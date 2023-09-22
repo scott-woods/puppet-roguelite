@@ -30,6 +30,9 @@ namespace PuppetRoguelite.Components.Characters
         PrototypeSpriteRenderer _spriteRenderer;
         Mover _mover;
         SpriteAnimator _spriteAnimator;
+        Collider _collider;
+        HealthComponent _healthComponent;
+        Hitbox _hitbox;
 
         //misc
         Vector2 _direction = new Vector2(0, 1);
@@ -48,6 +51,18 @@ namespace PuppetRoguelite.Components.Characters
 
             //add mover
             _mover = Entity.AddComponent(new Mover());
+
+            //Add collider
+            _collider = Entity.AddComponent(new BoxCollider(10, 20));
+
+            //Add hitbox
+            _hitbox = Entity.AddComponent(new Hitbox());
+
+            //Add health component
+            _healthComponent = Entity.AddComponent(new HealthComponent(10));
+
+            //Add observers
+            _hitbox.Emitter.AddObserver(HitboxEventTypes.Hit, OnHitboxHit);
 
             //setup input
             SetupInput();
@@ -141,14 +156,14 @@ namespace PuppetRoguelite.Components.Characters
             });
             _spriteAnimator.AddAnimation("RunUp", new[]
             {
-                runSprites[28],
-                runSprites[29],
                 runSprites[30],
                 runSprites[31],
                 runSprites[32],
                 runSprites[33],
                 runSprites[34],
-                runSprites[35]
+                runSprites[35],
+                runSprites[36],
+                runSprites[37]
             });
         }
 
@@ -226,6 +241,14 @@ namespace PuppetRoguelite.Components.Characters
                 {
                     _spriteAnimator.Play(animation);
                 }
+            }
+        }
+
+        public void OnHitboxHit(Collider collider)
+        {
+            if (collider.Entity.TryGetComponent<DamageComponent>(out var damageComponent))
+            {
+                _healthComponent.DecrementHealth(damageComponent.Damage);
             }
         }
     }

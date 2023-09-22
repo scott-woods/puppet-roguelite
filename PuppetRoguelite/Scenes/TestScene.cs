@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,18 @@ namespace PuppetRoguelite.Scenes
         {
             base.Initialize();
 
-            SetDesignResolution(640, 360, SceneResolutionPolicy.ShowAllPixelPerfect);
+            SetDesignResolution(480, 270, SceneResolutionPolicy.ShowAllPixelPerfect);
             Screen.SetSize(1920, 1080);
 
             ClearColor = Color.Black;
 
             var playerEntity = CreateEntity("player");
             var player = playerEntity.AddComponent(new Player());
-            playerEntity.SetPosition(640 / 2, 360 / 2);
+            playerEntity.SetPosition(480 / 2, 270 / 2);
+
+            var projectileEntity = CreateEntity("projectile");
+            var projectile = projectileEntity.AddComponent(new TestProjectile());
+            projectileEntity.SetPosition(480 / 3, 270 / 3);
         }
     }
 }
