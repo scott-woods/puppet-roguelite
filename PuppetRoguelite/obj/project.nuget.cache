@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "43sShqiNKVyDAwhpReuMM6lPLcZNM7t0qt0zO4L4oRZQlx/vniHgb9Qr/9t4mzJoMA/XAGPG5nHVBrIg1Crx4A==",
+  "dgSpecHash": "p6UUzTDS3YGubsnJPA6ZPLJjg1phBsdbo9hidwyShzRTtcGIUC/FUPGlgn45It580bY9SFnZ4YuXdpbcYv8lbw==",
   "success": true,
   "projectFilePath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\scott\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\scott\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\monogame.content.builder.task\\3.8.1.303\\monogame.content.builder.task.3.8.1.303.nupkg.sha512",
-    "C:\\Users\\scott\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+    "C:\\Users\\scott\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512",
+    "C:\\Users\\scott\\.nuget\\packages\\nopipeline.task\\2.2.0\\nopipeline.task.2.2.0.nupkg.sha512",
+    "C:\\Users\\scott\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512"
   ],
   "logs": []
 }

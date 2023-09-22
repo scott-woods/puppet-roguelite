@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetRoguelite", "PuppetRoguelite\PuppetRoguelite.csproj", "{F69A7735-A682-4257-8980-73EE09D04EEC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez.MG38", "Nez\Nez.Portable\Nez.MG38.csproj", "{D6680BB8-FB9D-4266-A170-84382AA89D0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F69A7735-A682-4257-8980-73EE09D04EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F69A7735-A682-4257-8980-73EE09D04EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F69A7735-A682-4257-8980-73EE09D04EEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6680BB8-FB9D-4266-A170-84382AA89D0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6680BB8-FB9D-4266-A170-84382AA89D0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6680BB8-FB9D-4266-A170-84382AA89D0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6680BB8-FB9D-4266-A170-84382AA89D0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
