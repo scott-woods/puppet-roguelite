@@ -5,6 +5,7 @@ using Nez.AI.FSM;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.UI;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,12 +28,14 @@ namespace PuppetRoguelite.Components.Characters
         float _moveSpeed = 100f;
 
         //components
-        PrototypeSpriteRenderer _spriteRenderer;
         Mover _mover;
         SpriteAnimator _spriteAnimator;
+        Collider _hitboxCollider;
         Collider _collider;
         HealthComponent _healthComponent;
         Hitbox _hitbox;
+        HurtComponent _hurtComponent;
+        InvincibilityComponent _invincibilityComponent;
 
         //misc
         Vector2 _direction = new Vector2(0, 1);
@@ -52,14 +55,22 @@ namespace PuppetRoguelite.Components.Characters
             //add mover
             _mover = Entity.AddComponent(new Mover());
 
-            //Add collider
-            _collider = Entity.AddComponent(new BoxCollider(10, 20));
+            //Add hitbox collider
+            _hitboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
+            _hitboxCollider.IsTrigger = true;
+            _hitboxCollider.PhysicsLayer = (int)PhysicsLayers.Hitbox;
 
             //Add hitbox
             _hitbox = Entity.AddComponent(new Hitbox());
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10));
+
+            //Add hurt component
+            _hurtComponent = Entity.AddComponent(new HurtComponent());
+
+            //Add invincibility component
+            _invincibilityComponent = Entity.AddComponent(new InvincibilityComponent(1));
 
             //Add observers
             _hitbox.Emitter.AddObserver(HitboxEventTypes.Hit, OnHitboxHit);
@@ -248,7 +259,12 @@ namespace PuppetRoguelite.Components.Characters
         {
             if (collider.Entity.TryGetComponent<DamageComponent>(out var damageComponent))
             {
-                _healthComponent.DecrementHealth(damageComponent.Damage);
+                if (!_invincibilityComponent.IsInvincible)
+                {
+                    _healthComponent.DecrementHealth(damageComponent.Damage);
+                    _hurtComponent.PlayHurtEffect();
+                    _invincibilityComponent.Activate();
+                }
             }
         }
     }

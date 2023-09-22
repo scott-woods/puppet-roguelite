@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.Systems;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,10 @@ namespace PuppetRoguelite.Components
 
         public void OnTriggerEnter(Collider other, Collider local)
         {
-            Emitter.Emit(HitboxEventTypes.Hit, other);
+            if (other.PhysicsLayer == (int)PhysicsLayers.Damage)
+            {
+                Emitter.Emit(HitboxEventTypes.Hit, other);
+            }
             //if (other.Entity.TryGetComponent<DamageComponent>(out var damageComponent))
             //{
             //    if (local.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
