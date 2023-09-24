@@ -39,6 +39,7 @@ namespace PuppetRoguelite.Components.Characters
 
         //misc
         Vector2 _direction = new Vector2(0, 1);
+        SubpixelVector2 _subPixelV2 = new SubpixelVector2();
 
         public Player()
         {
@@ -58,10 +59,13 @@ namespace PuppetRoguelite.Components.Characters
             //Add hitbox collider
             _hitboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
             _hitboxCollider.IsTrigger = true;
-            _hitboxCollider.PhysicsLayer = (int)PhysicsLayers.Hitbox;
+            _hitboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerHitbox;
 
             //Add hitbox
             _hitbox = Entity.AddComponent(new Hitbox());
+
+            //add collision box
+            _collider = Entity.AddComponent(new BoxCollider(-5, 5, 10, 8));
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10));
@@ -224,11 +228,6 @@ namespace PuppetRoguelite.Components.Characters
             {
                 _direction = newDirection;
 
-                var movement = _direction * _moveSpeed * Time.DeltaTime;
-
-                _mover.CalculateMovement(ref movement, out var result);
-                _mover.ApplyMovement(movement);
-
                 //animation
                 var animation = "RunDown";
                 if (_direction.X < 0)
@@ -252,6 +251,17 @@ namespace PuppetRoguelite.Components.Characters
                 {
                     _spriteAnimator.Play(animation);
                 }
+
+                //move
+                //var movementX = (int)Math.Round(_direction.X * _moveSpeed * Time.DeltaTime);
+                //var movementY = (int)Math.Round(_direction.Y * _moveSpeed * Time.DeltaTime);
+                //var movement = new Vector2(movementX, movementY);
+                _direction.Normalize();
+                var movement = _direction * _moveSpeed * Time.DeltaTime;
+
+                _mover.CalculateMovement(ref movement, out var result);
+                _subPixelV2.Update(ref movement);
+                _mover.ApplyMovement(movement);
             }
         }
 

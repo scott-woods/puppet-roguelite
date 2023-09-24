@@ -13,7 +13,8 @@ namespace PuppetRoguelite
             base.Initialize();
 
             DebugRenderEnabled = true;
-            Window.AllowUserResizing = false;
+            Window.AllowUserResizing = true;
+            //IsFixedTimeStep = true;
 
             Scene = new TestScene();
         }

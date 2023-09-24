@@ -11,6 +11,9 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Maps\dungeon_prison_tileset.png" />
+    <None Remove="Content\Maps\dungeon_prison_tileset.tsx" />
+    <None Remove="Content\Maps\test_tilemap.tmx" />
     <None Remove="Content\Sprites\Player\hooded_knight_attack.png" />
     <None Remove="Content\Sprites\Player\hooded_knight_death.png" />
     <None Remove="Content\Sprites\Player\hooded_knight_hurt.png" />
@@ -20,6 +23,15 @@
     <None Remove="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Maps\dungeon_prison_tileset.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Maps\dungeon_prison_tileset.tsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Maps\test_tilemap.tmx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Sprites\Player\hooded_knight_attack.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

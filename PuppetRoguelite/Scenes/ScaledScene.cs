@@ -1,18 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using Nez;
-using Nez.AI.Pathfinding;
-using PuppetRoguelite.Components;
+﻿using Nez;
 using PuppetRoguelite.Components.Characters;
-using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace PuppetRoguelite.Scenes
 {
-    public class TestScene : Scene
+    public class ScaledScene : Scene
     {
         Entity _playerEntity;
 
@@ -20,7 +18,7 @@ namespace PuppetRoguelite.Scenes
         {
             base.Initialize();
 
-            SetDesignResolution(480, 270, SceneResolutionPolicy.ShowAllPixelPerfect);
+            SetDesignResolution(1920, 1080, SceneResolutionPolicy.ShowAllPixelPerfect);
             Screen.SetSize(1920, 1080);
 
             ClearColor = Color.Black;
@@ -34,11 +32,13 @@ namespace PuppetRoguelite.Scenes
 
             _playerEntity = CreateEntity("player");
             var player = _playerEntity.AddComponent(new Player());
-            _playerEntity.SetPosition(480 / 3, 270 / 3);
+            _playerEntity.SetPosition(50, 50);
 
             //camera
-            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
+            var followCamera = Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
             Camera.Entity.SetUpdateOrder(int.MaxValue);
+            Camera.SetMaximumZoom(4);
+            Camera.SetZoom(1);
 
             //var projectileEntity = CreateEntity("projectile");
             //var projectile = projectileEntity.AddComponent(new TestProjectile());
@@ -46,11 +46,15 @@ namespace PuppetRoguelite.Scenes
 
             var enemyEntity = CreateEntity("enemy");
             var enemy = enemyEntity.AddComponent(new TestEnemy());
-            enemyEntity.SetPosition(480 / 4, 270 / 4);
+            enemyEntity.SetPosition(1920 / 4, 1080 / 4);
+        }
 
-            //pathfinding
-            var graph = new AstarGridGraph(tiledMapRenderer.CollisionLayer);
-            AddSceneComponent(new GridGraphManager(graph, map));
+        public override void Update()
+        {
+            base.Update();
+
+            Debug.Log(Camera.Position);
+            Debug.Log(_playerEntity.Position);
         }
     }
 }

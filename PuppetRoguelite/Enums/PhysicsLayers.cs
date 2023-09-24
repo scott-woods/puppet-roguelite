@@ -8,7 +8,8 @@ namespace PuppetRoguelite.Enums
 {
     public enum PhysicsLayers 
     {
-        Hitbox,
-        Damage
+        PlayerHitbox,
+        Damage,
+        EnemyHitbox
     }
 }
