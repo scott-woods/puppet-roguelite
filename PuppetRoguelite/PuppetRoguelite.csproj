@@ -11,6 +11,16 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Characters\ChainBot\attack.png" />
+    <None Remove="Content\Characters\ChainBot\charge.png" />
+    <None Remove="Content\Characters\ChainBot\death.png" />
+    <None Remove="Content\Characters\ChainBot\hit.png" />
+    <None Remove="Content\Characters\ChainBot\idle.png" />
+    <None Remove="Content\Characters\ChainBot\run.png" />
+    <None Remove="Content\Characters\ChainBot\transition to charge.png" />
+    <None Remove="Content\Characters\Skeleton\Death-Sheet.png" />
+    <None Remove="Content\Characters\Skeleton\Idle-Sheet.png" />
+    <None Remove="Content\Characters\Skeleton\Run-Sheet.png" />
     <None Remove="Content\Maps\dungeon_prison_tileset.png" />
     <None Remove="Content\Maps\dungeon_prison_tileset.tsx" />
     <None Remove="Content\Maps\test_tilemap.tmx" />
@@ -23,6 +33,36 @@
     <None Remove="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Characters\ChainBot\attack.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\ChainBot\charge.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\ChainBot\death.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\ChainBot\hit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\ChainBot\idle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\ChainBot\run.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\ChainBot\transition to charge.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\Skeleton\Death-Sheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\Skeleton\Idle-Sheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Characters\Skeleton\Run-Sheet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Maps\dungeon_prison_tileset.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

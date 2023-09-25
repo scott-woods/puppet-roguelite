@@ -19,7 +19,6 @@ namespace PuppetRoguelite.Components.Characters
         //components
         Mover _mover;
         SpriteRenderer _spriteRenderer;
-        Collider _hitboxCollider;
         Hitbox _hitbox;
         HealthComponent _healthComponent;
         InvincibilityComponent _invincibilityComponent;
@@ -60,10 +59,10 @@ namespace PuppetRoguelite.Components.Characters
             _spriteRenderer = Entity.AddComponent(new PrototypeSpriteRenderer(8, 20));
 
             //hitbox
-            _hitboxCollider = Entity.AddComponent(new BoxCollider(8, 20));
-            _hitboxCollider.IsTrigger = true;
-            _hitboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHitbox;
-            _hitbox = Entity.AddComponent(new Hitbox());
+            var hitboxCollider = Entity.AddComponent(new BoxCollider(8, 20));
+            hitboxCollider.IsTrigger = true;
+            hitboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHitbox;
+            _hitbox = Entity.AddComponent(new Hitbox(hitboxCollider));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(10));

@@ -32,6 +32,10 @@ namespace PuppetRoguelite.Scenes
             tiledMapRenderer.SetLayersToRender(new[] { "floor", "details" });
             tiledMapRenderer.RenderLayer = 10;
 
+            //pathfinding
+            var graph = new AstarGridGraph(tiledMapRenderer.CollisionLayer);
+            AddSceneComponent(new GridGraphManager(graph, map));
+
             _playerEntity = CreateEntity("player");
             var player = _playerEntity.AddComponent(new Player());
             _playerEntity.SetPosition(480 / 3, 270 / 3);
@@ -44,13 +48,13 @@ namespace PuppetRoguelite.Scenes
             //var projectile = projectileEntity.AddComponent(new TestProjectile());
             //projectileEntity.SetPosition(480 / 3, 270 / 3);
 
-            var enemyEntity = CreateEntity("enemy");
-            var enemy = enemyEntity.AddComponent(new TestEnemy());
-            enemyEntity.SetPosition(480 / 4, 270 / 4);
+            //var enemyEntity = CreateEntity("enemy");
+            //var enemy = enemyEntity.AddComponent(new TestEnemy());
+            //enemyEntity.SetPosition(480 / 4, 270 / 4);
 
-            //pathfinding
-            var graph = new AstarGridGraph(tiledMapRenderer.CollisionLayer);
-            AddSceneComponent(new GridGraphManager(graph, map));
+            var chainBotEntity = CreateEntity("chain-bot-entity");
+            var chainBot = chainBotEntity.AddComponent(new ChainBot());
+            chainBotEntity.SetPosition(64, 64);
         }
     }
 }
