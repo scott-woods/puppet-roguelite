@@ -34,17 +34,18 @@ namespace PuppetRoguelite.Components.Characters
         Collider _collider;
         HealthComponent _healthComponent;
         Hurtbox _hurtbox;
-        HurtComponent _hurtComponent;
-        InvincibilityComponent _invincibilityComponent;
         HitHandler _hitHandler;
 
         //misc
-        Vector2 _direction = new Vector2(0, 1);
+        Vector2 _direction = new Vector2(1, 0);
+        Vector2 _lastNonZeroDirection = new Vector2(1, 0);
         SubpixelVector2 _subPixelV2 = new SubpixelVector2();
+
+        #region SETUP
 
         public Player()
         {
-            StateMachine = new PlayerStateMachine(this, new PlayerIdle());
+            StateMachine = new PlayerStateMachine(this, new PlayerInCombat());
         }
 
         public override void Initialize()
@@ -53,14 +54,14 @@ namespace PuppetRoguelite.Components.Characters
 
             AddComponents();
             AddObservers();
-            SetupSprites();
             SetupInput();
         }
 
-        public void AddComponents()
+        void AddComponents()
         {
             //add sprites
             _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
+            AddAnimations();
 
             //add mover
             _mover = Entity.AddComponent(new Mover());
@@ -77,57 +78,17 @@ namespace PuppetRoguelite.Components.Characters
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10));
 
-            //Add hurt component
-            _hurtComponent = Entity.AddComponent(new HurtComponent());
-
-            //Add invincibility component
-            _invincibilityComponent = Entity.AddComponent(new InvincibilityComponent(1));
-
             //hit handler
             _hitHandler = Entity.AddComponent(new HitHandler());
         }
 
-        public void AddObservers()
+        void AddObservers()
         {
             //_hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHitboxHit);
             _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, _hitHandler.OnHurtboxHit);
 
             _hitHandler.Emitter.AddObserver(HitHandlerEventType.Hurt, OnHurt);
             _hitHandler.Emitter.AddObserver(HitHandlerEventType.Killed, OnKilled);
-        }
-
-        public void OnHurt()
-        {
-            var hurtAnimation = _direction.X >= 0 ? "HurtRight" : "HurtLeft";
-            _spriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-            StateMachine.ChangeState<PlayerHurt>();
-        }
-
-        public void OnKilled()
-        {
-            var deathAnimation = _direction.X >= 0 ? "DeathRight" : "DeathLeft";
-            _spriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
-            StateMachine.ChangeState<PlayerDying>();
-        }
-
-        public void CheckForDeathCompletion()
-        {
-            if (new[] { "DeathRight", "DeathLeft" }.Contains(_spriteAnimator.CurrentAnimationName))
-            {
-                if (_spriteAnimator.AnimationState == SpriteAnimator.State.Completed)
-                {
-                    Game1.Exit();
-                }
-            }
-            else
-            {
-                Game1.Exit();
-            }
-        }
-
-        public void Update()
-        {
-            StateMachine.Update(Time.DeltaTime);
         }
 
         void SetupInput()
@@ -143,7 +104,7 @@ namespace PuppetRoguelite.Components.Characters
             _yAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
         }
 
-        void SetupSprites()
+        void AddAnimations()
         {
             //idle
             var idleTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_idle.png");
@@ -174,33 +135,51 @@ namespace PuppetRoguelite.Components.Characters
             _spriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
         }
 
+        #endregion
+
+        public void Update()
+        {
+            StateMachine.Update(Time.DeltaTime);
+        }
+
+        public void OnHurt()
+        {
+            var hurtAnimation = _direction.X >= 0 ? "HurtRight" : "HurtLeft";
+            _spriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+            void handler(string obj)
+            {
+                _spriteAnimator.OnAnimationCompletedEvent -= handler;
+                StateMachine.ChangeState<PlayerInCombat>();
+            }
+            _spriteAnimator.OnAnimationCompletedEvent += handler;
+            StateMachine.ChangeState<PlayerHurt>();
+        }
+
+        public void OnKilled()
+        {
+            var deathAnimation = _direction.X >= 0 ? "DeathRight" : "DeathLeft";
+            _spriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
+            void handler(string obj)
+            {
+                _spriteAnimator.OnAnimationCompletedEvent -= handler;
+                Game1.Exit();
+            }
+            _spriteAnimator.OnAnimationCompletedEvent += handler;
+            StateMachine.ChangeState<PlayerDying>();
+        }
+
         public void Idle()
         {
-            if (_xAxisInput.Value != 0 || _yAxisInput.Value != 0)
-            {
-                StateMachine.ChangeState<PlayerRunning>();
-                return;
-            }
-
             //handle animation
             var animation = "IdleDown";
-            if (_direction.X < 0)
+            if (_lastNonZeroDirection.X != 0)
             {
-                animation = "IdleLeft";
+                animation = _lastNonZeroDirection.X >= 0 ? "IdleRight" : "IdleLeft";
             }
-            else if (_direction.X > 0)
+            else if (_lastNonZeroDirection.Y != 0)
             {
-                animation = "IdleRight";
+                animation = _lastNonZeroDirection.Y >= 0 ? "IdleDown" : "IdleUp";
             }
-            if (_direction.Y < 0)
-            {
-                animation = "IdleUp";
-            }
-            else if (_direction.Y > 0)
-            {
-                animation = "IdleDown";
-            }
-
             if (!_spriteAnimator.IsAnimationActive(animation))
             {
                 _spriteAnimator.Play(animation);
@@ -209,79 +188,47 @@ namespace PuppetRoguelite.Components.Characters
 
         public void Move()
         {
+            //animation
+            var animation = "RunDown";
+            if (_direction.X != 0)
+            {
+                animation = _direction.X >= 0 ? "RunRight" : "RunLeft";
+            }
+            else if (_direction.Y != 0)
+            {
+                animation = _direction.Y >= 0 ? "RunDown" : "RunUp";
+            }
+            if (!_spriteAnimator.IsAnimationActive(animation))
+            {
+                _spriteAnimator.Play(animation);
+            }
+
+            //move
+            var movement = _direction * _moveSpeed * Time.DeltaTime;
+            _mover.CalculateMovement(ref movement, out var result);
+            _subPixelV2.Update(ref movement);
+            _mover.ApplyMovement(movement);
+        }
+
+        public void HandleMovement()
+        {
+            //get movement inputs
             var newDirection = new Vector2(_xAxisInput.Value, _yAxisInput.Value);
 
+            //if no movement, switch to idle and return
             if (newDirection == Vector2.Zero)
             {
-                StateMachine.ChangeState<PlayerIdle>();
-                return;
+                _lastNonZeroDirection = _direction;
+                _direction = newDirection;
+                _direction.Normalize();
+                Idle();
             }
             else
             {
                 _direction = newDirection;
-
-                //animation
-                var animation = "RunDown";
-                if (_direction.X < 0)
-                {
-                    animation = "RunLeft";
-                }
-                else if (_direction.X > 0)
-                {
-                    animation = "RunRight";
-                }
-                if (_direction.Y < 0)
-                {
-                    animation = "RunUp";
-                }
-                else if (_direction.Y > 0)
-                {
-                    animation = "RunDown";
-                }
-
-                if (!_spriteAnimator.IsAnimationActive(animation))
-                {
-                    _spriteAnimator.Play(animation);
-                }
-
-                //move
-                //var movementX = (int)Math.Round(_direction.X * _moveSpeed * Time.DeltaTime);
-                //var movementY = (int)Math.Round(_direction.Y * _moveSpeed * Time.DeltaTime);
-                //var movement = new Vector2(movementX, movementY);
                 _direction.Normalize();
-                var movement = _direction * _moveSpeed * Time.DeltaTime;
-
-                _mover.CalculateMovement(ref movement, out var result);
-                _subPixelV2.Update(ref movement);
-                _mover.ApplyMovement(movement);
-            }
-        }
-
-        public void OnHitboxHit(Hitbox hitbox)
-        {
-            _healthComponent.DecrementHealth(hitbox.Damage);
-            if (_healthComponent.IsDepleted())
-            {
-
-            }
-            
-            _healthComponent.DecrementHealth(hitbox.Damage);
-            _hurtComponent.PlayHurtEffect();
-            _invincibilityComponent.Activate();
-        }
-
-        public void CheckForHurtCompletion()
-        {
-            if (new[] { "HurtRight", "HurtLeft" }.Contains(_spriteAnimator.CurrentAnimationName))
-            {
-                if (_spriteAnimator.AnimationState == SpriteAnimator.State.Completed)
-                {
-                    StateMachine.ChangeState<PlayerIdle>();
-                }
-            }
-            else
-            {
-                StateMachine.ChangeState<PlayerIdle>();
+                _lastNonZeroDirection = _direction;
+                Move();
             }
         }
     }
@@ -296,6 +243,15 @@ namespace PuppetRoguelite.Components.Characters
             AddState(new PlayerRunning());
             AddState(new PlayerHurt());
             AddState(new PlayerDying());
+            AddState(new PlayerInCombat());
+        }
+    }
+
+    public class PlayerInCombat : State<Player>
+    {
+        public override void Update(float deltaTime)
+        {
+            _context.HandleMovement();
         }
     }
 
@@ -319,7 +275,7 @@ namespace PuppetRoguelite.Components.Characters
     {
         public override void Update(float deltaTime)
         {
-            _context.CheckForHurtCompletion();
+
         }
     }
 
@@ -327,7 +283,7 @@ namespace PuppetRoguelite.Components.Characters
     {
         public override void Update(float deltaTime)
         {
-            _context.CheckForDeathCompletion();
+
         }
     }
 

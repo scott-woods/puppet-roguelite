@@ -21,8 +21,6 @@ namespace PuppetRoguelite.Components.Characters
         SpriteRenderer _spriteRenderer;
         Hurtbox _hurtbox;
         HealthComponent _healthComponent;
-        InvincibilityComponent _invincibilityComponent;
-        HurtComponent _hurtComponent;
         PathfindingComponent _pathfinder;
         Collider _collider;
 
@@ -67,12 +65,6 @@ namespace PuppetRoguelite.Components.Characters
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(10));
 
-            //Invincibility
-            _invincibilityComponent = Entity.AddComponent(new InvincibilityComponent(1));
-
-            //hurt
-            _hurtComponent = Entity.AddComponent(new HurtComponent());
-
             //pathfinding
             _pathfinder = Entity.AddComponent(new PathfindingComponent());
 
@@ -96,20 +88,7 @@ namespace PuppetRoguelite.Components.Characters
 
         public void AddObservers()
         {
-            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHitboxHit);
-        }
 
-        public void OnHitboxHit(Hitbox hitbox)
-        {
-            if (!_invincibilityComponent.IsInvincible)
-            {
-                if (hitbox.Entity.TryGetComponent<DamageComponent>(out var damageComponent))
-                {
-                    _hurtComponent.PlayHurtEffect();
-                    _healthComponent.DecrementHealth(damageComponent.Damage);
-                    _invincibilityComponent.Activate();
-                }
-            }
         }
 
         public TaskStatus ChasePlayer()

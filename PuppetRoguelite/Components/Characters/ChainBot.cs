@@ -24,8 +24,6 @@ namespace PuppetRoguelite.Components.Characters
         SpriteAnimator _animator;
         Hurtbox _hurtbox;
         HealthComponent _healthComponent;
-        InvincibilityComponent _invincibilityComponent;
-        HurtComponent _hurtComponent;
         PathfindingComponent _pathfinder;
         Collider _collider;
         Hitbox _melee;
@@ -38,17 +36,15 @@ namespace PuppetRoguelite.Components.Characters
         //misc
         SubpixelVector2 _subPixelV2 = new SubpixelVector2();
         Vector2 _direction = Vector2.One;
+
+        #region SETUP
+
         public override void Initialize()
         {
             base.Initialize();
 
             AddComponents();
             SetupBehaviorTree();
-        }
-
-        public void Update()
-        {
-            BehaviorTree.Tick();
         }
 
         public void AddComponents()
@@ -64,12 +60,6 @@ namespace PuppetRoguelite.Components.Characters
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(10));
-
-            //Invincibility
-            _invincibilityComponent = Entity.AddComponent(new InvincibilityComponent(1));
-
-            //hurt
-            _hurtComponent = Entity.AddComponent(new HurtComponent());
 
             //pathfinding
             _pathfinder = Entity.AddComponent(new PathfindingComponent());
@@ -161,6 +151,13 @@ namespace PuppetRoguelite.Components.Characters
             _animator.AddAnimation("ChargeRight", chargeSprites.Where((sprite, index) => index % 2 == 0).ToArray());
         }
 
+        #endregion
+
+        public void Update()
+        {
+            BehaviorTree.Tick();
+        }
+
         public TaskStatus ChasePlayer()
         {
             var player = Entity.Scene.FindComponentOfType<Player>();
@@ -233,8 +230,8 @@ namespace PuppetRoguelite.Components.Characters
         {
             if (_animator.CurrentAnimationName != "AttackRight" && _animator.CurrentAnimationName != "AttackLeft")
             {
-                var transitionAnimation = _direction.X >= 0 ? "AttackRight" : "AttackLeft";
-                _animator.Play(transitionAnimation, SpriteAnimator.LoopMode.Once);
+                var attackAnimation = _direction.X >= 0 ? "AttackRight" : "AttackLeft";
+                _animator.Play(attackAnimation, SpriteAnimator.LoopMode.Once);
                 var meleeShape = new[]
                 {
                     new Vector2(10, -4),
@@ -249,7 +246,11 @@ namespace PuppetRoguelite.Components.Characters
                 meleeCollider.IsTrigger = true;
                 meleeCollider.PhysicsLayer = (int)PhysicsLayers.Damage;
                 _melee = _meleeEntity.AddComponent(new Hitbox(meleeCollider, 3));
-                _meleeEntity.Rotation = Mathf.Atan2(0, (int)Math.Round(_direction.X));
+                if (_direction.X < 0)
+                {
+                    _meleeEntity.RotationDegrees = _direction.X >= 0 ? 0 : 180;
+                    _meleeEntity.Position = new Vector2(_meleeEntity.Position.X, _meleeEntity.Position.Y + 7);
+                }
                 return TaskStatus.Running;
             }
             if (_animator.AnimationState != SpriteAnimator.State.Completed)
