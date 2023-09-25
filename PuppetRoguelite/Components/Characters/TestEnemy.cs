@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Components.Characters
         //components
         Mover _mover;
         SpriteRenderer _spriteRenderer;
-        Hitbox _hitbox;
+        Hurtbox _hurtbox;
         HealthComponent _healthComponent;
         InvincibilityComponent _invincibilityComponent;
         HurtComponent _hurtComponent;
@@ -59,10 +59,10 @@ namespace PuppetRoguelite.Components.Characters
             _spriteRenderer = Entity.AddComponent(new PrototypeSpriteRenderer(8, 20));
 
             //hitbox
-            var hitboxCollider = Entity.AddComponent(new BoxCollider(8, 20));
-            hitboxCollider.IsTrigger = true;
-            hitboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHitbox;
-            _hitbox = Entity.AddComponent(new Hitbox(hitboxCollider));
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(8, 20));
+            hurtboxCollider.IsTrigger = true;
+            hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(10));
@@ -96,14 +96,14 @@ namespace PuppetRoguelite.Components.Characters
 
         public void AddObservers()
         {
-            _hitbox.Emitter.AddObserver(HitboxEventTypes.Hit, OnHitboxHit);
+            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHitboxHit);
         }
 
-        public void OnHitboxHit(Collider collider)
+        public void OnHitboxHit(Hitbox hitbox)
         {
             if (!_invincibilityComponent.IsInvincible)
             {
-                if (collider.Entity.TryGetComponent<DamageComponent>(out var damageComponent))
+                if (hitbox.Entity.TryGetComponent<DamageComponent>(out var damageComponent))
                 {
                     _hurtComponent.PlayHurtEffect();
                     _healthComponent.DecrementHealth(damageComponent.Damage);

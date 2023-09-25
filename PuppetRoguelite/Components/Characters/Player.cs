@@ -6,6 +6,7 @@ using Nez.Sprites;
 using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -32,9 +33,10 @@ namespace PuppetRoguelite.Components.Characters
         SpriteAnimator _spriteAnimator;
         Collider _collider;
         HealthComponent _healthComponent;
-        Hitbox _hitbox;
+        Hurtbox _hurtbox;
         HurtComponent _hurtComponent;
         InvincibilityComponent _invincibilityComponent;
+        HitHandler _hitHandler;
 
         //misc
         Vector2 _direction = new Vector2(0, 1);
@@ -49,17 +51,25 @@ namespace PuppetRoguelite.Components.Characters
         {
             base.Initialize();
 
-            //add sprites
+            AddComponents();
+            AddObservers();
             SetupSprites();
+            SetupInput();
+        }
+
+        public void AddComponents()
+        {
+            //add sprites
+            _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
 
             //add mover
             _mover = Entity.AddComponent(new Mover());
 
-            //Add hitbox
-            var hitboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
-            hitboxCollider.IsTrigger = true;
-            hitboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerHitbox;
-            _hitbox = Entity.AddComponent(new Hitbox(hitboxCollider));
+            //Add hurtbox
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
+            hurtboxCollider.IsTrigger = true;
+            hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerHurtbox;
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 5, 10, 8));
@@ -73,11 +83,46 @@ namespace PuppetRoguelite.Components.Characters
             //Add invincibility component
             _invincibilityComponent = Entity.AddComponent(new InvincibilityComponent(1));
 
-            //Add observers
-            _hitbox.Emitter.AddObserver(HitboxEventTypes.Hit, OnHitboxHit);
+            //hit handler
+            _hitHandler = Entity.AddComponent(new HitHandler());
+        }
 
-            //setup input
-            SetupInput();
+        public void AddObservers()
+        {
+            //_hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHitboxHit);
+            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, _hitHandler.OnHurtboxHit);
+
+            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Hurt, OnHurt);
+            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Killed, OnKilled);
+        }
+
+        public void OnHurt()
+        {
+            var hurtAnimation = _direction.X >= 0 ? "HurtRight" : "HurtLeft";
+            _spriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+            StateMachine.ChangeState<PlayerHurt>();
+        }
+
+        public void OnKilled()
+        {
+            var deathAnimation = _direction.X >= 0 ? "DeathRight" : "DeathLeft";
+            _spriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
+            StateMachine.ChangeState<PlayerDying>();
+        }
+
+        public void CheckForDeathCompletion()
+        {
+            if (new[] { "DeathRight", "DeathLeft" }.Contains(_spriteAnimator.CurrentAnimationName))
+            {
+                if (_spriteAnimator.AnimationState == SpriteAnimator.State.Completed)
+                {
+                    Game1.Exit();
+                }
+            }
+            else
+            {
+                Game1.Exit();
+            }
         }
 
         public void Update()
@@ -100,83 +145,33 @@ namespace PuppetRoguelite.Components.Characters
 
         void SetupSprites()
         {
+            //idle
             var idleTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_idle.png");
             var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 64, 64);
+            _spriteAnimator.AddAnimation("IdleDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 0, 2));
+            _spriteAnimator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 3, 5));
+            _spriteAnimator.AddAnimation("IdleUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 6, 8));
+            _spriteAnimator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 9, 11));
+
+            //run
             var runTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_run.png");
             var runSprites = Sprite.SpritesFromAtlas(runTexture, 64, 64);
-            _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
-            _spriteAnimator.AddAnimation("IdleLeft", new[]
-            {
-                idleSprites[9],
-                idleSprites[10],
-                idleSprites[11]
-            });
-            _spriteAnimator.AddAnimation("IdleRight", new[]
-            {
-                idleSprites[3],
-                idleSprites[4],
-                idleSprites[5]
-            });
-            _spriteAnimator.AddAnimation("IdleDown", new[]
-            {
-                idleSprites[0],
-                idleSprites[1],
-                idleSprites[2]
-            });
-            _spriteAnimator.AddAnimation("IdleUp", new[]
-            {
-                idleSprites[6],
-                idleSprites[7],
-                idleSprites[8]
-            });
-            _spriteAnimator.AddAnimation("RunLeft", new[]
-            {
-                runSprites[10],
-                runSprites[11],
-                runSprites[12],
-                runSprites[13],
-                runSprites[14],
-                runSprites[15],
-                runSprites[16],
-                runSprites[17],
-                runSprites[18],
-                runSprites[19]
-            });
-            _spriteAnimator.AddAnimation("RunRight", new[]
-            {
-                runSprites[0],
-                runSprites[1],
-                runSprites[2],
-                runSprites[3],
-                runSprites[4],
-                runSprites[5],
-                runSprites[6],
-                runSprites[7],
-                runSprites[8],
-                runSprites[9]
-            });
-            _spriteAnimator.AddAnimation("RunDown", new[]
-            {
-                runSprites[20],
-                runSprites[21],
-                runSprites[22],
-                runSprites[23],
-                runSprites[24],
-                runSprites[25],
-                runSprites[26],
-                runSprites[27]
-            });
-            _spriteAnimator.AddAnimation("RunUp", new[]
-            {
-                runSprites[30],
-                runSprites[31],
-                runSprites[32],
-                runSprites[33],
-                runSprites[34],
-                runSprites[35],
-                runSprites[36],
-                runSprites[37]
-            });
+            _spriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9));
+            _spriteAnimator.AddAnimation("RunLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 10, 19));
+            _spriteAnimator.AddAnimation("RunDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 20, 27));
+            _spriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37));
+
+            //hurt
+            var hurtTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_hurt.png");
+            var hurtSprites = Sprite.SpritesFromAtlas(hurtTexture, 64, 64);
+            _spriteAnimator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 0, 4));
+            _spriteAnimator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 5, 9));
+
+            //death
+            var deathTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_death.png");
+            var deathSprites = Sprite.SpritesFromAtlas(deathTexture, 64, 64);
+            _spriteAnimator.AddAnimation("DeathRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 0, 9));
+            _spriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
         }
 
         public void Idle()
@@ -262,16 +257,31 @@ namespace PuppetRoguelite.Components.Characters
             }
         }
 
-        public void OnHitboxHit(Collider collider)
+        public void OnHitboxHit(Hitbox hitbox)
         {
-            if (collider.Entity.TryGetComponent<DamageComponent>(out var damageComponent))
+            _healthComponent.DecrementHealth(hitbox.Damage);
+            if (_healthComponent.IsDepleted())
             {
-                if (!_invincibilityComponent.IsInvincible)
+
+            }
+            
+            _healthComponent.DecrementHealth(hitbox.Damage);
+            _hurtComponent.PlayHurtEffect();
+            _invincibilityComponent.Activate();
+        }
+
+        public void CheckForHurtCompletion()
+        {
+            if (new[] { "HurtRight", "HurtLeft" }.Contains(_spriteAnimator.CurrentAnimationName))
+            {
+                if (_spriteAnimator.AnimationState == SpriteAnimator.State.Completed)
                 {
-                    _healthComponent.DecrementHealth(damageComponent.Damage);
-                    _hurtComponent.PlayHurtEffect();
-                    _invincibilityComponent.Activate();
+                    StateMachine.ChangeState<PlayerIdle>();
                 }
+            }
+            else
+            {
+                StateMachine.ChangeState<PlayerIdle>();
             }
         }
     }
@@ -284,6 +294,8 @@ namespace PuppetRoguelite.Components.Characters
         {
             AddState(new PlayerIdle());
             AddState(new PlayerRunning());
+            AddState(new PlayerHurt());
+            AddState(new PlayerDying());
         }
     }
 
@@ -300,6 +312,22 @@ namespace PuppetRoguelite.Components.Characters
         public override void Update(float deltaTime)
         {
             _context.Move();
+        }
+    }
+
+    public class PlayerHurt : State<Player>
+    {
+        public override void Update(float deltaTime)
+        {
+            _context.CheckForHurtCompletion();
+        }
+    }
+
+    public class PlayerDying : State<Player>
+    {
+        public override void Update(float deltaTime)
+        {
+            _context.CheckForDeathCompletion();
         }
     }
 

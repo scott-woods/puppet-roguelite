@@ -22,13 +22,13 @@ namespace PuppetRoguelite.Components.Characters
         //components
         Mover _mover;
         SpriteAnimator _animator;
-        Hitbox _hitbox;
+        Hurtbox _hurtbox;
         HealthComponent _healthComponent;
         InvincibilityComponent _invincibilityComponent;
         HurtComponent _hurtComponent;
         PathfindingComponent _pathfinder;
         Collider _collider;
-        Melee _melee;
+        Hitbox _melee;
 
         Entity _meleeEntity;
 
@@ -57,10 +57,10 @@ namespace PuppetRoguelite.Components.Characters
             _mover = Entity.AddComponent(new Mover());
 
             //hitbox
-            var hitboxCollider = Entity.AddComponent(new BoxCollider(0, -9, 8, 18));
-            hitboxCollider.IsTrigger = true;
-            hitboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHitbox;
-            _hitbox = Entity.AddComponent(new Hitbox(hitboxCollider));
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(0, -9, 8, 18));
+            hurtboxCollider.IsTrigger = true;
+            hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(10));
@@ -76,7 +76,7 @@ namespace PuppetRoguelite.Components.Characters
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));
-            _collider.PhysicsLayer = (int)PhysicsLayers.EnemyHitbox;
+            _collider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
 
             //animator
             _animator = Entity.AddComponent(new SpriteAnimator());
@@ -243,8 +243,12 @@ namespace PuppetRoguelite.Components.Characters
                     new Vector2(45, 7),
                     new Vector2(10, 7)
                 };
+
                 _meleeEntity = Entity.Scene.CreateEntity("chain-bot-melee", Entity.Position);
-                _melee = _meleeEntity.AddComponent(new Melee(new PolygonCollider(meleeShape), 1));
+                var meleeCollider = _meleeEntity.AddComponent(new PolygonCollider(meleeShape));
+                meleeCollider.IsTrigger = true;
+                meleeCollider.PhysicsLayer = (int)PhysicsLayers.Damage;
+                _melee = _meleeEntity.AddComponent(new Hitbox(meleeCollider, 3));
                 _meleeEntity.Rotation = Mathf.Atan2(0, (int)Math.Round(_direction.X));
                 return TaskStatus.Running;
             }

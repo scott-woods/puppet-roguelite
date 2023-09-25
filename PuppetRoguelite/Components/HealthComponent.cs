@@ -21,5 +21,14 @@ namespace PuppetRoguelite.Components
             Health = Health - amount > 0 ? Health - amount : 0;
             return Health;
         }
+
+        /// <summary>
+        /// returns true if health is 0 or less
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDepleted()
+        {
+            return Health <= 0;
+        }
     }
 }
