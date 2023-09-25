@@ -5,6 +5,7 @@ using Nez.Sprites;
 using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
