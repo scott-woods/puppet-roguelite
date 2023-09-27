@@ -63,7 +63,7 @@ namespace PuppetRoguelite.Components.Characters
             _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //health
-            _healthComponent = Entity.AddComponent(new HealthComponent(10));
+            _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
 
             //pathfinding
             _pathfinder = Entity.AddComponent(new PathfindingComponent());

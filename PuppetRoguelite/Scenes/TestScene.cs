@@ -4,6 +4,7 @@ using Nez.AI.Pathfinding;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +15,21 @@ namespace PuppetRoguelite.Scenes
 {
     public class TestScene : Scene
     {
+        //entities
         Entity _playerEntity;
+
+        //components
+        CombatUI _ui;
 
         public override void Initialize()
         {
             base.Initialize();
 
-            SetDesignResolution(480, 270, SceneResolutionPolicy.ShowAllPixelPerfect);
-            Screen.SetSize(1920, 1080);
-
             ClearColor = Color.Black;
+
+            //ui
+            var uiEntity = CreateEntity("ui");
+            _ui = uiEntity.AddComponent(new CombatUI());
 
             //tilemap
             var tiledEntity = CreateEntity("tiled-map-entity");
@@ -52,9 +58,9 @@ namespace PuppetRoguelite.Scenes
             //var enemy = enemyEntity.AddComponent(new TestEnemy());
             //enemyEntity.SetPosition(480 / 4, 270 / 4);
 
-            var chainBotEntity = CreateEntity("chain-bot-entity");
-            var chainBot = chainBotEntity.AddComponent(new ChainBot());
-            chainBotEntity.SetPosition(64, 64);
+            //var chainBotEntity = CreateEntity("chain-bot-entity");
+            //var chainBot = chainBotEntity.AddComponent(new ChainBot());
+            //chainBotEntity.SetPosition(64, 64);
         }
     }
 }

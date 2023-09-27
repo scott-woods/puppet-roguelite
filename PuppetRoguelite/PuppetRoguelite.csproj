@@ -29,6 +29,139 @@
     <None Remove="Content\Sprites\Player\hooded_knight_hurt.png" />
     <None Remove="Content\Sprites\Player\hooded_knight_idle.png" />
     <None Remove="Content\Sprites\Player\hooded_knight_run.png" />
+    <None Remove="Content\UI\basic_ui.atlas" />
+    <None Remove="Content\UI\basic_ui.png" />
+    <None Remove="Content\UI\UI_Flat_Banner_01_Downward.png" />
+    <None Remove="Content\UI\UI_Flat_Banner_01_Upward.png" />
+    <None Remove="Content\UI\UI_Flat_Banner_02_Downward.png" />
+    <None Remove="Content\UI\UI_Flat_Banner_02_Upward.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Checkmark_Large.png" />
+    <None Remove="Content\UI\UI_Flat_Checkmark_Medium.png" />
+    <None Remove="Content\UI\UI_Flat_Checkmark_Small.png" />
+    <None Remove="Content\UI\UI_Flat_Cross_Large.png" />
+    <None Remove="Content\UI\UI_Flat_Cross_Medium.png" />
+    <None Remove="Content\UI\UI_Flat_Cross_Small.png" />
+    <None Remove="Content\UI\UI_Flat_Dropdown.png" />
+    <None Remove="Content\UI\UI_Flat_Dropdown_Handle.png" />
+    <None Remove="Content\UI\UI_Flat_Fillbar_01_Block.png" />
+    <None Remove="Content\UI\UI_Flat_Fillbar_01_Flat.png" />
+    <None Remove="Content\UI\UI_Flat_Fillbar_01_Hollow.png" />
+    <None Remove="Content\UI\UI_Flat_Fillbar_02_Block.png" />
+    <None Remove="Content\UI\UI_Flat_Fillbar_02_Flat.png" />
+    <None Remove="Content\UI\UI_Flat_Fillbar_02_Hollow.png" />
+    <None Remove="Content\UI\UI_Flat_Filler_01.png" />
+    <None Remove="Content\UI\UI_Flat_Filler_02.png" />
+    <None Remove="Content\UI\UI_Flat_Filler_03.png" />
+    <None Remove="Content\UI\UI_Flat_Filler_04.png" />
+    <None Remove="Content\UI\UI_Flat_Filler_05.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_01_Horizontal.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_01_Inward.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_01_Lite.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_01_Standard.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_01_Vertical.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_02_Horizontal.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_02_Inward.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_02_Lite.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_02_Standard.png" />
+    <None Remove="Content\UI\UI_Flat_Frame_02_Vertical.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_01.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_02.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_03.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_04.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_01.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_02.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_03.png" />
+    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_04.png" />
+    <None Remove="Content\UI\UI_Flat_Select_01a1.png" />
+    <None Remove="Content\UI\UI_Flat_Select_01a2.png" />
+    <None Remove="Content\UI\UI_Flat_Select_01a3.png" />
+    <None Remove="Content\UI\UI_Flat_Select_01a4.png" />
+    <None Remove="Content\UI\UI_Flat_Select_02a1.png" />
+    <None Remove="Content\UI\UI_Flat_Select_02a2.png" />
+    <None Remove="Content\UI\UI_Flat_Select_02a3.png" />
+    <None Remove="Content\UI\UI_Flat_Select_02a4.png" />
+    <None Remove="Content\UI\UI_Flat_Slider.png" />
+    <None Remove="Content\UI\UI_Flat_Slider_Filler.png" />
+    <None Remove="Content\UI\UI_Flat_Slot_01_Available.png" />
+    <None Remove="Content\UI\UI_Flat_Slot_01_Selected.png" />
+    <None Remove="Content\UI\UI_Flat_Slot_01_Unavailable.png" />
+    <None Remove="Content\UI\UI_Flat_Slot_02_Available.png" />
+    <None Remove="Content\UI\UI_Flat_Slot_02_Selected.png" />
+    <None Remove="Content\UI\UI_Flat_Slot_02_Unavailable.png" />
+    <None Remove="Content\UI\UI_Flat_Textfield_01.png" />
+    <None Remove="Content\UI\UI_Flat_Textfield_02.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
@@ -85,6 +218,405 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Sprites\Player\hooded_knight_run.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\basic_ui.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\basic_ui.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Banner_01_Downward.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Banner_01_Upward.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Banner_02_Downward.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Banner_02_Upward.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Checkmark_Large.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Checkmark_Medium.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Checkmark_Small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Cross_Large.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Cross_Medium.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Cross_Small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Dropdown.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Dropdown_Handle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Fillbar_01_Block.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Fillbar_01_Flat.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Fillbar_01_Hollow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Fillbar_02_Block.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Fillbar_02_Flat.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Fillbar_02_Hollow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Filler_01.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Filler_02.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Filler_03.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Filler_04.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Filler_05.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_01_Horizontal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_01_Inward.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_01_Lite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_01_Standard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_01_Vertical.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_02_Horizontal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_02_Inward.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_02_Lite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_02_Standard.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Frame_02_Vertical.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_01.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_02.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_03.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_04.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_01.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_02.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_03.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_04.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_01a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_01a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_01a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_01a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_02a1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_02a2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_02a3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Select_02a4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slider.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slider_Filler.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slot_01_Available.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slot_01_Selected.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slot_01_Unavailable.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slot_02_Available.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slot_02_Selected.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Slot_02_Unavailable.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Textfield_01.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\UI_Flat_Textfield_02.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

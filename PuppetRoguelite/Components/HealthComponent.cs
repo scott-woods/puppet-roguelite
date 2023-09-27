@@ -1,7 +1,9 @@
 ﻿using Nez;
+using Nez.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,17 +11,38 @@ namespace PuppetRoguelite.Components
 {
     public class HealthComponent : Component
     {
-        public int Health;
+        public Emitter<HealthComponentEventType, HealthComponent> Emitter;
 
-        public HealthComponent(int health)
+        int _health;
+        public int Health
         {
-            Health = health;
+            get => _health;
+        }
+
+        int _maxHealth;
+        public int MaxHealth
+        {
+            get => _maxHealth;
+        }
+
+        public HealthComponent(int health, int maxHealth)
+        {
+            _health = health;
+            _maxHealth = maxHealth;
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            Emitter = new Emitter<HealthComponentEventType, HealthComponent>();
         }
 
         public int DecrementHealth(int amount)
         {
-            Health = Health - amount > 0 ? Health - amount : 0;
-            return Health;
+            _health = _health - amount > 0 ? _health - amount : 0;
+            Emitter.Emit(HealthComponentEventType.HealthChanged, this);
+            return _health;
         }
 
         /// <summary>
@@ -28,7 +51,12 @@ namespace PuppetRoguelite.Components
         /// <returns></returns>
         public bool IsDepleted()
         {
-            return Health <= 0;
+            return _health <= 0;
         }
+    }
+
+    public enum HealthComponentEventType
+    {
+        HealthChanged = 1
     }
 }

@@ -7,6 +7,7 @@ using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
+using PuppetRoguelite.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,7 @@ namespace PuppetRoguelite.Components.Characters
         //input
         VirtualIntegerAxis _xAxisInput;
         VirtualIntegerAxis _yAxisInput;
+        VirtualButton _actionInput;
 
         //stats
         float _moveSpeed = 100f;
@@ -35,6 +37,7 @@ namespace PuppetRoguelite.Components.Characters
         HealthComponent _healthComponent;
         Hurtbox _hurtbox;
         HitHandler _hitHandler;
+        ActionPointComponent _actionPointComponent;
 
         //misc
         Vector2 _direction = new Vector2(1, 0);
@@ -43,11 +46,6 @@ namespace PuppetRoguelite.Components.Characters
 
         #region SETUP
 
-        public Player()
-        {
-            StateMachine = new PlayerStateMachine(this, new PlayerInCombat());
-        }
-
         public override void Initialize()
         {
             base.Initialize();
@@ -55,6 +53,12 @@ namespace PuppetRoguelite.Components.Characters
             AddComponents();
             AddObservers();
             SetupInput();
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+            StateMachine = new PlayerStateMachine(this, new PlayerInCombat());
         }
 
         void AddComponents()
@@ -76,10 +80,13 @@ namespace PuppetRoguelite.Components.Characters
             _collider = Entity.AddComponent(new BoxCollider(-5, 5, 10, 8));
 
             //Add health component
-            _healthComponent = Entity.AddComponent(new HealthComponent(10));
+            _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
 
             //hit handler
             _hitHandler = Entity.AddComponent(new HitHandler());
+
+            //action points
+            _actionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
         }
 
         void AddObservers()
@@ -102,6 +109,9 @@ namespace PuppetRoguelite.Components.Characters
             _yAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
             _yAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
             _yAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
+
+            _actionInput = new VirtualButton();
+            _actionInput.AddKeyboardKey(Keys.Space);
         }
 
         void AddAnimations()
@@ -210,8 +220,22 @@ namespace PuppetRoguelite.Components.Characters
             _mover.ApplyMovement(movement);
         }
 
-        public void HandleMovement()
+        public void HandleInput()
         {
+            //first, check for action button
+            if (_actionInput.IsPressed)
+            {
+                if (_actionPointComponent.ActionPoints > 0)
+                {
+                    _actionPointComponent.StopCharging();
+                    var actionSelectorEntity = Entity.Scene.CreateEntity("actions-selector");
+                    var actionSelector = actionSelectorEntity.AddComponent(new ActionsSelector(Entity.Position));
+                    //var pos = Entity.Position - new Vector2(0, 20);
+                    //var pos2 = Entity.Scene.Camera.WorldToScreenPoint(pos);
+                    //actionSelectorEntity.SetPosition(pos2);
+                }
+            }
+
             //get movement inputs
             var newDirection = new Vector2(_xAxisInput.Value, _yAxisInput.Value);
 
@@ -231,6 +255,11 @@ namespace PuppetRoguelite.Components.Characters
                 Move();
             }
         }
+
+        public void ChargeActionPoints()
+        {
+            _actionPointComponent.Charge();
+        }
     }
 
     #region STATE MACHINE
@@ -249,9 +278,15 @@ namespace PuppetRoguelite.Components.Characters
 
     public class PlayerInCombat : State<Player>
     {
+        public override void Begin()
+        {
+            base.Begin();
+
+            _context.ChargeActionPoints();
+        }
         public override void Update(float deltaTime)
         {
-            _context.HandleMovement();
+            _context.HandleInput();
         }
     }
 
