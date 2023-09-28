@@ -30,7 +30,7 @@ namespace PuppetRoguelite.UI
             base.Initialize();
 
             _basicSkin = CustomSkins.CreateBasicSkin();
-            SetRenderLayer(-1);
+            SetRenderLayer(999);
 
             ArrangeElements();
         }
@@ -41,7 +41,7 @@ namespace PuppetRoguelite.UI
 
             //position elements in world space
             var pos = Entity.Scene.Camera.WorldToScreenPoint(_anchorPosition + _offset);
-            _actionGroup.SetPosition(pos.X - (_actionGroup.PreferredWidth / 2), pos.Y);
+            _actionGroup.SetPosition((pos.X * 2) - (_actionGroup.PreferredWidth / 2), pos.Y * 2);
         }
 
         void ArrangeElements()
