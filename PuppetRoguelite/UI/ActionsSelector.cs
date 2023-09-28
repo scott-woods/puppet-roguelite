@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.UI;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace PuppetRoguelite.UI
             base.Initialize();
 
             _basicSkin = CustomSkins.CreateBasicSkin();
-            SetRenderLayer(999);
+            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             ArrangeElements();
         }

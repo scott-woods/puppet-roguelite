@@ -18,7 +18,7 @@ namespace PuppetRoguelite
             Window.AllowUserResizing = true;
             //IsFixedTimeStep = true;
 
-            Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.ShowAllPixelPerfect);
+            Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
 
             Scene = new TestScene();

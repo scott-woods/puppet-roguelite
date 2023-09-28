@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qnFUbqJUMVFE2jbdMEMMzL+2MyQIKPJruvxUd+WtBxw9u02FRUlMwag01OEu4g7+FHv+QbQ8rGKPPXFB4t82MA==",
+  "dgSpecHash": "eRseuYiqhKg46qGGlgusIIM+fhX5HCZPX1KuFSwYgL2cTPaW0wSL/5Z+ZdwQS+z694PBzgQMzRiPpT6zIO9Kbw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\scott\\OneDrive\\Desktop\\Development\\Projects\\puppet-roguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
+  "projectFilePath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
