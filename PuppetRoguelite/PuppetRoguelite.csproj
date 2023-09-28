@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,614 +9,361 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Content\Characters\ChainBot\attack.png" />
-    <None Remove="Content\Characters\ChainBot\charge.png" />
-    <None Remove="Content\Characters\ChainBot\death.png" />
-    <None Remove="Content\Characters\ChainBot\hit.png" />
-    <None Remove="Content\Characters\ChainBot\idle.png" />
-    <None Remove="Content\Characters\ChainBot\run.png" />
-    <None Remove="Content\Characters\ChainBot\transition to charge.png" />
-    <None Remove="Content\Characters\Skeleton\Death-Sheet.png" />
-    <None Remove="Content\Characters\Skeleton\Idle-Sheet.png" />
-    <None Remove="Content\Characters\Skeleton\Run-Sheet.png" />
-    <None Remove="Content\Maps\dungeon_prison_tileset.png" />
-    <None Remove="Content\Maps\dungeon_prison_tileset.tsx" />
-    <None Remove="Content\Maps\test_tilemap.tmx" />
-    <None Remove="Content\Sprites\Player\hooded_knight_attack.png" />
-    <None Remove="Content\Sprites\Player\hooded_knight_death.png" />
-    <None Remove="Content\Sprites\Player\hooded_knight_hurt.png" />
-    <None Remove="Content\Sprites\Player\hooded_knight_idle.png" />
-    <None Remove="Content\Sprites\Player\hooded_knight_run.png" />
-    <None Remove="Content\UI\basic_ui.atlas" />
-    <None Remove="Content\UI\basic_ui.png" />
-    <None Remove="Content\UI\UI_Flat_Banner_01_Downward.png" />
-    <None Remove="Content\UI\UI_Flat_Banner_01_Upward.png" />
-    <None Remove="Content\UI\UI_Flat_Banner_02_Downward.png" />
-    <None Remove="Content\UI\UI_Flat_Banner_02_Upward.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Lock_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Press_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Large_Release_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Lock_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Press_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Medium_Release_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Lock_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Press_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Button_Small_Release_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Checkmark_Large.png" />
-    <None Remove="Content\UI\UI_Flat_Checkmark_Medium.png" />
-    <None Remove="Content\UI\UI_Flat_Checkmark_Small.png" />
-    <None Remove="Content\UI\UI_Flat_Cross_Large.png" />
-    <None Remove="Content\UI\UI_Flat_Cross_Medium.png" />
-    <None Remove="Content\UI\UI_Flat_Cross_Small.png" />
-    <None Remove="Content\UI\UI_Flat_Dropdown.png" />
-    <None Remove="Content\UI\UI_Flat_Dropdown_Handle.png" />
-    <None Remove="Content\UI\UI_Flat_Fillbar_01_Block.png" />
-    <None Remove="Content\UI\UI_Flat_Fillbar_01_Flat.png" />
-    <None Remove="Content\UI\UI_Flat_Fillbar_01_Hollow.png" />
-    <None Remove="Content\UI\UI_Flat_Fillbar_02_Block.png" />
-    <None Remove="Content\UI\UI_Flat_Fillbar_02_Flat.png" />
-    <None Remove="Content\UI\UI_Flat_Fillbar_02_Hollow.png" />
-    <None Remove="Content\UI\UI_Flat_Filler_01.png" />
-    <None Remove="Content\UI\UI_Flat_Filler_02.png" />
-    <None Remove="Content\UI\UI_Flat_Filler_03.png" />
-    <None Remove="Content\UI\UI_Flat_Filler_04.png" />
-    <None Remove="Content\UI\UI_Flat_Filler_05.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_01_Horizontal.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_01_Inward.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_01_Lite.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_01_Standard.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_01_Vertical.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_02_Horizontal.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_02_Inward.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_02_Lite.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_02_Standard.png" />
-    <None Remove="Content\UI\UI_Flat_Frame_02_Vertical.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_01.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_02.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_03.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_04.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_01.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_02.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_03.png" />
-    <None Remove="Content\UI\UI_Flat_Scrollbar_Handle_04.png" />
-    <None Remove="Content\UI\UI_Flat_Select_01a1.png" />
-    <None Remove="Content\UI\UI_Flat_Select_01a2.png" />
-    <None Remove="Content\UI\UI_Flat_Select_01a3.png" />
-    <None Remove="Content\UI\UI_Flat_Select_01a4.png" />
-    <None Remove="Content\UI\UI_Flat_Select_02a1.png" />
-    <None Remove="Content\UI\UI_Flat_Select_02a2.png" />
-    <None Remove="Content\UI\UI_Flat_Select_02a3.png" />
-    <None Remove="Content\UI\UI_Flat_Select_02a4.png" />
-    <None Remove="Content\UI\UI_Flat_Slider.png" />
-    <None Remove="Content\UI\UI_Flat_Slider_Filler.png" />
-    <None Remove="Content\UI\UI_Flat_Slot_01_Available.png" />
-    <None Remove="Content\UI\UI_Flat_Slot_01_Selected.png" />
-    <None Remove="Content\UI\UI_Flat_Slot_01_Unavailable.png" />
-    <None Remove="Content\UI\UI_Flat_Slot_02_Available.png" />
-    <None Remove="Content\UI\UI_Flat_Slot_02_Selected.png" />
-    <None Remove="Content\UI\UI_Flat_Slot_02_Unavailable.png" />
-    <None Remove="Content\UI\UI_Flat_Textfield_01.png" />
-    <None Remove="Content\UI\UI_Flat_Textfield_02.png" />
+    <None Remove="Content\Textures\Characters\ChainBot\charge.png" />
+    <None Remove="Content\Textures\Characters\ChainBot\death.png" />
+    <None Remove="Content\Textures\Characters\ChainBot\hit.png" />
+    <None Remove="Content\Textures\Characters\ChainBot\idle.png" />
+    <None Remove="Content\Textures\Characters\ChainBot\run.png" />
+    <None Remove="Content\Textures\Characters\ChainBot\transition to charge.png" />
+    <None Remove="Content\Textures\Characters\Player\hooded_knight_attack.png" />
+    <None Remove="Content\Textures\Characters\Player\hooded_knight_death.png" />
+    <None Remove="Content\Textures\Characters\Player\hooded_knight_hurt.png" />
+    <None Remove="Content\Textures\Characters\Player\hooded_knight_idle.png" />
+    <None Remove="Content\Textures\Characters\Player\hooded_knight_run.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 000.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 001.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 002.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 003.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 004.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 005.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 006.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 007.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 008.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 009.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 010.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 011.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 012.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 013.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 014.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 015.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 016.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 017.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 018.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 019.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 020.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 021.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 022.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 023.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 024.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 025.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 026.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 027.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 028.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 029.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 030.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 031.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 032.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 033.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 034.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 035.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 036.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 037.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 038.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 039.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 040.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 041.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 042.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 043.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 044.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 045.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 046.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 047.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 048.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 049.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 050.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 051.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 052.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 053.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 054.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 055.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 056.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 057.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 058.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 059.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 060.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 061.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 062.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 063.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 064.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 065.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 066.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 067.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 068.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 069.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 070.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 071.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 072.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 073.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 074.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 075.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 076.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 077.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 078.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 079.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 080.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 081.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 082.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 083.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 084.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 085.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 086.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 087.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 088.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 089.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 090.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 091.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 092.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 093.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 094.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 095.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 096.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 097.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 098.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 099.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 100.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 101.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 102.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 103.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 104.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 105.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 106.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 107.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 108.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 109.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 110.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 111.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 112.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 113.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 114.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 115.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 116.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 117.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 118.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 119.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 120.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 121.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 122.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 123.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 124.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 125.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 126.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 127.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 128.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 129.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 130.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 131.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 132.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 133.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 134.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 135.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 136.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 137.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 138.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 139.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 140.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 141.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 142.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 143.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 144.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 145.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 146.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 147.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 148.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 149.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 150.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 151.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 152.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 153.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 154.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 155.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 156.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 157.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 158.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 159.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 160.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 161.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 162.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 163.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 164.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 165.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 166.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 167.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 168.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 169.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 170.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 171.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 172.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 173.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 174.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 175.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 176.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 177.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 178.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 179.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 180.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 181.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 182.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 183.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 184.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 185.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 186.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 187.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 188.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 189.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 190.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 191.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 192.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 193.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 194.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 195.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 196.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 197.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 198.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 199.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 200.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 201.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 202.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 203.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 204.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 205.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 206.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 207.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 208.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 209.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 210.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 211.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 212.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 213.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 214.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 215.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 216.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 217.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 218.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 219.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 220.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 221.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 222.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 223.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 224.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 225.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 226.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 227.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 228.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 229.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 230.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 231.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 232.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 233.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 234.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 235.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 236.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 237.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 238.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 239.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 240.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 241.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 242.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 243.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 244.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 245.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 246.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 247.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 248.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 249.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 250.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 251.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 252.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 253.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 254.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 255.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 256.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 257.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 258.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 259.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 260.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 261.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 262.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 263.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 264.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 265.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 266.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 267.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 268.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 269.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 270.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 271.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 272.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 273.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 274.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 275.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 276.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 277.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 278.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 279.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 280.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 281.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 282.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 283.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 284.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 285.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 286.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 287.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 288.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 289.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 290.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 291.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 292.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 293.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 294.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 295.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 296.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 297.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 298.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 299.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 300.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 301.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 302.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 303.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 304.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 305.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 306.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 307.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 308.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 309.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 310.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 311.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 312.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 313.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 314.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 315.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 316.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 317.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 318.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 319.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 320.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 321.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 322.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 323.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 324.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 325.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 326.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 327.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 328.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 329.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 330.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 331.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 332.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 333.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 334.png" />
+    <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 335.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Characters\ChainBot\attack.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\ChainBot\charge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\ChainBot\death.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\ChainBot\hit.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\ChainBot\idle.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\ChainBot\run.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\ChainBot\transition to charge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\Skeleton\Death-Sheet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\Skeleton\Idle-Sheet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Characters\Skeleton\Run-Sheet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Maps\dungeon_prison_tileset.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Maps\dungeon_prison_tileset.tsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Maps\test_tilemap.tmx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sprites\Player\hooded_knight_attack.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sprites\Player\hooded_knight_death.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sprites\Player\hooded_knight_hurt.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sprites\Player\hooded_knight_idle.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Sprites\Player\hooded_knight_run.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\basic_ui.atlas">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\basic_ui.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Banner_01_Downward.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Banner_01_Upward.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Banner_02_Downward.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Banner_02_Upward.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Lock_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Press_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Large_Release_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Lock_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Press_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Medium_Release_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Lock_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Press_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Button_Small_Release_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Checkmark_Large.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Checkmark_Medium.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Checkmark_Small.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Cross_Large.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Cross_Medium.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Cross_Small.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Dropdown.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Dropdown_Handle.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Fillbar_01_Block.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Fillbar_01_Flat.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Fillbar_01_Hollow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Fillbar_02_Block.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Fillbar_02_Flat.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Fillbar_02_Hollow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Filler_01.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Filler_02.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Filler_03.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Filler_04.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Filler_05.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_01_Horizontal.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_01_Inward.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_01_Lite.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_01_Standard.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_01_Vertical.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_02_Horizontal.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_02_Inward.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_02_Lite.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_02_Standard.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Frame_02_Vertical.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_01.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_02.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_03.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_04.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_01.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_02.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_03.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Scrollbar_Handle_04.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_01a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_01a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_01a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_01a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_02a1.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_02a2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_02a3.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Select_02a4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slider.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slider_Filler.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slot_01_Available.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slot_01_Selected.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slot_01_Unavailable.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slot_02_Available.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slot_02_Selected.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Slot_02_Unavailable.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Textfield_01.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\UI\UI_Flat_Textfield_02.png">
+    <Content Include="Content\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -626,11 +373,33 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-    <PackageReference Include="Nopipeline.Task" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez\Nez.Portable\Nez.MG38.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Audio\Music\" />
+    <Folder Include="Content\Textures\UI\Icons\Style3\Atlas\" />
+    <Folder Include="Content\Textures\UI\Icons\Style4\Atlas\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ContentPathGenerator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ContentPathGenerator.cs</LastGenOutput>
+    </None>
+    <None Update="Content\Textures\Characters\ChainBot\attack.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ContentPathGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ContentPathGenerator.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />

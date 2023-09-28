@@ -106,7 +106,7 @@ namespace PuppetRoguelite.Components.Characters
         public void AddAnimations()
         {
             //Idle
-            var idleTexture = Entity.Scene.Content.LoadTexture("Content/Characters/ChainBot/idle.png");
+            var idleTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Idle);
             var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 126, 39);
             _animator.AddAnimation("IdleLeft", new[]
             {
@@ -126,7 +126,7 @@ namespace PuppetRoguelite.Components.Characters
             });
 
             //Run
-            var runTexture = Entity.Scene.Content.LoadTexture("Content/Characters/ChainBot/run.png");
+            var runTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Run);
             var runSprites = Sprite.SpritesFromAtlas(runTexture, 126, 39);
             var leftSprites = runSprites.Where((sprite, index) => index % 2 != 0);
             var rightSprites = runSprites.Where((sprite, index) => index % 2 == 0);
@@ -134,19 +134,19 @@ namespace PuppetRoguelite.Components.Characters
             _animator.AddAnimation("RunRight", rightSprites.ToArray());
 
             //Attack
-            var attackTexture = Entity.Scene.Content.LoadTexture("Content/Characters/ChainBot/attack.png");
+            var attackTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Attack);
             var attackSprites = Sprite.SpritesFromAtlas(attackTexture, 126, 39);
             _animator.AddAnimation("AttackLeft", attackSprites.Where((sprite, index) => index % 2 != 0).ToArray());
             _animator.AddAnimation("AttackRight", attackSprites.Where((sprite, index) => index % 2 == 0).ToArray());
 
             //transition to charge
-            var transitionTexture = Entity.Scene.Content.LoadTexture("Content/Characters/ChainBot/transition to charge.png");
+            var transitionTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Transitiontocharge);
             var transitionSprites = Sprite.SpritesFromAtlas(transitionTexture, 126, 39);
             _animator.AddAnimation("TransitionLeft", transitionSprites.Where((sprite, index) => index % 2 != 0).ToArray());
             _animator.AddAnimation("TransitionRight", transitionSprites.Where((sprite, index) => index % 2 == 0).ToArray());
 
             //charge
-            var chargeTexture = Entity.Scene.Content.LoadTexture("Content/Characters/ChainBot/charge.png");
+            var chargeTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Charge);
             var chargeSprites = Sprite.SpritesFromAtlas(chargeTexture, 126, 39);
             _animator.AddAnimation("ChargeLeft", chargeSprites.Where((sprite, index) => index % 2 != 0).ToArray());
             _animator.AddAnimation("ChargeRight", chargeSprites.Where((sprite, index) => index % 2 == 0).ToArray());

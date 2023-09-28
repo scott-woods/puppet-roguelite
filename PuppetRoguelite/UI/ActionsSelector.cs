@@ -29,8 +29,8 @@ namespace PuppetRoguelite.UI
         {
             base.Initialize();
 
-            _basicSkin = Skin.CreateDefaultSkin();
-            IsFullScreen = false;
+            _basicSkin = CustomSkins.CreateBasicSkin();
+            SetRenderLayer(-1);
 
             ArrangeElements();
         }
@@ -40,23 +40,17 @@ namespace PuppetRoguelite.UI
             base.Update();
 
             //position elements in world space
-            var pos = Entity.Scene.Camera.WorldToScreenPoint( _anchorPosition + _offset );
+            var pos = Entity.Scene.Camera.WorldToScreenPoint(_anchorPosition + _offset);
             _actionGroup.SetPosition(pos.X - (_actionGroup.PreferredWidth / 2), pos.Y);
         }
 
         void ArrangeElements()
         {
             _actionGroup = new HorizontalGroup().SetSpacing(4);
-            _actionGroup.AddElement(new Label("t", _basicSkin));
-            _actionGroup.AddElement(new Label("e", _basicSkin));
-            _actionGroup.AddElement(new Label("s", _basicSkin));
-            _actionGroup.AddElement(new Label("t", _basicSkin));
+            _actionGroup.AddElement(new Button(_basicSkin, "attackActionButton"));
+            _actionGroup.AddElement(new Button(_basicSkin, "toolActionButton"));
             Stage.AddElement(_actionGroup);
-            //_label = new Label("test", _basicSkin);
-            //label.SetPosition(100, 100);
-            //Stage.AddElement(_label);
-            //var dialog = new Dialog("test", _basicSkin);
-            //Stage.AddElement(dialog);
+            //_actionGroup.SetScale(.75f);
         }
     }
 }

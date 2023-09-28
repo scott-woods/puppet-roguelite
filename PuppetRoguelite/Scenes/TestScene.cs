@@ -1,8 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.AI.Pathfinding;
+using Nez.Textures;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.PostProcessors;
+using PuppetRoguelite.Renderers;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.UI;
 using System;
@@ -21,6 +25,35 @@ namespace PuppetRoguelite.Scenes
         //components
         CombatUI _ui;
 
+        //renderers
+        ScreenSpaceRenderer _screenSpaceRenderer;
+
+        public TestScene()
+        {
+            //_screenSpaceRenderer = new ScreenSpaceRenderer(100, 999);
+            ////_screenSpaceRenderer.RenderTexture = new RenderTexture(1920, 1080);
+            //_screenSpaceRenderer.ShouldDebugRender = false;
+            //_screenSpaceRenderer.Camera.Zoom = 1;
+            //FinalRenderDelegate = this;
+        }
+
+        //public override void Begin()
+        //{
+        //    var mainRenderer = AddRenderer(new RenderLayerExcludeRenderer(0, new[] { 999 }));
+        //    //mainRenderer.Material = Material.StencilRead();
+        //    mainRenderer.RenderTargetClearColor = Color.Black;
+
+        //    var uiRenderTarget = new RenderTexture(1920, 1080);
+        //    uiRenderTarget.ResizeBehavior = RenderTexture.RenderTextureResizeBehavior.None;
+        //    var uiRenderer = new ScreenSpaceRenderer(-1, 999);
+        //    uiRenderer.RenderTexture = uiRenderTarget;
+        //    uiRenderer.WantsToRenderAfterPostProcessors = false;
+        //    AddRenderer(uiRenderer);
+        //    AddPostProcessor(new SimplePostProcessor(0, uiRenderer.RenderTexture));
+
+        //    base.Begin();
+        //}
+
         public override void Initialize()
         {
             base.Initialize();
@@ -33,7 +66,7 @@ namespace PuppetRoguelite.Scenes
 
             //tilemap
             var tiledEntity = CreateEntity("tiled-map-entity");
-            var map = Content.LoadTiledMap("Content/Maps/test_tilemap.tmx");
+            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Test_tilemap);
             var tiledMapRenderer = tiledEntity.AddComponent(new TiledMapRenderer(map, "collision"));
             tiledMapRenderer.SetLayersToRender(new[] { "floor", "details" });
             tiledMapRenderer.RenderLayer = 10;
@@ -49,6 +82,9 @@ namespace PuppetRoguelite.Scenes
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
             Camera.Entity.SetUpdateOrder(int.MaxValue);
+            Camera.MaximumZoom = 4;
+            Camera.MinimumZoom = .3f;
+            Camera.Zoom = .45f;
 
             //var projectileEntity = CreateEntity("projectile");
             //var projectile = projectileEntity.AddComponent(new TestProjectile());

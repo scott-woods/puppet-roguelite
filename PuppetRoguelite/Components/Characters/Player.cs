@@ -117,7 +117,7 @@ namespace PuppetRoguelite.Components.Characters
         void AddAnimations()
         {
             //idle
-            var idleTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_idle.png");
+            var idleTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_idle);
             var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 64, 64);
             _spriteAnimator.AddAnimation("IdleDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 0, 2));
             _spriteAnimator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 3, 5));
@@ -125,7 +125,7 @@ namespace PuppetRoguelite.Components.Characters
             _spriteAnimator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 9, 11));
 
             //run
-            var runTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_run.png");
+            var runTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_run);
             var runSprites = Sprite.SpritesFromAtlas(runTexture, 64, 64);
             _spriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9));
             _spriteAnimator.AddAnimation("RunLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 10, 19));
@@ -133,13 +133,13 @@ namespace PuppetRoguelite.Components.Characters
             _spriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37));
 
             //hurt
-            var hurtTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_hurt.png");
+            var hurtTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_hurt);
             var hurtSprites = Sprite.SpritesFromAtlas(hurtTexture, 64, 64);
             _spriteAnimator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 0, 4));
             _spriteAnimator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 5, 9));
 
             //death
-            var deathTexture = Entity.Scene.Content.LoadTexture("Content/Sprites/Player/hooded_knight_death.png");
+            var deathTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_death);
             var deathSprites = Sprite.SpritesFromAtlas(deathTexture, 64, 64);
             _spriteAnimator.AddAnimation("DeathRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 0, 9));
             _spriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
@@ -242,9 +242,9 @@ namespace PuppetRoguelite.Components.Characters
             //if no movement, switch to idle and return
             if (newDirection == Vector2.Zero)
             {
-                _lastNonZeroDirection = _direction;
-                _direction = newDirection;
-                _direction.Normalize();
+                //_lastNonZeroDirection = _direction;
+                //_direction = newDirection;
+                //_direction.Normalize();
                 Idle();
             }
             else
