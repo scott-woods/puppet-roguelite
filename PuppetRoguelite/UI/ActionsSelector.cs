@@ -2,6 +2,7 @@
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +42,8 @@ namespace PuppetRoguelite.UI
             base.Update();
 
             //position elements in world space
-            var pos = Entity.Scene.Camera.WorldToScreenPoint(_anchorPosition + _offset);
-            _actionGroup.SetPosition((pos.X * 2) - (_actionGroup.PreferredWidth / 2), pos.Y * 2);
+            var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition + _offset);
+            _actionGroup.SetPosition(pos.X - (_actionGroup.PreferredWidth / _actionGroup.GetChildren().Count), pos.Y);
         }
 
         void ArrangeElements()
@@ -51,7 +52,6 @@ namespace PuppetRoguelite.UI
             _actionGroup.AddElement(new Button(_basicSkin, "attackActionButton"));
             _actionGroup.AddElement(new Button(_basicSkin, "toolActionButton"));
             Stage.AddElement(_actionGroup);
-            //_actionGroup.SetScale(.75f);
         }
     }
 }

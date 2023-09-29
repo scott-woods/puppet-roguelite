@@ -6,7 +6,6 @@ using Nez.Textures;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.PostProcessors;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.UI;
 using System;
@@ -24,32 +23,6 @@ namespace PuppetRoguelite.Scenes
 
         //components
         CombatUI _ui;
-
-        //RenderLayerExcludeRenderer _gameRenderer;
-        //ScreenSpaceRenderer _uiRenderer;
-
-        //public override void Begin()
-        //{
-        //    _gameRenderer = new RenderLayerExcludeRenderer(-1, (int)RenderLayers.ScreenSpaceRenderLayer);
-        //    var mainRenderTarget = new RenderTexture(480, 270);
-        //    mainRenderTarget.ResizeBehavior = RenderTexture.RenderTextureResizeBehavior.None;
-        //    _gameRenderer.WantsToRenderAfterPostProcessors = false;
-        //    _gameRenderer.RenderTargetClearColor = Color.Transparent;
-        //    _gameRenderer.RenderTexture = mainRenderTarget;
-        //    AddRenderer(_gameRenderer);
-
-        //    _uiRenderer = new ScreenSpaceRenderer(-1, (int)RenderLayers.ScreenSpaceRenderLayer);
-        //    var uiRenderTarget = new RenderTexture(960, 540);
-        //    uiRenderTarget.ResizeBehavior = RenderTexture.RenderTextureResizeBehavior.None;
-        //    _uiRenderer.WantsToRenderAfterPostProcessors = false;
-        //    _uiRenderer.RenderTargetClearColor = Color.Transparent;
-        //    _uiRenderer.RenderTexture = uiRenderTarget;
-        //    AddRenderer(_uiRenderer);
-
-        //    AddPostProcessor(new MainPostProcessor(mainRenderTarget, uiRenderTarget));
-
-        //    base.Begin();
-        //}
 
         public override void Initialize()
         {

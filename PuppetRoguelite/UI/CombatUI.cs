@@ -2,6 +2,7 @@
 using Nez.Sprites;
 using Nez.UI;
 using PuppetRoguelite.Components;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace PuppetRoguelite.UI
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
-            _table.SetDebug(true);
+            _table.SetDebug(false);
 
             //load skin
             _basicSkin = Skin.CreateDefaultSkin();

@@ -14,9 +14,9 @@ namespace PuppetRoguelite
         {
             base.Initialize();
 
-            DebugRenderEnabled = true;
+            DebugRenderEnabled = false;
             Window.AllowUserResizing = true;
-            //IsFixedTimeStep = true;
+            IsFixedTimeStep = false;
 
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);

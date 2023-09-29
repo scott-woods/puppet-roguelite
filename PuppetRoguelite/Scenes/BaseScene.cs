@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Textures;
+using PuppetRoguelite.Enums;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +21,22 @@ namespace PuppetRoguelite.Scenes
         {
             FinalRenderDelegate = this;
 
-            _gameRenderer = new RenderLayerExcludeRenderer(0, 999);
+            _gameRenderer = new RenderLayerExcludeRenderer(0, (int)RenderLayers.ScreenSpaceRenderLayer);
             var mainRenderTarget = new RenderTexture(480, 270);
             _gameRenderer.RenderTexture = mainRenderTarget;
             AddRenderer(_gameRenderer);
 
-            _uiRenderer = new ScreenSpaceRenderer(100, 999);
+            _uiRenderer = new ScreenSpaceRenderer(100, (int)RenderLayers.ScreenSpaceRenderLayer);
+            _uiRenderer.WantsToRenderAfterPostProcessors = false;
             var uiRenderTarget = new RenderTexture(960, 540);
             uiRenderTarget.ResizeBehavior = RenderTexture.RenderTextureResizeBehavior.None;
             _uiRenderer.RenderTexture = uiRenderTarget;
             AddRenderer(_uiRenderer);
+
+            var scaleX = (float)uiRenderTarget.RenderTarget.Width / mainRenderTarget.RenderTarget.Width;
+            var scaleY = (float)uiRenderTarget.RenderTarget.Height / mainRenderTarget.RenderTarget.Height;
+
+            ResolutionHelper.SetScaleFactor(new Vector2(scaleX, scaleY));
         }
 
         #region IFinalRenderDelegate
@@ -53,13 +61,9 @@ namespace PuppetRoguelite.Scenes
 
             //draw game
             Graphics.Instance.Batcher.Draw(_gameRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
-            //var gameScale = new Vector2(Screen.Width / _gameRenderer.RenderTexture.RenderTarget.Width, Screen.Height / _gameRenderer.RenderTexture.RenderTarget.Height);
-            //Graphics.Instance.Batcher.Draw(_gameRenderer.RenderTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, gameScale, SpriteEffects.None, 0f);
 
             //draw ui
             Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
-            //var uiScale = new Vector2(Screen.Width / _uiRenderer.RenderTexture.RenderTarget.Width, Screen.Height / _uiRenderer.RenderTexture.RenderTarget.Height);
-            //Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, uiScale, SpriteEffects.None, 0f);
 
             Graphics.Instance.Batcher.End();
         }
