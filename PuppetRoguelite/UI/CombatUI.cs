@@ -36,9 +36,6 @@ namespace PuppetRoguelite.UI
 
             //arrange elements
             ArrangeElements();
-
-            //connect to emitters
-            //ConnectToEmitters();
         }
 
         public override void OnAddedToEntity()
@@ -71,26 +68,6 @@ namespace PuppetRoguelite.UI
             _apProgressBar = new ProgressBar(_basicSkin);
             _apProgressBar.SetStepSize(.1f);
             apTable.Add(_apProgressBar);
-
-            //progress bar on bottom
-            //_table.Row();
-            //_apProgressBar = new ProgressBar(_basicSkin);
-            //_apProgressBar.SetStepSize(.1f);
-            //_table.Add(_apProgressBar).Expand().Bottom().SetPadBottom(10);
-
-            //_table.Row();
-            //var container = new Container();
-            //_table.Add(container).Expand().Fill().Center();
-            //var progressBar = new ProgressBar(_basicSkin);
-            ////container.SetRight();
-            //container.AddElement(progressBar);
-            //container.SetAlign(Align.TopRight);
-
-            //_table.Row();
-            //var progressBarTable = new Table();
-            //_table.Add(progressBarTable).Expand().Bottom();
-            //var progressBar = new ProgressBar(_basicSkin);
-            //progressBarTable.Add(progressBar).SetPadBottom(10);
         }
 
         void ConnectToEmitters()

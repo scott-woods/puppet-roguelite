@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.AI.FSM;
 using Nez.Sprites;
+using Nez.Systems;
 using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Enums;
@@ -20,6 +21,9 @@ namespace PuppetRoguelite.Components.Characters
 {
     public class Player : Component, IUpdatable
     {
+        public static Player Instance { get; private set; } = new Player();
+
+        //state machine
         internal PlayerStateMachine StateMachine;
 
         //input
@@ -45,6 +49,11 @@ namespace PuppetRoguelite.Components.Characters
         SubpixelVector2 _subPixelV2 = new SubpixelVector2();
 
         #region SETUP
+
+        public Player()
+        {
+            Instance = this;
+        }
 
         public override void Initialize()
         {
@@ -96,6 +105,8 @@ namespace PuppetRoguelite.Components.Characters
 
             _hitHandler.Emitter.AddObserver(HitHandlerEventType.Hurt, OnHurt);
             _hitHandler.Emitter.AddObserver(HitHandlerEventType.Killed, OnKilled);
+
+            Game1.GameEventsEmitter.AddObserver(GameEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
         }
 
         void SetupInput()
@@ -227,12 +238,7 @@ namespace PuppetRoguelite.Components.Characters
             {
                 if (_actionPointComponent.ActionPoints > 0)
                 {
-                    _actionPointComponent.StopCharging();
-                    var actionSelectorEntity = Entity.Scene.CreateEntity("actions-selector");
-                    var actionSelector = actionSelectorEntity.AddComponent(new ActionsSelector(Entity.Position));
-                    //var pos = Entity.Position - new Vector2(0, 20);
-                    //var pos2 = Entity.Scene.Camera.WorldToScreenPoint(pos);
-                    //actionSelectorEntity.SetPosition(pos2);
+                    Game1.GameEventsEmitter.Emit(GameEvents.TurnPhaseTriggered);
                 }
             }
 
@@ -259,6 +265,11 @@ namespace PuppetRoguelite.Components.Characters
         public void ChargeActionPoints()
         {
             _actionPointComponent.Charge();
+        }
+
+        public void OnTurnPhaseTriggered()
+        {
+            _actionPointComponent.StopCharging();
         }
     }
 

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
+using Nez.Systems;
 using PuppetRoguelite.Scenes;
 
 namespace PuppetRoguelite
@@ -9,6 +10,7 @@ namespace PuppetRoguelite
     public class Game1 : Core
     {
         public static Point DesignResolution = new Point(480, 270);
+        public static Emitter<GameEvents> GameEventsEmitter = new Emitter<GameEvents>();
 
         protected override void Initialize()
         {

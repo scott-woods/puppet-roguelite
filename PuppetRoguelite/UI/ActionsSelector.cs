@@ -2,6 +2,7 @@
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,19 @@ namespace PuppetRoguelite.UI
         //elements
         Label _label;
         HorizontalGroup _actionGroup;
+        ActionButton _attackButton;
+        ActionButton _toolButton;
 
         Vector2 _offset = new Vector2(0, -20);
 
-        public ActionsSelector(Vector2 anchorPosition)
+        CombatManager _combatManager;
+        AttacksMenu _attacksMenu;
+
+        public ActionsSelector(Vector2 anchorPosition, CombatManager combatManager, AttacksMenu attacksMenu)
         {
             _anchorPosition = anchorPosition;
+            _combatManager = combatManager;
+            _attacksMenu = attacksMenu;
         }
 
         public override void Initialize()
@@ -35,6 +43,13 @@ namespace PuppetRoguelite.UI
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             ArrangeElements();
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            Stage.SetGamepadFocusElement(_attackButton);
         }
 
         public override void Update()
@@ -49,9 +64,21 @@ namespace PuppetRoguelite.UI
         void ArrangeElements()
         {
             _actionGroup = new HorizontalGroup().SetSpacing(4);
-            _actionGroup.AddElement(new Button(_basicSkin, "attackActionButton"));
-            _actionGroup.AddElement(new Button(_basicSkin, "toolActionButton"));
+            _attackButton = _actionGroup.AddElement(new ActionButton(_basicSkin, "attackActionButton"));
+            _attackButton.OnClicked += OnAttackButtonClicked;
+            _toolButton = _actionGroup.AddElement(new ActionButton(_basicSkin, "toolActionButton"));
+            _toolButton.OnClicked += OnToolButtonClicked;
             Stage.AddElement(_actionGroup);
+        }
+
+        void OnAttackButtonClicked(Button obj)
+        {
+            _combatManager.OpenMenu(_attacksMenu);
+        }
+
+        void OnToolButtonClicked(Button obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }

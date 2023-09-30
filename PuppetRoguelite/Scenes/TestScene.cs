@@ -5,6 +5,7 @@ using Nez.AI.Pathfinding;
 using Nez.Textures;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.UI;
@@ -35,17 +36,20 @@ namespace PuppetRoguelite.Scenes
             _ui = uiEntity.AddComponent(new CombatUI());
 
             //tilemap
-            var tiledEntity = CreateEntity("tiled-map-entity");
+            var tiledEntity = new PausableEntity("tiled-map-entity");
+            AddEntity(tiledEntity);
             var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Test_tilemap);
             var tiledMapRenderer = tiledEntity.AddComponent(new TiledMapRenderer(map, "collision"));
             tiledMapRenderer.SetLayersToRender(new[] { "floor", "details" });
             tiledMapRenderer.RenderLayer = 10;
 
             //pathfinding
-            //var graph = new AstarGridGraph(tiledMapRenderer.CollisionLayer);
-            //AddSceneComponent(new GridGraphManager(graph, map));
+            var graph = new AstarGridGraph(tiledMapRenderer.CollisionLayer);
+            AddSceneComponent(new GridGraphManager(graph, map));
 
-            _playerEntity = CreateEntity("player");
+            //add player
+            _playerEntity = new PausableEntity("player");
+            AddEntity(_playerEntity);
             var player = _playerEntity.AddComponent(new Player());
             _playerEntity.SetPosition(480 / 3, 270 / 3);
 
@@ -56,17 +60,13 @@ namespace PuppetRoguelite.Scenes
             //Camera.MinimumZoom = .3f;
             //Camera.Zoom = .45f;
 
-            //var projectileEntity = CreateEntity("projectile");
-            //var projectile = projectileEntity.AddComponent(new TestProjectile());
-            //projectileEntity.SetPosition(480 / 3, 270 / 3);
+            var chainBotEntity = new PausableEntity("chain-bot-entity");
+            AddEntity(chainBotEntity);
+            var chainBot = chainBotEntity.AddComponent(new ChainBot());
+            chainBotEntity.SetPosition(64, 64);
 
-            //var enemyEntity = CreateEntity("enemy");
-            //var enemy = enemyEntity.AddComponent(new TestEnemy());
-            //enemyEntity.SetPosition(480 / 4, 270 / 4);
-
-            //var chainBotEntity = CreateEntity("chain-bot-entity");
-            //var chainBot = chainBotEntity.AddComponent(new ChainBot());
-            //chainBotEntity.SetPosition(64, 64);
+            //add combat manager
+            AddSceneComponent(new CombatManager());
         }
     }
 }
