@@ -6,6 +6,7 @@ using Nez.Sprites;
 using Nez.Systems;
 using Nez.Textures;
 using Nez.UI;
+using PuppetRoguelite.Components.Attacks;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI;
@@ -41,7 +42,8 @@ namespace PuppetRoguelite.Components.Characters
         HealthComponent _healthComponent;
         Hurtbox _hurtbox;
         HitHandler _hitHandler;
-        ActionPointComponent _actionPointComponent;
+        public ActionPointComponent ActionPointComponent;
+        public AttacksList AttacksList;
 
         //misc
         Vector2 _direction = new Vector2(1, 0);
@@ -95,7 +97,10 @@ namespace PuppetRoguelite.Components.Characters
             _hitHandler = Entity.AddComponent(new HitHandler());
 
             //action points
-            _actionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
+            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
+
+            //attacks list
+            AttacksList = Entity.AddComponent(new AttacksList(new List<IPlayerAttack>() { new Slash() }));
         }
 
         void AddObservers()
@@ -236,7 +241,7 @@ namespace PuppetRoguelite.Components.Characters
             //first, check for action button
             if (_actionInput.IsPressed)
             {
-                if (_actionPointComponent.ActionPoints > 0)
+                if (ActionPointComponent.ActionPoints > 0)
                 {
                     Game1.GameEventsEmitter.Emit(GameEvents.TurnPhaseTriggered);
                 }
@@ -264,12 +269,12 @@ namespace PuppetRoguelite.Components.Characters
 
         public void ChargeActionPoints()
         {
-            _actionPointComponent.Charge();
+            ActionPointComponent.Charge();
         }
 
         public void OnTurnPhaseTriggered()
         {
-            _actionPointComponent.StopCharging();
+            ActionPointComponent.StopCharging();
         }
     }
 

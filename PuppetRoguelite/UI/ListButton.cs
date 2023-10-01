@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI
 {
-    public class ActionButton : Button
+    public class ListButton : TextButton
     {
         UIMenu _menu;
 
-        public ActionButton(Skin skin, string styleName = null) : base(skin, styleName)
+        public ListButton(string text, Skin skin, string styleName = null) : base(text, skin, styleName)
         {
-
         }
 
-        public ActionButton(UIMenu menu, Skin skin, string styleName = null) : base(skin, styleName)
+        public ListButton(UIMenu menu, string text, Skin skin, string styleName = null) : base(text, skin, styleName)
         {
             _menu = menu;
         }

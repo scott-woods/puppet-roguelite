@@ -359,6 +359,14 @@
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 333.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 334.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 335.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_01.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_02.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_01.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_02.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_03.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_04.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_05.png" />
+    <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_06.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
@@ -381,6 +389,7 @@
     <Folder Include="Content\Audio\Music\" />
     <Folder Include="Content\Textures\UI\Icons\Style3\Atlas\" />
     <Folder Include="Content\Textures\UI\Icons\Style4\Atlas\" />
+    <Folder Include="Content\Textures\UI\Menu\Style3\Atlas\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="ContentPathGenerator.tt">

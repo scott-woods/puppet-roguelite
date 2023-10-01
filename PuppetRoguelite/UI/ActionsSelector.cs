@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI
 {
-    public class ActionsSelector : UICanvas
+    public class ActionsSelector : UIMenu
     {
         Skin _basicSkin;
         Vector2 _anchorPosition;
@@ -28,7 +28,8 @@ namespace PuppetRoguelite.UI
         CombatManager _combatManager;
         AttacksMenu _attacksMenu;
 
-        public ActionsSelector(Vector2 anchorPosition, CombatManager combatManager, AttacksMenu attacksMenu)
+        public ActionsSelector(Vector2 anchorPosition, CombatManager combatManager, AttacksMenu attacksMenu,
+            bool shouldMaintainFocusedElement = false) : base(shouldMaintainFocusedElement)
         {
             _anchorPosition = anchorPosition;
             _combatManager = combatManager;
@@ -43,13 +44,8 @@ namespace PuppetRoguelite.UI
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             ArrangeElements();
-        }
-
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
-
-            Stage.SetGamepadFocusElement(_attackButton);
+            DefaultElement = _attackButton;
+            SetEnabled(false);
         }
 
         public override void Update()
@@ -64,9 +60,9 @@ namespace PuppetRoguelite.UI
         void ArrangeElements()
         {
             _actionGroup = new HorizontalGroup().SetSpacing(4);
-            _attackButton = _actionGroup.AddElement(new ActionButton(_basicSkin, "attackActionButton"));
+            _attackButton = _actionGroup.AddElement(new ActionButton(this, _basicSkin, "attackActionButton"));
             _attackButton.OnClicked += OnAttackButtonClicked;
-            _toolButton = _actionGroup.AddElement(new ActionButton(_basicSkin, "toolActionButton"));
+            _toolButton = _actionGroup.AddElement(new ActionButton(this, _basicSkin, "toolActionButton"));
             _toolButton.OnClicked += OnToolButtonClicked;
             Stage.AddElement(_actionGroup);
         }
