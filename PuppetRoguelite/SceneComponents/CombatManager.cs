@@ -37,6 +37,7 @@ namespace PuppetRoguelite.SceneComponents
         public void OnTurnPhaseCompleted()
         {
             _turnHandlerEntity.Destroy();
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
         }
     }
 }

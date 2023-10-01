@@ -17,6 +17,15 @@ namespace PuppetRoguelite.Components
         public int Health
         {
             get => _health;
+            set
+            {
+                _health = value;
+                Emitter.Emit(HealthComponentEventType.HealthChanged, this);
+                if (_health <= 0)
+                {
+                    Emitter.Emit(HealthComponentEventType.HealthDepleted, this);
+                }
+            }
         }
 
         int _maxHealth;
@@ -40,9 +49,8 @@ namespace PuppetRoguelite.Components
 
         public int DecrementHealth(int amount)
         {
-            _health = _health - amount > 0 ? _health - amount : 0;
-            Emitter.Emit(HealthComponentEventType.HealthChanged, this);
-            return _health;
+            Health -= amount;
+            return Health;
         }
 
         /// <summary>
@@ -57,6 +65,7 @@ namespace PuppetRoguelite.Components
 
     public enum HealthComponentEventType
     {
-        HealthChanged = 1
+        HealthChanged,
+        HealthDepleted
     }
 }

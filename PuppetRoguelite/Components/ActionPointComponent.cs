@@ -11,96 +11,103 @@ namespace PuppetRoguelite.Components
 {
     public class ActionPointComponent : Component, IUpdatable
     {
-        public Emitter<ActionPointEventType, int> ActionPointEmitter;
-        public Emitter<ActionPointEventType, float> ActionPointTimerEmitter;
-
         int _maxActionPoints;
-        public int MaxActionPoints { get => _maxActionPoints; }
-        int _actionPoints = 0;
-        public int ActionPoints { get => _actionPoints; }
+        int _actionPoints;
         float _totalChargeTime;
-        float _chargeRate;
-        float _currentChargeTimer = 0;
+        float _currentChargeTimer;
         bool _active = false;
+
+        public int MaxActionPoints
+        {
+            get => _maxActionPoints;
+            set
+            {
+                _maxActionPoints = value;
+                Emitters.ActionPointEmitter.Emit(ActionPointEvents.MaxActionPointsChanged, this);
+            }
+        }
+        public int ActionPoints
+        {
+            get => _actionPoints;
+            set
+            {
+                _actionPoints = Math.Max(0, Math.Min(value, MaxActionPoints));
+                Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsChanged, this);
+            }
+        }
+        public float ChargeRate;
+        public float CurrentChargeTimer
+        {
+            get => _currentChargeTimer;
+            set
+            {
+                _currentChargeTimer = value;
+                Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsTimerUpdated, this);
+            }
+        }
 
         public ActionPointComponent(int maxActionPoints, float totalChargeTime)
         {
-            ActionPointEmitter = new Emitter<ActionPointEventType, int>();
-            ActionPointTimerEmitter = new Emitter<ActionPointEventType, float>();
-
-            _maxActionPoints = maxActionPoints;
+            MaxActionPoints = maxActionPoints;
             _totalChargeTime = totalChargeTime;
-            _chargeRate = _totalChargeTime / _maxActionPoints;
+            ChargeRate = _totalChargeTime / MaxActionPoints;
 
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionExecuting, OnPlayerActionExecuting);
-        }
-
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
-
-            ActionPointEmitter.Emit(ActionPointEventType.ActionPointGained, _actionPoints);
-            ActionPointEmitter.Emit(ActionPointEventType.MaxActionPointsChanged, _maxActionPoints);
         }
 
         public void Update()
         {
             if (_active)
             {
-                if (_actionPoints < _maxActionPoints)
+                if (ActionPoints < MaxActionPoints)
                 {
-                    //increment timer and emit
-                    _currentChargeTimer += Time.DeltaTime;
-                    ActionPointTimerEmitter.Emit(ActionPointEventType.TimeChanged, _currentChargeTimer);
+                    //increment timer
+                    CurrentChargeTimer += Time.DeltaTime;
 
-                    if (_currentChargeTimer >= _chargeRate)
+                    //if timer has finished
+                    if (CurrentChargeTimer >= ChargeRate)
                     {
-                        _actionPoints++;
-                        ActionPointEmitter.Emit(ActionPointEventType.ActionPointGained, _actionPoints);
-                        if (_actionPoints < _maxActionPoints)
+                        ActionPoints++;
+
+                        //if we haven't hit the max ap
+                        if (ActionPoints < MaxActionPoints)
                         {
-                            _currentChargeTimer = 0;
-                            ActionPointTimerEmitter.Emit(ActionPointEventType.TimeChanged, _currentChargeTimer);
-                            ActionPointTimerEmitter.Emit(ActionPointEventType.TimerStarted, _chargeRate);
+                            StartTimer();
                         }
                     }
                 }
             }
         }
 
-        public void Charge()
+        void StartTimer()
         {
-            ActionPointTimerEmitter.Emit(ActionPointEventType.TimerStarted, _chargeRate);
+            CurrentChargeTimer = 0;
+            Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsTimerStarted, this);
+        }
+
+        /// <summary>
+        /// decrement ap when an action is used
+        /// </summary>
+        /// <param name="action"></param>
+        void OnPlayerActionExecuting(IPlayerAction action)
+        {
+            ActionPoints -= PlayerActionUtils.GetApCost(action.GetType());
+        }
+
+        void OnDodgePhaseStarted()
+        {
+            ActionPoints = 0;
+            StartTimer();
             _active = true;
         }
 
-        public void StopCharging()
+        void OnTurnPhaseTriggered()
         {
+            CurrentChargeTimer = 0;
             _active = false;
         }
-
-        void OnPlayerActionExecuting(IPlayerAction action)
-        {
-            _actionPoints -= PlayerActionUtils.GetApCost(action.GetType());
-            _actionPoints = _actionPoints < 0 ? 0 : _actionPoints;
-            ActionPointEmitter.Emit(ActionPointEventType.ActionPointGained, _actionPoints);
-        }
-
-        void OnTurnPhaseCompleted()
-        {
-            _actionPoints = 0;
-            _currentChargeTimer = 0;
-            ActionPointEmitter.Emit(ActionPointEventType.ActionPointGained, _actionPoints);
-            ActionPointTimerEmitter.Emit(ActionPointEventType.TimeChanged, _currentChargeTimer);
-        }
-    }
-
-    public enum ActionPointEventType
-    {
-        ActionPointGained = 1,
-        TimeChanged = 2,
-        TimerStarted = 3,
-        MaxActionPointsChanged = 4
     }
 }

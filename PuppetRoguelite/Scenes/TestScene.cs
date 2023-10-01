@@ -68,5 +68,12 @@ namespace PuppetRoguelite.Scenes
             //add combat manager
             AddSceneComponent(new CombatManager());
         }
+
+        public override void Begin()
+        {
+            base.Begin();
+
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
+        }
     }
 }

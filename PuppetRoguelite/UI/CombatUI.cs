@@ -36,11 +36,14 @@ namespace PuppetRoguelite.UI
 
             //arrange elements
             ArrangeElements();
+
+            ConnectToGlobalEmitters();
         }
 
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
+
             ConnectToEmitters();
         }
 
@@ -73,27 +76,50 @@ namespace PuppetRoguelite.UI
         void ConnectToEmitters()
         {
             //player health
-            var healthComponents = Entity.Scene.FindComponentsOfType<HealthComponent>();
-            var playerHealthComponent = healthComponents.FirstOrDefault(h => h.Entity.Name == "player");
+            var playerHealthComponent = Entity.Scene.FindComponentsOfType<HealthComponent>().FirstOrDefault(h => h.Entity.Name == "player");
             if (playerHealthComponent != null)
             {
                 OnPlayerHealthChanged(playerHealthComponent);
                 playerHealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
             }
+        }
 
-            //player ap
-            var apComponents = Entity.Scene.FindComponentsOfType<ActionPointComponent>();
-            var playerApComponent = apComponents.FirstOrDefault(a => a.Entity.Name == "player");
-            if (playerApComponent != null)
-            {
-                playerApComponent.ActionPointEmitter.AddObserver(ActionPointEventType.ActionPointGained, OnPlayerApGained);
-                playerApComponent.ActionPointTimerEmitter.AddObserver(ActionPointEventType.TimeChanged, OnPlayerApTimerUpdated);
-                playerApComponent.ActionPointTimerEmitter.AddObserver(ActionPointEventType.TimerStarted, OnPlayerApTimerStarted);
-                playerApComponent.ActionPointEmitter.AddObserver(ActionPointEventType.MaxActionPointsChanged, OnPlayerMaxApChanged);
-            }
+        void ConnectToGlobalEmitters()
+        {
+            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerStarted, OnActionPointsTimerStarted);
+            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerUpdated, OnActionPointsTimerUpdated);
+            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsChanged, OnActionPointsChanged);
+            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.MaxActionPointsChanged, OnMaxActionPointsChanged);
 
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+        }
+
+        void OnActionPointsTimerStarted(ActionPointComponent actionPointComponent)
+        {
+            _apProgressBar.SetMinMax(0, actionPointComponent.ChargeRate);
+        }
+
+        void OnActionPointsTimerUpdated(ActionPointComponent actionPointComponent)
+        {
+            _apProgressBar.SetValue(actionPointComponent.CurrentChargeTimer);
+        }
+
+        void OnActionPointsChanged(ActionPointComponent actionPointComponent)
+        {
+            var text = _playerApLabel.GetText();
+            var slashIndex = text.IndexOf("/");
+            var newString = actionPointComponent.ActionPoints.ToString() + text.Substring(slashIndex);
+            _playerApLabel.SetText(newString);
+        }
+
+        void OnMaxActionPointsChanged(ActionPointComponent actionPointComponent)
+        {
+            var text = _playerApLabel.GetText();
+            var slashIndex = text.IndexOf("/");
+            var newString = text.Substring(0, slashIndex + 1) + actionPointComponent.MaxActionPoints.ToString();
+            _playerApLabel.SetText(newString);
         }
 
         void OnTurnPhaseTriggered()
@@ -107,30 +133,24 @@ namespace PuppetRoguelite.UI
             _apProgressBar.Value = 0;
         }
 
-        public void OnPlayerApGained(int apAmount)
+        void OnDodgePhaseStarted()
         {
-            var text = _playerApLabel.GetText();
-            var slashIndex = text.IndexOf("/");
-            var newString = apAmount.ToString() + text.Substring(slashIndex);
-            _playerApLabel.SetText(newString);
-        }
+            //get initial hp values
+            var playerHealthComponent = Entity.Scene.FindComponentsOfType<HealthComponent>().FirstOrDefault(h => h.Entity.Name == "player");
+            if (playerHealthComponent != null)
+            {
+                OnPlayerHealthChanged(playerHealthComponent);
+            }
 
-        public void OnPlayerApTimerUpdated(float time)
-        {
-            _apProgressBar.Value = time;
-        }
-
-        public void OnPlayerApTimerStarted(float maxTime)
-        {
-            _apProgressBar.SetMinMax(0, maxTime);
-        }
-
-        public void OnPlayerMaxApChanged(int maxAp)
-        {
-            var text = _playerApLabel.GetText();
-            var slashIndex = text.IndexOf("/");
-            var newString = text.Substring(0, slashIndex + 1) + maxAp.ToString();
-            _playerApLabel.SetText(newString);
+            //get initial action point values
+            var actionPointComponent = Entity.Scene.FindComponentOfType<ActionPointComponent>();
+            if (actionPointComponent != null )
+            {
+                OnActionPointsChanged(actionPointComponent);
+                OnActionPointsTimerStarted(actionPointComponent);
+                OnActionPointsTimerUpdated(actionPointComponent);
+                OnMaxActionPointsChanged(actionPointComponent);
+            }
         }
 
         public void OnPlayerHealthChanged(HealthComponent healthComponent)

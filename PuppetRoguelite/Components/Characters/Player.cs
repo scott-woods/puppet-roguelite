@@ -267,11 +267,6 @@ namespace PuppetRoguelite.Components.Characters
             }
         }
 
-        public void ChargeActionPoints()
-        {
-            ActionPointComponent.Charge();
-        }
-
         void OnTurnPhaseTriggered()
         {
             StateMachine.ChangeState<PlayerInTurn>();
@@ -301,12 +296,6 @@ namespace PuppetRoguelite.Components.Characters
 
     public class PlayerInCombat : State<Player>
     {
-        public override void Begin()
-        {
-            base.Begin();
-
-            _context.ChargeActionPoints();
-        }
         public override void Update(float deltaTime)
         {
             _context.HandleInput();
