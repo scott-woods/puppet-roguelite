@@ -100,18 +100,18 @@ namespace PuppetRoguelite.Components.Characters
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
 
             //attacks list
-            AttacksList = Entity.AddComponent(new AttacksList(new List<IPlayerAttack>() { new Slash() }));
+            AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash) }));
         }
 
         void AddObservers()
         {
-            //_hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHitboxHit);
             _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, _hitHandler.OnHurtboxHit);
 
             _hitHandler.Emitter.AddObserver(HitHandlerEventType.Hurt, OnHurt);
             _hitHandler.Emitter.AddObserver(HitHandlerEventType.Killed, OnKilled);
 
-            Game1.GameEventsEmitter.AddObserver(GameEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
         void SetupInput()
@@ -243,7 +243,7 @@ namespace PuppetRoguelite.Components.Characters
             {
                 if (ActionPointComponent.ActionPoints > 0)
                 {
-                    Game1.GameEventsEmitter.Emit(GameEvents.TurnPhaseTriggered);
+                    Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
                 }
             }
 
@@ -272,9 +272,15 @@ namespace PuppetRoguelite.Components.Characters
             ActionPointComponent.Charge();
         }
 
-        public void OnTurnPhaseTriggered()
+        void OnTurnPhaseTriggered()
         {
-            ActionPointComponent.StopCharging();
+            StateMachine.ChangeState<PlayerInTurn>();
+        }
+
+        void OnTurnPhaseCompleted()
+        {
+            Core.Schedule(2, timer => StateMachine.ChangeState<PlayerInCombat>());
+            //StateMachine.ChangeState<PlayerInCombat>();
         }
     }
 
@@ -289,6 +295,7 @@ namespace PuppetRoguelite.Components.Characters
             AddState(new PlayerHurt());
             AddState(new PlayerDying());
             AddState(new PlayerInCombat());
+            AddState(new PlayerInTurn());
         }
     }
 
@@ -335,6 +342,14 @@ namespace PuppetRoguelite.Components.Characters
         public override void Update(float deltaTime)
         {
 
+        }
+    }
+
+    public class PlayerInTurn : State<Player>
+    {
+        public override void Update(float deltaTime)
+        {
+            
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using Nez;
+using PuppetRoguelite.Components.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Attacks
 {
-    public interface IPlayerAttack
+    public interface IPlayerAttack : IPlayerAction
     {
-        string Name { get; }
-        int ApCost { get; }
-        void Prepare();
-        void Execute();
+
     }
 }

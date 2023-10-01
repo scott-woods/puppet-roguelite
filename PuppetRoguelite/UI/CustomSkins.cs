@@ -30,6 +30,8 @@ namespace PuppetRoguelite.UI
                 skin.GetDrawable("Style 3 Icon 005"), skin.GetDrawable("Style 3 Icon 005")));
             skin.Add("toolActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 299"),
                 skin.GetDrawable("Style 3 Icon 299"), skin.GetDrawable("Style 3 Icon 299")));
+            skin.Add("executeButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 299"),
+                skin.GetDrawable("Style 3 Icon 299"), skin.GetDrawable("Style 3 Icon 299")));
 
             //text buttons
             skin.Add("textButton", new TextButtonStyle()

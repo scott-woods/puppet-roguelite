@@ -13,21 +13,28 @@ namespace PuppetRoguelite.Components
     /// </summary>
     public class AttacksList : Component
     {
-        public List<IPlayerAttack> AvailableAttacks;
+        public List<Type> AvailableAttackTypes;
 
-        public AttacksList(List<IPlayerAttack> startingAttacks)
+        public AttacksList(List<Type> startingAttacks)
         {
-            AvailableAttacks = startingAttacks;
+            foreach (var type in startingAttacks)
+            {
+                if (!typeof(IPlayerAttack).IsAssignableFrom(type))
+                    throw new ArgumentException($"Type {type.FullName} does not implement IPlayerAttack");
+            }
+            AvailableAttackTypes = startingAttacks;
         }
 
-        public void AddAttack(IPlayerAttack attack)
+        public void AddAttack(Type attack)
         {
-            AvailableAttacks.Add(attack);
+            if (!typeof(IPlayerAttack).IsAssignableFrom(attack))
+                throw new ArgumentException($"Type {attack.FullName} does not implement IPlayerAttack");
+            AvailableAttackTypes.Add(attack);
         }
 
-        public void RemoveAttack(IPlayerAttack attack)
+        public void RemoveAttack(Type attack)
         {
-            AvailableAttacks.Remove(attack);
+            AvailableAttackTypes.Remove(attack);
         }
     }
 }

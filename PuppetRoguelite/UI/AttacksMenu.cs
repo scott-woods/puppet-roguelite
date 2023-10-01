@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.UI;
+using PuppetRoguelite.Components;
+using PuppetRoguelite.Components.Actions;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
@@ -18,7 +20,7 @@ namespace PuppetRoguelite.UI
         Vector2 _offset = new Vector2(-20, 0);
 
         Vector2 _playerPosition;
-        CombatManager _combatManager;
+        TurnHandler _turnHandler;
 
         Vector2 _anchorPosition;
 
@@ -32,11 +34,11 @@ namespace PuppetRoguelite.UI
 
         Skin _skin;
 
-        public AttacksMenu(Vector2 playerPosition, CombatManager combatManager,
+        public AttacksMenu(Vector2 playerPosition, TurnHandler turnHandler,
             bool shouldMaintainFocusedElement = false) : base(shouldMaintainFocusedElement)
         {
             _playerPosition = playerPosition;
-            _combatManager = combatManager;
+            _turnHandler = turnHandler;
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
         }
 
@@ -62,13 +64,15 @@ namespace PuppetRoguelite.UI
             var contentTable = _dialog.GetContentTable();
             contentTable.Pad(10).Top();
             contentTable.Defaults().Space(8);
-            var options = Player.Instance.AttacksList.AvailableAttacks;
+            var options = Player.Instance.AttacksList.AvailableAttackTypes;
             contentTable.Add(new Label("Cost", new LabelStyle(Graphics.Instance.BitmapFont, Color.Black))).SetColspan(2).SetExpandX().Right();
             contentTable.Row();
-            foreach(var attack in options)
+            foreach(var attackType in options)
             {
-                contentTable.Add(new ListButton(this, attack.Name, _skin)).SetExpandX().Left().SetSpaceRight(32);
-                contentTable.Add(new Label(attack.ApCost.ToString(), new LabelStyle(Graphics.Instance.BitmapFont, Color.White))).SetExpandX().Right();
+                var button = new ListButton(this, PlayerActionUtils.GetName(attackType), _skin);
+                button.OnClicked += button => _turnHandler.HandleActionSelected(attackType);
+                contentTable.Add(button).SetExpandX().Left().SetSpaceRight(32);
+                contentTable.Add(new Label(PlayerActionUtils.GetApCost(attackType).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, Color.White))).SetExpandX().Right();
                 contentTable.Row();
             }
 

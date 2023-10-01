@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.Systems;
+using PuppetRoguelite.Components.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,9 @@ namespace PuppetRoguelite.Components
             _maxActionPoints = maxActionPoints;
             _totalChargeTime = totalChargeTime;
             _chargeRate = _totalChargeTime / _maxActionPoints;
+
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionExecuting, OnPlayerActionExecuting);
         }
 
         public override void OnAddedToEntity()
@@ -74,6 +78,21 @@ namespace PuppetRoguelite.Components
         public void StopCharging()
         {
             _active = false;
+        }
+
+        void OnPlayerActionExecuting(IPlayerAction action)
+        {
+            _actionPoints -= PlayerActionUtils.GetApCost(action.GetType());
+            _actionPoints = _actionPoints < 0 ? 0 : _actionPoints;
+            ActionPointEmitter.Emit(ActionPointEventType.ActionPointGained, _actionPoints);
+        }
+
+        void OnTurnPhaseCompleted()
+        {
+            _actionPoints = 0;
+            _currentChargeTimer = 0;
+            ActionPointEmitter.Emit(ActionPointEventType.ActionPointGained, _actionPoints);
+            ActionPointTimerEmitter.Emit(ActionPointEventType.TimeChanged, _currentChargeTimer);
         }
     }
 

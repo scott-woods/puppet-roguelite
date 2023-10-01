@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.UI;
+using PuppetRoguelite.Components;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
@@ -22,17 +23,18 @@ namespace PuppetRoguelite.UI
         HorizontalGroup _actionGroup;
         ActionButton _attackButton;
         ActionButton _toolButton;
+        ActionButton _executeButton;
 
         Vector2 _offset = new Vector2(0, -20);
 
-        CombatManager _combatManager;
+        TurnHandler _turnHandler;
         AttacksMenu _attacksMenu;
 
-        public ActionsSelector(Vector2 anchorPosition, CombatManager combatManager, AttacksMenu attacksMenu,
+        public ActionsSelector(Vector2 anchorPosition, TurnHandler turnHandler, AttacksMenu attacksMenu,
             bool shouldMaintainFocusedElement = false) : base(shouldMaintainFocusedElement)
         {
             _anchorPosition = anchorPosition;
-            _combatManager = combatManager;
+            _turnHandler = turnHandler;
             _attacksMenu = attacksMenu;
         }
 
@@ -54,7 +56,7 @@ namespace PuppetRoguelite.UI
 
             //position elements in world space
             var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition + _offset);
-            _actionGroup.SetPosition(pos.X - (_actionGroup.PreferredWidth / _actionGroup.GetChildren().Count), pos.Y);
+            _actionGroup.SetPosition(pos.X - (_actionGroup.PreferredWidth / 2), pos.Y);
         }
 
         void ArrangeElements()
@@ -64,17 +66,24 @@ namespace PuppetRoguelite.UI
             _attackButton.OnClicked += OnAttackButtonClicked;
             _toolButton = _actionGroup.AddElement(new ActionButton(this, _basicSkin, "toolActionButton"));
             _toolButton.OnClicked += OnToolButtonClicked;
+            _executeButton = _actionGroup.AddElement(new ActionButton(this, _basicSkin, "executeButton"));
+            _executeButton.OnClicked += OnExecuteButtonClicked;
             Stage.AddElement(_actionGroup);
         }
 
         void OnAttackButtonClicked(Button obj)
         {
-            _combatManager.OpenMenu(_attacksMenu);
+            _turnHandler.OpenMenu(_attacksMenu);
         }
 
         void OnToolButtonClicked(Button obj)
         {
             throw new NotImplementedException();
+        }
+
+        void OnExecuteButtonClicked(Button obj)
+        {
+            _turnHandler.ExecuteActions();
         }
     }
 }

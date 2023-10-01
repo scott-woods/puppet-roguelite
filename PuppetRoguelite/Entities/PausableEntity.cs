@@ -16,9 +16,22 @@ namespace PuppetRoguelite.Entities
 
         }
 
-        public void TogglePaused()
+        public override void OnAddedToScene()
         {
-            _paused = !_paused;
+            base.OnAddedToScene();
+
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
+        }
+
+        void OnTurnPhaseTriggered()
+        {
+            _paused = true;
+        }
+
+        void OnTurnPhaseExecuting()
+        {
+            _paused = false;
         }
 
         public override void Update()

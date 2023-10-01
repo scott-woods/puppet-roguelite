@@ -91,6 +91,20 @@ namespace PuppetRoguelite.UI
                 playerApComponent.ActionPointTimerEmitter.AddObserver(ActionPointEventType.TimerStarted, OnPlayerApTimerStarted);
                 playerApComponent.ActionPointEmitter.AddObserver(ActionPointEventType.MaxActionPointsChanged, OnPlayerMaxApChanged);
             }
+
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+        }
+
+        void OnTurnPhaseTriggered()
+        {
+            _apProgressBar.SetIsVisible(false);
+        }
+
+        void OnTurnPhaseCompleted()
+        {
+            _apProgressBar.SetIsVisible(true);
+            _apProgressBar.Value = 0;
         }
 
         public void OnPlayerApGained(int apAmount)
