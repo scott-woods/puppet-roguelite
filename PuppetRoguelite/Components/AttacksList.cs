@@ -1,5 +1,5 @@
 ﻿using Nez;
-using PuppetRoguelite.Components.Attacks;
+using PuppetRoguelite.PlayerActions.Attacks;
 using System;
 using System.Collections.Generic;
 using System.Linq;

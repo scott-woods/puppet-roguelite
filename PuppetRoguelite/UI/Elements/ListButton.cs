@@ -1,22 +1,22 @@
 ﻿using Nez.UI;
+using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.UI
+namespace PuppetRoguelite.UI.Elements
 {
-    public class ActionButton : Button
+    public class ListButton : TextButton
     {
         UIMenu _menu;
 
-        public ActionButton(Skin skin, string styleName = null) : base(skin, styleName)
+        public ListButton(string text, Skin skin, string styleName = null) : base(text, skin, styleName)
         {
-
         }
 
-        public ActionButton(UIMenu menu, Skin skin, string styleName = null) : base(skin, styleName)
+        public ListButton(UIMenu menu, string text, Skin skin, string styleName = null) : base(text, skin, styleName)
         {
             _menu = menu;
         }

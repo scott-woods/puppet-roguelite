@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.Shared
 {
     public class DamageComponent : Component
     {

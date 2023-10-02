@@ -4,6 +4,7 @@ using Nez.AI.BehaviorTrees;
 using Nez.AI.FSM;
 using Nez.AI.Pathfinding;
 using Nez.Sprites;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;

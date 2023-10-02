@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.UI
+namespace PuppetRoguelite.UI.Menus
 {
     public class UIMenu : UICanvas
     {

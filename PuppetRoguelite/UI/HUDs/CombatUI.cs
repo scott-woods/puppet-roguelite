@@ -2,14 +2,16 @@
 using Nez.Sprites;
 using Nez.UI;
 using PuppetRoguelite.Components;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.UI.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.UI
+namespace PuppetRoguelite.UI.HUDs
 {
     public class CombatUI : UICanvas
     {
@@ -65,11 +67,10 @@ namespace PuppetRoguelite.UI
             var apTable = new Table();
             apTable.Defaults().Center();
             _table.Add(apTable).Expand().Bottom().SetPadBottom(10);
-            _playerApLabel = new Label("/", _basicSkin);
+            _playerApLabel = new ApLabel("/", _basicSkin);
             apTable.Add(_playerApLabel).SetSpaceBottom(5);
             apTable.Row();
-            _apProgressBar = new ProgressBar(_basicSkin);
-            _apProgressBar.SetStepSize(.1f);
+            _apProgressBar = new ApProgressBar(_basicSkin);
             apTable.Add(_apProgressBar);
         }
 
@@ -86,51 +87,7 @@ namespace PuppetRoguelite.UI
 
         void ConnectToGlobalEmitters()
         {
-            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerStarted, OnActionPointsTimerStarted);
-            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerUpdated, OnActionPointsTimerUpdated);
-            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsChanged, OnActionPointsChanged);
-            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.MaxActionPointsChanged, OnMaxActionPointsChanged);
-
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
-        }
-
-        void OnActionPointsTimerStarted(ActionPointComponent actionPointComponent)
-        {
-            _apProgressBar.SetMinMax(0, actionPointComponent.ChargeRate);
-        }
-
-        void OnActionPointsTimerUpdated(ActionPointComponent actionPointComponent)
-        {
-            _apProgressBar.SetValue(actionPointComponent.CurrentChargeTimer);
-        }
-
-        void OnActionPointsChanged(ActionPointComponent actionPointComponent)
-        {
-            var text = _playerApLabel.GetText();
-            var slashIndex = text.IndexOf("/");
-            var newString = actionPointComponent.ActionPoints.ToString() + text.Substring(slashIndex);
-            _playerApLabel.SetText(newString);
-        }
-
-        void OnMaxActionPointsChanged(ActionPointComponent actionPointComponent)
-        {
-            var text = _playerApLabel.GetText();
-            var slashIndex = text.IndexOf("/");
-            var newString = text.Substring(0, slashIndex + 1) + actionPointComponent.MaxActionPoints.ToString();
-            _playerApLabel.SetText(newString);
-        }
-
-        void OnTurnPhaseTriggered()
-        {
-            _apProgressBar.SetIsVisible(false);
-        }
-
-        void OnTurnPhaseCompleted()
-        {
-            _apProgressBar.SetIsVisible(true);
-            _apProgressBar.Value = 0;
         }
 
         void OnDodgePhaseStarted()
@@ -140,16 +97,6 @@ namespace PuppetRoguelite.UI
             if (playerHealthComponent != null)
             {
                 OnPlayerHealthChanged(playerHealthComponent);
-            }
-
-            //get initial action point values
-            var actionPointComponent = Entity.Scene.FindComponentOfType<ActionPointComponent>();
-            if (actionPointComponent != null )
-            {
-                OnActionPointsChanged(actionPointComponent);
-                OnActionPointsTimerStarted(actionPointComponent);
-                OnActionPointsTimerUpdated(actionPointComponent);
-                OnMaxActionPointsChanged(actionPointComponent);
             }
         }
 

@@ -4,6 +4,7 @@ using Nez.AI.BehaviorTrees;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.UI;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using System;

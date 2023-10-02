@@ -8,7 +8,7 @@ using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
-using PuppetRoguelite.UI;
+using PuppetRoguelite.UI.HUDs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

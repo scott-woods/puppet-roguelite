@@ -1,4 +1,5 @@
 ﻿using Nez;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;

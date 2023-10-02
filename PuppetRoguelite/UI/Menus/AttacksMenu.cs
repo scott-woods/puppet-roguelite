@@ -2,18 +2,19 @@
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Actions;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.PlayerActions;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
+using PuppetRoguelite.UI.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.UI
+namespace PuppetRoguelite.UI.Menus
 {
     public class AttacksMenu : UIMenu
     {
@@ -46,12 +47,43 @@ namespace PuppetRoguelite.UI
         {
             base.Initialize();
 
+            //get skin
             _skin = CustomSkins.CreateBasicSkin();
+
+            //determine anchor pos
             _anchorPosition = ResolutionHelper.GameToUiPoint(Entity, _playerPosition + _offset);
-            ArrangeElements();
-            var contentTable = _dialog.GetContentTable();
-            DefaultElement = contentTable.GetCells().FirstOrDefault(c => c.GetElement<Button>() != null).GetElement<Button>();
+
+            //disabled by default
             SetEnabled(false);
+        }
+
+        public override void OnEnabled()
+        {
+            ArrangeElements();
+
+            //set default focus element
+            var contentTable = _dialog.GetContentTable();
+            DefaultElement = contentTable.GetCells().FirstOrDefault((c) =>
+            {
+                var button = c.GetElement<Button>();
+                if (button == null || button.GetDisabled())
+                {
+                    return false;
+                }
+                return true;
+            })?.GetElement<Button>();
+
+            base.OnEnabled();
+        }
+
+        public override void OnDisabled()
+        {
+            if (_dialog != null)
+            {
+                _dialog.Remove();
+            }
+
+            base.OnDisabled();
         }
 
         void ArrangeElements()
@@ -67,12 +99,26 @@ namespace PuppetRoguelite.UI
             var options = Player.Instance.AttacksList.AvailableAttackTypes;
             contentTable.Add(new Label("Cost", new LabelStyle(Graphics.Instance.BitmapFont, Color.Black))).SetColspan(2).SetExpandX().Right();
             contentTable.Row();
-            foreach(var attackType in options)
+            foreach (var attackType in options)
             {
-                var button = new ListButton(this, PlayerActionUtils.GetName(attackType), _skin);
+                //check affordability
+                var apCostColor = Color.White;
+                var disabled = false;
+                var apCost = PlayerActionUtils.GetApCost(attackType);
+                if (apCost > Player.Instance.ActionPointComponent.ActionPoints)
+                {
+                    apCostColor = Color.Gray;
+                    disabled = true;
+                }
+
+                //create button
+                var button = new ListButton(this, PlayerActionUtils.GetName(attackType), _skin, "listButton");
+                button.SetDisabled(disabled);
                 button.OnClicked += button => _turnHandler.HandleActionSelected(attackType);
                 contentTable.Add(button).SetExpandX().Left().SetSpaceRight(32);
-                contentTable.Add(new Label(PlayerActionUtils.GetApCost(attackType).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, Color.White))).SetExpandX().Right();
+
+                //add cost label
+                contentTable.Add(new Label(PlayerActionUtils.GetApCost(attackType).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, apCostColor))).SetExpandX().Right();
                 contentTable.Row();
             }
 

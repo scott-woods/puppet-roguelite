@@ -1,6 +1,6 @@
 ﻿using Nez;
 using Nez.Systems;
-using PuppetRoguelite.Components.Actions;
+using PuppetRoguelite.PlayerActions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +55,7 @@ namespace PuppetRoguelite.Components
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
-            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionExecuting, OnPlayerActionExecuting);
+            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
         }
 
         public void Update()
@@ -89,10 +89,10 @@ namespace PuppetRoguelite.Components
         }
 
         /// <summary>
-        /// decrement ap when an action is used
+        /// decrement ap when an action is successfully prepared
         /// </summary>
         /// <param name="action"></param>
-        void OnPlayerActionExecuting(IPlayerAction action)
+        void OnPlayerActionFinishedPreparing(IPlayerAction action)
         {
             ActionPoints -= PlayerActionUtils.GetApCost(action.GetType());
         }

@@ -2,10 +2,10 @@
 using Nez;
 using Nez.AI.FSM;
 using Nez.Systems;
-using PuppetRoguelite.Components.Actions;
 using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.PlayerActions;
 using PuppetRoguelite.SceneComponents;
-using PuppetRoguelite.UI;
+using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace PuppetRoguelite.Components
         AttacksMenu _attacksMenu;
         ActionsSelector _actionsSelector;
 
-        Queue<IPlayerAction> _actionQueue = new Queue<IPlayerAction>();
+        public Queue<IPlayerAction> ActionQueue = new Queue<IPlayerAction>();
 
         CombatManager _combatManager;
 
@@ -93,7 +93,7 @@ namespace PuppetRoguelite.Components
             }
             else
             {
-                _actionQueue.Enqueue(action);
+                ActionQueue.Enqueue(action);
                 _menuStack.Clear();
                 Core.Schedule(.1f, timer =>
                 {
@@ -110,7 +110,7 @@ namespace PuppetRoguelite.Components
             _attacksMenu.Entity.Destroy();
 
             Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseExecuting);
-            var action = _actionQueue.Dequeue();
+            var action = ActionQueue.Dequeue();
             action.Execute();
             Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionExecuting, action);
         }
@@ -118,9 +118,9 @@ namespace PuppetRoguelite.Components
         public void OnActionFinishedExecuting(IPlayerAction action)
         {
             //if there are more actions in the queue, execute the next one
-            if (_actionQueue.TryDequeue(out var nextAction))
+            if (ActionQueue.TryDequeue(out var nextAction))
             {
-                _actionQueue.Dequeue().Execute();
+                ActionQueue.Dequeue().Execute();
             }
             else //otherwise, emit turn phase finished
             {

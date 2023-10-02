@@ -1,20 +1,22 @@
 ﻿using Nez;
-using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.Shared
 {
-    public class Melee : Component
+    public class Hitbox : Component
     {
         Collider _collider;
         int _damage;
-        DamageComponent _damageComponent;
+        public int Damage
+        {
+            get { return _damage; }
+        }
 
-        public Melee(Collider collider, int damage)
+        public Hitbox(Collider collider, int damage)
         {
             _collider = collider;
             _damage = damage;
@@ -24,12 +26,7 @@ namespace PuppetRoguelite.Components
         {
             base.Initialize();
 
-            _collider = Entity.AddComponent(_collider);
             _collider.IsTrigger = true;
-            _collider.PhysicsLayer = (int)PhysicsLayers.Damage;
-            //_collider.SetEnabled(false);
-
-            _damageComponent = Entity.AddComponent(new DamageComponent(_damage));
         }
 
         public void Enable()

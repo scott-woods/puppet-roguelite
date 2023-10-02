@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
-using PuppetRoguelite.Components.Actions;
 using PuppetRoguelite.Components.Characters;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components.Attacks
+namespace PuppetRoguelite.PlayerActions.Attacks
 {
     [PlayerActionInfo("Slash", 1)]
     public class Slash : IPlayerAttack
@@ -23,7 +22,7 @@ namespace PuppetRoguelite.Components.Attacks
 
         public void Prepare()
         {
-            _entity = Game1.Scene.CreateEntity("slash-entity");
+            _entity = Core.Scene.CreateEntity("slash-entity");
             _entity.AddComponent(new PrototypeSpriteRenderer(32, 32));
             _entity.SetPosition(Player.Instance.Entity.Position + new Vector2(20, 20));
             //Core.Schedule(2, timer => Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedPreparing, this));

@@ -7,7 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.Shared
 {
     public class HealthComponent : Component
     {

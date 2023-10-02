@@ -34,12 +34,13 @@ namespace PuppetRoguelite.UI
                 skin.GetDrawable("Style 3 Icon 299"), skin.GetDrawable("Style 3 Icon 299")));
 
             //text buttons
-            skin.Add("textButton", new TextButtonStyle()
+            skin.Add("listButton", new TextButtonStyle()
             {
                 Font = Graphics.Instance.BitmapFont,
                 Up = new PrimitiveDrawable(Color.Transparent),
                 Down = new PrimitiveDrawable(Color.Yellow),
-                Over = new PrimitiveDrawable(Color.Black)
+                Over = new PrimitiveDrawable(Color.Black),
+                DisabledFontColor = Color.Gray
             });
 
             //dialog
@@ -49,6 +50,13 @@ namespace PuppetRoguelite.UI
                 TitleFontColor = Color.White,
                 TitleFontScaleX = 1.25f,
                 TitleFontScaleY = 1.25f
+            });
+
+            //label
+            skin.Add("defaultLabel", new LabelStyle()
+            {
+                Font = Graphics.Instance.BitmapFont,
+                FontColor = Color.White
             });
 
             return skin;

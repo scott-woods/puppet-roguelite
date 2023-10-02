@@ -2,7 +2,6 @@
 using Nez;
 using Nez.AI.FSM;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Actions;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.UI;
