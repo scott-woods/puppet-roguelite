@@ -17,9 +17,8 @@ namespace PuppetRoguelite.UI.Menus
 {
     public class ActionsSelector : UIMenu
     {
-        Vector2 _offset = new Vector2(0, -16);
+        Vector2 _worldSpaceOffset = new Vector2(0, -16);
         Vector2 _basePosition;
-        Vector2 _anchorPosition;
 
         //elements
         Table _actionTable;
@@ -34,18 +33,6 @@ namespace PuppetRoguelite.UI.Menus
         {
             _basePosition = basePosition;
             _turnHandler = turnHandler;
-        }
-
-        public override void Update()
-        {
-            base.Update();
-
-            //position elements in world space
-            if (_actionTable != null)
-            {
-                var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition);
-                _actionTable.SetPosition(pos.X - _actionTable.PreferredWidth / 2, pos.Y);
-            }
         }
 
         public override Element ArrangeElements()
@@ -126,7 +113,8 @@ namespace PuppetRoguelite.UI.Menus
 
         public override void DeterminePosition()
         {
-            _anchorPosition = _basePosition + _offset - new Vector2(0, _actionTable.PreferredHeight / 2);
+            _anchorPosition = _basePosition + _worldSpaceOffset;
+            _screenSpaceOffset = new Vector2(-_actionTable.PreferredWidth / 2, -_actionTable.PreferredHeight);
         }
 
         void OnAttackButtonClicked(Button obj)

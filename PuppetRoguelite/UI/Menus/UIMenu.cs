@@ -1,6 +1,8 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.UI;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,8 @@ namespace PuppetRoguelite.UI.Menus
     {
         protected Skin _defaultSkin;
         protected Element _baseElement;
+        protected Vector2 _anchorPosition;
+        protected Vector2 _screenSpaceOffset = Vector2.Zero;
 
         public override void Initialize()
         {
@@ -35,6 +39,18 @@ namespace PuppetRoguelite.UI.Menus
             ValidateButtons();
             DetermineDefaultElement();
             DeterminePosition();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            //position elements in world space
+            if (_baseElement != null)
+            {
+                var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition);
+                _baseElement.SetPosition(pos.X + _screenSpaceOffset.X, pos.Y + _screenSpaceOffset.Y);
+            }
         }
 
         public override void OnEnabled()

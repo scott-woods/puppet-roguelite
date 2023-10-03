@@ -34,14 +34,6 @@ namespace PuppetRoguelite.UI.Menus
             _turnHandler = turnHandler;
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            //determine anchor pos
-            _anchorPosition = ResolutionHelper.GameToUiPoint(Entity, _basePosition + _offset);
-        }
-
         public override Element ArrangeElements()
         {
             throw new NotImplementedException();
