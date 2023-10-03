@@ -17,11 +17,10 @@ namespace PuppetRoguelite.Components
     public class TurnHandler : Component, IUpdatable
     {
         protected TurnHandlerStateMachine StateMachine;
-        
+
         //menus
-        Stack<UIMenu> _menuStack = new Stack<UIMenu>();
-        AttacksMenu _attacksMenu;
-        ActionsSelector _actionsSelector;
+        Entity _turnMenuEntity;
+        Stack<UICanvas> _menuStack = new Stack<UICanvas>();
 
         public Queue<IPlayerAction> ActionQueue = new Queue<IPlayerAction>();
 
@@ -39,15 +38,15 @@ namespace PuppetRoguelite.Components
             //state machine
             StateMachine = new TurnHandlerStateMachine(this, new SelectingFromMenu());
 
-            //setup menus
-            var turnMenuEntity = Entity.Scene.CreateEntity("turn-menu");
-            _attacksMenu = turnMenuEntity.AddComponent(new AttacksMenu(Player.Instance.Entity.Position, this));
-            _actionsSelector = turnMenuEntity.AddComponent(new ActionsSelector(Player.Instance.Entity.Position, this, _attacksMenu, true));
-            OpenMenu(_actionsSelector);
+            //setup turn menu entity
+            _turnMenuEntity = Entity.Scene.CreateEntity("turn-menu");
 
             //observe emitter
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnActionFinishedPreparing);
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedExecuting, OnActionFinishedExecuting);
+
+            //begin selection
+            StartNewSelection();
         }
 
         public void Update()
@@ -55,14 +54,29 @@ namespace PuppetRoguelite.Components
             StateMachine.Update(Time.DeltaTime);
         }
 
-        public void OpenMenu(UIMenu menu)
+        /// <summary>
+        /// should be called at beginning or after each successful action queued
+        /// </summary>
+        void StartNewSelection()
         {
+            StateMachine.ChangeState<SelectingFromMenu>();
+            var actionSelector = new ActionsSelector(Player.Instance.Entity.Position, this);
+            OpenMenu(actionSelector);
+        }
+
+        public void OpenMenu(UICanvas menu)
+        {
+            //hide previous menu if any
             if (_menuStack.Count > 0)
             {
                 _menuStack.Peek().SetEnabled(false);
             }
+
+            //add new menu to entity
+            _turnMenuEntity?.AddComponent(menu);
+
+            //add new menu to stack
             _menuStack.Push(menu);
-            menu.SetEnabled(true);
         }
 
         public void GoBack()
@@ -70,7 +84,7 @@ namespace PuppetRoguelite.Components
             if (_menuStack.Count > 1)
             {
                 var currentMenu = _menuStack.Pop();
-                currentMenu.SetEnabled(false);
+                _turnMenuEntity.RemoveComponent(currentMenu);
                 _menuStack.Peek().SetEnabled(true);
             }
         }
@@ -88,6 +102,7 @@ namespace PuppetRoguelite.Components
             //action will be null if cancelled
             if (action == null)
             {
+                //if cancelled, just go back to last menu
                 _menuStack.Peek().SetEnabled(true);
                 StateMachine.ChangeState<SelectingFromMenu>();
             }
@@ -95,19 +110,15 @@ namespace PuppetRoguelite.Components
             {
                 ActionQueue.Enqueue(action);
                 _menuStack.Clear();
-                Core.Schedule(.1f, timer =>
-                {
-                    OpenMenu(_actionsSelector);
-                    StateMachine.ChangeState<SelectingFromMenu>();
-                });
+                _turnMenuEntity.RemoveAllComponents();
+                StartNewSelection();
             }
         }
 
         public void ExecuteActions()
         {
             //destroy ui menus
-            _actionsSelector.Entity.Destroy();
-            _attacksMenu.Entity.Destroy();
+            _turnMenuEntity.Destroy();
 
             Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseExecuting);
             var action = ActionQueue.Dequeue();

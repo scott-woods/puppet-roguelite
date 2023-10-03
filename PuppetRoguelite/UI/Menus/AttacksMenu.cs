@@ -20,83 +20,35 @@ namespace PuppetRoguelite.UI.Menus
     public class AttacksMenu : UIMenu
     {
         Vector2 _offset = new Vector2(-20, 0);
-
-        Vector2 _playerPosition;
-        TurnHandler _turnHandler;
-
+        Vector2 _basePosition;
         Vector2 _anchorPosition;
 
-        //pagination
-        int _page = 0;
-        int _maxPerPage = 4;
+        TurnHandler _turnHandler;
 
         //elements
         Dialog _dialog;
 
-        Skin _skin;
-
         Dictionary<Button, Type> _buttonDictionary = new Dictionary<Button, Type>();
 
-        public AttacksMenu(Vector2 playerPosition, TurnHandler turnHandler,
-            bool shouldMaintainFocusedElement = false) : base(shouldMaintainFocusedElement)
+        public AttacksMenu(Vector2 basePosition, TurnHandler turnHandler)
         {
-            _playerPosition = playerPosition;
+            _basePosition = basePosition;
             _turnHandler = turnHandler;
-            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
         }
 
-        public override void Initialize()
+        public override void Update()
         {
-            base.Initialize();
+            base.Update();
 
-            //get skin
-            _skin = CustomSkins.CreateBasicSkin();
-
-            //determine anchor pos
-            _anchorPosition = ResolutionHelper.GameToUiPoint(Entity, _playerPosition + _offset);
-
-            //disabled by default
-            SetEnabled(false);
-        }
-
-        public override void OnEnabled()
-        {
+            //position elements in world space
             if (_dialog != null)
             {
-                ValidateButtons();
-                Stage.AddElement(_dialog);
+                var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition);
+                _dialog.SetPosition(pos.X - _dialog.PreferredWidth, pos.Y - _dialog.PreferredHeight);
             }
-            else
-            {
-                ArrangeElements();
-            }
-
-            //set default focus element
-            var contentTable = _dialog.GetContentTable();
-            DefaultElement = contentTable.GetCells().FirstOrDefault((c) =>
-            {
-                var button = c.GetElement<Button>();
-                if (button == null || button.GetDisabled())
-                {
-                    return false;
-                }
-                return true;
-            })?.GetElement<Button>();
-
-            base.OnEnabled();
         }
 
-        public override void OnDisabled()
-        {
-            if (_dialog != null)
-            {
-                _dialog.Remove();
-            }
-
-            base.OnDisabled();
-        }
-
-        void ArrangeElements()
+        public override Element ArrangeElements()
         {
             //dialog content
             Dictionary<ListButton, Label> dialogContent = new Dictionary<ListButton, Label>();
@@ -114,7 +66,7 @@ namespace PuppetRoguelite.UI.Menus
                 }
 
                 //create button
-                var button = new ListButton(this, PlayerActionUtils.GetName(attackType), _skin, "listButton");
+                var button = new ListButton(PlayerActionUtils.GetName(attackType), _defaultSkin, "listButton");
                 button.SetDisabled(disabled);
                 button.OnClicked += button => _turnHandler.HandleActionSelected(attackType);
                 _buttonDictionary.Add(button, attackType);
@@ -127,7 +79,7 @@ namespace PuppetRoguelite.UI.Menus
             }
 
             //create dialog box
-            _dialog = new SelectionDialog(dialogContent, "Tools", _skin, labelHeader: "AP Cost");
+            _dialog = new SelectionDialog(dialogContent, "Tools", _defaultSkin, labelHeader: "AP Cost");
             _dialog.SetDebug(false);
 
             //validate buttons
@@ -135,10 +87,10 @@ namespace PuppetRoguelite.UI.Menus
 
             //add to stage and set position
             Stage.AddElement(_dialog);
-            _dialog.SetPosition(_anchorPosition.X - _dialog.PreferredWidth, _anchorPosition.Y - _dialog.PreferredHeight);
+            return _dialog;
         }
 
-        void ValidateButtons()
+        public override void ValidateButtons()
         {
             foreach(var pair in  _buttonDictionary)
             {
@@ -156,9 +108,23 @@ namespace PuppetRoguelite.UI.Menus
             }
         }
 
-        void SetPage(int newPage)
+        public override void DetermineDefaultElement()
         {
-            _page = newPage;
+            var contentTable = _dialog.GetContentTable();
+            Stage.SetGamepadFocusElement(contentTable.GetCells().FirstOrDefault((c) =>
+            {
+                var button = c.GetElement<Button>();
+                if (button == null || button.GetDisabled())
+                {
+                    return false;
+                }
+                return true;
+            })?.GetElement<Button>());
+        }
+
+        public override void DeterminePosition()
+        {
+            _anchorPosition = _basePosition + _offset;
         }
     }
 }

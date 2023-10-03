@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.UI;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,71 +9,65 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Menus
 {
-    public class UIMenu : UICanvas
+    /// <summary>
+    /// Wrapper to set action key for any menus
+    /// </summary>
+    public abstract class UIMenu : UICanvas, IUIMenu
     {
-        bool _shouldMaintainFocusedElement;
-
-        protected IGamepadFocusable DefaultElement;
-        IGamepadFocusable _lastFocusedElement;
-
-        public UIMenu(bool shouldMaintainFocusedElement)
-        {
-            _shouldMaintainFocusedElement = shouldMaintainFocusedElement;
-        }
+        protected Skin _defaultSkin;
+        protected Element _baseElement;
 
         public override void Initialize()
         {
             base.Initialize();
-            
+
+            //render layer
+            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
+
             //set default accept key
             Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.Z;
+
+            //load skin
+            _defaultSkin = CustomSkins.CreateBasicSkin();
+
+            //setup
+            _baseElement = ArrangeElements();
+            ValidateButtons();
+            DetermineDefaultElement();
+            DeterminePosition();
         }
 
         public override void OnEnabled()
         {
             base.OnEnabled();
 
-            if (!_shouldMaintainFocusedElement)
+            if (_baseElement != null)
             {
-                if (DefaultElement != _lastFocusedElement)
-                {
-                    Stage.SetGamepadFocusElement(DefaultElement);
-                }
+                Stage.AddElement(_baseElement);
             }
-
-            //IGamepadFocusable nextElement = null;
-
-            //Stage.SetGamepadFocusElement(null);
-
-            //if (_lastFocusedElement != null)
-            //{
-            //    nextElement = _lastFocusedElement;
-            //}
-            //else if (DefaultElement != null)
-            //{
-            //    nextElement = DefaultElement;
-            //}
-
-            //if (nextElement != null)
-            //{
-            //    Stage.SetGamepadFocusElement(nextElement);
-            //    if (_shouldMaintainFocusedElement)
-            //    {
-            //        _lastFocusedElement = nextElement;
-            //    }
-            //}
+            else
+            {
+                //if somehow setup hasn't been done, do it here
+                _baseElement = ArrangeElements();
+                ValidateButtons();
+                DetermineDefaultElement();
+                DeterminePosition();
+            }
         }
 
         public override void OnDisabled()
         {
             base.OnDisabled();
 
-            //Stage.SetGamepadFocusElement(null);
+            if (_baseElement != null)
+            {
+                _baseElement.Remove();
+            }
         }
 
-        public void OnMenuButtonFocused(Button button)
-        {
-            _lastFocusedElement = button;
-        }
+        public abstract Element ArrangeElements();
+        public abstract void ValidateButtons();
+        public abstract void DetermineDefaultElement();
+        public abstract void DeterminePosition();
     }
 }

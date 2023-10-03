@@ -17,7 +17,8 @@ namespace PuppetRoguelite.UI.Menus
 {
     public class ActionsSelector : UIMenu
     {
-        Skin _basicSkin;
+        Vector2 _offset = new Vector2(0, -16);
+        Vector2 _basePosition;
         Vector2 _anchorPosition;
 
         //elements
@@ -27,32 +28,12 @@ namespace PuppetRoguelite.UI.Menus
         ActionButton _itemButton;
         ActionButton _executeButton;
 
-        Vector2 _offset = new Vector2(0, -16);
-
         TurnHandler _turnHandler;
-        AttacksMenu _attacksMenu;
 
-        public ActionsSelector(Vector2 anchorPosition, TurnHandler turnHandler, AttacksMenu attacksMenu,
-            bool shouldMaintainFocusedElement = false) : base(shouldMaintainFocusedElement)
+        public ActionsSelector(Vector2 basePosition, TurnHandler turnHandler)
         {
-            _anchorPosition = anchorPosition;
+            _basePosition = basePosition;
             _turnHandler = turnHandler;
-            _attacksMenu = attacksMenu;
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            _basicSkin = CustomSkins.CreateBasicSkin();
-            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
-
-            ArrangeElements();
-            ValidateButtons();
-            DefaultElement = _attackButton;
-            Stage.SetGamepadFocusElement(_attackButton);
-
-            SetEnabled(false);
         }
 
         public override void Update()
@@ -62,44 +43,36 @@ namespace PuppetRoguelite.UI.Menus
             //position elements in world space
             if (_actionTable != null)
             {
-                var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition + _offset - new Vector2(0, _actionTable.PreferredHeight / 2));
+                var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition);
                 _actionTable.SetPosition(pos.X - _actionTable.PreferredWidth / 2, pos.Y);
             }
         }
 
-        public override void OnEnabled()
-        {
-            ValidateButtons();
-            DefaultElement = _attackButton;
-
-            base.OnEnabled();
-        }
-
-        void ArrangeElements()
+        public override Element ArrangeElements()
         {
             _actionTable = new Table();
 
-            var attackLabel = new Label("Attack", _basicSkin).SetAlignment(Align.Center);
+            var attackLabel = new Label("Attack", _defaultSkin).SetAlignment(Align.Center);
             _actionTable.Add(attackLabel).Center();
-            var toolLabel = new Label("Tools", _basicSkin).SetAlignment(Align.Center);
+            var toolLabel = new Label("Tools", _defaultSkin).SetAlignment(Align.Center);
             _actionTable.Add(toolLabel).Center();
-            var itemLabel = new Label("Items", _basicSkin).SetAlignment(Align.Center);
+            var itemLabel = new Label("Items", _defaultSkin).SetAlignment(Align.Center);
             _actionTable.Add(itemLabel).Center();
-            var executeLabel = new Label("Execute", _basicSkin).SetAlignment(Align.Center);
+            var executeLabel = new Label("Execute", _defaultSkin).SetAlignment(Align.Center);
             _actionTable.Add(executeLabel).Center();
 
             _actionTable.Row();
 
-            _attackButton = new ActionButton(this, _basicSkin, "attackActionButton", attackLabel);
+            _attackButton = new ActionButton(_defaultSkin, "attackActionButton", attackLabel);
             _attackButton.OnClicked += OnAttackButtonClicked;
             _actionTable.Add(_attackButton).Center();
-            _toolButton = new ActionButton(this, _basicSkin, "toolActionButton", toolLabel);
+            _toolButton = new ActionButton(_defaultSkin, "toolActionButton", toolLabel);
             _toolButton.OnClicked += OnToolButtonClicked;
             _actionTable.Add(_toolButton).Center();
-            _itemButton = new ActionButton(this, _basicSkin, "itemActionButton", itemLabel);
+            _itemButton = new ActionButton(_defaultSkin, "itemActionButton", itemLabel);
             _itemButton.OnClicked += OnItemButtonClicked;
             _actionTable.Add(_itemButton).Center();
-            _executeButton = new ActionButton(this, _basicSkin, "executeButton", executeLabel);
+            _executeButton = new ActionButton(_defaultSkin, "executeButton", executeLabel);
             _executeButton.OnClicked += OnExecuteButtonClicked;
             _actionTable.Add(_executeButton).Center();
 
@@ -123,9 +96,10 @@ namespace PuppetRoguelite.UI.Menus
             executeLabel.SetVisible(false);
 
             Stage.AddElement(_actionTable);
+            return _actionTable;
         }
 
-        void ValidateButtons()
+        public override void ValidateButtons()
         {
             if (_turnHandler.ActionQueue.Count == 0) //disable if no queued actions
             {
@@ -145,9 +119,19 @@ namespace PuppetRoguelite.UI.Menus
             _executeButton.EnableExplicitFocusableControl(null, null, _itemButton, null);
         }
 
+        public override void DetermineDefaultElement()
+        {
+            Stage.SetGamepadFocusElement(_attackButton);
+        }
+
+        public override void DeterminePosition()
+        {
+            _anchorPosition = _basePosition + _offset - new Vector2(0, _actionTable.PreferredHeight / 2);
+        }
+
         void OnAttackButtonClicked(Button obj)
         {
-            _turnHandler.OpenMenu(_attacksMenu);
+            _turnHandler.OpenMenu(new AttacksMenu(_basePosition, _turnHandler));
         }
 
         void OnToolButtonClicked(Button obj)

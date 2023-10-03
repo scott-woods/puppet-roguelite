@@ -11,7 +11,6 @@ namespace PuppetRoguelite.UI.Elements
 {
     public class ActionButton : Button
     {
-        UIMenu _menu;
         Label _label;
 
         public ActionButton(Skin skin, string styleName = null, Label label = null) : base(skin, styleName)
@@ -19,20 +18,9 @@ namespace PuppetRoguelite.UI.Elements
             _label = label;
         }
 
-        public ActionButton(UIMenu menu, Skin skin, string styleName = null, Label label = null) : base(skin, styleName)
-        {
-            _menu = menu;
-            _label = label;
-        }
-
         protected override void OnFocused()
         {
             base.OnFocused();
-
-            if (_menu != null)
-            {
-                _menu.OnMenuButtonFocused(this);
-            }
 
             if (_label != null)
             {

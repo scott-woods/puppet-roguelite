@@ -18,105 +18,48 @@ namespace PuppetRoguelite.UI.Menus
     public class ToolsMenu : UIMenu
     {
         Vector2 _offset = new Vector2(-20, 0);
-        Vector2 _playerPosition;
-        TurnHandler _turnHandler;
-        Skin _skin;
+        Vector2 _basePosition;
         Vector2 _anchorPosition;
-        int _maxPerPage = 4;
+
+        TurnHandler _turnHandler;
+        
+        //elements
         Dialog _dialog;
+
         Dictionary<ListButton, Type> _buttonDictionary = new Dictionary<ListButton, Type>();
 
-        public ToolsMenu(Vector2 playerPosition, TurnHandler turnHandler,
-            bool shouldMaintainFocusedElement = false) : base(shouldMaintainFocusedElement)
+        public ToolsMenu(Vector2 basePosition, TurnHandler turnHandler)
         {
-            _playerPosition = playerPosition;
+            _basePosition = basePosition;
             _turnHandler = turnHandler;
-            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
         }
 
         public override void Initialize()
         {
             base.Initialize();
 
-            //get skin
-            _skin = CustomSkins.CreateBasicSkin();
-
             //determine anchor pos
-            _anchorPosition = ResolutionHelper.GameToUiPoint(Entity, _playerPosition + _offset);
-
-            //disabled by default
-            SetEnabled(false);
+            _anchorPosition = ResolutionHelper.GameToUiPoint(Entity, _basePosition + _offset);
         }
 
-        public override void OnEnabled()
+        public override Element ArrangeElements()
         {
-            ArrangeElements();
-
-            //set default focus element
-            var contentTable = _dialog.GetContentTable();
-            DefaultElement = contentTable.GetCells().FirstOrDefault((c) =>
-            {
-                var button = c.GetElement<Button>();
-                if (button == null || button.GetDisabled())
-                {
-                    return false;
-                }
-                return true;
-            })?.GetElement<Button>();
-
-            base.OnEnabled();
+            throw new NotImplementedException();
         }
 
-        public override void OnDisabled()
+        public override void ValidateButtons()
         {
-            if (_dialog != null)
-            {
-                _dialog.Remove();
-            }
-
-            base.OnDisabled();
+            throw new NotImplementedException();
         }
 
-        void ArrangeElements()
+        public override void DetermineDefaultElement()
         {
-            //dialog content
-            Dictionary<ListButton, Label> dialogContent = new Dictionary<ListButton, Label>();
-            var options = Player.Instance.AttacksList.AvailableAttackTypes;
-            foreach (var attackType in options)
-            {
-                //check affordability
-                var apCostColor = Color.White;
-                var disabled = false;
-                var apCost = PlayerActionUtils.GetApCost(attackType);
-                if (apCost > Player.Instance.ActionPointComponent.ActionPoints)
-                {
-                    apCostColor = Color.Gray;
-                    disabled = true;
-                }
+            throw new NotImplementedException();
+        }
 
-                //create button
-                var button = new ListButton(this, PlayerActionUtils.GetName(attackType), _skin, "listButton");
-                button.SetDisabled(disabled);
-                button.OnClicked += button => _turnHandler.HandleActionSelected(attackType);
-                _buttonDictionary.Add(button, attackType);
-
-                //create cost label
-                var label = new Label(PlayerActionUtils.GetApCost(attackType).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, apCostColor));
-
-                //add to content list
-                dialogContent.Add(button, label);
-            }
-
-            //create dialog box
-            _dialog = new SelectionDialog(dialogContent, "Tools", _skin, labelHeader: "AP Cost");
-            _dialog.SetDebug(false);
-
-            //validate buttons
-            //ValidateButtons();
-
-            //add to stage and set position
-            Stage.AddElement(_dialog);
-            _dialog.SetPosition(_anchorPosition.X - _dialog.PreferredWidth, _anchorPosition.Y - _dialog.PreferredHeight);
+        public override void DeterminePosition()
+        {
+            throw new NotImplementedException();
         }
     }
 }
