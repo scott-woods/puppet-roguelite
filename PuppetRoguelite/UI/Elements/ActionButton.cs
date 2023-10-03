@@ -1,4 +1,5 @@
-﻿using Nez.UI;
+﻿using Nez;
+using Nez.UI;
 using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections.Generic;

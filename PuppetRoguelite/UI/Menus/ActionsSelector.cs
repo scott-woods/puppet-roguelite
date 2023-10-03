@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 
 namespace PuppetRoguelite.UI.Menus
 {
@@ -23,6 +24,7 @@ namespace PuppetRoguelite.UI.Menus
         Table _actionTable;
         ActionButton _attackButton;
         ActionButton _toolButton;
+        ActionButton _itemButton;
         ActionButton _executeButton;
 
         Vector2 _offset = new Vector2(0, -16);
@@ -46,8 +48,9 @@ namespace PuppetRoguelite.UI.Menus
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             ArrangeElements();
-            UpdateButtonStatuses();
+            ValidateButtons();
             DefaultElement = _attackButton;
+            Stage.SetGamepadFocusElement(_attackButton);
 
             SetEnabled(false);
         }
@@ -66,7 +69,8 @@ namespace PuppetRoguelite.UI.Menus
 
         public override void OnEnabled()
         {
-            UpdateButtonStatuses();
+            ValidateButtons();
+            DefaultElement = _attackButton;
 
             base.OnEnabled();
         }
@@ -79,6 +83,8 @@ namespace PuppetRoguelite.UI.Menus
             _actionTable.Add(attackLabel).Center();
             var toolLabel = new Label("Tools", _basicSkin).SetAlignment(Align.Center);
             _actionTable.Add(toolLabel).Center();
+            var itemLabel = new Label("Items", _basicSkin).SetAlignment(Align.Center);
+            _actionTable.Add(itemLabel).Center();
             var executeLabel = new Label("Execute", _basicSkin).SetAlignment(Align.Center);
             _actionTable.Add(executeLabel).Center();
 
@@ -90,6 +96,9 @@ namespace PuppetRoguelite.UI.Menus
             _toolButton = new ActionButton(this, _basicSkin, "toolActionButton", toolLabel);
             _toolButton.OnClicked += OnToolButtonClicked;
             _actionTable.Add(_toolButton).Center();
+            _itemButton = new ActionButton(this, _basicSkin, "itemActionButton", itemLabel);
+            _itemButton.OnClicked += OnItemButtonClicked;
+            _actionTable.Add(_itemButton).Center();
             _executeButton = new ActionButton(this, _basicSkin, "executeButton", executeLabel);
             _executeButton.OnClicked += OnExecuteButtonClicked;
             _actionTable.Add(_executeButton).Center();
@@ -110,12 +119,13 @@ namespace PuppetRoguelite.UI.Menus
 
             attackLabel.SetVisible(false);
             toolLabel.SetVisible(false);
+            itemLabel.SetVisible(false);
             executeLabel.SetVisible(false);
 
             Stage.AddElement(_actionTable);
         }
 
-        void UpdateButtonStatuses()
+        void ValidateButtons()
         {
             if (_turnHandler.ActionQueue.Count == 0) //disable if no queued actions
             {
@@ -130,8 +140,9 @@ namespace PuppetRoguelite.UI.Menus
 
             //setup explicit focus control
             _attackButton.EnableExplicitFocusableControl(null, null, null, _toolButton);
-            _toolButton.EnableExplicitFocusableControl(null, null, _attackButton, _executeButton.GetDisabled() ? null : _executeButton);
-            _executeButton.EnableExplicitFocusableControl(null, null, _toolButton, null);
+            _toolButton.EnableExplicitFocusableControl(null, null, _attackButton, _itemButton);
+            _itemButton.EnableExplicitFocusableControl(null, null, _toolButton, _executeButton.GetDisabled() ? null : _executeButton);
+            _executeButton.EnableExplicitFocusableControl(null, null, _itemButton, null);
         }
 
         void OnAttackButtonClicked(Button obj)
@@ -142,6 +153,11 @@ namespace PuppetRoguelite.UI.Menus
         void OnToolButtonClicked(Button obj)
         {
             throw new NotImplementedException();
+        }
+
+        void OnItemButtonClicked(Button obj)
+        {
+
         }
 
         void OnExecuteButtonClicked(Button obj)

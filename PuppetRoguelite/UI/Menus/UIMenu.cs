@@ -20,43 +20,54 @@ namespace PuppetRoguelite.UI.Menus
             _shouldMaintainFocusedElement = shouldMaintainFocusedElement;
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            
+            //set default accept key
+            Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.Z;
+        }
+
         public override void OnEnabled()
         {
             base.OnEnabled();
 
-            Stage.SetGamepadFocusElement(null);
-
-            IGamepadFocusable nextElement = null;
-
-            if (_lastFocusedElement != null)
+            if (!_shouldMaintainFocusedElement)
             {
-                nextElement = _lastFocusedElement;
-            }
-            else if (DefaultElement != null)
-            {
-                nextElement = DefaultElement;
-            }
-
-            if (nextElement != null)
-            {
-                Stage.SetGamepadFocusElement(nextElement);
-                if (_shouldMaintainFocusedElement)
+                if (DefaultElement != _lastFocusedElement)
                 {
-                    _lastFocusedElement = nextElement;
+                    Stage.SetGamepadFocusElement(DefaultElement);
                 }
             }
+
+            //IGamepadFocusable nextElement = null;
+
+            //Stage.SetGamepadFocusElement(null);
+
+            //if (_lastFocusedElement != null)
+            //{
+            //    nextElement = _lastFocusedElement;
+            //}
+            //else if (DefaultElement != null)
+            //{
+            //    nextElement = DefaultElement;
+            //}
+
+            //if (nextElement != null)
+            //{
+            //    Stage.SetGamepadFocusElement(nextElement);
+            //    if (_shouldMaintainFocusedElement)
+            //    {
+            //        _lastFocusedElement = nextElement;
+            //    }
+            //}
         }
 
         public override void OnDisabled()
         {
             base.OnDisabled();
 
-            Stage.SetGamepadFocusElement(null);
-        }
-
-        public void OnMenuButtonClicked(Button obj)
-        {
-            _lastFocusedElement = obj;
+            //Stage.SetGamepadFocusElement(null);
         }
 
         public void OnMenuButtonFocused(Button button)

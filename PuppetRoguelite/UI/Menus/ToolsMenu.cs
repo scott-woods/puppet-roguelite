@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.PlayerActions;
-using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI.Elements;
 using System;
@@ -17,27 +15,18 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Menus
 {
-    public class AttacksMenu : UIMenu
+    public class ToolsMenu : UIMenu
     {
         Vector2 _offset = new Vector2(-20, 0);
-
         Vector2 _playerPosition;
         TurnHandler _turnHandler;
-
-        Vector2 _anchorPosition;
-
-        //pagination
-        int _page = 0;
-        int _maxPerPage = 4;
-
-        //elements
-        Dialog _dialog;
-
         Skin _skin;
+        Vector2 _anchorPosition;
+        int _maxPerPage = 4;
+        Dialog _dialog;
+        Dictionary<ListButton, Type> _buttonDictionary = new Dictionary<ListButton, Type>();
 
-        Dictionary<Button, Type> _buttonDictionary = new Dictionary<Button, Type>();
-
-        public AttacksMenu(Vector2 playerPosition, TurnHandler turnHandler,
+        public ToolsMenu(Vector2 playerPosition, TurnHandler turnHandler,
             bool shouldMaintainFocusedElement = false) : base(shouldMaintainFocusedElement)
         {
             _playerPosition = playerPosition;
@@ -61,15 +50,7 @@ namespace PuppetRoguelite.UI.Menus
 
         public override void OnEnabled()
         {
-            if (_dialog != null)
-            {
-                ValidateButtons();
-                Stage.AddElement(_dialog);
-            }
-            else
-            {
-                ArrangeElements();
-            }
+            ArrangeElements();
 
             //set default focus element
             var contentTable = _dialog.GetContentTable();
@@ -131,34 +112,11 @@ namespace PuppetRoguelite.UI.Menus
             _dialog.SetDebug(false);
 
             //validate buttons
-            ValidateButtons();
+            //ValidateButtons();
 
             //add to stage and set position
             Stage.AddElement(_dialog);
             _dialog.SetPosition(_anchorPosition.X - _dialog.PreferredWidth, _anchorPosition.Y - _dialog.PreferredHeight);
-        }
-
-        void ValidateButtons()
-        {
-            foreach(var pair in  _buttonDictionary)
-            {
-                //check affordability
-                var apCostColor = Color.White;
-                var disabled = false;
-                var apCost = PlayerActionUtils.GetApCost(pair.Value);
-                if (apCost > Player.Instance.ActionPointComponent.ActionPoints)
-                {
-                    apCostColor = Color.Gray;
-                    disabled = true;
-                }
-
-                pair.Key.SetDisabled(disabled);
-            }
-        }
-
-        void SetPage(int newPage)
-        {
-            _page = newPage;
         }
     }
 }
