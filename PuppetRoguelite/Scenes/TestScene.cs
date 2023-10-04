@@ -48,7 +48,7 @@ namespace PuppetRoguelite.Scenes
             AddSceneComponent(new GridGraphManager(graph, map));
 
             //add player
-            _playerEntity = new PausableEntity("player");
+            _playerEntity = new Entity("player");
             AddEntity(_playerEntity);
             var player = _playerEntity.AddComponent(new Player());
             _playerEntity.SetPosition(480 / 3, 270 / 3);

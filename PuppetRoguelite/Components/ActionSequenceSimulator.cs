@@ -9,7 +9,7 @@ namespace PuppetRoguelite.Components
 {
     public class ActionSequenceSimulator
     {
-        public Queue<IPlayerAction> ActionQueue = new Queue<IPlayerAction>();
+        public Queue<PlayerAction> ActionQueue = new Queue<PlayerAction>();
 
         int _currentIndex = 0;
         bool _started = false;
@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Components
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.SimActionFinishedExecuting, OnSimActionFinishedExecuting);
         }
 
-        public void UpdateQueue(Queue<IPlayerAction> actionQueue)
+        public void UpdateQueue(Queue<PlayerAction> actionQueue)
         {
             ActionQueue = actionQueue;
             if (!_started)

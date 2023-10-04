@@ -1,5 +1,5 @@
 ﻿using Nez;
-using PuppetRoguelite.PlayerActions.Attacks;
+using PuppetRoguelite.PlayerActions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Components
         {
             foreach (var type in startingAttacks)
             {
-                if (!typeof(IPlayerAttack).IsAssignableFrom(type))
+                if (!typeof(PlayerAction).IsAssignableFrom(type))
                     throw new ArgumentException($"Type {type.FullName} does not implement IPlayerAttack");
             }
             AvailableAttackTypes = startingAttacks;
@@ -27,7 +27,7 @@ namespace PuppetRoguelite.Components
 
         public void AddAttack(Type attack)
         {
-            if (!typeof(IPlayerAttack).IsAssignableFrom(attack))
+            if (!typeof(PlayerAction).IsAssignableFrom(attack))
                 throw new ArgumentException($"Type {attack.FullName} does not implement IPlayerAttack");
             AvailableAttackTypes.Add(attack);
         }

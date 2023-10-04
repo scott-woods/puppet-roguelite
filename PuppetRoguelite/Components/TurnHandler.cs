@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.AI.FSM;
+using Nez.Sprites;
 using Nez.Systems;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.PlayerActions;
@@ -23,11 +24,13 @@ namespace PuppetRoguelite.Components
         Entity _turnMenuEntity;
         Stack<UICanvas> _menuStack = new Stack<UICanvas>();
 
-        public Queue<IPlayerAction> ActionQueue = new Queue<IPlayerAction>();
+        public Queue<PlayerAction> ActionQueue = new Queue<PlayerAction>();
         Vector2 _initialPlayerPosition;
+        Vector2 _finalPlayerPosition;
 
         CombatManager _combatManager;
-        ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
+        //ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
+        Entity _playerSimEntity;
 
         public TurnHandler(CombatManager combatManager)
         {
@@ -47,12 +50,34 @@ namespace PuppetRoguelite.Components
             //observe emitter
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnActionFinishedPreparing);
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedExecuting, OnActionFinishedExecuting);
+            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionPrepCanceled, OnActionPrepCanceled);
 
             //store player's position at start of turn
             _initialPlayerPosition = Player.Instance.Entity.Position;
+            _finalPlayerPosition = Player.Instance.Entity.Position;
+
+            //add the sim player
+            _playerSimEntity = Entity.Scene.CreateEntity("player-sim");
+            _playerSimEntity.AddComponent(new PlayerSim(Player.Instance.Direction));
+            _playerSimEntity.SetPosition(_initialPlayerPosition);
+
+            //if sim and real player would overlap, hide real player
+            if (_finalPlayerPosition == _initialPlayerPosition)
+            {
+                Player.Instance.Entity.SetEnabled(false);
+            }
 
             //begin selection
             StartNewSelection();
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.ActionFinishedPreparing, OnActionFinishedPreparing);
+            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.ActionFinishedExecuting, OnActionFinishedExecuting);
+            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.ActionPrepCanceled, OnActionPrepCanceled);
         }
 
         public void Update()
@@ -97,29 +122,76 @@ namespace PuppetRoguelite.Components
 
         public void HandleActionSelected(Type actionType)
         {
+            //disable last menu
             _menuStack.Peek().SetEnabled(false);
+
+            //change state
             StateMachine.ChangeState<PreparingAction>();
-            var action = Activator.CreateInstance(actionType) as IPlayerAction;
+
+            //hide original player if it will overlap sim player
+            if (_finalPlayerPosition ==  _initialPlayerPosition)
+            {
+                Player.Instance.Entity.SetEnabled(false);
+            }
+
+            //hide sim player
+            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.SetEnabled(false);
+            }
+
+            //create action instance, add to sim player, and prepare it
+            var action = Activator.CreateInstance(actionType) as PlayerAction;
+            _playerSimEntity.AddComponent(action);
             action.Prepare();
         }
 
-        public void OnActionFinishedPreparing(IPlayerAction action)
+        public void OnActionFinishedPreparing(PlayerAction action)
         {
-            //action will be null if cancelled
-            if (action == null)
+            //remove action from the sim
+            _playerSimEntity.RemoveComponent(action);
+
+            //add it to the queue, to be added to the real player later
+            ActionQueue.Enqueue(action);
+            //_sequenceSimulator.UpdateQueue(ActionQueue);
+
+            //clear menu and start new selection process
+            _menuStack.Clear();
+            _turnMenuEntity.RemoveAllComponents();
+            Core.Schedule(.1f, (timer) =>
             {
-                //if cancelled, just go back to last menu
-                _menuStack.Peek().SetEnabled(true);
-                StateMachine.ChangeState<SelectingFromMenu>();
-            }
-            else
-            {
-                ActionQueue.Enqueue(action);
-                _sequenceSimulator.UpdateQueue(ActionQueue);
-                _menuStack.Clear();
-                _turnMenuEntity.RemoveAllComponents();
                 StartNewSelection();
+            });
+
+            //reenable player and sim player
+            if (_finalPlayerPosition != _initialPlayerPosition)
+            {
+                Player.Instance.Entity.SetEnabled(true);
             }
+            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.SetEnabled(true);
+            }
+        }
+
+        public void OnActionPrepCanceled(PlayerAction action)
+        {
+            //remove action from the sim
+            _playerSimEntity.RemoveComponent(action);
+
+            //reenable player and sim player
+            if (_finalPlayerPosition != _initialPlayerPosition)
+            {
+                Player.Instance.Entity.SetEnabled(true);
+            }
+            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.SetEnabled(true);
+            }
+
+            //if cancelled, just go back to last menu
+            _menuStack.Peek().SetEnabled(true);
+            StateMachine.ChangeState<SelectingFromMenu>();
         }
 
         public void ExecuteActions()
@@ -127,21 +199,42 @@ namespace PuppetRoguelite.Components
             //destroy ui menus
             _turnMenuEntity.Destroy();
 
+            //destory sim player
+            _playerSimEntity.Destroy();
+
+            //reenable real player
+            Player.Instance.Entity.SetEnabled(true);
+            if (Player.Instance.Entity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.SetEnabled(false);
+            }
+
+            //change state
             Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseExecuting);
+
             var action = ActionQueue.Dequeue();
+            Player.Instance.Entity.AddComponent(action);
             action.Execute();
             Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionExecuting, action);
         }
 
-        public void OnActionFinishedExecuting(IPlayerAction action)
+        public void OnActionFinishedExecuting(PlayerAction action)
         {
+            //remove action from player entity
+            Player.Instance.Entity.RemoveComponent(action);
+
             //if there are more actions in the queue, execute the next one
             if (ActionQueue.TryDequeue(out var nextAction))
             {
-                ActionQueue.Dequeue().Execute();
+                Player.Instance.Entity.AddComponent(nextAction);
+                nextAction.Execute();
             }
             else //otherwise, emit turn phase finished
             {
+                if (Player.Instance.Entity.TryGetComponent<SpriteAnimator>(out var animator))
+                {
+                    animator.SetEnabled(true);
+                }
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseCompleted);
             }
         }

@@ -12,7 +12,7 @@ namespace PuppetRoguelite
 {
     public static class Emitters
     {
-        public static Emitter<PlayerActionEvents, IPlayerAction> PlayerActionEmitter = new Emitter<PlayerActionEvents, IPlayerAction>();
+        public static Emitter<PlayerActionEvents, PlayerAction> PlayerActionEmitter = new Emitter<PlayerActionEvents, PlayerAction>();
         public static Emitter<CombatEvents> CombatEventsEmitter = new Emitter<CombatEvents>();
         public static Emitter<ActionPointEvents, ActionPointComponent> ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
     }
@@ -23,7 +23,8 @@ namespace PuppetRoguelite
         ActionExecuting,
         ActionFinishedExecuting,
         SimActionExecuting,
-        SimActionFinishedExecuting
+        SimActionFinishedExecuting,
+        ActionPrepCanceled
     }
     public enum CombatEvents
     {

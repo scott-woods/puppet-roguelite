@@ -47,7 +47,7 @@ namespace PuppetRoguelite.Components.Characters
         public AttacksList AttacksList;
 
         //misc
-        Vector2 _direction = new Vector2(1, 0);
+        public Vector2 Direction = new Vector2(1, 0);
         Vector2 _lastNonZeroDirection = new Vector2(1, 0);
         SubpixelVector2 _subPixelV2 = new SubpixelVector2();
 
@@ -171,7 +171,7 @@ namespace PuppetRoguelite.Components.Characters
 
         public void OnHurt()
         {
-            var hurtAnimation = _direction.X >= 0 ? "HurtRight" : "HurtLeft";
+            var hurtAnimation = Direction.X >= 0 ? "HurtRight" : "HurtLeft";
             _spriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
             void handler(string obj)
             {
@@ -184,7 +184,7 @@ namespace PuppetRoguelite.Components.Characters
 
         public void OnKilled()
         {
-            var deathAnimation = _direction.X >= 0 ? "DeathRight" : "DeathLeft";
+            var deathAnimation = Direction.X >= 0 ? "DeathRight" : "DeathLeft";
             _spriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
             void handler(string obj)
             {
@@ -217,13 +217,13 @@ namespace PuppetRoguelite.Components.Characters
         {
             //animation
             var animation = "RunDown";
-            if (_direction.X != 0)
+            if (Direction.X != 0)
             {
-                animation = _direction.X >= 0 ? "RunRight" : "RunLeft";
+                animation = Direction.X >= 0 ? "RunRight" : "RunLeft";
             }
-            else if (_direction.Y != 0)
+            else if (Direction.Y != 0)
             {
-                animation = _direction.Y >= 0 ? "RunDown" : "RunUp";
+                animation = Direction.Y >= 0 ? "RunDown" : "RunUp";
             }
             if (!_spriteAnimator.IsAnimationActive(animation))
             {
@@ -231,7 +231,7 @@ namespace PuppetRoguelite.Components.Characters
             }
 
             //move
-            var movement = _direction * _moveSpeed * Time.DeltaTime;
+            var movement = Direction * _moveSpeed * Time.DeltaTime;
             _mover.CalculateMovement(ref movement, out var result);
             _subPixelV2.Update(ref movement);
             _mover.ApplyMovement(movement);
@@ -261,9 +261,9 @@ namespace PuppetRoguelite.Components.Characters
             }
             else
             {
-                _direction = newDirection;
-                _direction.Normalize();
-                _lastNonZeroDirection = _direction;
+                Direction = newDirection;
+                Direction.Normalize();
+                _lastNonZeroDirection = Direction;
                 Move();
             }
         }
@@ -275,8 +275,7 @@ namespace PuppetRoguelite.Components.Characters
 
         void OnTurnPhaseCompleted()
         {
-            Core.Schedule(2, timer => StateMachine.ChangeState<PlayerInCombat>());
-            //StateMachine.ChangeState<PlayerInCombat>();
+            StateMachine.ChangeState<PlayerInCombat>();
         }
     }
 
@@ -339,7 +338,7 @@ namespace PuppetRoguelite.Components.Characters
     {
         public override void Update(float deltaTime)
         {
-            
+            _context.Idle();
         }
     }
 

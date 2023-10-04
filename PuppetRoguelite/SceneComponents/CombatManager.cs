@@ -19,17 +19,21 @@ namespace PuppetRoguelite.SceneComponents
     public class CombatManager : SceneComponent
     {
         Entity _turnHandlerEntity;
+        TurnHandler _turnHandler;
 
         public CombatManager()
         {
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+
+            //_turnHandler = new TurnHandler(this);
         }
 
         public void OnTurnPhaseTriggered()
         {
             //create turn handler
             _turnHandlerEntity = Scene.CreateEntity("turn-handler");
+            //_turnHandlerEntity.AddComponent(_turnHandler);
             _turnHandlerEntity.AddComponent(new TurnHandler(this));
         }
 
