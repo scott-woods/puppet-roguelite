@@ -8,8 +8,17 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.PlayerActions.Attacks
 {
-    public interface IPlayerAttack : IPlayerAction
+    public abstract class PlayerAttack : IPlayerAction
     {
+        protected bool _isSimulation;
 
+        public virtual void Execute(bool isSimulation = false)
+        {
+            _isSimulation = isSimulation;
+            var type = isSimulation ? PlayerActionEvents.SimActionExecuting : PlayerActionEvents.ActionExecuting;
+            Emitters.PlayerActionEmitter.Emit(type, this);
+        }
+
+        public abstract void Prepare();
     }
 }

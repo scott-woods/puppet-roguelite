@@ -10,17 +10,20 @@ using System.Threading.Tasks;
 namespace PuppetRoguelite.PlayerActions.Attacks
 {
     [PlayerActionInfo("Slash", 1)]
-    public class Slash : IPlayerAttack
+    public class Slash : PlayerAttack
     {
         Entity _entity;
 
-        public void Execute()
+        public override void Execute(bool isSimulation = false)
         {
+            base.Execute(isSimulation);
+
             _entity.Destroy();
-            Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedExecuting, this);
+            var type = _isSimulation ? PlayerActionEvents.SimActionFinishedExecuting : PlayerActionEvents.ActionFinishedExecuting;
+            Emitters.PlayerActionEmitter.Emit(type, this);
         }
 
-        public void Prepare()
+        public override void Prepare()
         {
             _entity = Core.Scene.CreateEntity("slash-entity");
             _entity.AddComponent(new PrototypeSpriteRenderer(32, 32));

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.AI.FSM;
 using Nez.Systems;
@@ -23,8 +24,10 @@ namespace PuppetRoguelite.Components
         Stack<UICanvas> _menuStack = new Stack<UICanvas>();
 
         public Queue<IPlayerAction> ActionQueue = new Queue<IPlayerAction>();
+        Vector2 _initialPlayerPosition;
 
         CombatManager _combatManager;
+        ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
 
         public TurnHandler(CombatManager combatManager)
         {
@@ -44,6 +47,9 @@ namespace PuppetRoguelite.Components
             //observe emitter
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnActionFinishedPreparing);
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedExecuting, OnActionFinishedExecuting);
+
+            //store player's position at start of turn
+            _initialPlayerPosition = Player.Instance.Entity.Position;
 
             //begin selection
             StartNewSelection();
@@ -109,6 +115,7 @@ namespace PuppetRoguelite.Components
             else
             {
                 ActionQueue.Enqueue(action);
+                _sequenceSimulator.UpdateQueue(ActionQueue);
                 _menuStack.Clear();
                 _turnMenuEntity.RemoveAllComponents();
                 StartNewSelection();

@@ -21,7 +21,9 @@ namespace PuppetRoguelite
     {
         ActionFinishedPreparing,
         ActionExecuting,
-        ActionFinishedExecuting
+        ActionFinishedExecuting,
+        SimActionExecuting,
+        SimActionFinishedExecuting
     }
     public enum CombatEvents
     {

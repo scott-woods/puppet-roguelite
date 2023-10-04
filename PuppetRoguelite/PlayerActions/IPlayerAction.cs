@@ -10,7 +10,7 @@ namespace PuppetRoguelite.PlayerActions
     public interface IPlayerAction
     {
         void Prepare();
-        void Execute();
+        void Execute(bool isSimulation = false);
     }
 
     sealed class PlayerActionInfoAttribute : Attribute
