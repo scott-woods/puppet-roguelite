@@ -13,5 +13,6 @@ namespace PuppetRoguelite.Components.Shared
         bool IsCompleted { get; }
         BehaviorTree<Enemy> GetBehaviorTree();
         void Start();
+        void Reset();
     }
 }

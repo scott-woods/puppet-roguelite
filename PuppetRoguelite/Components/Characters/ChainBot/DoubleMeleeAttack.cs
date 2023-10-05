@@ -43,9 +43,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _chainBot = chainBot;
         }
 
-        public override void Initialize()
+        public void Start()
         {
-            base.Initialize();
+            _isCompleted = false;
 
             _behaviorTree = BehaviorTreeBuilder<Enemy>.Begin(_chainBot)
                 .Sequence()
@@ -60,9 +60,11 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _behaviorTree.UpdatePeriod = 0;
         }
 
-        public void Start()
+        public void Reset()
         {
             _isCompleted = false;
+            if (_hitbox != null) Entity.RemoveComponent(_hitbox);
+            if (_hitboxCollider != null) Entity.RemoveComponent(_hitboxCollider);
         }
 
         public BehaviorTree<Enemy> GetBehaviorTree()

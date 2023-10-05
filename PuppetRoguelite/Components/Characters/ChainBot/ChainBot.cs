@@ -11,6 +11,7 @@ using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
@@ -139,12 +140,19 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public void SetupBehaviorTree()
         {
             BehaviorTree = BehaviorTreeBuilder<Enemy>.Begin(this)
-                .Sequence()
-                    .Action(enemy => SelectNextAction())
-                    .Action(enemy => ExecuteAction())
-                    //.SubTree(_nextAction.GetBehaviorTree(this))
-                    .Action(enemy => Idle())
-                    .WaitAction(.5f)
+                .Selector()
+                    .Sequence(AbortTypes.LowerPriority)
+                        .Conditional(e => _isHurt)
+                        .Action(e => CancelAction())
+                    .EndComposite()
+                    .Sequence(AbortTypes.LowerPriority)
+                        .Conditional(e => !_isHurt)
+                        .Action(enemy => SelectNextAction())
+                        .Action(enemy => ExecuteAction())
+                        //.SubTree(_nextAction.GetBehaviorTree(this))
+                        .Action(enemy => Idle())
+                        .WaitAction(.5f)
+                    .EndComposite()
                 .EndComposite()
                 .Build();
             BehaviorTree.UpdatePeriod = 0;
@@ -154,10 +162,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         public void Update()
         {
-            if (!_isHurt)
-            {
-                BehaviorTree.Tick();
-            }
+            BehaviorTree.Tick();
         }
 
         public TaskStatus SelectNextAction()
@@ -171,6 +176,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             if (_nextAction.IsCompleted)
             {
+                _nextAction.Reset();
                 return TaskStatus.Success;
             }
             else
@@ -179,6 +185,16 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                 tree.Tick();
                 return TaskStatus.Running;
             }
+        }
+
+        public TaskStatus CancelAction()
+        {
+            if (_nextAction != null)
+            {
+                _nextAction.Reset();
+            }
+
+            return TaskStatus.Success;
         }
 
         public TaskStatus Idle()
@@ -191,17 +207,17 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         void OnDamageTaken(HealthComponent healthComponent)
         {
             var hurtAnimation = Direction.X >= 0 ? "HurtRight" : "HurtLeft";
-            Animator.Speed = Animator.Speed / 2;
+            //Animator.Speed = Animator.Speed / 2;
             int plays = 0;
             Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
             void handler(string obj)
             {
                 plays += 1;
-                if (plays >= 3)
+                if (plays >= 4)
                 {
                     Animator.Stop();
                     Animator.OnAnimationCompletedEvent -= handler;
-                    Animator.Speed = Animator.Speed * 2;
+                    //Animator.Speed = Animator.Speed * 2;
                     _isHurt = false;
                 }
                 else
