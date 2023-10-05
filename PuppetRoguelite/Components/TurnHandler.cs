@@ -29,7 +29,7 @@ namespace PuppetRoguelite.Components
         Vector2 _finalPlayerPosition;
 
         CombatManager _combatManager;
-        //ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
+        ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
         Entity _playerSimEntity;
 
         public TurnHandler(CombatManager combatManager)
@@ -247,6 +247,42 @@ namespace PuppetRoguelite.Components
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseCompleted);
             }
         }
+
+        public void ShowSequenceSim()
+        {
+            //hide menu
+            _menuStack.Peek().SetEnabled(false);
+
+            //hide sim player
+            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.SetEnabled(false);
+            }
+
+            //start sim
+            _sequenceSimulator.StartSim(ActionQueue, _playerSimEntity, _playerSimEntity.Position);
+
+            //change state
+            StateMachine.ChangeState<ShowingSim>();
+        }
+
+        public void HideSequenceSim()
+        {
+            //stop sim
+            _sequenceSimulator.StopSim();
+
+            //show sim player
+            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.SetEnabled(true);
+            }
+
+            //show menu
+            _menuStack.Peek().SetEnabled(true);
+
+            //change state
+            StateMachine.ChangeState<SelectingFromMenu>();
+        }
     }
 
     #region STATE MACHINE
@@ -257,12 +293,14 @@ namespace PuppetRoguelite.Components
         {
             AddState(new SelectingFromMenu());
             AddState(new PreparingAction());
+            AddState(new ShowingSim());
         }
     }
 
     public class SelectingFromMenu : State<TurnHandler>
     {
         VirtualButton _cancelInput;
+        VirtualButton _simButton;
 
         public override void Begin()
         {
@@ -270,10 +308,20 @@ namespace PuppetRoguelite.Components
 
             _cancelInput = new VirtualButton();
             _cancelInput.AddKeyboardKey(Keys.X);
+
+            _simButton = new VirtualButton();
+            _simButton.AddKeyboardKey(Keys.C);
         }
 
         public override void Update(float deltaTime)
         {
+            if (_simButton.IsPressed)
+            {
+                if (_context.ActionQueue.Count > 0)
+                {
+                    _context.ShowSequenceSim();
+                }
+            }
             if (_cancelInput.IsPressed)
             {
                 _context.GoBack();
@@ -286,6 +334,28 @@ namespace PuppetRoguelite.Components
         public override void Update(float deltaTime)
         {
 
+        }
+    }
+
+    public class ShowingSim : State<TurnHandler>
+    {
+        VirtualButton _backButton;
+
+        public override void Begin()
+        {
+            base.Begin();
+
+            _backButton = new VirtualButton();
+            _backButton.AddKeyboardKey(Keys.C);
+            _backButton.AddKeyboardKey(Keys.X);
+        }
+
+        public override void Update(float deltaTime)
+        {
+            if (_backButton.IsPressed)
+            {
+                _context.HideSequenceSim();
+            }
         }
     }
 

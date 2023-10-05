@@ -77,9 +77,17 @@ namespace PuppetRoguelite.PlayerActions.Attacks
                 animation = _direction.Y >= 0 ? "SlashDown" : "SlashUp";
             }
 
-            if (_isPreparing)
+            if (_isPreparing || _isSimulation)
             {
                 _animator.SetColor(new Color(Color.White, 128));
+            }
+            else
+            {
+                _animator.SetColor(new Color(Color.White, 255));
+            }
+
+            if (_isPreparing)
+            {
                 if (!_animator.IsAnimationActive(animation))
                 {
                     _animator.Play(animation);
@@ -88,7 +96,6 @@ namespace PuppetRoguelite.PlayerActions.Attacks
             }
             else
             {
-                _animator.SetColor(new Color(Color.White, 255));
                 _animator.Play(animation, SpriteAnimator.LoopMode.Once);
                 _animator.OnAnimationCompletedEvent += _animator_OnAnimationCompletedEvent;
             }
