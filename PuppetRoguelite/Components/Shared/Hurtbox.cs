@@ -1,4 +1,6 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
+using Nez.PhysicsShapes;
 using Nez.Systems;
 using PuppetRoguelite.Enums;
 using System;
@@ -14,6 +16,7 @@ namespace PuppetRoguelite.Components.Shared
         public Emitter<HurtboxEventTypes, Hitbox> Emitter;
 
         Collider _collider;
+        HealthComponent _healthComponent;
 
         float _recoveryTime;
         bool _inRecovery = false;
@@ -31,6 +34,13 @@ namespace PuppetRoguelite.Components.Shared
             Emitter = new Emitter<HurtboxEventTypes, Hitbox>();
 
             _collider.IsTrigger = true;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            _healthComponent = Entity.GetComponent<HealthComponent>();
         }
 
         public void Update()

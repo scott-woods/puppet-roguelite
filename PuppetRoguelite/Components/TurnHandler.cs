@@ -53,12 +53,12 @@ namespace PuppetRoguelite.Components
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionPrepCanceled, OnActionPrepCanceled);
 
             //store player's position at start of turn
-            _initialPlayerPosition = Player.Instance.Entity.Position;
-            _finalPlayerPosition = Player.Instance.Entity.Position;
+            _initialPlayerPosition = PlayerController.Instance.Entity.Position;
+            _finalPlayerPosition = PlayerController.Instance.Entity.Position;
 
             //add the sim player
             _playerSimEntity = Entity.Scene.CreateEntity("player-sim");
-            _playerSimEntity.AddComponent(new PlayerSim(Player.Instance.Direction));
+            _playerSimEntity.AddComponent(new PlayerSim(PlayerController.Instance.Direction));
             _playerSimEntity.SetPosition(_initialPlayerPosition);
 
             //begin selection
@@ -89,11 +89,11 @@ namespace PuppetRoguelite.Components
                 //if sim and real player would overlap, hide real player
                 if (_finalPlayerPosition == _initialPlayerPosition)
                 {
-                    Player.Instance.Entity.SetEnabled(false);
+                    PlayerController.Instance.Entity.SetEnabled(false);
                 }
 
                 StateMachine.ChangeState<SelectingFromMenu>();
-                var actionSelector = new ActionsSelector(Player.Instance.Entity.Position, this);
+                var actionSelector = new ActionsSelector(PlayerController.Instance.Entity.Position, this);
                 OpenMenu(actionSelector);
             });
         }
@@ -136,7 +136,7 @@ namespace PuppetRoguelite.Components
                 //hide original player if it will overlap sim player
                 if (_finalPlayerPosition == _initialPlayerPosition)
                 {
-                    Player.Instance.Entity.SetEnabled(false);
+                    PlayerController.Instance.Entity.SetEnabled(false);
                 }
 
                 //hide sim player
@@ -171,7 +171,7 @@ namespace PuppetRoguelite.Components
                 //reenable player and sim player
                 if (_finalPlayerPosition != _initialPlayerPosition)
                 {
-                    Player.Instance.Entity.SetEnabled(true);
+                    PlayerController.Instance.Entity.SetEnabled(true);
                 }
                 if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
                 {
@@ -190,7 +190,7 @@ namespace PuppetRoguelite.Components
                 //reenable player and sim player
                 if (_finalPlayerPosition != _initialPlayerPosition)
                 {
-                    Player.Instance.Entity.SetEnabled(true);
+                    PlayerController.Instance.Entity.SetEnabled(true);
                 }
                 if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
                 {
@@ -212,8 +212,8 @@ namespace PuppetRoguelite.Components
             _playerSimEntity.Destroy();
 
             //reenable real player
-            Player.Instance.Entity.SetEnabled(true);
-            if (Player.Instance.Entity.TryGetComponent<SpriteAnimator>(out var animator))
+            PlayerController.Instance.Entity.SetEnabled(true);
+            if (PlayerController.Instance.Entity.TryGetComponent<SpriteAnimator>(out var animator))
             {
                 animator.SetEnabled(false);
             }
@@ -222,7 +222,7 @@ namespace PuppetRoguelite.Components
             Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseExecuting);
 
             var action = ActionQueue.Dequeue();
-            Player.Instance.Entity.AddComponent(action);
+            PlayerController.Instance.Entity.AddComponent(action);
             action.Execute();
             Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionExecuting, action);
         }
@@ -230,17 +230,17 @@ namespace PuppetRoguelite.Components
         public void OnActionFinishedExecuting(PlayerAction action)
         {
             //remove action from player entity
-            Player.Instance.Entity.RemoveComponent(action);
+            PlayerController.Instance.Entity.RemoveComponent(action);
 
             //if there are more actions in the queue, execute the next one
             if (ActionQueue.TryDequeue(out var nextAction))
             {
-                Player.Instance.Entity.AddComponent(nextAction);
+                PlayerController.Instance.Entity.AddComponent(nextAction);
                 nextAction.Execute();
             }
             else //otherwise, emit turn phase finished
             {
-                if (Player.Instance.Entity.TryGetComponent<SpriteAnimator>(out var animator))
+                if (PlayerController.Instance.Entity.TryGetComponent<SpriteAnimator>(out var animator))
                 {
                     animator.SetEnabled(true);
                 }

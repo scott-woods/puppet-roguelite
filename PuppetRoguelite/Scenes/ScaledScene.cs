@@ -31,7 +31,7 @@ namespace PuppetRoguelite.Scenes
             tiledMapRenderer.RenderLayer = 10;
 
             _playerEntity = CreateEntity("player");
-            var player = _playerEntity.AddComponent(new Player());
+            var player = _playerEntity.AddComponent(new PlayerController());
             _playerEntity.SetPosition(50, 50);
 
             //camera

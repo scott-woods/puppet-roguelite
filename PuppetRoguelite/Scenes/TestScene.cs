@@ -50,7 +50,7 @@ namespace PuppetRoguelite.Scenes
             //add player
             _playerEntity = new Entity("player");
             AddEntity(_playerEntity);
-            var player = _playerEntity.AddComponent(new Player());
+            var player = _playerEntity.AddComponent(new PlayerController());
             _playerEntity.SetPosition(480 / 3, 270 / 3);
 
             //camera
@@ -62,7 +62,7 @@ namespace PuppetRoguelite.Scenes
 
             var chainBotEntity = new PausableEntity("chain-bot-entity");
             AddEntity(chainBotEntity);
-            var chainBot = chainBotEntity.AddComponent(new ChainBot());
+            var chainBot = chainBotEntity.AddComponent(new ChainBotController());
             chainBotEntity.SetPosition(64, 64);
 
             //add combat manager

@@ -39,14 +39,14 @@ namespace PuppetRoguelite.UI.Menus
         {
             //dialog content
             Dictionary<ListButton, Label> dialogContent = new Dictionary<ListButton, Label>();
-            var options = Player.Instance.AttacksList.AvailableAttackTypes;
+            var options = PlayerController.Instance.AttacksList.AvailableAttackTypes;
             foreach (var attackType in options)
             {
                 //check affordability
                 var apCostColor = Color.White;
                 var disabled = false;
                 var apCost = PlayerActionUtils.GetApCost(attackType);
-                if (apCost > Player.Instance.ActionPointComponent.ActionPoints)
+                if (apCost > PlayerController.Instance.ActionPointComponent.ActionPoints)
                 {
                     apCostColor = Color.Gray;
                     disabled = true;
@@ -85,7 +85,7 @@ namespace PuppetRoguelite.UI.Menus
                 var apCostColor = Color.White;
                 var disabled = false;
                 var apCost = PlayerActionUtils.GetApCost(pair.Value);
-                if (apCost > Player.Instance.ActionPointComponent.ActionPoints)
+                if (apCost > PlayerController.Instance.ActionPointComponent.ActionPoints)
                 {
                     apCostColor = Color.Gray;
                     disabled = true;

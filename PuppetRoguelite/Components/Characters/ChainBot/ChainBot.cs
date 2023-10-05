@@ -15,12 +15,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
-namespace PuppetRoguelite.Components.Characters
+namespace PuppetRoguelite.Components.Characters.ChainBot
 {
     public class ChainBot : Component, IUpdatable
     {
         //behavior tree
         BehaviorTree<ChainBot> BehaviorTree;
+
+        Entity _meleeEntity;
 
         //components
         Mover _mover;
@@ -29,10 +31,8 @@ namespace PuppetRoguelite.Components.Characters
         HealthComponent _healthComponent;
         PathfindingComponent _pathfinder;
         Collider _collider;
-        Hitbox _melee;
-        HitHandler _hitHandler;
 
-        Entity _meleeEntity;
+        Hitbox _melee;
 
         //properties
         float _moveSpeed = 75f;
@@ -50,14 +50,17 @@ namespace PuppetRoguelite.Components.Characters
 
             AddComponents();
             SetupBehaviorTree();
-
-            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, _hitHandler.OnHurtboxHit);
-
-            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Hurt, OnHurt);
-            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Killed, OnKilled);
         }
 
-        public void AddComponents()
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+        }
+
+        void AddComponents()
         {
             //Mover
             _mover = Entity.AddComponent(new Mover());
@@ -81,20 +84,47 @@ namespace PuppetRoguelite.Components.Characters
             //animator
             _animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
+        }
 
-            //hit handler
-            _hitHandler = Entity.AddComponent(new HitHandler());
+        void AddAnimations()
+        {
+            //Idle
+            var idleTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Idle);
+            var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 126, 39);
+            _animator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArray(idleSprites, new List<int> { 1, 3, 5, 7, 9 }));
+            _animator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArray(idleSprites, new List<int> { 0, 2, 4, 6, 8 }));
 
-            //melee
-            //var meleeShape = new[]
-            //{
-            //    new Vector2(10, -5),
-            //    new Vector2(45, -5),
-            //    new Vector2(50, 0),
-            //    new Vector2(45, 5),
-            //    new Vector2(10, 5)
-            //};
-            //_melee = Entity.AddComponent(new Melee(new PolygonCollider(meleeShape), 1));
+            //Run
+            var runTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Run);
+            var runSprites = Sprite.SpritesFromAtlas(runTexture, 126, 39);
+            var leftSprites = runSprites.Where((sprite, index) => index % 2 != 0);
+            var rightSprites = runSprites.Where((sprite, index) => index % 2 == 0);
+            _animator.AddAnimation("RunLeft", leftSprites.ToArray());
+            _animator.AddAnimation("RunRight", rightSprites.ToArray());
+
+            //Attack
+            var attackTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Attack);
+            var attackSprites = Sprite.SpritesFromAtlas(attackTexture, 126, 39);
+            _animator.AddAnimation("AttackLeft", attackSprites.Where((sprite, index) => index % 2 != 0).ToArray());
+            _animator.AddAnimation("AttackRight", attackSprites.Where((sprite, index) => index % 2 == 0).ToArray());
+
+            //transition to charge
+            var transitionTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Transitiontocharge);
+            var transitionSprites = Sprite.SpritesFromAtlas(transitionTexture, 126, 39);
+            _animator.AddAnimation("TransitionLeft", transitionSprites.Where((sprite, index) => index % 2 != 0).ToArray());
+            _animator.AddAnimation("TransitionRight", transitionSprites.Where((sprite, index) => index % 2 == 0).ToArray());
+
+            //charge
+            var chargeTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Charge);
+            var chargeSprites = Sprite.SpritesFromAtlas(chargeTexture, 126, 39);
+            _animator.AddAnimation("ChargeLeft", chargeSprites.Where((sprite, index) => index % 2 != 0).ToArray());
+            _animator.AddAnimation("ChargeRight", chargeSprites.Where((sprite, index) => index % 2 == 0).ToArray());
+
+            //hit
+            var hitTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Hit);
+            var hitSprites = Sprite.SpritesFromAtlas(hitTexture, 126, 39);
+            _animator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 1, 3 }));
+            _animator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 0, 2 }));
         }
 
         public void SetupBehaviorTree()
@@ -115,61 +145,6 @@ namespace PuppetRoguelite.Components.Characters
             BehaviorTree.UpdatePeriod = 0;
         }
 
-        public void AddAnimations()
-        {
-            //Idle
-            var idleTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Idle);
-            var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 126, 39);
-            _animator.AddAnimation("IdleLeft", new[]
-            {
-                idleSprites[1],
-                idleSprites[3],
-                idleSprites[5],
-                idleSprites[7],
-                idleSprites[9]
-            });
-            _animator.AddAnimation("IdleRight", new[]
-            {
-                idleSprites[0],
-                idleSprites[2],
-                idleSprites[4],
-                idleSprites[6],
-                idleSprites[8]
-            });
-
-            //Run
-            var runTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Run);
-            var runSprites = Sprite.SpritesFromAtlas(runTexture, 126, 39);
-            var leftSprites = runSprites.Where((sprite, index) => index % 2 != 0);
-            var rightSprites = runSprites.Where((sprite, index) => index % 2 == 0);
-            _animator.AddAnimation("RunLeft", leftSprites.ToArray());
-            _animator.AddAnimation("RunRight", rightSprites.ToArray());
-
-            //Attack
-            var attackTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Attack);
-            var attackSprites = Sprite.SpritesFromAtlas(attackTexture, 126, 39);
-            _animator.AddAnimation("AttackLeft", attackSprites.Where((sprite, index) => index % 2 != 0).ToArray());
-            _animator.AddAnimation("AttackRight", attackSprites.Where((sprite, index) => index % 2 == 0).ToArray());
-
-            //transition to charge
-            var transitionTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Transitiontocharge);
-            var transitionSprites = Sprite.SpritesFromAtlas(transitionTexture, 126, 39);
-            _animator.AddAnimation("TransitionLeft", transitionSprites.Where((sprite, index) => index % 2 != 0).ToArray());
-            _animator.AddAnimation("TransitionRight", transitionSprites.Where((sprite, index) => index % 2 == 0).ToArray());
-
-            //charge
-            var chargeTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Charge);
-            var chargeSprites = Sprite.SpritesFromAtlas(chargeTexture, 126, 39);
-            _animator.AddAnimation("ChargeLeft", chargeSprites.Where((sprite, index) => index % 2 != 0).ToArray());
-            _animator.AddAnimation("ChargeRight", chargeSprites.Where((sprite, index) => index % 2 == 0).ToArray());
-
-            //hit
-            var hitTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Hit);
-            var hitSprites = Sprite.SpritesFromAtlas(hitTexture, 126, 39);
-            _animator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 1, 3 }));
-            _animator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 0, 2 }));
-        }
-
         #endregion
 
         public void Update()
@@ -182,7 +157,7 @@ namespace PuppetRoguelite.Components.Characters
 
         public TaskStatus ChasePlayer()
         {
-            var player = Entity.Scene.FindComponentOfType<Player>();
+            var player = Entity.Scene.FindComponentOfType<PlayerController>();
             if (player != null)
             {
                 //check if finished
@@ -296,7 +271,7 @@ namespace PuppetRoguelite.Components.Characters
             return TaskStatus.Success;
         }
 
-        void OnHurt()
+        void OnDamageTaken(HealthComponent healthComponent)
         {
             var hurtAnimation = _direction.X >= 0 ? "HurtRight" : "HurtLeft";
             _animator.Speed = _animator.Speed / 2;
@@ -321,7 +296,7 @@ namespace PuppetRoguelite.Components.Characters
             _isHurt = true;
         }
 
-        void OnKilled()
+        void OnHealthDepleted(HealthComponent healthComponent)
         {
 
         }

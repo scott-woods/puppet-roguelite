@@ -21,9 +21,9 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters
 {
-    public class Player : Component, IUpdatable
+    public class PlayerController : Component, IUpdatable
     {
-        public static Player Instance { get; private set; } = new Player();
+        public static PlayerController Instance { get; private set; } = new PlayerController();
 
         //state machine
         internal PlayerStateMachine StateMachine;
@@ -42,7 +42,6 @@ namespace PuppetRoguelite.Components.Characters
         Collider _collider;
         HealthComponent _healthComponent;
         Hurtbox _hurtbox;
-        HitHandler _hitHandler;
         public ActionPointComponent ActionPointComponent;
         public AttacksList AttacksList;
 
@@ -53,7 +52,7 @@ namespace PuppetRoguelite.Components.Characters
 
         #region SETUP
 
-        public Player()
+        public PlayerController()
         {
             Instance = this;
         }
@@ -65,11 +64,7 @@ namespace PuppetRoguelite.Components.Characters
             AddComponents();
             AddObservers();
             SetupInput();
-        }
 
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
             StateMachine = new PlayerStateMachine(this, new PlayerInCombat());
         }
 
@@ -93,9 +88,8 @@ namespace PuppetRoguelite.Components.Characters
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
-
-            //hit handler
-            _hitHandler = Entity.AddComponent(new HitHandler());
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //action points
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
@@ -106,11 +100,6 @@ namespace PuppetRoguelite.Components.Characters
 
         void AddObservers()
         {
-            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, _hitHandler.OnHurtboxHit);
-
-            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Hurt, OnHurt);
-            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Killed, OnKilled);
-
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
@@ -167,32 +156,6 @@ namespace PuppetRoguelite.Components.Characters
         public void Update()
         {
             StateMachine.Update(Time.DeltaTime);
-        }
-
-        public void OnHurt()
-        {
-            var hurtAnimation = Direction.X >= 0 ? "HurtRight" : "HurtLeft";
-            _spriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-            void handler(string obj)
-            {
-                _spriteAnimator.OnAnimationCompletedEvent -= handler;
-                StateMachine.ChangeState<PlayerInCombat>();
-            }
-            _spriteAnimator.OnAnimationCompletedEvent += handler;
-            StateMachine.ChangeState<PlayerHurt>();
-        }
-
-        public void OnKilled()
-        {
-            var deathAnimation = Direction.X >= 0 ? "DeathRight" : "DeathLeft";
-            _spriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
-            void handler(string obj)
-            {
-                _spriteAnimator.OnAnimationCompletedEvent -= handler;
-                Game1.Exit();
-            }
-            _spriteAnimator.OnAnimationCompletedEvent += handler;
-            StateMachine.ChangeState<PlayerDying>();
         }
 
         public void Idle()
@@ -268,6 +231,32 @@ namespace PuppetRoguelite.Components.Characters
             }
         }
 
+        public void OnDamageTaken(HealthComponent healthComponent)
+        {
+            var hurtAnimation = Direction.X >= 0 ? "HurtRight" : "HurtLeft";
+            _spriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+            void handler(string obj)
+            {
+                _spriteAnimator.OnAnimationCompletedEvent -= handler;
+                StateMachine.ChangeState<PlayerInCombat>();
+            }
+            _spriteAnimator.OnAnimationCompletedEvent += handler;
+            StateMachine.ChangeState<PlayerHurt>();
+        }
+
+        public void OnHealthDepleted(HealthComponent healthComponent)
+        {
+            var deathAnimation = Direction.X >= 0 ? "DeathRight" : "DeathLeft";
+            _spriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
+            void handler(string obj)
+            {
+                _spriteAnimator.OnAnimationCompletedEvent -= handler;
+                Game1.Exit();
+            }
+            _spriteAnimator.OnAnimationCompletedEvent += handler;
+            StateMachine.ChangeState<PlayerDying>();
+        }
+
         void OnTurnPhaseTriggered()
         {
             StateMachine.ChangeState<PlayerInTurn>();
@@ -281,9 +270,9 @@ namespace PuppetRoguelite.Components.Characters
 
     #region STATE MACHINE
 
-    public class PlayerStateMachine : StateMachine<Player>
+    public class PlayerStateMachine : StateMachine<PlayerController>
     {
-        public PlayerStateMachine(Player context, State<Player> initialState) : base(context, initialState)
+        public PlayerStateMachine(PlayerController context, State<PlayerController> initialState) : base(context, initialState)
         {
             AddState(new PlayerIdle());
             AddState(new PlayerRunning());
@@ -294,7 +283,7 @@ namespace PuppetRoguelite.Components.Characters
         }
     }
 
-    public class PlayerInCombat : State<Player>
+    public class PlayerInCombat : State<PlayerController>
     {
         public override void Update(float deltaTime)
         {
@@ -302,7 +291,7 @@ namespace PuppetRoguelite.Components.Characters
         }
     }
 
-    public class PlayerIdle : State<Player>
+    public class PlayerIdle : State<PlayerController>
     {
         public override void Update(float deltaTime)
         {
@@ -310,7 +299,7 @@ namespace PuppetRoguelite.Components.Characters
         }
     }
 
-    public class PlayerRunning : State<Player>
+    public class PlayerRunning : State<PlayerController>
     {
         public override void Update(float deltaTime)
         {
@@ -318,7 +307,7 @@ namespace PuppetRoguelite.Components.Characters
         }
     }
 
-    public class PlayerHurt : State<Player>
+    public class PlayerHurt : State<PlayerController>
     {
         public override void Update(float deltaTime)
         {
@@ -326,7 +315,7 @@ namespace PuppetRoguelite.Components.Characters
         }
     }
 
-    public class PlayerDying : State<Player>
+    public class PlayerDying : State<PlayerController>
     {
         public override void Update(float deltaTime)
         {
@@ -334,7 +323,7 @@ namespace PuppetRoguelite.Components.Characters
         }
     }
 
-    public class PlayerInTurn : State<Player>
+    public class PlayerInTurn : State<PlayerController>
     {
         public override void Update(float deltaTime)
         {

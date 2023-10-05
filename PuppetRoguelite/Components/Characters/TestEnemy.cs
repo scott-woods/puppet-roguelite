@@ -26,7 +26,7 @@ namespace PuppetRoguelite.Components.Characters
         Collider _collider;
 
         //Player
-        Player _player;
+        PlayerController _player;
 
         //Properties
         Vector2 _direction;
@@ -79,7 +79,7 @@ namespace PuppetRoguelite.Components.Characters
         {
             base.OnAddedToEntity();
 
-            _player = Entity.Scene.FindComponentOfType<Player>();
+            _player = Entity.Scene.FindComponentOfType<PlayerController>();
         }
 
         public void Update()
