@@ -9,8 +9,9 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class Hitbox : Component
     {
-        Collider _collider;
+        public Collider Collider;
         int _damage;
+
         public int Damage
         {
             get { return _damage; }
@@ -18,7 +19,7 @@ namespace PuppetRoguelite.Components.Shared
 
         public Hitbox(Collider collider, int damage)
         {
-            _collider = collider;
+            Collider = collider;
             _damage = damage;
         }
 
@@ -26,17 +27,17 @@ namespace PuppetRoguelite.Components.Shared
         {
             base.Initialize();
 
-            _collider.IsTrigger = true;
+            Collider.IsTrigger = true;
         }
 
         public void Enable()
         {
-            _collider.Enabled = true;
+            Collider.Enabled = true;
         }
 
         public void Disable()
         {
-            _collider.Enabled = false;
+            Collider.Enabled = false;
         }
     }
 }

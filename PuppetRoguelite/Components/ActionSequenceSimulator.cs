@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
-using PuppetRoguelite.PlayerActions;
+using PuppetRoguelite.Components.PlayerActions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,22 +46,6 @@ namespace PuppetRoguelite.Components
             _currentIndex = 0;
             _currentAction = null;
         }
-
-        //public void UpdateQueue(Queue<PlayerAction> actionQueue)
-        //{
-        //    ActionQueue = actionQueue;
-        //    if (!_started)
-        //    {
-        //        _started = true;
-        //        ExecuteActions();
-        //    }
-        //}
-
-        //public void ExecuteActions()
-        //{
-        //    var nextAction = ActionQueue.ElementAt(_currentIndex);
-        //    nextAction.Execute(true);
-        //}
 
         void PlayNextAction()
         {

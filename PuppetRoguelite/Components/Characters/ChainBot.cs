@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.AI.BehaviorTrees;
+using Nez.AI.FSM;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.UI;
@@ -29,11 +30,13 @@ namespace PuppetRoguelite.Components.Characters
         PathfindingComponent _pathfinder;
         Collider _collider;
         Hitbox _melee;
+        HitHandler _hitHandler;
 
         Entity _meleeEntity;
 
         //properties
         float _moveSpeed = 75f;
+        bool _isHurt = false;
 
         //misc
         SubpixelVector2 _subPixelV2 = new SubpixelVector2();
@@ -47,6 +50,11 @@ namespace PuppetRoguelite.Components.Characters
 
             AddComponents();
             SetupBehaviorTree();
+
+            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, _hitHandler.OnHurtboxHit);
+
+            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Hurt, OnHurt);
+            _hitHandler.Emitter.AddObserver(HitHandlerEventType.Killed, OnKilled);
         }
 
         public void AddComponents()
@@ -54,7 +62,7 @@ namespace PuppetRoguelite.Components.Characters
             //Mover
             _mover = Entity.AddComponent(new Mover());
 
-            //hitbox
+            //hurtbox
             var hurtboxCollider = Entity.AddComponent(new BoxCollider(0, -9, 8, 18));
             hurtboxCollider.IsTrigger = true;
             hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
@@ -73,6 +81,9 @@ namespace PuppetRoguelite.Components.Characters
             //animator
             _animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
+
+            //hit handler
+            _hitHandler = Entity.AddComponent(new HitHandler());
 
             //melee
             //var meleeShape = new[]
@@ -151,13 +162,22 @@ namespace PuppetRoguelite.Components.Characters
             var chargeSprites = Sprite.SpritesFromAtlas(chargeTexture, 126, 39);
             _animator.AddAnimation("ChargeLeft", chargeSprites.Where((sprite, index) => index % 2 != 0).ToArray());
             _animator.AddAnimation("ChargeRight", chargeSprites.Where((sprite, index) => index % 2 == 0).ToArray());
+
+            //hit
+            var hitTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Hit);
+            var hitSprites = Sprite.SpritesFromAtlas(hitTexture, 126, 39);
+            _animator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 1, 3 }));
+            _animator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 0, 2 }));
         }
 
         #endregion
 
         public void Update()
         {
-            BehaviorTree.Tick();
+            if (!_isHurt)
+            {
+                BehaviorTree.Tick();
+            }
         }
 
         public TaskStatus ChasePlayer()
@@ -274,6 +294,36 @@ namespace PuppetRoguelite.Components.Characters
             var animation = _direction.X >= 0 ? "IdleRight" : "IdleLeft";
             _animator.Play(animation);
             return TaskStatus.Success;
+        }
+
+        void OnHurt()
+        {
+            var hurtAnimation = _direction.X >= 0 ? "HurtRight" : "HurtLeft";
+            _animator.Speed = _animator.Speed / 2;
+            int plays = 0;
+            _animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+            void handler(string obj)
+            {
+                plays += 1;
+                if (plays >= 3)
+                {
+                    _animator.Stop();
+                    _animator.OnAnimationCompletedEvent -= handler;
+                    _animator.Speed = _animator.Speed * 2;
+                    _isHurt = false;
+                }
+                else
+                {
+                    _animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+                }
+            }
+            _animator.OnAnimationCompletedEvent += handler;
+            _isHurt = true;
+        }
+
+        void OnKilled()
+        {
+
         }
     }
 }

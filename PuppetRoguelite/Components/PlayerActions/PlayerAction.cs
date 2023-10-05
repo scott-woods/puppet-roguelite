@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.PlayerActions
+namespace PuppetRoguelite.Components.PlayerActions
 {
     public abstract class PlayerAction : Component, IPlayerAction, IUpdatable
     {
@@ -30,7 +30,7 @@ namespace PuppetRoguelite.PlayerActions
         {
             if (_isPreparing)
             {
-                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+                if (Input.IsKeyPressed(Keys.X))
                 {
                     Core.Schedule(.1f, timer =>
                     {

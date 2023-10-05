@@ -5,7 +5,7 @@ using Nez.AI.FSM;
 using Nez.Sprites;
 using Nez.Systems;
 using PuppetRoguelite.Components.Characters;
-using PuppetRoguelite.PlayerActions;
+using PuppetRoguelite.Components.PlayerActions;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.UI.Menus;
 using System;

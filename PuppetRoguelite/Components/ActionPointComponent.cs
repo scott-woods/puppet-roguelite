@@ -1,6 +1,6 @@
 ﻿using Nez;
 using Nez.Systems;
-using PuppetRoguelite.PlayerActions;
+using PuppetRoguelite.Components.PlayerActions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

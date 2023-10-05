@@ -60,10 +60,10 @@ namespace PuppetRoguelite.Scenes
             //Camera.MinimumZoom = .3f;
             //Camera.Zoom = .45f;
 
-            //var chainBotEntity = new PausableEntity("chain-bot-entity");
-            //AddEntity(chainBotEntity);
-            //var chainBot = chainBotEntity.AddComponent(new ChainBot());
-            //chainBotEntity.SetPosition(64, 64);
+            var chainBotEntity = new PausableEntity("chain-bot-entity");
+            AddEntity(chainBotEntity);
+            var chainBot = chainBotEntity.AddComponent(new ChainBot());
+            chainBotEntity.SetPosition(64, 64);
 
             //add combat manager
             AddSceneComponent(new CombatManager());

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.PlayerActions
+namespace PuppetRoguelite.Components.PlayerActions
 {
     public interface IPlayerAction
     {

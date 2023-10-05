@@ -4,6 +4,9 @@ using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Components.PlayerActions;
+using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
@@ -11,11 +14,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.PlayerActions.Attacks
+namespace PuppetRoguelite.Components.PlayerActions.Attacks
 {
     [PlayerActionInfo("Slash", 1)]
     public class Slash : PlayerAction, IUpdatable
     {
+        int _offset = 16;
+        Vector2 _hitboxHorizontalSize = new Vector2(16, 32);
+        Vector2 _hitboxVerticalSize = new Vector2(32, 16);
+        int _damage = 2;
+
         Vector2 _direction = new Vector2(1, 0);
         int _currentIndex;
 
@@ -26,6 +34,10 @@ namespace PuppetRoguelite.PlayerActions.Attacks
 
         //components
         SpriteAnimator _animator;
+        Hitbox _hitbox;
+
+        //entities
+        Entity _hitboxEntity;
 
         public override void Initialize()
         {
@@ -41,11 +53,6 @@ namespace PuppetRoguelite.PlayerActions.Attacks
 
             //SetEnabled(true);
             PlayAnimation();
-        }
-
-        public override void Prepare()
-        {
-            base.Prepare();
         }
 
         public override void Update()
@@ -98,18 +105,37 @@ namespace PuppetRoguelite.PlayerActions.Attacks
             {
                 _animator.Play(animation, SpriteAnimator.LoopMode.Once);
                 _animator.OnAnimationCompletedEvent += _animator_OnAnimationCompletedEvent;
+
+                //determine hitbox position
+                var hitboxPos = Entity.Position + (_direction * _offset);
+
+                //determine hitbox size
+                var hitboxSize = _hitboxHorizontalSize;
+                if (_direction.X != 0) hitboxSize = _hitboxHorizontalSize;
+                else if (_direction.Y != 0) hitboxSize = _hitboxVerticalSize;
+
+                //add hitbox
+                _hitboxEntity = Entity.Scene.CreateEntity("slash", hitboxPos);
+                var hitboxCollider = _hitboxEntity.AddComponent(new BoxCollider(hitboxSize.X, hitboxSize.Y));
+                hitboxCollider.PhysicsLayer = (int)PhysicsLayers.Damage;
+                _hitbox = _hitboxEntity.AddComponent(new Hitbox(hitboxCollider, 3));
+                _hitbox.Enable();
             }
         }
 
         private void _animator_OnAnimationCompletedEvent(string obj)
         {
             _animator.OnAnimationCompletedEvent -= _animator_OnAnimationCompletedEvent;
+
             if (_isPreparing)
             {
                 PlayAnimation();
             }
             else
             {
+                _hitbox.Disable();
+                _hitboxEntity.Destroy();
+                
                 var type = _isSimulation ? PlayerActionEvents.SimActionFinishedExecuting : PlayerActionEvents.ActionFinishedExecuting;
                 Emitters.PlayerActionEmitter.Emit(type, this);
             }
@@ -140,7 +166,7 @@ namespace PuppetRoguelite.PlayerActions.Attacks
         void AddAnimations()
         {
             //slash
-            var slashTexture = Game1.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
+            var slashTexture = Core.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_attack);
             var slashSprites = Sprite.SpritesFromAtlas(slashTexture, 64, 64);
             _animator.AddAnimation("SlashDown", AnimatedSpriteHelper.GetSpriteArray(slashSprites, new List<int>() { 18, 19, 20, 21, 26 }));
             _animator.AddAnimation("SlashRight", AnimatedSpriteHelper.GetSpriteArray(slashSprites, new List<int>() { 0, 1, 2, 3, 8 }));

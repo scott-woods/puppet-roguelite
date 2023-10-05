@@ -15,7 +15,7 @@ namespace PuppetRoguelite
         {
             base.Initialize();
 
-            DebugRenderEnabled = false;
+            DebugRenderEnabled = true;
             Window.AllowUserResizing = true;
             IsFixedTimeStep = false;
 
