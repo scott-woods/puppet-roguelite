@@ -61,12 +61,6 @@ namespace PuppetRoguelite.Components
             _playerSimEntity.AddComponent(new PlayerSim(Player.Instance.Direction));
             _playerSimEntity.SetPosition(_initialPlayerPosition);
 
-            //if sim and real player would overlap, hide real player
-            if (_finalPlayerPosition == _initialPlayerPosition)
-            {
-                Player.Instance.Entity.SetEnabled(false);
-            }
-
             //begin selection
             StartNewSelection();
         }
@@ -90,9 +84,18 @@ namespace PuppetRoguelite.Components
         /// </summary>
         void StartNewSelection()
         {
-            StateMachine.ChangeState<SelectingFromMenu>();
-            var actionSelector = new ActionsSelector(Player.Instance.Entity.Position, this);
-            OpenMenu(actionSelector);
+            Core.Schedule(.1f, timer =>
+            {
+                //if sim and real player would overlap, hide real player
+                if (_finalPlayerPosition == _initialPlayerPosition)
+                {
+                    Player.Instance.Entity.SetEnabled(false);
+                }
+
+                StateMachine.ChangeState<SelectingFromMenu>();
+                var actionSelector = new ActionsSelector(Player.Instance.Entity.Position, this);
+                OpenMenu(actionSelector);
+            });
         }
 
         public void OpenMenu(UICanvas menu)
@@ -122,76 +125,82 @@ namespace PuppetRoguelite.Components
 
         public void HandleActionSelected(Type actionType)
         {
-            //disable last menu
-            _menuStack.Peek().SetEnabled(false);
-
-            //change state
-            StateMachine.ChangeState<PreparingAction>();
-
-            //hide original player if it will overlap sim player
-            if (_finalPlayerPosition ==  _initialPlayerPosition)
+            Core.Schedule(.1f, timer =>
             {
-                Player.Instance.Entity.SetEnabled(false);
-            }
+                //disable last menu
+                _menuStack.Peek().SetEnabled(false);
 
-            //hide sim player
-            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
-            {
-                animator.SetEnabled(false);
-            }
+                //change state
+                StateMachine.ChangeState<PreparingAction>();
 
-            //create action instance, add to sim player, and prepare it
-            var action = Activator.CreateInstance(actionType) as PlayerAction;
-            _playerSimEntity.AddComponent(action);
-            action.Prepare();
+                //hide original player if it will overlap sim player
+                if (_finalPlayerPosition == _initialPlayerPosition)
+                {
+                    Player.Instance.Entity.SetEnabled(false);
+                }
+
+                //hide sim player
+                if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+                {
+                    animator.SetEnabled(false);
+                }
+
+                //create action instance, add to sim player, and prepare it
+                var action = Activator.CreateInstance(actionType) as PlayerAction;
+                _playerSimEntity.AddComponent(action);
+                action.Prepare();
+            });
         }
 
         public void OnActionFinishedPreparing(PlayerAction action)
         {
-            //remove action from the sim
-            _playerSimEntity.RemoveComponent(action);
-
-            //add it to the queue, to be added to the real player later
-            ActionQueue.Enqueue(action);
-            //_sequenceSimulator.UpdateQueue(ActionQueue);
-
-            //clear menu and start new selection process
-            _menuStack.Clear();
-            _turnMenuEntity.RemoveAllComponents();
-            Core.Schedule(.1f, (timer) =>
+            Core.Schedule(.1f, timer =>
             {
+                //remove action from the sim
+                _playerSimEntity.RemoveComponent(action);
+
+                //add it to the queue, to be added to the real player later
+                ActionQueue.Enqueue(action);
+                //_sequenceSimulator.UpdateQueue(ActionQueue);
+
+                //clear menu and start new selection process
+                _menuStack.Clear();
+                _turnMenuEntity.RemoveAllComponents();
                 StartNewSelection();
-            });
 
-            //reenable player and sim player
-            if (_finalPlayerPosition != _initialPlayerPosition)
-            {
-                Player.Instance.Entity.SetEnabled(true);
-            }
-            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
-            {
-                animator.SetEnabled(true);
-            }
+                //reenable player and sim player
+                if (_finalPlayerPosition != _initialPlayerPosition)
+                {
+                    Player.Instance.Entity.SetEnabled(true);
+                }
+                if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+                {
+                    animator.SetEnabled(true);
+                }
+            });
         }
 
         public void OnActionPrepCanceled(PlayerAction action)
         {
-            //remove action from the sim
-            _playerSimEntity.RemoveComponent(action);
-
-            //reenable player and sim player
-            if (_finalPlayerPosition != _initialPlayerPosition)
+            Core.Schedule(.1f, timer =>
             {
-                Player.Instance.Entity.SetEnabled(true);
-            }
-            if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
-            {
-                animator.SetEnabled(true);
-            }
+                //remove action from the sim
+                _playerSimEntity.RemoveComponent(action);
 
-            //if cancelled, just go back to last menu
-            _menuStack.Peek().SetEnabled(true);
-            StateMachine.ChangeState<SelectingFromMenu>();
+                //reenable player and sim player
+                if (_finalPlayerPosition != _initialPlayerPosition)
+                {
+                    Player.Instance.Entity.SetEnabled(true);
+                }
+                if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
+                {
+                    animator.SetEnabled(true);
+                }
+
+                //if cancelled, just go back to last menu
+                _menuStack.Peek().SetEnabled(true);
+                StateMachine.ChangeState<SelectingFromMenu>();
+            });
         }
 
         public void ExecuteActions()

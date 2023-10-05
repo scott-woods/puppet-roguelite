@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework.Input;
+using Nez;
 using Nez.UI;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,11 @@ namespace PuppetRoguelite.PlayerActions
             {
                 if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
                 {
-                    _isPreparing = false;
-                    Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionPrepCanceled, this);
+                    Core.Schedule(.1f, timer =>
+                    {
+                        _isPreparing = false;
+                        Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionPrepCanceled, this);
+                    });
                 }
             }
         }

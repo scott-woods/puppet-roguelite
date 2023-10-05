@@ -52,14 +52,15 @@ namespace PuppetRoguelite.PlayerActions.Attacks
         {
             base.Update();
 
-            if (_isPreparing)
+            HandleInput();
+
+            if (_isPreparing) //check after input in case confirm was pressed
             {
-                HandleInput();
                 PlayAnimation();
-                if (_animator.IsRunning)
-                {
-                    _currentIndex = _animator.CurrentFrame;
-                }
+            }
+            if (_animator.IsRunning)
+            {
+                _currentIndex = _animator.CurrentFrame;
             }
         }
 
@@ -142,31 +143,34 @@ namespace PuppetRoguelite.PlayerActions.Attacks
 
         void HandleInput()
         {
-            //check for confirm
-            if (_confirmButton.IsPressed)
+            if (_isPreparing)
             {
-                _isPreparing = false;
-                _animator.Stop();
-                //SetEnabled(false);
-                Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedPreparing, this);
-                return;
-            }
+                //check for confirm
+                if (_confirmButton.IsReleased)
+                {
+                    _isPreparing = false;
+                    _animator.Stop();
+                    //SetEnabled(false);
+                    Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedPreparing, this);
+                    return;
+                }
 
-            if (_xAxisInput.Value > 0)
-            {
-                _direction = new Vector2(1, 0);
-            }
-            else if (_xAxisInput.Value < 0)
-            {
-                _direction = new Vector2(-1, 0);
-            }
-            else if (_yAxisInput.Value > 0)
-            {
-                _direction = new Vector2(0, 1);
-            }
-            else if (_yAxisInput.Value < 0)
-            {
-                _direction = new Vector2(0, -1);
+                if (_xAxisInput.Value > 0)
+                {
+                    _direction = new Vector2(1, 0);
+                }
+                else if (_xAxisInput.Value < 0)
+                {
+                    _direction = new Vector2(-1, 0);
+                }
+                else if (_yAxisInput.Value > 0)
+                {
+                    _direction = new Vector2(0, 1);
+                }
+                else if (_yAxisInput.Value < 0)
+                {
+                    _direction = new Vector2(0, -1);
+                }
             }
         }
 
