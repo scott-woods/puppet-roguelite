@@ -11,20 +11,22 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Shared
 {
-    public class Hurtbox : Component, ITriggerListener, IUpdatable
+    public class Hurtbox : Component, IUpdatable
     {
         public Emitter<HurtboxEventTypes, Hitbox> Emitter;
 
         Collider _collider;
         HealthComponent _healthComponent;
+        int[] _damageLayers;
 
         float _recoveryTime;
         bool _inRecovery = false;
 
-        public Hurtbox(Collider collider, float recoveryTime)
+        public Hurtbox(Collider collider, float recoveryTime, int[] damageLayers)
         {
             _collider = collider;
             _recoveryTime = recoveryTime;
+            _damageLayers = damageLayers;
         }
 
         public override void Initialize()
@@ -46,25 +48,26 @@ namespace PuppetRoguelite.Components.Shared
         public void Update()
         {
             var colliders = Physics.BoxcastBroadphase(_collider.Bounds);
-            var damageCollider = colliders.FirstOrDefault(collider => collider.PhysicsLayer == (int)PhysicsLayers.Damage);
+            //var damageCollider = colliders.FirstOrDefault(collider => collider.PhysicsLayer == (int)PhysicsLayers.EnemyDamage);
+            var damageCollider = colliders.FirstOrDefault(c => _damageLayers.Contains(c.PhysicsLayer));
             if (damageCollider != null)
             {
                 HandleHit(damageCollider);
             }
         }
 
-        public void OnTriggerEnter(Collider other, Collider local)
-        {
-            if (other.PhysicsLayer == (int)PhysicsLayers.Damage)
-            {
-                HandleHit(other);
-            }
-        }
+        //public void OnTriggerEnter(Collider other, Collider local)
+        //{
+        //    if (other.PhysicsLayer == (int)PhysicsLayers.Damage)
+        //    {
+        //        HandleHit(other);
+        //    }
+        //}
 
-        public void OnTriggerExit(Collider other, Collider local)
-        {
+        //public void OnTriggerExit(Collider other, Collider local)
+        //{
 
-        }
+        //}
 
         public void HandleHit(Collider damageCollider)
         {

@@ -81,7 +81,7 @@ namespace PuppetRoguelite.Components.Characters
             var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
             hurtboxCollider.IsTrigger = true;
             hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerHurtbox;
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 5, 10, 8));

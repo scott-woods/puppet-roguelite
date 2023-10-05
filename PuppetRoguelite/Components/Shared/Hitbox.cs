@@ -1,4 +1,5 @@
 ﻿using Nez;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,18 @@ namespace PuppetRoguelite.Components.Shared
     {
         public Collider Collider;
         int _damage;
+        int[] _targetLayers;
 
         public int Damage
         {
             get { return _damage; }
         }
 
-        public Hitbox(Collider collider, int damage)
+        public Hitbox(Collider collider, int damage, int[] targetLayers)
         {
             Collider = collider;
             _damage = damage;
+            _targetLayers = targetLayers;
         }
 
         public override void Initialize()

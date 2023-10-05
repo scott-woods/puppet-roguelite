@@ -117,8 +117,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 //add hitbox
                 _hitboxEntity = Entity.Scene.CreateEntity("slash", hitboxPos);
                 var hitboxCollider = _hitboxEntity.AddComponent(new BoxCollider(hitboxSize.X, hitboxSize.Y));
-                hitboxCollider.PhysicsLayer = (int)PhysicsLayers.Damage;
-                _hitbox = _hitboxEntity.AddComponent(new Hitbox(hitboxCollider, 3));
+                hitboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerDamage;
+                _hitbox = _hitboxEntity.AddComponent(new Hitbox(hitboxCollider, 3, new int[] { (int)PhysicsLayers.EnemyHurtbox }));
                 _hitbox.Enable();
             }
         }

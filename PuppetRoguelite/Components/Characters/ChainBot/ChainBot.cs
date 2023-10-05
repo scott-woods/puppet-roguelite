@@ -17,30 +17,35 @@ using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
 namespace PuppetRoguelite.Components.Characters.ChainBot
 {
-    public class ChainBot : Component, IUpdatable
+    public class ChainBot : Enemy, IUpdatable
     {
         //behavior tree
-        BehaviorTree<ChainBot> BehaviorTree;
+        BehaviorTree<Enemy> BehaviorTree;
+
+        //actions
+        List<IEnemyAction> _actions = new List<IEnemyAction>();
+        IEnemyAction _nextAction;
+        DoubleMeleeAttack _doubleMeleeAttack;
 
         Entity _meleeEntity;
 
         //components
-        Mover _mover;
-        SpriteAnimator _animator;
+        public Mover Mover;
+        public SpriteAnimator Animator;
         Hurtbox _hurtbox;
         HealthComponent _healthComponent;
-        PathfindingComponent _pathfinder;
+        public PathfindingComponent Pathfinder;
         Collider _collider;
 
         Hitbox _melee;
 
         //properties
-        float _moveSpeed = 75f;
+        public float MoveSpeed = 75f;
         bool _isHurt = false;
 
         //misc
-        SubpixelVector2 _subPixelV2 = new SubpixelVector2();
-        Vector2 _direction = Vector2.One;
+        public SubpixelVector2 SubPixelV2 = new SubpixelVector2();
+        public Vector2 Direction = Vector2.One;
 
         #region SETUP
 
@@ -63,27 +68,31 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         void AddComponents()
         {
             //Mover
-            _mover = Entity.AddComponent(new Mover());
+            Mover = Entity.AddComponent(new Mover());
 
             //hurtbox
             var hurtboxCollider = Entity.AddComponent(new BoxCollider(0, -9, 8, 18));
             hurtboxCollider.IsTrigger = true;
             hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] {(int)PhysicsLayers.PlayerDamage}));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
 
             //pathfinding
-            _pathfinder = Entity.AddComponent(new PathfindingComponent());
+            Pathfinder = Entity.AddComponent(new PathfindingComponent());
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));
-            _collider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
+            //_collider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
 
             //animator
-            _animator = Entity.AddComponent(new SpriteAnimator());
+            Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
+
+            //actions
+            _doubleMeleeAttack = Entity.AddComponent(new DoubleMeleeAttack(this));
+            _actions.Add(_doubleMeleeAttack);
         }
 
         void AddAnimations()
@@ -91,55 +100,51 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //Idle
             var idleTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Idle);
             var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 126, 39);
-            _animator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArray(idleSprites, new List<int> { 1, 3, 5, 7, 9 }));
-            _animator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArray(idleSprites, new List<int> { 0, 2, 4, 6, 8 }));
+            Animator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArray(idleSprites, new List<int> { 1, 3, 5, 7, 9 }));
+            Animator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArray(idleSprites, new List<int> { 0, 2, 4, 6, 8 }));
 
             //Run
             var runTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Run);
             var runSprites = Sprite.SpritesFromAtlas(runTexture, 126, 39);
             var leftSprites = runSprites.Where((sprite, index) => index % 2 != 0);
             var rightSprites = runSprites.Where((sprite, index) => index % 2 == 0);
-            _animator.AddAnimation("RunLeft", leftSprites.ToArray());
-            _animator.AddAnimation("RunRight", rightSprites.ToArray());
+            Animator.AddAnimation("RunLeft", leftSprites.ToArray());
+            Animator.AddAnimation("RunRight", rightSprites.ToArray());
 
             //Attack
             var attackTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Attack);
             var attackSprites = Sprite.SpritesFromAtlas(attackTexture, 126, 39);
-            _animator.AddAnimation("AttackLeft", attackSprites.Where((sprite, index) => index % 2 != 0).ToArray());
-            _animator.AddAnimation("AttackRight", attackSprites.Where((sprite, index) => index % 2 == 0).ToArray());
+            Animator.AddAnimation("AttackLeft", attackSprites.Where((sprite, index) => index % 2 != 0).ToArray());
+            Animator.AddAnimation("AttackRight", attackSprites.Where((sprite, index) => index % 2 == 0).ToArray());
 
             //transition to charge
             var transitionTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Transitiontocharge);
             var transitionSprites = Sprite.SpritesFromAtlas(transitionTexture, 126, 39);
-            _animator.AddAnimation("TransitionLeft", transitionSprites.Where((sprite, index) => index % 2 != 0).ToArray());
-            _animator.AddAnimation("TransitionRight", transitionSprites.Where((sprite, index) => index % 2 == 0).ToArray());
+            Animator.AddAnimation("TransitionLeft", transitionSprites.Where((sprite, index) => index % 2 != 0).ToArray());
+            Animator.AddAnimation("TransitionRight", transitionSprites.Where((sprite, index) => index % 2 == 0).ToArray());
 
             //charge
             var chargeTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Charge);
             var chargeSprites = Sprite.SpritesFromAtlas(chargeTexture, 126, 39);
-            _animator.AddAnimation("ChargeLeft", chargeSprites.Where((sprite, index) => index % 2 != 0).ToArray());
-            _animator.AddAnimation("ChargeRight", chargeSprites.Where((sprite, index) => index % 2 == 0).ToArray());
+            Animator.AddAnimation("ChargeLeft", chargeSprites.Where((sprite, index) => index % 2 != 0).ToArray());
+            Animator.AddAnimation("ChargeRight", chargeSprites.Where((sprite, index) => index % 2 == 0).ToArray());
 
             //hit
             var hitTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Hit);
             var hitSprites = Sprite.SpritesFromAtlas(hitTexture, 126, 39);
-            _animator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 1, 3 }));
-            _animator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 0, 2 }));
+            Animator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 1, 3 }));
+            Animator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 0, 2 }));
         }
 
         public void SetupBehaviorTree()
         {
-            BehaviorTree = BehaviorTreeBuilder<ChainBot>.Begin(this)
-                .Selector()
-                    .Sequence()
-                        .Action(enemy => enemy.ChasePlayer())
-                        .Action(enemy => enemy.TransitionToCharge())
-                        .Action(enemy => enemy.ChargeAttack())
-                        .WaitAction(.25f)
-                        .Action(enemy => enemy.AttackPlayer())
-                        .Action(enemy => enemy.Idle())
-                        .WaitAction(.5f)
-                    .EndComposite()
+            BehaviorTree = BehaviorTreeBuilder<Enemy>.Begin(this)
+                .Sequence()
+                    .Action(enemy => SelectNextAction())
+                    .Action(enemy => ExecuteAction())
+                    //.SubTree(_nextAction.GetBehaviorTree(this))
+                    .Action(enemy => Idle())
+                    .WaitAction(.5f)
                 .EndComposite()
                 .Build();
             BehaviorTree.UpdatePeriod = 0;
@@ -155,144 +160,56 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             }
         }
 
-        public TaskStatus ChasePlayer()
+        public TaskStatus SelectNextAction()
         {
-            var player = Entity.Scene.FindComponentOfType<PlayerController>();
-            if (player != null)
-            {
-                //check if finished
-                if (_pathfinder.IsNavigationFinished())
-                {
-                    return TaskStatus.Success;
-                }
-
-                //if close enough to player, return success
-                var distanceToPlayer = Vector2.Distance(Entity.Position, player.Entity.Position);
-                if (distanceToPlayer < 20)
-                {
-                    return TaskStatus.Success;
-                }
-
-                //get next path position
-                _pathfinder.SetTarget(player.Entity.Position);
-                var target = _pathfinder.GetNextPosition();
-
-                //determine direction
-                _direction = target - Entity.Position;
-                _direction.Normalize();
-
-                //handle animation
-                var animation = _direction.X >= 0 ? "RunRight" : "RunLeft";
-                if (!_animator.IsAnimationActive(animation))
-                {
-                    _animator.Play(animation);
-                }
-
-                //move
-                var movement = _direction * _moveSpeed * Time.DeltaTime;
-                _mover.CalculateMovement(ref movement, out var result);
-                _subPixelV2.Update(ref movement);
-                _mover.ApplyMovement(movement);
-
-                return TaskStatus.Running;
-            }
-
-            return TaskStatus.Failure;
-        }
-
-        public TaskStatus TransitionToCharge()
-        {
-            if (_animator.CurrentAnimationName != "TransitionRight" && _animator.CurrentAnimationName != "TransitionLeft")
-            {
-                var transitionAnimation = _direction.X >= 0 ? "TransitionRight" : "TransitionLeft";
-                _animator.Play(transitionAnimation, SpriteAnimator.LoopMode.Once);
-                return TaskStatus.Running;
-            }
-            if (_animator.AnimationState != SpriteAnimator.State.Completed)
-            {
-                return TaskStatus.Running;
-            }
-
+            _nextAction = _actions.RandomItem();
+            _nextAction.Start();
             return TaskStatus.Success;
         }
 
-        public TaskStatus ChargeAttack()
+        public TaskStatus ExecuteAction()
         {
-            var chargeAnimation = _direction.X >= 0 ? "ChargeRight" : "ChargeLeft";
-            _animator.Play(chargeAnimation);
-            return TaskStatus.Success;
-        }
-
-        public TaskStatus AttackPlayer()
-        {
-            if (_animator.CurrentAnimationName != "AttackRight" && _animator.CurrentAnimationName != "AttackLeft")
+            if (_nextAction.IsCompleted)
             {
-                var attackAnimation = _direction.X >= 0 ? "AttackRight" : "AttackLeft";
-                _animator.Play(attackAnimation, SpriteAnimator.LoopMode.Once);
-                var meleeShape = new[]
-                {
-                    new Vector2(10, -4),
-                    new Vector2(45, -4),
-                    new Vector2(50, 0),
-                    new Vector2(45, 7),
-                    new Vector2(10, 7)
-                };
-
-                _meleeEntity = Entity.Scene.CreateEntity("chain-bot-melee", Entity.Position);
-                var meleeCollider = _meleeEntity.AddComponent(new PolygonCollider(meleeShape));
-                meleeCollider.IsTrigger = true;
-                meleeCollider.PhysicsLayer = (int)PhysicsLayers.Damage;
-                _melee = _meleeEntity.AddComponent(new Hitbox(meleeCollider, 3));
-                if (_direction.X < 0)
-                {
-                    _meleeEntity.RotationDegrees = _direction.X >= 0 ? 0 : 180;
-                    _meleeEntity.Position = new Vector2(_meleeEntity.Position.X, _meleeEntity.Position.Y + 7);
-                }
+                return TaskStatus.Success;
+            }
+            else
+            {
+                var tree = _nextAction.GetBehaviorTree();
+                tree.Tick();
                 return TaskStatus.Running;
             }
-            if (_animator.AnimationState != SpriteAnimator.State.Completed)
-            {
-                if (new[] { 0, 4 }.Contains(_animator.CurrentFrame))
-                {
-                    _melee.Enable();
-                }
-                else _melee.Disable();
-                return TaskStatus.Running;
-            }
-
-            _meleeEntity.Destroy();
-            return TaskStatus.Success;
         }
 
         public TaskStatus Idle()
         {
-            var animation = _direction.X >= 0 ? "IdleRight" : "IdleLeft";
-            _animator.Play(animation);
+            var animation = Direction.X >= 0 ? "IdleRight" : "IdleLeft";
+            Animator.Play(animation);
             return TaskStatus.Success;
         }
 
         void OnDamageTaken(HealthComponent healthComponent)
         {
-            var hurtAnimation = _direction.X >= 0 ? "HurtRight" : "HurtLeft";
-            _animator.Speed = _animator.Speed / 2;
+            var hurtAnimation = Direction.X >= 0 ? "HurtRight" : "HurtLeft";
+            Animator.Speed = Animator.Speed / 2;
             int plays = 0;
-            _animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+            Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
             void handler(string obj)
             {
                 plays += 1;
                 if (plays >= 3)
                 {
-                    _animator.Stop();
-                    _animator.OnAnimationCompletedEvent -= handler;
-                    _animator.Speed = _animator.Speed * 2;
+                    Animator.Stop();
+                    Animator.OnAnimationCompletedEvent -= handler;
+                    Animator.Speed = Animator.Speed * 2;
                     _isHurt = false;
                 }
                 else
                 {
-                    _animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+                    Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
                 }
             }
-            _animator.OnAnimationCompletedEvent += handler;
+            Animator.OnAnimationCompletedEvent += handler;
             _isHurt = true;
         }
 

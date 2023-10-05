@@ -5,6 +5,7 @@ using Nez.AI.Pathfinding;
 using Nez.Textures;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
@@ -62,7 +63,7 @@ namespace PuppetRoguelite.Scenes
 
             var chainBotEntity = new PausableEntity("chain-bot-entity");
             AddEntity(chainBotEntity);
-            var chainBot = chainBotEntity.AddComponent(new ChainBotController());
+            var chainBot = chainBotEntity.AddComponent(new ChainBot());
             chainBotEntity.SetPosition(64, 64);
 
             //add combat manager
