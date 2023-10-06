@@ -35,9 +35,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         //components
         SpriteAnimator _animator;
         Hitbox _hitbox;
-
-        //entities
-        Entity _hitboxEntity;
+        Collider _hitboxCollider;
 
         public override void Initialize()
         {
@@ -51,7 +49,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             base.Execute(isSimulation);
 
-            //SetEnabled(true);
             PlayAnimation();
         }
 
@@ -73,7 +70,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         void PlayAnimation()
         {
-            //animation
+            //get animation by direction
             var animation = "SlashRight";
             if (_direction.X != 0)
             {
@@ -84,6 +81,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 animation = _direction.Y >= 0 ? "SlashDown" : "SlashUp";
             }
 
+            //if in prep or sim state, set animator to slightly transparent
             if (_isPreparing || _isSimulation)
             {
                 _animator.SetColor(new Color(Color.White, 128));
@@ -115,10 +113,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 else if (_direction.Y != 0) hitboxSize = _hitboxVerticalSize;
 
                 //add hitbox
-                _hitboxEntity = Entity.Scene.CreateEntity("slash", hitboxPos);
-                var hitboxCollider = _hitboxEntity.AddComponent(new BoxCollider(hitboxSize.X, hitboxSize.Y));
-                hitboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerDamage;
-                _hitbox = _hitboxEntity.AddComponent(new Hitbox(hitboxCollider, 3, new int[] { (int)PhysicsLayers.EnemyHurtbox }));
+                _hitboxCollider = Entity.AddComponent(new BoxCollider(hitboxSize.X, hitboxSize.Y));
+                _hitboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerDamage;
+                _hitboxCollider.LocalOffset += (_direction * _offset);
+                _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, _damage, new int[] { (int)PhysicsLayers.EnemyHurtbox }));
                 _hitbox.Enable();
             }
         }
@@ -133,9 +131,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             }
             else
             {
-                _hitbox.Disable();
-                _hitboxEntity.Destroy();
-                
                 var type = _isSimulation ? PlayerActionEvents.SimActionFinishedExecuting : PlayerActionEvents.ActionFinishedExecuting;
                 Emitters.PlayerActionEmitter.Emit(type, this);
             }
@@ -207,20 +202,13 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             }
         }
 
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
-
-            SetEnabled(true);
-            _animator.SetEnabled(true);
-        }
-
         public override void OnRemovedFromEntity()
         {
             base.OnRemovedFromEntity();
 
-            SetEnabled(false);
-            _animator.SetEnabled(false);
+            if (_animator != null) Entity.RemoveComponent(_animator);
+            if (_hitbox != null) Entity.RemoveComponent(_hitbox);
+            if (_hitboxCollider != null) Entity.RemoveComponent(_hitboxCollider);
         }
     }
 }
