@@ -95,7 +95,7 @@ namespace PuppetRoguelite.Components.Characters
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
 
             //attacks list
-            AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash) }));
+            AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash), typeof(Dash) }));
         }
 
         void AddObservers()

@@ -26,11 +26,13 @@ namespace PuppetRoguelite.Components
 
         public Queue<PlayerAction> ActionQueue = new Queue<PlayerAction>();
         Vector2 _initialPlayerPosition;
-        Vector2 _finalPlayerPosition;
+        Entity _finalPlayerPositionEntity;
 
         CombatManager _combatManager;
         ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
         Entity _playerSimEntity;
+
+        DeadzoneFollowCamera _camera;
 
         public TurnHandler(CombatManager combatManager)
         {
@@ -54,12 +56,19 @@ namespace PuppetRoguelite.Components
 
             //store player's position at start of turn
             _initialPlayerPosition = PlayerController.Instance.Entity.Position;
-            _finalPlayerPosition = PlayerController.Instance.Entity.Position;
+
+            //create entity to track final player position for camera to follow
+            _finalPlayerPositionEntity = Entity.Scene.CreateEntity("final-player-pos");
+            _finalPlayerPositionEntity.Position = _initialPlayerPosition;
 
             //add the sim player
             _playerSimEntity = Entity.Scene.CreateEntity("player-sim");
             _playerSimEntity.AddComponent(new PlayerSim(PlayerController.Instance.Direction));
             _playerSimEntity.SetPosition(_initialPlayerPosition);
+
+            //get ref to deadzone camera
+            _camera = Entity.Scene.Camera.GetComponent<DeadzoneFollowCamera>();
+            _camera.SetFollowTarget(_finalPlayerPositionEntity);
 
             //begin selection
             StartNewSelection();
@@ -87,13 +96,13 @@ namespace PuppetRoguelite.Components
             Core.Schedule(.1f, timer =>
             {
                 //if sim and real player would overlap, hide real player
-                if (_finalPlayerPosition == _initialPlayerPosition)
+                if (_finalPlayerPositionEntity.Position == _initialPlayerPosition)
                 {
                     PlayerController.Instance.Entity.SetEnabled(false);
                 }
 
                 StateMachine.ChangeState<SelectingFromMenu>();
-                var actionSelector = new ActionsSelector(PlayerController.Instance.Entity.Position, this);
+                var actionSelector = new ActionsSelector(_finalPlayerPositionEntity.Position, this);
                 OpenMenu(actionSelector);
             });
         }
@@ -134,7 +143,7 @@ namespace PuppetRoguelite.Components
                 StateMachine.ChangeState<PreparingAction>();
 
                 //hide original player if it will overlap sim player
-                if (_finalPlayerPosition == _initialPlayerPosition)
+                if (_finalPlayerPositionEntity.Position == _initialPlayerPosition)
                 {
                     PlayerController.Instance.Entity.SetEnabled(false);
                 }
@@ -168,8 +177,14 @@ namespace PuppetRoguelite.Components
                 _turnMenuEntity.RemoveAllComponents();
                 StartNewSelection();
 
+                //update final player position
+                _finalPlayerPositionEntity.Position = action.FinalPosition;
+
+                //update sim player position
+                _playerSimEntity.Position = _finalPlayerPositionEntity.Position;
+
                 //reenable player and sim player
-                if (_finalPlayerPosition != _initialPlayerPosition)
+                if (_finalPlayerPositionEntity.Position != _initialPlayerPosition)
                 {
                     PlayerController.Instance.Entity.SetEnabled(true);
                 }
@@ -188,7 +203,7 @@ namespace PuppetRoguelite.Components
                 _playerSimEntity.RemoveComponent(action);
 
                 //reenable player and sim player
-                if (_finalPlayerPosition != _initialPlayerPosition)
+                if (_finalPlayerPositionEntity.Position != _initialPlayerPosition)
                 {
                     PlayerController.Instance.Entity.SetEnabled(true);
                 }
@@ -217,6 +232,9 @@ namespace PuppetRoguelite.Components
             {
                 animator.SetEnabled(false);
             }
+
+            //update camera target
+            _camera.SetFollowTarget(PlayerController.Instance.Entity);
 
             //change state
             Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseExecuting);

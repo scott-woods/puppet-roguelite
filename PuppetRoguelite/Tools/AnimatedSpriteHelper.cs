@@ -28,10 +28,23 @@ namespace PuppetRoguelite.Tools
         /// <param name="spriteList"></param>
         /// <param name="indicies"></param>
         /// <returns></returns>
-        public static Sprite[] GetSpriteArray(List<Sprite> spriteList, List<int> indicies)
+        public static Sprite[] GetSpriteArray(List<Sprite> spriteList, List<int> indicies, bool allowDuplicates = false)
         {
-            var sprites = spriteList.Where((sprite, index) => indicies.Contains(index));
-            return sprites.ToArray();
+            var newSpriteList = new List<Sprite>();
+            if (!allowDuplicates)
+            {
+                newSpriteList = spriteList.Where((sprite, index) => indicies.Contains(index)).ToList();
+            }
+            else
+            {
+                foreach(var index in indicies)
+                {
+                    var sprite = spriteList[index];
+                    newSpriteList.Add(sprite);
+                }
+            }
+            
+            return newSpriteList.ToArray();
         }
     }
 }

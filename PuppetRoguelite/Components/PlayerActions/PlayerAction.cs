@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.UI;
 using System;
@@ -13,10 +14,14 @@ namespace PuppetRoguelite.Components.PlayerActions
     {
         protected bool _isSimulation;
         protected bool _isPreparing = false;
+        public Vector2 InitialPosition;
+        public Vector2 FinalPosition;
 
         public virtual void Prepare()
         {
             _isPreparing = true;
+            InitialPosition = Entity.Position;
+            FinalPosition = Entity.Position;
         }
 
         public virtual void Execute(bool isSimulation = false)

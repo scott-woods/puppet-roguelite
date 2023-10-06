@@ -66,7 +66,7 @@ namespace PuppetRoguelite.UI.Menus
             }
 
             //create dialog box
-            _dialog = new SelectionDialog(dialogContent, "Tools", _defaultSkin, labelHeader: "AP Cost");
+            _dialog = new SelectionDialog(dialogContent, "Attacks", _defaultSkin, labelHeader: "AP Cost");
             _dialog.SetDebug(false);
 
             //validate buttons
