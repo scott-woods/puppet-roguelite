@@ -58,11 +58,11 @@ namespace PuppetRoguelite.Components
         {
             if (_active)
             {
-                if (_currentIndex < _actionQueue.Count - 1)
+                if (_currentIndex < _actionQueue.Count - 1) //not at end of queue
                 {
                     _currentIndex++;
                 }
-                else
+                else //reached end of queue
                 {
                     _currentIndex = 0;
                 }

@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using Nez.UI;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
@@ -36,6 +37,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         SpriteAnimator _animator;
         Hitbox _hitbox;
         Collider _hitboxCollider;
+        PrototypeSpriteRenderer _target;
 
         List<Component> _componentsList = new List<Component>();
 
@@ -57,6 +59,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _componentsList.Add(_hitboxCollider);
             _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, _damage, _targetLayers));
             _componentsList.Add(_hitbox);
+
+            _target = new PrototypeSpriteRenderer(8, 8);
         }
 
         void AddAnimations()
@@ -76,6 +80,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             InitialPosition = Entity.Position;
             FinalPosition = Entity.Position + (_direction * _range);
 
+            Entity.AddComponent(_target);
+            _componentsList.Add(_target);
+
+            _animator.Speed = 1;
+
             var animationName = GetNextAnimation();
             if (!_animator.IsAnimationActive(animationName))
             {
@@ -89,6 +98,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             base.Execute(isSimulation);
 
             Entity.Position = InitialPosition;
+
+            _animator.Speed = 2;
 
             if (!_isSimulation)
             {
@@ -178,6 +189,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 _angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(InitialPosition, FinalPosition));
                 _angle = (_angle + 360) % 360;
             }
+
+            //update target
+            _target.SetLocalOffset(FinalPosition - Entity.Position);
         }
 
         string GetNextAnimation()

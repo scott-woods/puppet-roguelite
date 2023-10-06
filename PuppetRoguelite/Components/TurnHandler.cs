@@ -202,6 +202,9 @@ namespace PuppetRoguelite.Components
                 //remove action from the sim
                 _playerSimEntity.RemoveComponent(action);
 
+                //update sim player position
+                _playerSimEntity.Position = _finalPlayerPositionEntity.Position;
+
                 //reenable player and sim player
                 if (_finalPlayerPositionEntity.Position != _initialPlayerPosition)
                 {
@@ -271,11 +274,14 @@ namespace PuppetRoguelite.Components
             //hide menu
             _menuStack.Peek().SetEnabled(false);
 
-            //hide sim player
+            //hide sim player animator
             if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
             {
                 animator.SetEnabled(false);
             }
+
+            //set camera to follow sim
+            _camera.SetFollowTarget(_playerSimEntity);
 
             //start sim
             _sequenceSimulator.StartSim(ActionQueue, _playerSimEntity, _playerSimEntity.Position);
@@ -289,11 +295,14 @@ namespace PuppetRoguelite.Components
             //stop sim
             _sequenceSimulator.StopSim();
 
-            //show sim player
+            //show sim player animator
             if (_playerSimEntity.TryGetComponent<SpriteAnimator>(out var animator))
             {
                 animator.SetEnabled(true);
             }
+
+            //set camera to follow final player pos
+            _camera.SetFollowTarget(_finalPlayerPositionEntity);
 
             //show menu
             _menuStack.Peek().SetEnabled(true);
