@@ -7,6 +7,7 @@ using Nez.Systems;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.PlayerActions;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.UI.HUDs;
 using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections.Generic;
@@ -229,6 +230,13 @@ namespace PuppetRoguelite.Components
             //destory sim player
             _playerSimEntity.Destroy();
 
+            //hide sim tip ui label
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+            if (ui != null)
+            {
+                ui.SetShowSimTipLabel(false);
+            }
+
             //reenable real player
             PlayerController.Instance.Entity.SetEnabled(true);
             if (PlayerController.Instance.Entity.TryGetComponent<SpriteAnimator>(out var animator))
@@ -338,6 +346,19 @@ namespace PuppetRoguelite.Components
 
             _simButton = new VirtualButton();
             _simButton.AddKeyboardKey(Keys.C);
+
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+            if (ui != null)
+            {
+                if (_context.ActionQueue.Count > 0)
+                {
+                    ui.SetShowSimTipLabel(true);
+                }
+                else
+                {
+                    ui.SetShowSimTipLabel(false);
+                }
+            }
         }
 
         public override void Update(float deltaTime)
@@ -358,6 +379,17 @@ namespace PuppetRoguelite.Components
 
     public class PreparingAction : State<TurnHandler>
     {
+        public override void Begin()
+        {
+            base.Begin();
+
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+            if (ui != null)
+            {
+                ui.SetShowSimTipLabel(false);
+            }
+        }
+
         public override void Update(float deltaTime)
         {
 
@@ -375,6 +407,12 @@ namespace PuppetRoguelite.Components
             _backButton = new VirtualButton();
             _backButton.AddKeyboardKey(Keys.C);
             _backButton.AddKeyboardKey(Keys.X);
+
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+            if (ui != null)
+            {
+                ui.SetShowSimTipLabel(false);
+            }
         }
 
         public override void Update(float deltaTime)

@@ -23,6 +23,8 @@ namespace PuppetRoguelite.UI.HUDs
         Table _topLeftTable;
         Table _topRightTable;
         Table _bottomMiddleTable;
+        Table _apTable;
+        Label _simTipLabel;
 
         //skins
         Skin _basicSkin;
@@ -34,7 +36,7 @@ namespace PuppetRoguelite.UI.HUDs
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
-            _table.SetDebug(true);
+            _table.SetDebug(false);
 
             //load skin
             _basicSkin = Skin.CreateDefaultSkin();
@@ -65,28 +67,66 @@ namespace PuppetRoguelite.UI.HUDs
             //statusTable.Row();
             //statusTable.Add(new Label("&", _basicSkin));
 
-            _topLeftTable = new Table();
-            _table.Add(_topLeftTable).Expand().Top().Left().SetPadTop(5).SetPadLeft(5);
+            _topLeftTable = new Table().Top().Left().PadTop(5).PadLeft(5);
+            _table.Add(_topLeftTable).Grow();
             _playerHealthLabel = new Label("HP: ", _basicSkin);
             _topLeftTable.Add(_playerHealthLabel);
-            _topLeftTable.Pack();
+            //_topLeftTable.Pack();
 
-            _topRightTable = new Table();
-            _table.Add(_topRightTable).Expand().Top().Right().SetPadTop(5).SetPadRight(5);
+            _topRightTable = new Table().Top().Right().PadTop(5).PadRight(5);
+            _table.Add(_topRightTable).Grow();
             _topRightTable.Add(new Label("$", _basicSkin));
             _topRightTable.Pack();
 
             _table.Row();
 
-            _bottomMiddleTable = new Table();
-            _table.Add(_bottomMiddleTable).Expand().Bottom().SetColspan(2).Width(480 * .35f);
-            var apGroup = new Table();
-            apGroup.Defaults().SetSpaceRight(8).Grow();
-            //apGroup.SetWidth(5);
-            _bottomMiddleTable.Add(apGroup).Grow().SetPadBottom(5);
-            apGroup.Add(new TextButton("hi", _basicSkin)).Expand();
-            apGroup.Add(new TextButton("hi", _basicSkin)).Expand();
-            apGroup.Add(new TextButton("hi", _basicSkin)).Expand();
+            var bottomTable = new Table();
+            _table.Add(bottomTable).SetColspan(2).Grow().SetPadBottom(10);
+
+            var bottomLeftTable = new Table();
+            bottomTable.Add(bottomLeftTable).Width(480 * .75f).Expand().Bottom().Left();
+
+            _apTable = new Table();
+            _apTable.Defaults().SetSpaceRight(8).Grow();
+            bottomLeftTable.Add(_apTable).Width(480 * .5f).Expand().Right();
+
+            _simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
+            _simTipLabel.SetWrap(true);
+            _simTipLabel.SetVisible(false);
+            bottomTable.Add(_simTipLabel).SetPadLeft(480 * .025f).SetPadRight(480 * .025f).Width(480 * .2f).Expand().Bottom().Right();
+
+            _apTable.Add(new TextButton("test", _basicSkin));
+            _apTable.Add(new TextButton("test", _basicSkin));
+
+            //_bottomMiddleTable = new Table().PadLeft(10);
+            //_bottomMiddleTable.DebugAll();
+            //_table.Add(_bottomMiddleTable).Expand().SetFillY().SetColspan(2).Left();
+            //var leftTable = new Table();
+            //_bottomMiddleTable.Add(leftTable).Width(480 * .75f).Expand().Bottom().Right();
+            //var apGroup = new Table();
+            //leftTable.Add(apGroup).Width(480 * .5f).Right();
+            //apGroup.Add(new TextButton("hi", _basicSkin));
+
+            //var apGroup = new Table().PadBottom(5);
+            //apGroup.Defaults().SetSpaceRight(8);
+            //_bottomMiddleTable.Add(apGroup).Width(480 * .75f).Bottom().Right().Expand();
+            //var horGroup = new Table();
+            //apGroup.Add(horGroup).Width(480 * .5f).Right().Expand();
+            //horGroup.Add(new TextButton("hi", _basicSkin));
+
+            //var labelTable = new Table().Right().Bottom();
+            //labelTable.DebugAll();
+            //_bottomMiddleTable.Add(labelTable).Width(480 * .25f);
+            //var simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
+            //simTipLabel.SetWrap(true);
+            //labelTable.Add(simTipLabel).Grow();
+
+            //_bottomMiddleTable.Add(simTipLabel);
+            //var labelContainer = new Container(simTipLabel);
+            //labelContainer.SetRight();
+            //_bottomMiddleTable.Add(labelContainer).Width(480 * .25f).Expand().Right();
+            //apGroup.Add(new TextButton("hi", _basicSkin));
+            //apGroup.Add(new TextButton("hi", _basicSkin));
             //apGroup.Pack();
             //_bottomMiddleTable.Pack();
 
@@ -132,6 +172,11 @@ namespace PuppetRoguelite.UI.HUDs
         {
             _playerHealthLabel.SetText($"HP: {healthComponent.Health}/{healthComponent.MaxHealth}");
             _topLeftTable.Pack();
+        }
+
+        public void SetShowSimTipLabel(bool show)
+        {
+            _simTipLabel.SetVisible(show);
         }
     }
 }
