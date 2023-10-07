@@ -752,6 +752,27 @@ namespace Nez
 
 				}
 
+				public static class Menu
+				{
+					public static class Style3
+					{
+						public static class Atlas
+						{
+							public const string Menu_style_3 = @"Content\Textures\UI\Menu\Style3\Atlas\menu_style_3.png";
+						}
+
+						public const string Inventory_01 = @"Content\Textures\UI\Menu\Style3\Inventory_01.png";
+						public const string Inventory_02 = @"Content\Textures\UI\Menu\Style3\Inventory_02.png";
+						public const string Inventory_Slot_01 = @"Content\Textures\UI\Menu\Style3\Inventory_Slot_01.png";
+						public const string Inventory_Slot_02 = @"Content\Textures\UI\Menu\Style3\Inventory_Slot_02.png";
+						public const string Inventory_Slot_03 = @"Content\Textures\UI\Menu\Style3\Inventory_Slot_03.png";
+						public const string Inventory_Slot_04 = @"Content\Textures\UI\Menu\Style3\Inventory_Slot_04.png";
+						public const string Inventory_Slot_05 = @"Content\Textures\UI\Menu\Style3\Inventory_Slot_05.png";
+						public const string Inventory_Slot_06 = @"Content\Textures\UI\Menu\Style3\Inventory_Slot_06.png";
+					}
+
+				}
+
 			}
 
 		}
@@ -760,7 +781,21 @@ namespace Nez
 		{
 			public static class Tilemaps
 			{
-				public const string Test_tilemap = @"Content\Tiled\Tilemaps\test_tilemap.tmx";
+				public const string B_1 = @"Content\Tiled\Tilemaps\B_1.tmx";
+				public const string BL_1 = @"Content\Tiled\Tilemaps\BL_1.tmx";
+				public const string BLR_1 = @"Content\Tiled\Tilemaps\BLR_1.tmx";
+				public const string BR_1 = @"Content\Tiled\Tilemaps\BR_1.tmx";
+				public const string L_1 = @"Content\Tiled\Tilemaps\L_1.tmx";
+				public const string LR_1 = @"Content\Tiled\Tilemaps\LR_1.tmx";
+				public const string R_1 = @"Content\Tiled\Tilemaps\R_1.tmx";
+				public const string T_1 = @"Content\Tiled\Tilemaps\T_1.tmx";
+				public const string TB_1 = @"Content\Tiled\Tilemaps\TB_1.tmx";
+				public const string TBL_1 = @"Content\Tiled\Tilemaps\TBL_1.tmx";
+				public const string TBLR_1 = @"Content\Tiled\Tilemaps\TBLR_1.tmx";
+				public const string TBR_1 = @"Content\Tiled\Tilemaps\TBR_1.tmx";
+				public const string TL_1 = @"Content\Tiled\Tilemaps\TL_1.tmx";
+				public const string TLR_1 = @"Content\Tiled\Tilemaps\TLR_1.tmx";
+				public const string TR_1 = @"Content\Tiled\Tilemaps\TR_1.tmx";
 			}
 
 			public static class Tilesets

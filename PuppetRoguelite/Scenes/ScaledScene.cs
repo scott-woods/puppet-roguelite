@@ -25,7 +25,7 @@ namespace PuppetRoguelite.Scenes
 
             //tilemap
             var tiledEntity = CreateEntity("tiled-map-entity");
-            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Test_tilemap);
+            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.TBLR_1);
             var tiledMapRenderer = tiledEntity.AddComponent(new TiledMapRenderer(map, "collision"));
             tiledMapRenderer.SetLayersToRender(new[] { "floor", "details" });
             tiledMapRenderer.RenderLayer = 10;

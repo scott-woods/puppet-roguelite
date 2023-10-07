@@ -34,7 +34,7 @@ namespace PuppetRoguelite.Components.Characters
         VirtualButton _actionInput;
 
         //stats
-        float _moveSpeed = 100f;
+        float _moveSpeed = 150f;
 
         //components
         Mover _mover;
