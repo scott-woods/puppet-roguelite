@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.UI;
 using PuppetRoguelite.Components;
+using PuppetRoguelite.Components.PlayerActions;
 using PuppetRoguelite.Components.Shared;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,12 @@ namespace PuppetRoguelite.UI.Elements
 {
     public class ApProgressBar : ProgressBar
     {
-        public ApProgressBar(Skin skin, string styleName = null) : base(skin, styleName)
+        int _index;
+
+        public ApProgressBar(int index, Skin skin, string styleName = null) : base(skin, styleName)
         {
+            _index = index;
+
             Setup();
             AddObservers();
         }
@@ -27,6 +32,7 @@ namespace PuppetRoguelite.UI.Elements
         {
             Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerStarted, OnActionPointsTimerStarted);
             Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerUpdated, OnActionPointsTimerUpdated);
+            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsChanged, OnActionPointsChanged);
 
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
@@ -35,22 +41,36 @@ namespace PuppetRoguelite.UI.Elements
 
         void OnActionPointsTimerStarted(ActionPointComponent actionPointComponent)
         {
-            SetMinMax(0, actionPointComponent.ChargeRate);
+            if (actionPointComponent.ActionPoints == _index)
+            {
+                SetMinMax(0, actionPointComponent.ChargeRate);
+            }
         }
 
         void OnActionPointsTimerUpdated(ActionPointComponent actionPointComponent)
         {
-            SetValue(actionPointComponent.CurrentChargeTimer);
+            if (actionPointComponent.ActionPoints == _index)
+            {
+                SetValue(actionPointComponent.CurrentChargeTimer);
+            }
         }
 
         void OnTurnPhaseTriggered()
         {
-            SetIsVisible(false);
+            //SetIsVisible(false);
+            var actionPointComponent = Game1.Scene.FindComponentOfType<ActionPointComponent>();
+            if (actionPointComponent != null)
+            {
+                if (_index == actionPointComponent.ActionPoints)
+                {
+                    Value = 0;
+                }
+            }
         }
 
         void OnTurnPhaseCompleted()
         {
-            SetIsVisible(true);
+            //SetIsVisible(true);
             Value = 0;
         }
 
@@ -60,8 +80,16 @@ namespace PuppetRoguelite.UI.Elements
             var actionPointComponent = Game1.Scene.FindComponentOfType<ActionPointComponent>();
             if (actionPointComponent != null)
             {
-                OnActionPointsTimerStarted(actionPointComponent);
-                OnActionPointsTimerUpdated(actionPointComponent);
+                SetMinMax(0, actionPointComponent.ChargeRate);
+                SetValue(actionPointComponent.CurrentChargeTimer);
+            }
+        }
+
+        void OnActionPointsChanged(ActionPointComponent actionPointComponent)
+        {
+            if (actionPointComponent.ActionPoints <= _index)
+            {
+                SetValue(0);
             }
         }
     }

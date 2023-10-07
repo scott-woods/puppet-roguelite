@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
@@ -17,9 +18,9 @@ namespace PuppetRoguelite.UI
         {
             //load assets
             var skin = new Skin();
-            skin.AddSprites(Game1.Scene.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style3/Atlas/icons_style_3.atlas"));
-            skin.AddSprites(Game1.Scene.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style4/Atlas/icons_style_4.atlas"));
-            skin.AddSprites(Game1.Scene.Content.LoadSpriteAtlas("Content/Textures/UI/Menu/Style3/Atlas/menu_style_3.atlas"));
+            skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style3/Atlas/icons_style_3.atlas"));
+            skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style4/Atlas/icons_style_4.atlas"));
+            skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Menu/Style3/Atlas/menu_style_3.atlas"));
 
             var subTexture = skin.GetSprite("Inventory_01");
             var ninePatch = new NinePatchDrawable(subTexture, 16, 16, 16, 16);
@@ -60,6 +61,14 @@ namespace PuppetRoguelite.UI
                 Font = Graphics.Instance.BitmapFont,
                 FontColor = Color.White
             });
+
+            //progress bar
+            var progressBarStyle = new ProgressBarStyle
+            {
+                Background = new PrimitiveDrawable(0, 5, Color.LightGray),
+                KnobBefore = new PrimitiveDrawable(0, 5, Color.Green)
+            };
+            skin.Add("default", progressBarStyle);
 
             return skin;
         }

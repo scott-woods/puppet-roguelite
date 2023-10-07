@@ -2,6 +2,7 @@
 using Nez.Sprites;
 using Nez.UI;
 using PuppetRoguelite.Components;
+using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.UI.Elements;
@@ -25,6 +26,7 @@ namespace PuppetRoguelite.UI.HUDs
         Table _bottomMiddleTable;
         Table _apTable;
         Label _simTipLabel;
+        List<ApProgressBar> _apProgressBars = new List<ApProgressBar>();
 
         //skins
         Skin _basicSkin;
@@ -39,7 +41,7 @@ namespace PuppetRoguelite.UI.HUDs
             _table.SetDebug(false);
 
             //load skin
-            _basicSkin = Skin.CreateDefaultSkin();
+            _basicSkin = CustomSkins.CreateBasicSkin();
 
             //arrange elements
             ArrangeElements();
@@ -50,30 +52,20 @@ namespace PuppetRoguelite.UI.HUDs
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
-
+            
             ConnectToEmitters();
         }
 
         void ArrangeElements()
         {
-            //status section in top left
-            //var statusTable = new Table();
-            //statusTable.Defaults().Left().SetSpaceBottom(5);
-            //_table.Add(statusTable).Expand().Top().Left().SetPadTop(5).SetPadLeft(5);
-            //_playerHealthLabel = new Label("HP: ", _basicSkin);
-            //statusTable.Add(_playerHealthLabel);
-            //statusTable.Row();
-            //statusTable.Add(new Label("$", _basicSkin));
-            //statusTable.Row();
-            //statusTable.Add(new Label("&", _basicSkin));
-
-            _topLeftTable = new Table().Top().Left().PadTop(5).PadLeft(5);
+            //hp
+            _topLeftTable = new Table().Top().Left().PadTop(10).PadLeft(10);
             _table.Add(_topLeftTable).Grow();
             _playerHealthLabel = new Label("HP: ", _basicSkin);
             _topLeftTable.Add(_playerHealthLabel);
-            //_topLeftTable.Pack();
 
-            _topRightTable = new Table().Top().Right().PadTop(5).PadRight(5);
+            //currency
+            _topRightTable = new Table().Top().Right().PadTop(10).PadRight(10);
             _table.Add(_topRightTable).Grow();
             _topRightTable.Add(new Label("$", _basicSkin));
             _topRightTable.Pack();
@@ -81,13 +73,13 @@ namespace PuppetRoguelite.UI.HUDs
             _table.Row();
 
             var bottomTable = new Table();
-            _table.Add(bottomTable).SetColspan(2).Grow().SetPadBottom(10);
+            _table.Add(bottomTable).SetColspan(2).Grow().SetPadBottom(20);
 
             var bottomLeftTable = new Table();
             bottomTable.Add(bottomLeftTable).Width(480 * .75f).Expand().Bottom().Left();
 
             _apTable = new Table();
-            _apTable.Defaults().SetSpaceRight(8).Grow();
+            _apTable.Defaults().SetSpaceRight(8);
             bottomLeftTable.Add(_apTable).Width(480 * .5f).Expand().Right();
 
             _simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
@@ -95,8 +87,8 @@ namespace PuppetRoguelite.UI.HUDs
             _simTipLabel.SetVisible(false);
             bottomTable.Add(_simTipLabel).SetPadLeft(480 * .025f).SetPadRight(480 * .025f).Width(480 * .2f).Expand().Bottom().Right();
 
-            _apTable.Add(new TextButton("test", _basicSkin));
-            _apTable.Add(new TextButton("test", _basicSkin));
+            //_apTable.Add(new TextButton("test", _basicSkin));
+            //_apTable.Add(new TextButton("test", _basicSkin));
 
             //_bottomMiddleTable = new Table().PadLeft(10);
             //_bottomMiddleTable.DebugAll();
@@ -165,6 +157,20 @@ namespace PuppetRoguelite.UI.HUDs
             if (playerHealthComponent != null)
             {
                 OnPlayerHealthChanged(playerHealthComponent);
+            }
+
+            //ap bars
+            _apProgressBars.Clear();
+            _apTable.ClearChildren();
+            if (PlayerController.Instance.ActionPointComponent != null)
+            {
+                for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
+                {
+                    var bar = new ApProgressBar(i, _basicSkin);
+                    _apProgressBars.Add(bar);
+                    var width = ((480 * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
+                    _apTable.Add(bar).Width(width);
+                }
             }
         }
 
