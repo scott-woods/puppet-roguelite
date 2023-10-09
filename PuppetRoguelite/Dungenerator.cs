@@ -294,14 +294,16 @@ namespace PuppetRoguelite
                 switch (node.RoomType)
                 {
                     case RoomType.Hub:
-                        CreateMap(node, Nez.Content.Tiled.Tilemaps.Hub_room);
+                        //CreateMap(node, Nez.Content.Tiled.Tilemaps.Hub_room);
+                        CreateMap(node);
                         break;
                     case RoomType.Key:
                         var mapString = node.NeedsLeftDoor ? Nez.Content.Tiled.Tilemaps.Right_key_room : Nez.Content.Tiled.Tilemaps.Left_key_room;
                         CreateMap(node, mapString);
                         break;
                     case RoomType.PreBoss:
-                        CreateMap(node, Nez.Content.Tiled.Tilemaps.Pre_boss_room);
+                        //CreateMap(node, Nez.Content.Tiled.Tilemaps.Pre_boss_room);
+                        CreateMap(node);
                         break;
                     case RoomType.Boss:
                         CreateMap(node, Nez.Content.Tiled.Tilemaps.Boss_room);
@@ -399,7 +401,8 @@ namespace PuppetRoguelite
                         else if (dir.X < 0 && nodeToCheck.NeedsRightDoor) return true;
                         else return false;
                     case RoomType.Boss:
-                        return false;
+                        if (baseNode.RoomType == RoomType.PreBoss) return true;
+                        else return false;
                     case RoomType.PreBoss:
                     case RoomType.Normal:
                     case RoomType.Hub:
