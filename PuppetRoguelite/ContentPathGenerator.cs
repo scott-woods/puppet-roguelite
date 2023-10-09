@@ -784,10 +784,15 @@ namespace Nez
 				public const string B_1 = @"Content\Tiled\Tilemaps\B_1.tmx";
 				public const string BL_1 = @"Content\Tiled\Tilemaps\BL_1.tmx";
 				public const string BLR_1 = @"Content\Tiled\Tilemaps\BLR_1.tmx";
+				public const string Boss_room = @"Content\Tiled\Tilemaps\boss_room.tmx";
 				public const string BR_1 = @"Content\Tiled\Tilemaps\BR_1.tmx";
+				public const string Hub_room = @"Content\Tiled\Tilemaps\hub_room.tmx";
 				public const string L_1 = @"Content\Tiled\Tilemaps\L_1.tmx";
+				public const string Left_key_room = @"Content\Tiled\Tilemaps\left_key_room.tmx";
 				public const string LR_1 = @"Content\Tiled\Tilemaps\LR_1.tmx";
+				public const string Pre_boss_room = @"Content\Tiled\Tilemaps\pre_boss_room.tmx";
 				public const string R_1 = @"Content\Tiled\Tilemaps\R_1.tmx";
+				public const string Right_key_room = @"Content\Tiled\Tilemaps\right_key_room.tmx";
 				public const string T_1 = @"Content\Tiled\Tilemaps\T_1.tmx";
 				public const string TB_1 = @"Content\Tiled\Tilemaps\TB_1.tmx";
 				public const string TBL_1 = @"Content\Tiled\Tilemaps\TBL_1.tmx";
