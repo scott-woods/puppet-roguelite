@@ -1,5 +1,5 @@
 {
-    "activeFile": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx",
+    "activeFile": "Tilemaps/BR_1.tmx",
     "expandedProjectPaths": [
         "Tilemaps"
     ],
@@ -46,11 +46,11 @@
                 6,
                 4
             ],
-            "scale": 1,
-            "selectedLayer": 5,
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 220.5,
-                "y": 298
+                "x": 139,
+                "y": 214.66666666666663
             }
         },
         "Tilemaps/BR_1.tmx": {
@@ -58,11 +58,11 @@
                 4,
                 5
             ],
-            "scale": 1,
-            "selectedLayer": 3,
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 232.5,
-                "y": 214
+                "x": 295.66666666666663,
+                "y": 207.33333333333334
             }
         },
         "Tilemaps/B_1.tmx": {
@@ -111,11 +111,11 @@
                 7,
                 5
             ],
-            "scale": 1,
+            "scale": 2,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 206.5,
-                "y": 262
+                "x": 211.25,
+                "y": 227.5
             }
         },
         "Tilemaps/TBL_1.tmx": {
@@ -158,22 +158,45 @@
             }
         },
         "Tilemaps/TLR_1.tmx": {
-            "scale": 1.3458333333333334,
-            "selectedLayer": 2,
+            "expandedObjectLayers": [
+                6,
+                4,
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 192.07430340557275,
-                "y": 192.4458204334365
+                "x": 168.5,
+                "y": 249
             }
         },
         "Tilemaps/TL_1.tmx": {
+            "expandedObjectLayers": [
+                6,
+                4,
+                5
+            ],
             "scale": 1,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 160.5,
-                "y": 200
+                "x": 168.5,
+                "y": 220
             }
         },
         "Tilemaps/TR_1.tmx": {
+            "expandedObjectLayers": [
+                6,
+                4,
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 174.5,
+                "y": 182
+            }
+        },
+        "Tilemaps/T_1.tmx": {
             "scale": 1.3458333333333334,
             "selectedLayer": 0,
             "viewCenter": {
@@ -224,21 +247,34 @@
     },
     "openFiles": [
         "Tilemaps/boss_room.tmx",
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx"
-    ],
-    "project": "puppet_roguelite.tiled-project",
-    "recentFiles": [
-        "Tilemaps/TL_1.tmx",
-        "Tilemaps/L_1.tmx",
-        "Tilemaps/LR_1.tmx",
-        "Tilesets/dungeon_prison_tileset.tsx",
+        "Tilemaps/B_1.tmx",
         "Tilemaps/BL_1.tmx",
         "Tilemaps/BLR_1.tmx",
         "Tilemaps/BR_1.tmx",
-        "Tilemaps/left_key_room.tmx",
-        "Tilemaps/pre_boss_room.tmx",
-        "Tilemaps/R_1.tmx",
-        "Tilemaps/right_key_room.tmx",
+        "Tilemaps/LR_1.tmx",
+        "Tilemaps/TB_1.tmx",
+        "Tilemaps/TBL_1.tmx",
+        "Tilemaps/TBLR_1.tmx",
+        "Tilemaps/TBR_1.tmx",
+        "Tilemaps/TLR_1.tmx",
+        "Tilemaps/TL_1.tmx",
+        "Tilemaps/TR_1.tmx",
+        "Tilemaps/L_1.tmx",
+        "Tilemaps/T_1.tmx"
+    ],
+    "project": "puppet_roguelite.tiled-project",
+    "recentFiles": [
+        "Tilemaps/boss_room.tmx",
+        "Tilemaps/B_1.tmx",
+        "Tilemaps/BL_1.tmx",
+        "Tilemaps/BLR_1.tmx",
+        "Tilemaps/T_1.tmx",
+        "Tilemaps/L_1.tmx",
+        "Tilemaps/TR_1.tmx",
+        "Tilemaps/TL_1.tmx",
+        "Tilemaps/TLR_1.tmx",
+        "Tilemaps/TBR_1.tmx",
+        "Tilemaps/TBLR_1.tmx",
         "Tilemaps/TBL_1.tmx"
     ]
 }
