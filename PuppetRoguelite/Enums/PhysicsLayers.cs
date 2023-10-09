@@ -12,6 +12,7 @@ namespace PuppetRoguelite.Enums
         Damage = 999,
         EnemyHurtbox = 2,
         PlayerDamage = 3,
-        EnemyDamage = 4
+        EnemyDamage = 4,
+        Collider = 5
     }
 }

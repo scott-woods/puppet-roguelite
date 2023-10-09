@@ -1,0 +1,182 @@
+{
+    "activeFile": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx",
+    "expandedProjectPaths": [
+        "Tilemaps"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx": {
+            "scale": 1.1962962962962962,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 216.0835913312694,
+                "y": 216.50154798761614
+            }
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#CollisionTileset": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#Stardew-Spring-Outdoors": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#bunny_npc": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#edge_test_tileset": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#large_sprite_test": {
+            "scaleInDock": 1
+        },
+        "Tilemaps/BLR_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/BL_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 191.70278637770897
+            }
+        },
+        "Tilemaps/BR_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/LR_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/L_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/R_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/TBLR_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/TBL_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/TBR_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/TLR_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/TL_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/TR_1.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/boss_room.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 249.6594427244582
+            }
+        },
+        "Tilemaps/left_key_room.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/pre_boss_room.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilemaps/right_key_room.tmx": {
+            "scale": 1.3458333333333334,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.07430340557275,
+                "y": 192.4458204334365
+            }
+        },
+        "Tilesets/dungeon_prison_tileset.tsx": {
+            "scaleInDock": 1
+        }
+    },
+    "openFiles": [
+        "Tilemaps/boss_room.tmx",
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx"
+    ],
+    "project": "puppet_roguelite.tiled-project",
+    "recentFiles": [
+        "Tilemaps/BL_1.tmx",
+        "Tilemaps/BLR_1.tmx",
+        "Tilemaps/BR_1.tmx",
+        "Tilemaps/L_1.tmx",
+        "Tilemaps/left_key_room.tmx",
+        "Tilemaps/LR_1.tmx",
+        "Tilemaps/pre_boss_room.tmx",
+        "Tilemaps/R_1.tmx",
+        "Tilemaps/right_key_room.tmx",
+        "Tilemaps/TBL_1.tmx",
+        "Tilemaps/TBLR_1.tmx",
+        "Tilemaps/TBR_1.tmx"
+    ]
+}

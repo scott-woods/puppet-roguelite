@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="5">
  <tileset firstgid="1" source="../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="3" name="floor" width="24" height="24">
   <data encoding="csv">
@@ -85,4 +85,11 @@
 502,502,502,502,502,502,502,502,502,502,502,0,0,502,502,502,502,502,502,502,502,502,502,502
 </data>
  </layer>
+ <objectgroup id="4" name="entrance-triggers">
+  <object id="1" name="bottom-trigger" class="entrance-trigger" x="176" y="352" width="32" height="16"/>
+ </objectgroup>
+ <objectgroup id="5" name="gates" class="gate">
+  <object id="2" name="gate-2" gid="235" x="176" y="384" width="16" height="16"/>
+  <object id="3" name="gate-1" gid="235" x="192" y="384" width="16" height="16"/>
+ </objectgroup>
 </map>

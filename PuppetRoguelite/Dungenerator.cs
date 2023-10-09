@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.AI.Pathfinding;
+using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Entities;
 using System;
@@ -16,7 +17,7 @@ namespace PuppetRoguelite
     {
         Point _roomSize = new Point(24, 24);
         Point _tileSize = new Point(16, 16);
-        Point _gridSize = new Point(5, 5);
+        Point _gridSize = new Point(4, 4);
 
         List<Map> _maps = new List<Map>()
         {
@@ -295,21 +296,21 @@ namespace PuppetRoguelite
                 {
                     case RoomType.Hub:
                         //CreateMap(node, Nez.Content.Tiled.Tilemaps.Hub_room);
-                        CreateMap(node);
+                        if (!CreateMap(node)) return false;
                         break;
                     case RoomType.Key:
                         var mapString = node.NeedsLeftDoor ? Nez.Content.Tiled.Tilemaps.Right_key_room : Nez.Content.Tiled.Tilemaps.Left_key_room;
-                        CreateMap(node, mapString);
+                        if (!CreateMap(node, mapString)) return false;
                         break;
                     case RoomType.PreBoss:
                         //CreateMap(node, Nez.Content.Tiled.Tilemaps.Pre_boss_room);
-                        CreateMap(node);
+                        if (!CreateMap(node)) return false;
                         break;
                     case RoomType.Boss:
-                        CreateMap(node, Nez.Content.Tiled.Tilemaps.Boss_room);
+                        if (!CreateMap(node, Nez.Content.Tiled.Tilemaps.Boss_room)) return false;
                         break;
                     case RoomType.Normal:
-                        CreateMap(node);
+                        if (!CreateMap(node)) return false;
                         break;
                 }
             }
@@ -322,7 +323,7 @@ namespace PuppetRoguelite
         /// </summary>
         /// <param name="node"></param>
         /// <param name="mapString"></param>
-        void CreateMap(RoomNode node, string mapString = null)
+        bool CreateMap(RoomNode node, string mapString = null)
         {
             if (String.IsNullOrWhiteSpace(mapString))
             {
@@ -346,18 +347,21 @@ namespace PuppetRoguelite
                     //return true;
                 }).ToList();
 
-                mapString = possibleMaps.RandomItem().Name;
+                if (possibleMaps.Any())
+                {
+                    mapString = possibleMaps.RandomItem().Name;
+                }
+                else return false;
             }
 
             var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
             var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
             mapEntity.SetPosition(mapPosition);
             Scene.AddEntity(mapEntity);
-            var map = Scene.Content.LoadTiledMap(mapString);
-            var renderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-            renderer.SetLayersToRender(new[] { "floor", "details" });
-            renderer.RenderLayer = 10;
+            mapEntity.AddComponent(new DungeonRoom(node, mapString));
             _roomDictionary.Add(node.Point, mapEntity);
+
+            return true;
         }
 
         /// <summary>

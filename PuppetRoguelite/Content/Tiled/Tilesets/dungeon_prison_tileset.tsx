@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.9" tiledversion="1.9.2" name="dungeon_prison_tileset" tilewidth="16" tileheight="16" tilecount="625" columns="25">
  <image source="../../Textures/Tilesets/dungeon_prison_tileset.png" trans="ff00ff" width="400" height="400"/>
+ <tile id="234">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="16" height="16"/>
+  </objectgroup>
+ </tile>
  <wangsets>
   <wangset name="terrains" type="corner" tile="-1">
    <wangcolor name="stone" color="#ff0000" tile="-1" probability="1"/>

@@ -57,7 +57,7 @@
 154,77,77,77,77,77,77,77,77,77,78,0,0,76,77,77,77,77,77,77,77,77,77,155
 </data>
  </layer>
- <layer id="1" name="collision" width="24" height="24" visible="0" opacity="0.5">
+ <layer id="1" name="collision" width="24" height="24" opacity="0.5">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
