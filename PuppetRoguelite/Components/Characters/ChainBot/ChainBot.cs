@@ -50,17 +50,24 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         #region SETUP
 
+        public ChainBot(DungeonRoom room) : base(room)
+        {
+
+        }
+
         public override void Initialize()
         {
             base.Initialize();
 
-            AddComponents();
-            SetupBehaviorTree();
+            
         }
 
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
+
+            AddComponents();
+            SetupBehaviorTree();
 
             _healthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
             _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
@@ -78,14 +85,13 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] {(int)PhysicsLayers.PlayerDamage}));
 
             //health
-            _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
+            _healthComponent = Entity.AddComponent(new HealthComponent(1, 1));
 
             //pathfinding
-            Pathfinder = Entity.AddComponent(new PathfindingComponent());
+            Pathfinder = Entity.AddComponent(new PathfindingComponent(DungeonRoom.GridGraphManager));
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));
-            //_collider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
@@ -231,7 +237,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         void OnHealthDepleted(HealthComponent healthComponent)
         {
-
+            Entity.Destroy();
         }
     }
 }

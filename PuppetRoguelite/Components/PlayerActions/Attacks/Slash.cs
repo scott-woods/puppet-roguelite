@@ -204,11 +204,14 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         public override void OnRemovedFromEntity()
         {
-            base.OnRemovedFromEntity();
+            if (Entity != null)
+            {
+                if (_animator != null) Entity.RemoveComponent(_animator);
+                if (_hitbox != null) Entity.RemoveComponent(_hitbox);
+                if (_hitboxCollider != null) Entity.RemoveComponent(_hitboxCollider);
+            }
 
-            if (_animator != null) Entity.RemoveComponent(_animator);
-            if (_hitbox != null) Entity.RemoveComponent(_hitbox);
-            if (_hitboxCollider != null) Entity.RemoveComponent(_hitboxCollider);
+            base.OnRemovedFromEntity();
         }
     }
 }

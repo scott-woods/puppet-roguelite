@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.SceneComponents
 {
-    public class GridGraphManager : SceneComponent
+    public class GridGraphManager : Component
     {
         AstarGridGraph _graph;
         TmxMap _map;

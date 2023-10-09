@@ -2,6 +2,7 @@
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.PlayerActions;
+using PuppetRoguelite.Components.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace PuppetRoguelite
     }
     public enum CombatEvents
     {
+        EncounterStarted,
+        EncounterEnded,
         TurnPhaseTriggered,
         TurnPhaseExecuting,
         TurnPhaseCompleted,

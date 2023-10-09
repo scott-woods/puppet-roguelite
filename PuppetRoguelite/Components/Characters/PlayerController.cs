@@ -65,7 +65,7 @@ namespace PuppetRoguelite.Components.Characters
             AddObservers();
             SetupInput();
 
-            StateMachine = new PlayerStateMachine(this, new PlayerInCombat());
+            StateMachine = new PlayerStateMachine(this, new PlayerDefault());
         }
 
         void AddComponents()
@@ -103,7 +103,9 @@ namespace PuppetRoguelite.Components.Characters
         void AddObservers()
         {
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
         }
 
         void SetupInput()
@@ -202,26 +204,19 @@ namespace PuppetRoguelite.Components.Characters
             _mover.ApplyMovement(movement);
         }
 
+        public bool IsActionInputPressed()
+        {
+            return _actionInput.IsPressed;
+        }
+
         public void HandleInput()
         {
-            //first, check for action button
-            if (_actionInput.IsPressed)
-            {
-                if (ActionPointComponent.ActionPoints > 0)
-                {
-                    Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
-                }
-            }
-
             //get movement inputs
             var newDirection = new Vector2(_xAxisInput.Value, _yAxisInput.Value);
 
             //if no movement, switch to idle and return
             if (newDirection == Vector2.Zero)
             {
-                //_lastNonZeroDirection = _direction;
-                //_direction = newDirection;
-                //_direction.Normalize();
                 Idle();
             }
             else
@@ -264,9 +259,19 @@ namespace PuppetRoguelite.Components.Characters
             StateMachine.ChangeState<PlayerInTurn>();
         }
 
-        void OnTurnPhaseCompleted()
+        void OnDodgePhaseStarted()
         {
             StateMachine.ChangeState<PlayerInCombat>();
+        }
+
+        void OnEncounterStarted()
+        {
+            StateMachine.ChangeState<PlayerInCombat>();
+        }
+
+        void OnEncounterEnded()
+        {
+            StateMachine.ChangeState<PlayerDefault>();
         }
     }
 
@@ -286,6 +291,20 @@ namespace PuppetRoguelite.Components.Characters
     }
 
     public class PlayerInCombat : State<PlayerController>
+    {
+        public override void Update(float deltaTime)
+        {
+            if (_context.IsActionInputPressed() && _context.ActionPointComponent.ActionPoints > 0)
+            {
+                Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
+                return;
+            }
+
+            _context.HandleInput();
+        }
+    }
+
+    public class PlayerDefault : State<PlayerController>
     {
         public override void Update(float deltaTime)
         {

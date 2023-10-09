@@ -46,14 +46,23 @@ namespace PuppetRoguelite.UI.HUDs
             //arrange elements
             ArrangeElements();
 
-            ConnectToGlobalEmitters();
+            //connect to emitters
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
         }
 
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
-            
-            ConnectToEmitters();
+
+            //player health
+            var playerHealthComponent = Entity.Scene.FindComponentsOfType<HealthComponent>().FirstOrDefault(h => h.Entity.Name == "player");
+            if (playerHealthComponent != null)
+            {
+                OnPlayerHealthChanged(playerHealthComponent);
+                playerHealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
+            }
         }
 
         void ArrangeElements()
@@ -80,77 +89,16 @@ namespace PuppetRoguelite.UI.HUDs
 
             _apTable = new Table();
             _apTable.Defaults().SetSpaceRight(8);
+            _apTable.SetVisible(false);
             bottomLeftTable.Add(_apTable).Width(480 * .5f).Expand().Right();
 
             _simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
             _simTipLabel.SetWrap(true);
             _simTipLabel.SetVisible(false);
             bottomTable.Add(_simTipLabel).SetPadLeft(480 * .025f).SetPadRight(480 * .025f).Width(480 * .2f).Expand().Bottom().Right();
-
-            //_apTable.Add(new TextButton("test", _basicSkin));
-            //_apTable.Add(new TextButton("test", _basicSkin));
-
-            //_bottomMiddleTable = new Table().PadLeft(10);
-            //_bottomMiddleTable.DebugAll();
-            //_table.Add(_bottomMiddleTable).Expand().SetFillY().SetColspan(2).Left();
-            //var leftTable = new Table();
-            //_bottomMiddleTable.Add(leftTable).Width(480 * .75f).Expand().Bottom().Right();
-            //var apGroup = new Table();
-            //leftTable.Add(apGroup).Width(480 * .5f).Right();
-            //apGroup.Add(new TextButton("hi", _basicSkin));
-
-            //var apGroup = new Table().PadBottom(5);
-            //apGroup.Defaults().SetSpaceRight(8);
-            //_bottomMiddleTable.Add(apGroup).Width(480 * .75f).Bottom().Right().Expand();
-            //var horGroup = new Table();
-            //apGroup.Add(horGroup).Width(480 * .5f).Right().Expand();
-            //horGroup.Add(new TextButton("hi", _basicSkin));
-
-            //var labelTable = new Table().Right().Bottom();
-            //labelTable.DebugAll();
-            //_bottomMiddleTable.Add(labelTable).Width(480 * .25f);
-            //var simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
-            //simTipLabel.SetWrap(true);
-            //labelTable.Add(simTipLabel).Grow();
-
-            //_bottomMiddleTable.Add(simTipLabel);
-            //var labelContainer = new Container(simTipLabel);
-            //labelContainer.SetRight();
-            //_bottomMiddleTable.Add(labelContainer).Width(480 * .25f).Expand().Right();
-            //apGroup.Add(new TextButton("hi", _basicSkin));
-            //apGroup.Add(new TextButton("hi", _basicSkin));
-            //apGroup.Pack();
-            //_bottomMiddleTable.Pack();
-
-            //ap table
-            //_table.Row();
-            //var apTable = new Table();
-            //apTable.Defaults().Center();
-            //_table.Add(apTable).Expand().Bottom().SetPadBottom(10);
-            //_playerApLabel = new ApLabel("/", _basicSkin);
-            //apTable.Add(_playerApLabel).SetSpaceBottom(5);
-            //apTable.Row();
-            //_apProgressBar = new ApProgressBar(_basicSkin);
-            //apTable.Add(_apProgressBar);
         }
 
-        void ConnectToEmitters()
-        {
-            //player health
-            var playerHealthComponent = Entity.Scene.FindComponentsOfType<HealthComponent>().FirstOrDefault(h => h.Entity.Name == "player");
-            if (playerHealthComponent != null)
-            {
-                OnPlayerHealthChanged(playerHealthComponent);
-                playerHealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
-            }
-        }
-
-        void ConnectToGlobalEmitters()
-        {
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
-        }
-
-        void OnDodgePhaseStarted()
+        void OnEncounterStarted()
         {
             //get initial hp values
             var playerHealthComponent = Entity.Scene.FindComponentsOfType<HealthComponent>().FirstOrDefault(h => h.Entity.Name == "player");
@@ -159,11 +107,24 @@ namespace PuppetRoguelite.UI.HUDs
                 OnPlayerHealthChanged(playerHealthComponent);
             }
 
+            //show relevant elements
+            _apTable.SetVisible(true);
+        }
+
+        void OnEncounterEnded()
+        {
+            //hide elements
+            _apTable.SetVisible(false);
+        }
+
+        void OnDodgePhaseStarted()
+        {
             //ap bars
             _apProgressBars.Clear();
             _apTable.ClearChildren();
             if (PlayerController.Instance.ActionPointComponent != null)
             {
+                //setup ap progress bars
                 for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
                 {
                     var bar = new ApProgressBar(i, _basicSkin);

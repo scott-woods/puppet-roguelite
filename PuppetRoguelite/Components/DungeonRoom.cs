@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.AI.Pathfinding;
 using Nez.Tiled;
+using PuppetRoguelite.Components.Characters.ChainBot;
+using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.SceneComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +16,14 @@ namespace PuppetRoguelite.Components
 {
     public class DungeonRoom : Component
     {
+        List<Type> _enemyTypes = new List<Type>()
+        {
+            typeof(ChainBot)
+        };
+
         RoomNode _node;
         bool _isCleared = false;
+        bool _encounterStarted = false;
         string _mapString;
 
         TmxMap _map;
@@ -21,6 +31,10 @@ namespace PuppetRoguelite.Components
 
         List<Entity> _triggerEntities = new List<Entity>();
         List<Gate> _gates = new List<Gate>();
+        List<EnemySpawnPoint> _enemySpawnPoints = new List<EnemySpawnPoint>();
+        List<Enemy> _enemies = new List<Enemy>();
+
+        public GridGraphManager GridGraphManager { get; set; }
 
         public DungeonRoom(RoomNode node, string mapString)
         {
@@ -37,6 +51,10 @@ namespace PuppetRoguelite.Components
             _mapRenderer = Entity.AddComponent(new TiledMapRenderer(_map, "collision"));
             _mapRenderer.SetLayersToRender(new[] { "floor", "details", "gates" });
             _mapRenderer.RenderLayer = 10;
+
+            //pathfinding
+            var graph = new AstarGridGraph(_mapRenderer.CollisionLayer);
+            GridGraphManager = Entity.AddComponent(new GridGraphManager(graph, _map));
 
             //gates
             var gateObjGroup = _map.GetObjectGroup("gates");
@@ -68,31 +86,86 @@ namespace PuppetRoguelite.Components
                     _triggerEntities.Add(ent);
                 }
             }
+
+            //enemy spawns
+            var enemySpawnObjGroup = _map.GetObjectGroup("enemy-spawn-points");
+            if (enemySpawnObjGroup != null)
+            {
+                foreach(var spawnObj in enemySpawnObjGroup.Objects)
+                {
+                    var ent = Entity.Scene.CreateEntity(spawnObj.Name);
+                    ent.SetPosition(Entity.Position + new Vector2((int)spawnObj.X, (int)spawnObj.Y));
+                    var enemySpawnPoint = ent.AddComponent(new EnemySpawnPoint());
+                    _enemySpawnPoints.Add(enemySpawnPoint);
+                }
+            }
+
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+        }
+
+        public void HandleEntranceTriggered()
+        {
+            if (_node.RoomType == RoomType.Normal)
+            {
+                if (!_isCleared)
+                {
+                    _encounterStarted = true;
+
+                    //lock gates
+                    foreach (var gate in _gates)
+                    {
+                        gate.Lock();
+                    }
+
+                    //spawn enemies
+                    foreach (var spawn in _enemySpawnPoints)
+                    {
+                        _enemies.Add(spawn.SpawnEnemy(_enemyTypes, this));
+                    }
+
+                    //emit
+                    Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
+
+                    //destroy entrance triggers
+                    foreach (var ent in _triggerEntities)
+                    {
+                        ent.Destroy();
+                    }
+                }
+            }
+        }
+
+        void OnTurnPhaseCompleted()
+        {
+            if (_encounterStarted)
+            {
+                _enemies.RemoveAll(e => e.Entity == null);
+                if (_enemies.Any())
+                {
+                    Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
+                }
+                else
+                {
+                    _isCleared = true;
+
+                    //unlock gates
+                    foreach (var gate in _gates)
+                    {
+                        gate.Unlock();
+                    }
+
+                    Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterEnded);
+                }
+            }
         }
 
         public override void OnRemovedFromEntity()
         {
             base.OnRemovedFromEntity();
 
-            foreach(var ent in _triggerEntities)
+            foreach (var ent in _triggerEntities)
             {
                 ent.Destroy();
-            }
-        }
-
-        public void HandleEntranceTriggered()
-        {
-            if (!_isCleared)
-            {
-                foreach (var gate in _gates)
-                {
-                    gate.Lock();
-                }
-
-                foreach(var ent in _triggerEntities)
-                {
-                    ent.Destroy();
-                }
             }
         }
     }

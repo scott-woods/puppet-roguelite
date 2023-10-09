@@ -37,8 +37,8 @@ namespace PuppetRoguelite.Scenes
             ClearColor = Microsoft.Xna.Framework.Color.Transparent;
 
             //ui
-            var uiEntity = CreateEntity("ui");
-            _ui = uiEntity.AddComponent(new CombatUI());
+            //var uiEntity = CreateEntity("ui");
+            _ui = Camera.Entity.AddComponent(new CombatUI());
 
             //tilemap
             //var tiledEntity = new PausableEntity("tiled-map-entity");
@@ -101,8 +101,6 @@ namespace PuppetRoguelite.Scenes
             //}
 
             _dungenerator.Generate();
-
-            Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
         }
     }
 }
