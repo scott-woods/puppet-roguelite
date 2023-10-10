@@ -70,7 +70,8 @@ namespace PuppetRoguelite
             }
 
             var point = _hubPoint * _roomSize * _tileSize;
-            PlayerController.Instance.Entity.SetPosition(point.ToVector2() + new Vector2(64, 64));
+            var midPoint = point + new Point((_roomSize.X * _tileSize.X) / 2, (_roomSize.Y * _tileSize.Y) / 2);
+            PlayerController.Instance.Entity.SetPosition(midPoint.ToVector2());
         }
 
         void Reset()

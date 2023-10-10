@@ -24,12 +24,14 @@ namespace PuppetRoguelite.SceneComponents
 
         public Point WorldToGridPosition(Vector2 worldPosition)
         {
-            return _map.WorldToTilePosition(worldPosition);
+            //subtract entity position to get position relative to this grid graph
+            return _map.WorldToTilePosition(worldPosition - Entity.Position);
         }
 
         public Vector2 GridToWorldPosition(Point gridPosition)
         {
-            return _map.TileToWorldPosition(gridPosition);
+            //subtract entity position to get position relative to this grid graph
+            return _map.TileToWorldPosition(gridPosition) + Entity.Position;
         }
 
         public List<Vector2> FindPath(Vector2 startPoint, Vector2 endPoint)
@@ -47,7 +49,7 @@ namespace PuppetRoguelite.SceneComponents
             List<Vector2> path = new List<Vector2>();
             foreach (var pathItem in gridPath)
             {
-                path.Add(GridToWorldPosition(pathItem));
+                path.Add(GridToWorldPosition(pathItem) + new Vector2(8, 8));
             }
 
             //if first point on path is further from target than start entity, remove it
