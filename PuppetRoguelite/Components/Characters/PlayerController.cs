@@ -47,6 +47,7 @@ namespace PuppetRoguelite.Components.Characters
         Hurtbox _hurtbox;
         public ActionPointComponent ActionPointComponent;
         public AttacksList AttacksList;
+        Inventory _inventory;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -101,6 +102,9 @@ namespace PuppetRoguelite.Components.Characters
 
             //attacks list
             AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash), typeof(Dash) }));
+
+            //inventory
+            _inventory = Entity.AddComponent(new Inventory());
         }
 
         void AddObservers()
@@ -318,7 +322,7 @@ namespace PuppetRoguelite.Components.Characters
 
         void OnTextboxClosed()
         {
-            StateMachine.ChangeState<PlayerDefault>();
+            Core.Schedule(.1f, timer => StateMachine.ChangeState<PlayerDefault>());
         }
     }
 

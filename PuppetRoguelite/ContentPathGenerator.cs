@@ -58,7 +58,9 @@ namespace Nez
 
 			public static class Objects
 			{
+				public const string Boss_gate = @"Content\Textures\Objects\boss_gate.png";
 				public const string Chest = @"Content\Textures\Objects\chest.png";
+				public const string Shelf = @"Content\Textures\Objects\shelf.png";
 			}
 
 			public static class Tilesets

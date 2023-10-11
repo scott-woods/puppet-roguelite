@@ -32,8 +32,8 @@
             "scale": 0.769047619047619,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 336.13003095975233,
-                "y": 336.78018575851394
+                "x": 314.6749226006192,
+                "y": 334.8297213622291
             }
         },
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx#tileset": {
@@ -42,8 +42,8 @@
         "Tilemaps/BLR_1.tmx": {
             "expandedObjectLayers": [
                 6,
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 0,
@@ -66,8 +66,8 @@
         },
         "Tilemaps/BR_1.tmx": {
             "expandedObjectLayers": [
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1.5,
             "selectedLayer": 1,
@@ -78,8 +78,8 @@
         },
         "Tilemaps/B_1.tmx": {
             "expandedObjectLayers": [
-                7,
                 6,
+                7,
                 5
             ],
             "scale": 1,
@@ -118,8 +118,8 @@
         },
         "Tilemaps/TBLR_1.tmx": {
             "expandedObjectLayers": [
-                7,
                 6,
+                7,
                 5
             ],
             "scale": 2,
@@ -132,8 +132,8 @@
         "Tilemaps/TBL_1.tmx": {
             "expandedObjectLayers": [
                 6,
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 2,
@@ -145,8 +145,8 @@
         "Tilemaps/TBR_1.tmx": {
             "expandedObjectLayers": [
                 6,
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 3,
@@ -158,8 +158,8 @@
         "Tilemaps/TB_1.tmx": {
             "expandedObjectLayers": [
                 6,
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 5,
@@ -171,8 +171,8 @@
         "Tilemaps/TLR_1.tmx": {
             "expandedObjectLayers": [
                 6,
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 4,
@@ -184,8 +184,8 @@
         "Tilemaps/TL_1.tmx": {
             "expandedObjectLayers": [
                 6,
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 2,
@@ -197,8 +197,8 @@
         "Tilemaps/TR_1.tmx": {
             "expandedObjectLayers": [
                 6,
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 3,
@@ -217,8 +217,8 @@
         },
         "Tilemaps/boss_room.tmx": {
             "expandedObjectLayers": [
-                5,
-                4
+                4,
+                5
             ],
             "scale": 1,
             "selectedLayer": 4,
@@ -230,30 +230,36 @@
         "Tilemaps/left_key_room.tmx": {
             "expandedObjectLayers": [
                 7,
-                5,
-                4
+                4,
+                5
             ],
-            "scale": 1.5,
-            "selectedLayer": 4,
+            "scale": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 198.33333333333331,
-                "y": 125.33333333333334
+                "x": 207.5,
+                "y": 222
             }
         },
         "Tilemaps/pre_boss_room.tmx": {
-            "scale": 1.3458333333333334,
-            "selectedLayer": 2,
+            "scale": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 192.07430340557275,
-                "y": 192.4458204334365
+                "x": 139.5,
+                "y": 222
             }
         },
         "Tilemaps/right_key_room.tmx": {
-            "scale": 1.3458333333333334,
-            "selectedLayer": 2,
+            "expandedObjectLayers": [
+                6,
+                7,
+                4,
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.07430340557275,
-                "y": 192.4458204334365
+                "x": 140.5,
+                "y": 210
             }
         },
         "Tilesets/dungeon_prison_props.tsx": {
@@ -265,6 +271,7 @@
             "scaleInEditor": 1
         }
     },
+    "last.externalTilesetPath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Tilesets",
     "last.imagePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Textures/Tilesets",
     "openFiles": [
         "Tilemaps/boss_room.tmx",
@@ -288,6 +295,8 @@
     ],
     "project": "puppet_roguelite.tiled-project",
     "recentFiles": [
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx",
+        "Tilesets/dungeon_prison_props.tsx",
         "Tilemaps/boss_room.tmx",
         "Tilemaps/B_1.tmx",
         "Tilemaps/BL_1.tmx",
@@ -297,10 +306,9 @@
         "Tilemaps/TB_1.tmx",
         "Tilemaps/TBL_1.tmx",
         "Tilemaps/TBLR_1.tmx",
-        "Tilemaps/TBR_1.tmx",
-        "Tilemaps/TLR_1.tmx",
-        "Tilemaps/TL_1.tmx"
+        "Tilemaps/TBR_1.tmx"
     ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
         "height": 16,

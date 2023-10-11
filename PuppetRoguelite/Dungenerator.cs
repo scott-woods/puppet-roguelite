@@ -69,7 +69,7 @@ namespace PuppetRoguelite
                 }
             }
 
-            var point = _leftKeyPoint * _roomSize * _tileSize;
+            var point = _preBossPoint * _roomSize * _tileSize;
             var midPoint = point + new Point((_roomSize.X * _tileSize.X) / 2, (_roomSize.Y * _tileSize.Y) / 2);
             PlayerController.Instance.Entity.SetPosition(midPoint.ToVector2());
         }
@@ -116,7 +116,7 @@ namespace PuppetRoguelite
 
             //boss above pre boss
             _bossPoint = new Point(_preBossPoint.X, _preBossPoint.Y - 1);
-            _nodes.Add(new RoomNode(_bossPoint, false, true, false, false, RoomType.Boss));
+            //_nodes.Add(new RoomNode(_bossPoint, false, true, false, false, RoomType.Boss));
             _graph.Walls.Add(_bossPoint);
 
             //left key
@@ -304,8 +304,8 @@ namespace PuppetRoguelite
                         if (!CreateMap(node, mapString)) return false;
                         break;
                     case RoomType.PreBoss:
-                        //CreateMap(node, Nez.Content.Tiled.Tilemaps.Pre_boss_room);
-                        if (!CreateMap(node)) return false;
+                        if (!CreateMap(node, Nez.Content.Tiled.Tilemaps.Pre_boss_room)) return false;
+                        //if (!CreateMap(node)) return false;
                         break;
                     case RoomType.Boss:
                         if (!CreateMap(node, Nez.Content.Tiled.Tilemaps.Boss_room)) return false;

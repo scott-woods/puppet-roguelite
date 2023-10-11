@@ -112,7 +112,37 @@ namespace PuppetRoguelite.Components
                         var translatedObjPosition = Entity.Position + new Vector2((int)keyChestObj.X, (int)keyChestObj.Y);
                         var entPosition = translatedObjPosition + new Vector2(keyChestObj.Width / 2, keyChestObj.Height / 2);
                         ent.SetPosition(entPosition);
-                        var chest = ent.AddComponent(new Chest());
+                        var chest = ent.AddComponent(new KeyChest());
+                    }
+                }
+            }
+
+            //pre boss stuff
+            if (_node.RoomType == RoomType.PreBoss)
+            {
+                //boss gate
+                var bossGateObjGroup = _map.GetObjectGroup("boss-gate");
+                if (bossGateObjGroup != null)
+                {
+                    var bossGateObj = bossGateObjGroup.Objects.FirstOrDefault();
+                    var ent = Entity.Scene.CreateEntity(bossGateObj.Name);
+                    var translatedPosition = Entity.Position + new Vector2((int)bossGateObj.X, (int)bossGateObj.Y);
+                    var entPosition = translatedPosition + new Vector2(bossGateObj.Width / 2, bossGateObj.Height / 2);
+                    ent.SetPosition(entPosition);
+                    ent.AddComponent(new BossGate());
+                }
+
+                //cereal shelves
+                var cerealShelvesObjGroup = _map.GetObjectGroup("shelves");
+                if (cerealShelvesObjGroup != null)
+                {
+                    foreach(var obj in cerealShelvesObjGroup.Objects)
+                    {
+                        var ent = Entity.Scene.CreateEntity(obj.Name);
+                        var translatedPosition = Entity.Position + new Vector2((int)obj.X, (int)obj.Y);
+                        var entPosition = translatedPosition + new Vector2(obj.Width / 2, obj.Height / 2);
+                        ent.SetPosition(entPosition);
+                        ent.AddComponent(new CerealShelf());
                     }
                 }
             }

@@ -12,6 +12,7 @@ namespace PuppetRoguelite.UI
     public class Textbox : UICanvas
     {
         float _horizontalPad = 8;
+        float _spacing = 2;
 
         public bool IsFinishedReading = false;
 
@@ -51,12 +52,11 @@ namespace PuppetRoguelite.UI
             //create textbox
             _box = new Table();
             _box.Top().Left();
-            _box.Defaults().SetPadTop(4).SetPadBottom(4).SetSpaceRight(2);
+            _box.Defaults().SetPadTop(4).SetPadBottom(4).SetSpaceRight(_spacing);
             _box.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
             var width = 480 * .8f;
             var height = (float)Math.Round(270 * .38f);
             _table.Add(_box).Expand().Width(width).Height(height).Bottom();
-            _box.SetDebug(true);
 
             //asterisk
             _asterisk = new Label("*", _basicSkin);
@@ -68,7 +68,7 @@ namespace PuppetRoguelite.UI
 
         public void ReadLine(DialogueLine line)
         {
-            var maxWidth = _table.GetCell(_box).GetPrefWidth() - _box.GetCell(_asterisk).GetPrefWidth() - 16 - (_horizontalPad * 2);
+            var maxWidth = _table.GetCell(_box).GetPrefWidth() - _box.GetCell(_asterisk).GetPrefWidth() - 32 - (_horizontalPad * 2) - _spacing;
             _readTextCoroutine = Game1.StartCoroutine(ReadText(GetWrappedText(line.Text, maxWidth)));
         }
 

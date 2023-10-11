@@ -25,6 +25,8 @@
     <None Remove="Content\Textures\Characters\Player\hooded_knight_hurt.png" />
     <None Remove="Content\Textures\Characters\Player\hooded_knight_idle.png" />
     <None Remove="Content\Textures\Characters\Player\hooded_knight_run.png" />
+    <None Remove="Content\Textures\Objects\boss_gate.png" />
+    <None Remove="Content\Textures\Objects\shelf.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 000.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 001.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 002.png" />

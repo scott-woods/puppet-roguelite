@@ -45,7 +45,7 @@ namespace PuppetRoguelite.SceneComponents
         {
             //reset everything
             _active = false;
-            _dialogueLines.Clear();
+            //_dialogueLines.Clear();
             Scene.Camera.Entity.RemoveComponent(_textbox);
             _textbox = null;
             _page = 0;

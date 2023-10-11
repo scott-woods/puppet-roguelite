@@ -10,6 +10,9 @@ namespace PuppetRoguelite.Components
 {
     public class Interactable : Component
     {
+        /// <summary>
+        /// bool to determine if this can be interacted with currently
+        /// </summary>
         public bool Active { get; set; }
         public Emitter<InteractableEvents> Emitter = new Emitter<InteractableEvents>();
 

@@ -14,6 +14,7 @@ namespace PuppetRoguelite.Enums
         PlayerDamage = 3,
         EnemyDamage = 4,
         Collider = 5,
-        Chest = 6
+        Chest = 6,
+        Interactable = 7
     }
 }
