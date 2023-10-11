@@ -9,6 +9,7 @@ using Nez.UI;
 using PuppetRoguelite.Components.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI;
 using System;
@@ -32,9 +33,11 @@ namespace PuppetRoguelite.Components.Characters
         VirtualIntegerAxis _xAxisInput;
         VirtualIntegerAxis _yAxisInput;
         VirtualButton _actionInput;
+        VirtualButton _checkInput;
 
         //stats
         float _moveSpeed = 150f;
+        float _raycastDistance = 10f;
 
         //components
         Mover _mover;
@@ -78,15 +81,15 @@ namespace PuppetRoguelite.Components.Characters
             _mover = Entity.AddComponent(new Mover());
 
             //Add hurtbox
-            var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
-            hurtboxCollider.IsTrigger = true;
-            hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerHurtbox;
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
+            //var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
+            //hurtboxCollider.IsTrigger = true;
+            //hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerHurtbox;
+            //_hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
             _collider.PhysicsLayer = (int)PhysicsLayers.Collider;
-            _collider.RegisterColliderWithPhysicsSystem();
+            //_collider.RegisterColliderWithPhysicsSystem();
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
@@ -106,6 +109,10 @@ namespace PuppetRoguelite.Components.Characters
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+
+            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
+            textboxManager.Emitter.AddObserver(TextboxEvents.TextboxOpened, OnTextboxOpened);
+            textboxManager.Emitter.AddObserver(TextboxEvents.TextboxClosed, OnTextboxClosed);
         }
 
         void SetupInput()
@@ -122,6 +129,9 @@ namespace PuppetRoguelite.Components.Characters
 
             _actionInput = new VirtualButton();
             _actionInput.AddKeyboardKey(Keys.Space);
+
+            _checkInput = new VirtualButton();
+            _checkInput.AddKeyboardKey(Keys.Z);
         }
 
         void AddAnimations()
@@ -209,7 +219,34 @@ namespace PuppetRoguelite.Components.Characters
             return _actionInput.IsPressed;
         }
 
-        public void HandleInput()
+        public void HandleCheck()
+        {
+            if (_checkInput.IsPressed)
+            {
+                var raycastHit = Physics.Linecast(Entity.Position, Entity.Position + (_lastNonZeroDirection * _raycastDistance));
+
+                if (raycastHit.Collider != null)
+                {
+                    if (raycastHit.Collider.Entity.TryGetComponent<Interactable>(out var interactable))
+                    {
+                        interactable.Interact();
+                    }
+                }
+                else
+                {
+                    var overlap = Physics.OverlapRectangle(new RectangleF(Entity.Position, new Vector2(16, 16)));
+                    if (overlap != null)
+                    {
+                        if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))
+                        {
+                            interactable.Interact();
+                        }
+                    }
+                }
+            }
+        }
+
+        public void HandleMovementInput()
         {
             //get movement inputs
             var newDirection = new Vector2(_xAxisInput.Value, _yAxisInput.Value);
@@ -273,6 +310,16 @@ namespace PuppetRoguelite.Components.Characters
         {
             StateMachine.ChangeState<PlayerDefault>();
         }
+
+        void OnTextboxOpened()
+        {
+            StateMachine.ChangeState<PlayerIdle>();
+        }
+
+        void OnTextboxClosed()
+        {
+            StateMachine.ChangeState<PlayerDefault>();
+        }
     }
 
     #region STATE MACHINE
@@ -300,7 +347,7 @@ namespace PuppetRoguelite.Components.Characters
                 return;
             }
 
-            _context.HandleInput();
+            _context.HandleMovementInput();
         }
     }
 
@@ -308,7 +355,8 @@ namespace PuppetRoguelite.Components.Characters
     {
         public override void Update(float deltaTime)
         {
-            _context.HandleInput();
+            _context.HandleCheck();
+            _context.HandleMovementInput();
         }
     }
 

@@ -12,6 +12,8 @@
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Fonts\abaddon_light.fnt" />
+    <None Remove="Content\Fonts\abaddon_light_0.png" />
     <None Remove="Content\Textures\Characters\ChainBot\charge.png" />
     <None Remove="Content\Textures\Characters\ChainBot\death.png" />
     <None Remove="Content\Textures\Characters\ChainBot\hit.png" />

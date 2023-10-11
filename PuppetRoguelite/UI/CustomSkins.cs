@@ -21,6 +21,7 @@ namespace PuppetRoguelite.UI
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style3/Atlas/icons_style_3.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style4/Atlas/icons_style_4.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Menu/Style3/Atlas/menu_style_3.atlas"));
+            skin.Add("font_abaddon_light", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light));
 
             var subTexture = skin.GetSprite("Inventory_01");
             var ninePatch = new NinePatchDrawable(subTexture, 16, 16, 16, 16);
@@ -39,7 +40,7 @@ namespace PuppetRoguelite.UI
             //text buttons
             skin.Add("listButton", new TextButtonStyle()
             {
-                Font = Graphics.Instance.BitmapFont,
+                Font = skin.GetFont("font_abaddon_light"),
                 Up = new PrimitiveDrawable(Color.Transparent),
                 Down = new PrimitiveDrawable(Color.Yellow),
                 Over = new PrimitiveDrawable(Color.Black),
@@ -58,7 +59,7 @@ namespace PuppetRoguelite.UI
             //label
             skin.Add("defaultLabel", new LabelStyle()
             {
-                Font = Graphics.Instance.BitmapFont,
+                Font = skin.GetFont("font_abaddon_light"),
                 FontColor = Color.White
             });
 

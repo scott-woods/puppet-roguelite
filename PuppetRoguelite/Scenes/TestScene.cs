@@ -9,6 +9,7 @@ using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.UI;
 using PuppetRoguelite.UI.HUDs;
 using System;
 using System.Collections.Generic;

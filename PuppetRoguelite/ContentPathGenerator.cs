@@ -24,6 +24,12 @@ namespace Nez
 
 		}
 
+		public static class Fonts
+		{
+			public const string Abaddon_light = @"Content\Fonts\abaddon_light.fnt";
+			public const string Abaddon_light_0 = @"Content\Fonts\abaddon_light_0.png";
+		}
+
 		public static class Textures
 		{
 			public static class Characters
@@ -50,8 +56,14 @@ namespace Nez
 
 			}
 
+			public static class Objects
+			{
+				public const string Chest = @"Content\Textures\Objects\chest.png";
+			}
+
 			public static class Tilesets
 			{
+				public const string Dungeon_prison_props = @"Content\Textures\Tilesets\dungeon_prison_props.png";
 				public const string Dungeon_prison_tileset = @"Content\Textures\Tilesets\dungeon_prison_tileset.png";
 			}
 
@@ -805,9 +817,11 @@ namespace Nez
 
 			public static class Tilesets
 			{
+				public const string Dungeon_prison_props = @"Content\Tiled\Tilesets\dungeon_prison_props.tsx";
 				public const string Dungeon_prison_tileset = @"Content\Tiled\Tilesets\dungeon_prison_tileset.tsx";
 			}
 
+			public const string Puppet_roguelite = @"Content\Tiled\puppet_roguelite.tiled-session";
 		}
 
 

@@ -100,6 +100,23 @@ namespace PuppetRoguelite.Components
                 }
             }
 
+            //key chests
+            if (_node.RoomType == RoomType.Key)
+            {
+                var keyChestObjGroup = _map.GetObjectGroup("key-chests");
+                if (keyChestObjGroup != null)
+                {
+                    foreach(var keyChestObj in  keyChestObjGroup.Objects)
+                    {
+                        var ent = Entity.Scene.CreateEntity(keyChestObj.Name);
+                        var translatedObjPosition = Entity.Position + new Vector2((int)keyChestObj.X, (int)keyChestObj.Y);
+                        var entPosition = translatedObjPosition + new Vector2(keyChestObj.Width / 2, keyChestObj.Height / 2);
+                        ent.SetPosition(entPosition);
+                        var chest = ent.AddComponent(new Chest());
+                    }
+                }
+            }
+
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
