@@ -60,12 +60,14 @@ namespace PuppetRoguelite.Components
                         var key = keys.First() as CerealBox;
                         var lines = new List<DialogueLine>()
                         {
-                            new DialogueLine($"You try slotting the ${key.Name} box into the shelf..."),
+                            new DialogueLine($"You try slotting the {key.Name} box into the shelf..."),
                             new DialogueLine($"Perfect fit! So, so satisfying.")
                         };
                         inventory.RemoveItem(key);
                         _slottedBox = key;
                         _slotted = true;
+
+                        textboxManager.DisplayTextbox(lines);
 
                         var bossGate = Entity.Scene.FindComponentOfType<BossGate>();
                         if (bossGate != null)
@@ -79,7 +81,7 @@ namespace PuppetRoguelite.Components
             {
                 textboxManager.DisplayTextbox(new List<DialogueLine>()
                 {
-                    new DialogueLine($"The box of ${_slottedBox.Name} is resting just where you left it.")
+                    new DialogueLine($"The box of {_slottedBox.Name} is resting just where you left it.")
                 });
             }
         }

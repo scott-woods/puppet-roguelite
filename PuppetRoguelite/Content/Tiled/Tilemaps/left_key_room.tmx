@@ -115,7 +115,6 @@
  </layer>
  <objectgroup id="7" name="key-chests">
   <object id="12" x="160" y="48" width="16" height="32"/>
-  <object id="14" x="0" y="0" width="384" height="384"/>
  </objectgroup>
  <objectgroup id="4" name="enemy-spawn-points">
   <object id="3" x="80" y="144" width="16" height="16"/>

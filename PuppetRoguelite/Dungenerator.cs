@@ -38,6 +38,8 @@ namespace PuppetRoguelite
             new Map(Nez.Content.Tiled.Tilemaps.R_1, false, false, false, true)
         };
 
+        Map _preBossMap = new Map(Nez.Content.Tiled.Tilemaps.Pre_boss_room, false, true, true, true);
+
         AstarGridGraph _graph;
 
         Point _hubPoint, _preBossPoint, _bossPoint, _leftKeyPoint, _rightKeyPoint;
@@ -57,6 +59,7 @@ namespace PuppetRoguelite
                 var graphSuccess = CreateGraph();
                 var pathsSuccess = CreatePaths();
                 var mapsSuccess = CreateMaps();
+                ProcessUnconnectedDoors();
 
                 if (!graphSuccess || !pathsSuccess || !mapsSuccess)
                 {
@@ -94,7 +97,7 @@ namespace PuppetRoguelite
 
             //random position for starting location
             _hubPoint = new Point(Nez.Random.NextInt((int)_gridSize.X), Nez.Random.NextInt((int)_gridSize.Y));
-            _nodes.Add(new RoomNode(_hubPoint, true, true, true, true, RoomType.Hub));
+            _nodes.Add(new RoomNode(_hubPoint, true, true, true, true, RoomType.Hub, _nodes));
 
             //pre boss room a certain distance from starting room
             bool bossRoomPlaced = false;
@@ -109,7 +112,7 @@ namespace PuppetRoguelite
                 if (path.Count >= 4)
                 {
                     _preBossPoint = potentialPos;
-                    _nodes.Add(new RoomNode(_preBossPoint, true, true, true, true, RoomType.PreBoss));
+                    _nodes.Add(new RoomNode(_preBossPoint, false, true, true, true, RoomType.PreBoss, _nodes));
                     bossRoomPlaced = true;
                 }
             }
@@ -146,7 +149,7 @@ namespace PuppetRoguelite
                 }
 
                 _leftKeyPoint = potentialPoint;
-                _nodes.Add(new RoomNode(_leftKeyPoint, false, false, false, true, RoomType.Key));
+                _nodes.Add(new RoomNode(_leftKeyPoint, false, false, false, true, RoomType.Key, _nodes));
                 _graph.Walls.Add(_leftKeyPoint);
                 leftKeyPlaced = true;
             }
@@ -178,7 +181,7 @@ namespace PuppetRoguelite
                 }
 
                 _rightKeyPoint = potentialPoint;
-                _nodes.Add(new RoomNode(_rightKeyPoint, false, false, true, false, RoomType.Key));
+                _nodes.Add(new RoomNode(_rightKeyPoint, false, false, true, false, RoomType.Key, _nodes));
                 _graph.Walls.Add(_rightKeyPoint);
                 rightKeyPlaced = true;
             }
@@ -212,7 +215,7 @@ namespace PuppetRoguelite
                 }
                 else
                 {
-                    node = new RoomNode(pathPoint, false, false, true, false, RoomType.Normal);
+                    node = new RoomNode(pathPoint, false, false, true, false, RoomType.Normal, _nodes);
                     _nodes.Add(node);
                 }
             }
@@ -238,7 +241,7 @@ namespace PuppetRoguelite
                 }
                 else
                 {
-                    node = new RoomNode(pathPoint, false, false, false, true, RoomType.Normal);
+                    node = new RoomNode(pathPoint, false, false, false, true, RoomType.Normal, _nodes);
                     _nodes.Add(node);
                 }
             }
@@ -277,7 +280,7 @@ namespace PuppetRoguelite
                 }
                 else
                 {
-                    node = new RoomNode(pathPoint, false, false, false, false, RoomType.Normal);
+                    node = new RoomNode(pathPoint, false, false, false, false, RoomType.Normal, _nodes);
                     _nodes.Add(node);
                 }
             }
@@ -315,6 +318,8 @@ namespace PuppetRoguelite
                         break;
                 }
             }
+
+
 
             return true;
         }
@@ -419,6 +424,46 @@ namespace PuppetRoguelite
             else
             {
                 return false;
+            }
+        }
+
+        void ProcessUnconnectedDoors()
+        {
+            var nodesToProcess = new Queue<RoomNode>(_nodes);
+            while (nodesToProcess.Count > 0)
+            {
+                var node = nodesToProcess.Dequeue();
+                var unconnectedDoors = node.GetUnconnectedDoors();
+                foreach (var direction in unconnectedDoors)
+                {
+                    var adjacentPoint = GetAdjacentPoint(node.Point, direction);
+                    var adjacentNode = _nodes.FirstOrDefault(n => n.Point == adjacentPoint);
+                    if (adjacentNode == null)
+                    {
+                        // Create a new room at the adjacent point
+                        adjacentNode = new RoomNode(adjacentPoint, false, false, false, false, RoomType.Normal, _nodes);
+                        _nodes.Add(adjacentNode);
+                        CreateMap(adjacentNode);
+
+                        nodesToProcess.Enqueue(adjacentNode);
+                    }
+
+                    // Update the doors to indicate a connection
+                    //UpdateDoorConnection(node, direction, true);
+                    //UpdateDoorConnection(adjacentNode, OppositeDirection(direction), true);
+                }
+            }
+        }
+
+        Point GetAdjacentPoint(Point point, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Up: return new Point(point.X, point.Y - 1);
+                case Direction.Down: return new Point(point.X, point.Y + 1);
+                case Direction.Left: return new Point(point.X - 1, point.Y);
+                case Direction.Right: return new Point(point.X + 1, point.Y);
+                default: throw new ArgumentException("Invalid direction");
             }
         }
     }

@@ -72,8 +72,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 191.66666666666663,
-                "y": 191.66666666666669
+                "x": 184.33333333333331,
+                "y": 240.66666666666666
             }
         },
         "Tilemaps/B_1.tmx": {
@@ -162,10 +162,10 @@
                 5
             ],
             "scale": 1,
-            "selectedLayer": 5,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 191.5,
-                "y": 192.5
+                "y": 193
             }
         },
         "Tilemaps/TLR_1.tmx": {
@@ -234,18 +234,23 @@
                 5
             ],
             "scale": 1,
-            "selectedLayer": 3,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 207.5,
-                "y": 222
+                "x": 192.5,
+                "y": 192
             }
         },
         "Tilemaps/pre_boss_room.tmx": {
+            "expandedObjectLayers": [
+                8,
+                6,
+                7
+            ],
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 139.5,
-                "y": 222
+                "y": 221
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -295,6 +300,7 @@
     ],
     "project": "puppet_roguelite.tiled-project",
     "recentFiles": [
+        "Tilemaps/left_key_room.tmx",
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx",
         "Tilesets/dungeon_prison_props.tsx",
         "Tilemaps/boss_room.tmx",
@@ -305,8 +311,7 @@
         "Tilemaps/LR_1.tmx",
         "Tilemaps/TB_1.tmx",
         "Tilemaps/TBL_1.tmx",
-        "Tilemaps/TBLR_1.tmx",
-        "Tilemaps/TBR_1.tmx"
+        "Tilemaps/TBLR_1.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

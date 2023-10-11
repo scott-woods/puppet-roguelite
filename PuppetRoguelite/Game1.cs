@@ -10,6 +10,7 @@ namespace PuppetRoguelite
     public class Game1 : Core
     {
         public static Point DesignResolution = new Point(480, 270);
+        public static SceneManager SceneManager = new SceneManager();
 
         protected override void Initialize()
         {
@@ -18,6 +19,8 @@ namespace PuppetRoguelite
             DebugRenderEnabled = false;
             Window.AllowUserResizing = true;
             IsFixedTimeStep = false;
+
+            RegisterGlobalManager(SceneManager);
 
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);

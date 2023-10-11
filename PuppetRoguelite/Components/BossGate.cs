@@ -1,6 +1,8 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ namespace PuppetRoguelite.Components
 
         SpriteRenderer _renderer;
         Collider _collider;
+        ExitArea _exitArea;
 
         public override void Initialize()
         {
@@ -30,6 +33,8 @@ namespace PuppetRoguelite.Components
             _renderer.SetSprite(_closedSprite);
 
             _collider = Entity.AddComponent(new BoxCollider());
+
+            _exitArea = new ExitArea(typeof(BossRoom), new Vector2(32, 16), new Vector2(0, 16));
         }
 
         public void AddKey()
@@ -40,6 +45,7 @@ namespace PuppetRoguelite.Components
             {
                 _renderer.SetSprite(_openSprite);
                 _collider.SetEnabled(false);
+                Entity.AddComponent(_exitArea);
             }
         }
     }

@@ -5,6 +5,7 @@ using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace PuppetRoguelite.Components
         List<Gate> _gates = new List<Gate>();
         List<EnemySpawnPoint> _enemySpawnPoints = new List<EnemySpawnPoint>();
         List<Enemy> _enemies = new List<Enemy>();
+        List<ExitArea> _exitAreas = new List<ExitArea>();
 
         public GridGraphManager GridGraphManager { get; set; }
 
@@ -73,19 +75,32 @@ namespace PuppetRoguelite.Components
             }
 
             //triggers
-            var triggerObjGroup = _map.GetObjectGroup("entrance-triggers");
-            if (triggerObjGroup != null)
-            {
-                for (int i = 0; i < triggerObjGroup.Objects.Count; i++)
-                {
-                    var trigger = triggerObjGroup.Objects[i];
+            //var triggerObjGroup = _map.GetObjectGroup("entrance-triggers");
+            //if (triggerObjGroup != null)
+            //{
+            //    for (int i = 0; i < triggerObjGroup.Objects.Count; i++)
+            //    {
+            //        var trigger = triggerObjGroup.Objects[i];
 
-                    var ent = Entity.Scene.CreateEntity(trigger.Name);
-                    ent.SetPosition(Entity.Position + new Vector2((int)trigger.X, (int)trigger.Y));
-                    ent.AddComponent(new EntranceTrigger(trigger, this));
-                    _triggerEntities.Add(ent);
-                }
-            }
+            //        var ent = Entity.Scene.CreateEntity(trigger.Name);
+            //        ent.SetPosition(Entity.Position + new Vector2((int)trigger.X, (int)trigger.Y));
+            //        ent.AddComponent(new EntranceTrigger(trigger, this));
+            //        _triggerEntities.Add(ent);
+            //    }
+            //}
+
+            //exit areas
+            //var exitAreaObjGroup = _map.GetObjectGroup("exit-areas");
+            //if (exitAreaObjGroup != null)
+            //{
+            //    foreach(var exitAreaObj in  exitAreaObjGroup.Objects)
+            //    {
+            //        var ent = Entity.Scene.CreateEntity(exitAreaObj.Name);
+            //        ent.SetPosition(Entity.Position + new Vector2((int)exitAreaObj.X, (int)exitAreaObj.Y));
+            //        var exitArea = ent.AddComponent(new ExitArea(typeof(BossRoom), exitAreaObj));
+            //        _exitAreas.Add(exitArea);
+            //    }
+            //}
 
             //enemy spawns
             var enemySpawnObjGroup = _map.GetObjectGroup("enemy-spawn-points");
