@@ -8,41 +8,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.TiledComponents
 {
-    public class Gate : Component
+    public class Gate : TiledComponent
     {
-        TmxObject _gateObj;
-
         Collider _collider;
 
-        public Gate(TmxObject gateObj)
+        public Gate(TmxObject gateObj, string mapId) : base(gateObj, mapId)
         {
-            _gateObj = gateObj;
+
         }
 
         public override void Initialize()
         {
             base.Initialize();
 
-            _collider = new BoxCollider(_gateObj.Width, _gateObj.Height);
-            _collider.LocalOffset = new Vector2(_gateObj.Width / 2, _gateObj.Height / 2);
+            _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
+            //_collider.LocalOffset = new Vector2(TmxObject.Width / 2, TmxObject.Height / 2);
             Entity.AddComponent(_collider);
             _collider.SetEnabled(false);
 
-            _gateObj.Visible = false;
+            TmxObject.Visible = true;
         }
 
         public void Lock()
         {
             _collider.SetEnabled(true);
-            _gateObj.Visible = true;
+            TmxObject.Visible = true;
         }
 
         public void Unlock()
         {
             _collider.SetEnabled(false);
-            _gateObj.Visible = false;
+            TmxObject.Visible = false;
         }
     }
 }

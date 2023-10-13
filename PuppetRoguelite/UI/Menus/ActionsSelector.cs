@@ -124,7 +124,7 @@ namespace PuppetRoguelite.UI.Menus
 
         void OnToolButtonClicked(Button obj)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         void OnItemButtonClicked(Button obj)

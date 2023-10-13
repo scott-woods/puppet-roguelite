@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using Nez.Tiled;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
@@ -10,9 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.TiledComponents
 {
-    public class CerealShelf : Component
+    public class Shelf : TiledComponent
     {
         List<DialogueLine> _noKeyLines = new List<DialogueLine>()
         {
@@ -28,12 +29,17 @@ namespace PuppetRoguelite.Components
         Collider _collider;
         Interactable _interactable;
 
+        public Shelf(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        {
+
+        }
+
         public override void Initialize()
         {
             base.Initialize();
 
             _renderer = Entity.AddComponent(new SpriteRenderer());
-            _renderer.SetSprite(new Sprite(Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Shelf)));
+            _renderer.SetSprite(new Sprite(Entity.Scene.Content.LoadTexture(Content.Textures.Objects.Shelf)));
 
             _collider = Entity.AddComponent(new BoxCollider());
             _collider.PhysicsLayer = (int)PhysicsLayers.Interactable;

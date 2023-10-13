@@ -50,7 +50,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         #region SETUP
 
-        public ChainBot(DungeonRoom room) : base(room)
+        public ChainBot(string mapId) : base(mapId)
         {
 
         }
@@ -88,7 +88,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _healthComponent = Entity.AddComponent(new HealthComponent(1, 1));
 
             //pathfinding
-            Pathfinder = Entity.AddComponent(new PathfindingComponent(DungeonRoom.GridGraphManager));
+            Pathfinder = Entity.AddComponent(new PathfindingComponent(MapId));
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));

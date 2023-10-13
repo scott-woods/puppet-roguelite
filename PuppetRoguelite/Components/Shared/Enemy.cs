@@ -9,11 +9,18 @@ namespace PuppetRoguelite.Components.Shared
 {
     public abstract class Enemy : Component
     {
-        public DungeonRoom DungeonRoom { get; set; }
+        //public DungeonRoom DungeonRoom { get; set; }
 
-        public Enemy(DungeonRoom room)
+        //public Enemy(DungeonRoom room)
+        //{
+        //    DungeonRoom = room;
+        //}
+
+        public string MapId { get; set; }
+
+        public Enemy(string mapId)
         {
-            DungeonRoom = room;
+            MapId = mapId;
         }
     }
 }

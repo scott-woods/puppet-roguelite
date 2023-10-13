@@ -13,13 +13,17 @@ namespace PuppetRoguelite.SceneComponents
 {
     public class GridGraphManager : Component
     {
+        public string MapId { get; set; }
+
         AstarGridGraph _graph;
         TmxMap _map;
 
-        public GridGraphManager(AstarGridGraph graph, TmxMap map)
+        public GridGraphManager(AstarGridGraph graph, TmxMap map, string mapId)
         {
             _graph = graph;
             _map = map;
+
+            MapId = mapId;
         }
 
         public Point WorldToGridPosition(Vector2 worldPosition)

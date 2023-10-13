@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="14">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="29">
  <tileset firstgid="1" source="../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="3" name="floor" width="24" height="24">
   <data encoding="csv">
@@ -85,23 +85,39 @@
 0,0,0,0,0,0,0,0,0,0,502,0,0,502,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="enemy-spawn-points" class="enemy-spawn-point">
-  <object id="10" x="192" y="80" width="16" height="16"/>
-  <object id="11" x="144" y="144" width="16" height="16"/>
-  <object id="12" x="240" y="192" width="16" height="16"/>
-  <object id="13" x="160" y="224" width="16" height="16"/>
- </objectgroup>
- <objectgroup id="5" name="entrance-triggers">
-  <object id="7" x="304" y="192" width="16" height="32"/>
-  <object id="8" x="176" y="304" width="32" height="16"/>
-  <object id="9" class="entrance-trigger" x="64" y="192" width="16" height="32"/>
- </objectgroup>
- <objectgroup id="6" name="gates" class="gate">
-  <object id="1" gid="235" x="176" y="336" width="16" height="16"/>
-  <object id="2" gid="235" x="192" y="336" width="16" height="16"/>
-  <object id="3" gid="235" x="48" y="208" width="16" height="16"/>
-  <object id="4" gid="235" x="48" y="224" width="16" height="16"/>
-  <object id="5" gid="235" x="320" y="224" width="16" height="16"/>
-  <object id="6" gid="235" x="320" y="208" width="16" height="16"/>
+ <objectgroup id="7" name="entities">
+  <object id="14" type="Trigger" x="176" y="288" width="32" height="16">
+   <properties>
+    <property name="TriggerType" propertytype="triggerType" value="EnemySpawn"/>
+   </properties>
+  </object>
+  <object id="16" type="Trigger" x="80" y="192" width="16" height="32">
+   <properties>
+    <property name="TriggerType" propertytype="triggerType" value="EnemySpawn"/>
+   </properties>
+  </object>
+  <object id="17" type="Trigger" x="288" y="192" width="16" height="32">
+   <properties>
+    <property name="TriggerType" propertytype="triggerType" value="EnemySpawn"/>
+   </properties>
+  </object>
+  <object id="18" type="EnemySpawnPoint" x="144" y="144">
+   <point/>
+  </object>
+  <object id="19" type="EnemySpawnPoint" x="224" y="144">
+   <point/>
+  </object>
+  <object id="20" type="EnemySpawnPoint" x="240" y="240">
+   <point/>
+  </object>
+  <object id="21" type="EnemySpawnPoint" x="160" y="240">
+   <point/>
+  </object>
+  <object id="22" type="Gate" gid="235" x="176" y="320" width="16" height="16"/>
+  <object id="23" type="Gate" gid="235" x="192" y="320" width="16" height="16"/>
+  <object id="24" type="Gate" gid="235" x="64" y="208" width="16" height="16"/>
+  <object id="25" type="Gate" gid="235" x="64" y="224" width="16" height="16"/>
+  <object id="26" type="Gate" gid="235" x="304" y="224" width="16" height="16"/>
+  <object id="28" type="Gate" gid="235" x="304" y="208" width="16" height="16"/>
  </objectgroup>
 </map>

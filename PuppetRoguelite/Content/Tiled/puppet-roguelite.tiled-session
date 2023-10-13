@@ -1,0 +1,223 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "Tilemaps"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx": {
+            "scale": 1.096458333333333,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 320.57761732851986,
+                "y": 240.77522325669776
+            }
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx#tileset": {
+            "scaleInDock": 1
+        },
+        "Tilemaps/BLR_1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1.3705729166666665,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 112.72658179745395,
+                "y": 216.69770093102792
+            }
+        },
+        "Tilemaps/BL_1.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 111.5,
+                "y": 315
+            }
+        },
+        "Tilemaps/BR_1.tmx": {
+            "expandedObjectLayers": [
+                4,
+                5,
+                7
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 224.5,
+                "y": 252
+            }
+        },
+        "Tilemaps/B_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 192.25536766102988,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/LR_1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 111.5,
+                "y": 126
+            }
+        },
+        "Tilemaps/L_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102988,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/R_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102988,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/TBLR_1.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1.3705729166666665,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 342.55747672430175,
+                "y": 207.2126163784914
+            }
+        },
+        "Tilemaps/TBL_1.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1.3705729166666665,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 55.816074482234484,
+                "y": 207.2126163784914
+            }
+        },
+        "Tilemaps/TBR_1.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 327.5,
+                "y": 207
+            }
+        },
+        "Tilemaps/TB_1.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 125.5,
+                "y": 163
+            }
+        },
+        "Tilemaps/TLR_1.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 191.5,
+                "y": 119
+            }
+        },
+        "Tilemaps/TL_1.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 191.5,
+                "y": 151
+            }
+        },
+        "Tilemaps/TR_1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 295.5,
+                "y": 206
+            }
+        },
+        "Tilemaps/boss_room.tmx": {
+            "expandedObjectLayers": [
+                4,
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 191.5,
+                "y": 374
+            }
+        },
+        "Tilemaps/left_key_room.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 1.3705729166666665,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 240.4104123123694,
+                "y": 218.15694470834129
+            }
+        },
+        "Tilemaps/pre_boss_room.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 122.21166634999054,
+                "y": 155.40946228386855
+            }
+        },
+        "Tilemaps/right_key_room.tmx": {
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 1.3705729166666665,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 128.0486414592438,
+                "y": 202.10526315789477
+            }
+        }
+    },
+    "last.objectTemplatePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Templates",
+    "openFiles": [
+    ],
+    "project": "puppet-roguelite.tiled-project",
+    "property.type": "triggerType",
+    "recentFiles": [
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx",
+        "Tilemaps/R_1.tmx",
+        "Tilemaps/L_1.tmx"
+    ]
+}

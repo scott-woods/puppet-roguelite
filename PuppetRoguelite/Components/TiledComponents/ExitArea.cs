@@ -8,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.TiledComponents
 {
     /// <summary>
     /// includes a collider with a trigger to transition to a new scene
     /// </summary>
-    public class ExitArea : Component, ITriggerListener
+    public class ExitArea : TiledComponent, ITriggerListener
     {
         Collider _collider;
 
@@ -21,11 +21,9 @@ namespace PuppetRoguelite.Components
         Vector2 _size;
         Vector2 _offset;
 
-        public ExitArea(Type sceneType, Vector2 size, Vector2 offset)
+        public ExitArea(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
         {
-            _sceneType = sceneType;
-            _size = size;
-            _offset = offset;
+
         }
 
         public override void Initialize()

@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using Nez.Tiled;
 using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.TiledComponents
 {
-    public class BossGate : Component
+    public class BossGate : TiledComponent
     {
         int _keysAdded = 0;
 
@@ -21,11 +22,16 @@ namespace PuppetRoguelite.Components
         Collider _collider;
         ExitArea _exitArea;
 
+        public BossGate(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        {
+
+        }
+
         public override void Initialize()
         {
             base.Initialize();
 
-            var bossGateTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Boss_gate);
+            var bossGateTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Objects.Boss_gate);
             _openSprite = new Sprite(bossGateTexture, 32, 0, 32, 48);
             _closedSprite = new Sprite(bossGateTexture, 0, 0, 32, 48);
 
@@ -34,7 +40,14 @@ namespace PuppetRoguelite.Components
 
             _collider = Entity.AddComponent(new BoxCollider());
 
-            _exitArea = new ExitArea(typeof(BossRoom), new Vector2(32, 16), new Vector2(0, 16));
+            //_exitArea = new ExitArea(typeof(BossRoom), new Vector2(32, 16), new Vector2(0, 16));
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            _exitArea = Entity.Scene.FindComponentsOfType<ExitArea>().Where(e => e.MapId == MapId).FirstOrDefault();
         }
 
         public void AddKey()

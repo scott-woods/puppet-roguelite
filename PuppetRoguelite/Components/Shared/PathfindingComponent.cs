@@ -12,6 +12,8 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class PathfindingComponent : Component
     {
+        string _mapId;
+
         GridGraphManager _gridGraphManager;
 
         List<Vector2> _currentPath;
@@ -24,16 +26,21 @@ namespace PuppetRoguelite.Components.Shared
 
         Vector2? _target;
 
-        public PathfindingComponent(GridGraphManager gridGraphManager)
+        //public PathfindingComponent(GridGraphManager gridGraphManager)
+        //{
+        //    _gridGraphManager = gridGraphManager;
+        //}
+
+        public PathfindingComponent(string mapId)
         {
-            _gridGraphManager = gridGraphManager;
+            _mapId = mapId;
         }
 
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
 
-            //_gridGraphManager = Entity.Scene.GetSceneComponent<GridGraphManager>();
+            _gridGraphManager = Entity.Scene.FindComponentsOfType<GridGraphManager>().Where(g => g.MapId == _mapId).FirstOrDefault();
 
             _timer = Core.Schedule(_updatePathInterval, true, timer => CalculatePath());
         }

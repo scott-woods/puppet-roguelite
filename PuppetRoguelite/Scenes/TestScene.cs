@@ -80,6 +80,9 @@ namespace PuppetRoguelite.Scenes
             //add combat manager
             AddSceneComponent(new CombatManager());
 
+            //add tiled object handler
+            AddSceneComponent(new TiledObjectHandler());
+
             //add dungenerator
             _dungenerator = AddSceneComponent(new Dungenerator());
         }

@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Scenes
 {
-    public class BossRoom : Scene
+    public class BossRoom : BaseScene
     {
+        public override void Initialize()
+        {
+            base.Initialize();
+
+
+        }
     }
 }
