@@ -63,4 +63,14 @@ namespace PuppetRoguelite
             return RoomNodes.Where(n => n.Point == point).Any();
         }
     }
+
+    public enum RoomType
+    {
+        Unassigned,
+        Normal,
+        Key,
+        PreBoss,
+        Boss,
+        Hub
+    }
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Systems;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Scenes;
 
 namespace PuppetRoguelite

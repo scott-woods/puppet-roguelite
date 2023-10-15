@@ -2,7 +2,7 @@
 using Nez;
 using Nez.AI.Pathfinding;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite
+namespace PuppetRoguelite.SceneComponents
 {
     public class Dungenerator : SceneComponent
     {
@@ -21,24 +21,24 @@ namespace PuppetRoguelite
 
         List<Map> _maps = new List<Map>()
         {
-            new Map(Nez.Content.Tiled.Tilemaps.TBLR_1, true, true, true, true),
-            new Map(Nez.Content.Tiled.Tilemaps.TBL_1, true, true, true, false),
-            new Map(Nez.Content.Tiled.Tilemaps.TBR_1, true, true, false, true),
-            new Map(Nez.Content.Tiled.Tilemaps.TLR_1, true, false, true, true),
-            new Map(Nez.Content.Tiled.Tilemaps.BLR_1, false, true, true, true),
-            new Map(Nez.Content.Tiled.Tilemaps.TB_1, true, true, false, false),
-            new Map(Nez.Content.Tiled.Tilemaps.TL_1, true, false, true, false),
-            new Map(Nez.Content.Tiled.Tilemaps.TR_1, true, false, false, true),
-            new Map(Nez.Content.Tiled.Tilemaps.BL_1, false, true, true, false),
-            new Map(Nez.Content.Tiled.Tilemaps.BR_1, false, true, false, true),
-            new Map(Nez.Content.Tiled.Tilemaps.LR_1, false, false, true, true),
-            new Map(Nez.Content.Tiled.Tilemaps.T_1, true, false, false, false),
-            new Map(Nez.Content.Tiled.Tilemaps.B_1, false, true, false, false),
-            new Map(Nez.Content.Tiled.Tilemaps.L_1, false, false, true, false),
-            new Map(Nez.Content.Tiled.Tilemaps.R_1, false, false, false, true)
+            new Map(Content.Tiled.Tilemaps.TBLR_1, true, true, true, true),
+            new Map(Content.Tiled.Tilemaps.TBL_1, true, true, true, false),
+            new Map(Content.Tiled.Tilemaps.TBR_1, true, true, false, true),
+            new Map(Content.Tiled.Tilemaps.TLR_1, true, false, true, true),
+            new Map(Content.Tiled.Tilemaps.BLR_1, false, true, true, true),
+            new Map(Content.Tiled.Tilemaps.TB_1, true, true, false, false),
+            new Map(Content.Tiled.Tilemaps.TL_1, true, false, true, false),
+            new Map(Content.Tiled.Tilemaps.TR_1, true, false, false, true),
+            new Map(Content.Tiled.Tilemaps.BL_1, false, true, true, false),
+            new Map(Content.Tiled.Tilemaps.BR_1, false, true, false, true),
+            new Map(Content.Tiled.Tilemaps.LR_1, false, false, true, true),
+            new Map(Content.Tiled.Tilemaps.T_1, true, false, false, false),
+            new Map(Content.Tiled.Tilemaps.B_1, false, true, false, false),
+            new Map(Content.Tiled.Tilemaps.L_1, false, false, true, false),
+            new Map(Content.Tiled.Tilemaps.R_1, false, false, false, true)
         };
 
-        Map _preBossMap = new Map(Nez.Content.Tiled.Tilemaps.Pre_boss_room, false, true, true, true);
+        Map _preBossMap = new Map(Content.Tiled.Tilemaps.Pre_boss_room, false, true, true, true);
 
         AstarGridGraph _graph;
 
@@ -73,14 +73,14 @@ namespace PuppetRoguelite
             }
 
             var point = _preBossPoint * _roomSize * _tileSize;
-            var midPoint = point + new Point((_roomSize.X * _tileSize.X) / 2, (_roomSize.Y * _tileSize.Y) / 2);
+            var midPoint = point + new Point(_roomSize.X * _tileSize.X / 2, _roomSize.Y * _tileSize.Y / 2);
             PlayerController.Instance.Entity.SetPosition(midPoint.ToVector2());
         }
 
         void Reset()
         {
             _graph = null;
-            foreach(var room in _roomDictionary)
+            foreach (var room in _roomDictionary)
             {
                 room.Value.Destroy();
             }
@@ -93,10 +93,10 @@ namespace PuppetRoguelite
         /// </summary>
         public bool CreateGraph()
         {
-            _graph = new AstarGridGraph((int)_gridSize.X, (int)_gridSize.Y);
+            _graph = new AstarGridGraph(_gridSize.X, _gridSize.Y);
 
             //random position for starting location
-            _hubPoint = new Point(Nez.Random.NextInt((int)_gridSize.X), Nez.Random.NextInt((int)_gridSize.Y));
+            _hubPoint = new Point(Nez.Random.NextInt(_gridSize.X), Nez.Random.NextInt(_gridSize.Y));
             _nodes.Add(new RoomNode(_hubPoint, true, true, true, true, RoomType.Hub, _nodes));
 
             //pre boss room a certain distance from starting room
@@ -126,8 +126,8 @@ namespace PuppetRoguelite
             bool leftKeyPlaced = false;
             while (!leftKeyPlaced)
             {
-                int x = Nez.Random.NextInt((int)_gridSize.X - 1);
-                int y = Nez.Random.NextInt((int)_gridSize.Y);
+                int x = Nez.Random.NextInt(_gridSize.X - 1);
+                int y = Nez.Random.NextInt(_gridSize.Y);
                 Point potentialPoint = new Point(x, y);
 
                 if (_nodes.Where(n => n.Point == potentialPoint).FirstOrDefault() != null)
@@ -158,8 +158,8 @@ namespace PuppetRoguelite
             bool rightKeyPlaced = false;
             while (!rightKeyPlaced)
             {
-                int x = Nez.Random.Range(1, (int)_gridSize.X);
-                int y = Nez.Random.NextInt((int)_gridSize.Y);
+                int x = Nez.Random.Range(1, _gridSize.X);
+                int y = Nez.Random.NextInt(_gridSize.Y);
                 Point potentialPoint = new Point(x, y);
 
                 if (_nodes.Where(n => n.Point == potentialPoint).FirstOrDefault() != null)
@@ -303,15 +303,15 @@ namespace PuppetRoguelite
                         if (!CreateMap(node)) return false;
                         break;
                     case RoomType.Key:
-                        var mapString = node.NeedsLeftDoor ? Nez.Content.Tiled.Tilemaps.Right_key_room : Nez.Content.Tiled.Tilemaps.Left_key_room;
+                        var mapString = node.NeedsLeftDoor ? Content.Tiled.Tilemaps.Right_key_room : Content.Tiled.Tilemaps.Left_key_room;
                         if (!CreateMap(node, mapString)) return false;
                         break;
                     case RoomType.PreBoss:
-                        if (!CreateMap(node, Nez.Content.Tiled.Tilemaps.Pre_boss_room)) return false;
+                        if (!CreateMap(node, Content.Tiled.Tilemaps.Pre_boss_room)) return false;
                         //if (!CreateMap(node)) return false;
                         break;
                     case RoomType.Boss:
-                        if (!CreateMap(node, Nez.Content.Tiled.Tilemaps.Boss_room)) return false;
+                        if (!CreateMap(node, Content.Tiled.Tilemaps.Boss_room)) return false;
                         break;
                     case RoomType.Normal:
                         if (!CreateMap(node)) return false;
@@ -331,7 +331,7 @@ namespace PuppetRoguelite
         /// <param name="mapString"></param>
         bool CreateMap(RoomNode node, string mapString = null)
         {
-            if (String.IsNullOrWhiteSpace(mapString))
+            if (string.IsNullOrWhiteSpace(mapString))
             {
                 CheckSurroundingNodes(ref node);
                 var possibleMaps = _maps.Where(m =>

@@ -3,6 +3,7 @@ using Nez;
 using Nez.AI.BehaviorTrees;
 using Nez.PhysicsShapes;
 using Nez.Sprites;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using System;

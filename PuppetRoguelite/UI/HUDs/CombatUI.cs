@@ -2,7 +2,7 @@
 using Nez.Sprites;
 using Nez.UI;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.UI.Elements;

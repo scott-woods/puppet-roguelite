@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PuppetRoguelite.Components.Characters.Player;
 
 namespace PuppetRoguelite.Scenes
 {
@@ -43,10 +44,6 @@ namespace PuppetRoguelite.Scenes
             //var projectileEntity = CreateEntity("projectile");
             //var projectile = projectileEntity.AddComponent(new TestProjectile());
             //projectileEntity.SetPosition(480 / 3, 270 / 3);
-
-            var enemyEntity = CreateEntity("enemy");
-            var enemy = enemyEntity.AddComponent(new TestEnemy());
-            enemyEntity.SetPosition(1920 / 4, 1080 / 4);
         }
 
         public override void Update()

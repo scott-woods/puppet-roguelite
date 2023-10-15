@@ -1,11 +1,12 @@
 ﻿using Nez;
+using PuppetRoguelite.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Components.Characters.Player
 {
     public class Inventory : Component
     {

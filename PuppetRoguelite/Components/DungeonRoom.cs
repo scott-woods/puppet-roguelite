@@ -5,7 +5,6 @@ using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
-using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;

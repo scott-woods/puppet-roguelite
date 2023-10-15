@@ -2,7 +2,6 @@
 using Nez.Textures;
 using Nez;
 using Nez.Tiled;
-using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
 using System;
@@ -12,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Items;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {

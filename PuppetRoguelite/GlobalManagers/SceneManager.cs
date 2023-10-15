@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite
+namespace PuppetRoguelite.GlobalManagers
 {
     public class SceneManager : GlobalManager
     {
@@ -16,7 +16,7 @@ namespace PuppetRoguelite
 
         public void ChangeScene(Scene scene)
         {
-            var transition = Game1.StartSceneTransition(new FadeTransition(() => scene));
+            var transition = Core.StartSceneTransition(new FadeTransition(() => scene));
             transition.OnTransitionCompleted += OnTransitionCompleted;
 
             Emitter.Emit(SceneEvents.TransitionStarted);

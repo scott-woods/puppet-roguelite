@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.SceneComponents
+namespace PuppetRoguelite.Components
 {
     public class GridGraphManager : Component
     {

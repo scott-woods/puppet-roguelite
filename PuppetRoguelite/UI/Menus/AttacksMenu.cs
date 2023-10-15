@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.PlayerActions;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;

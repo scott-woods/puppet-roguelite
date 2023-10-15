@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
+namespace PuppetRoguelite.Items
 {
     public abstract class Item
     {
         public ItemType Type { get; set; }
         public string Name { get; set; }
     }
-    
+
     public enum ItemType
     {
         Consumable,

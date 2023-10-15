@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Tiled;
-using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Components.Characters.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;

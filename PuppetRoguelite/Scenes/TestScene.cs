@@ -7,6 +7,7 @@ using Nez.Textures;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.ChainBot;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;

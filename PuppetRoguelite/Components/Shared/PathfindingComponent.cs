@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Timers;
-using PuppetRoguelite.SceneComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
