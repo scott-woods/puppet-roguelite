@@ -83,9 +83,10 @@ namespace PuppetRoguelite.UI
                 _text.SetText(text.Substring(0, count));
 
                 //TODO: sound
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Default_text);
 
                 //Set frames to wait to 2, or 30 if the last character was a comma for extra pause
-                var framesToWait = text[count - 1] == ',' ? 1000f : 200f;
+                var framesToWait = text[count - 1] == ',' ? 1250f : 275f;
 
                 //yield
                 yield return Coroutine.WaitForSeconds(framesToWait * Time.DeltaTime);

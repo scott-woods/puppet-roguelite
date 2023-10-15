@@ -15,11 +15,17 @@ namespace Nez
 		{
 			public static class Music
 			{
+				public const string Babbulon_double = @"Content\Audio\Music\babbulon_double.ogg";
+				public const string The_bay = @"Content\Audio\Music\the_bay.ogg";
 			}
 
 			public static class Sounds
 			{
 				public const string Attack = @"Content\Audio\Sounds\attack.wav";
+				public const string Cereal_slot_1 = @"Content\Audio\Sounds\cereal_slot_1.wav";
+				public const string Cereal_slot_2 = @"Content\Audio\Sounds\cereal_slot_2.wav";
+				public const string Cereal_slot_3 = @"Content\Audio\Sounds\cereal_slot_3.wav";
+				public const string Default_text = @"Content\Audio\Sounds\default_text.wav";
 			}
 
 		}
@@ -793,6 +799,12 @@ namespace Nez
 
 		public static class Tiled
 		{
+			public static class Templates
+			{
+				public const string Enemyspawntrigger = @"Content\Tiled\Templates\enemy-spawn-trigger.tx";
+				public const string Gate = @"Content\Tiled\Templates\gate.tx";
+			}
+
 			public static class Tilemaps
 			{
 				public const string B_1 = @"Content\Tiled\Tilemaps\B_1.tmx";
@@ -823,7 +835,7 @@ namespace Nez
 				public const string Dungeon_prison_tileset = @"Content\Tiled\Tilesets\dungeon_prison_tileset.tsx";
 			}
 
-			public const string Puppet_roguelite = @"Content\Tiled\puppet_roguelite.tiled-session";
+			public const string Puppetroguelite = @"Content\Tiled\puppet-roguelite.tiled-project";
 		}
 
 

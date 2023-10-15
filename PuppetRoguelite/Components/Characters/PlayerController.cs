@@ -83,14 +83,14 @@ namespace PuppetRoguelite.Components.Characters
             _mover = Entity.AddComponent(new Mover());
 
             //Add hurtbox
-            var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
-            hurtboxCollider.IsTrigger = true;
-            Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
+            //var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
+            //hurtboxCollider.IsTrigger = true;
+            //Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
+            //_hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
 
             //add collision box
-            _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Collider);
+            //_collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
+            //Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Collider);
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));

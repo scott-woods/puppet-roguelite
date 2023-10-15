@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FmodForFoxes;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.AI.Pathfinding;
@@ -105,6 +106,7 @@ namespace PuppetRoguelite.Scenes
             //}
 
             _dungenerator.Generate();
+            Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.Babbulon_double, false, 125902);
         }
     }
 }

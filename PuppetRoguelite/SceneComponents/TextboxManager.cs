@@ -14,7 +14,7 @@ namespace PuppetRoguelite.SceneComponents
     {
         public Emitter<TextboxEvents> Emitter = new Emitter<TextboxEvents>();
 
-        bool _active = false;
+        public bool IsActive = false;
         int _page = 0;
         List<DialogueLine> _dialogueLines = new List<DialogueLine>();
 
@@ -22,10 +22,10 @@ namespace PuppetRoguelite.SceneComponents
 
         public void DisplayTextbox(List<DialogueLine> lines)
         {
-            if (!_active)
+            if (!IsActive)
             {
                 //set active
-                _active = true;
+                IsActive = true;
 
                 //dialogue line list
                 _dialogueLines = lines;
@@ -44,7 +44,7 @@ namespace PuppetRoguelite.SceneComponents
         public void CloseTextbox()
         {
             //reset everything
-            _active = false;
+            IsActive = false;
             //_dialogueLines.Clear();
             Scene.Camera.Entity.RemoveComponent(_textbox);
             _textbox = null;
@@ -58,7 +58,7 @@ namespace PuppetRoguelite.SceneComponents
         {
             base.Update();
 
-            if (_active)
+            if (IsActive)
             {
                 if (_textbox.IsFinishedReading && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Z))
                 {

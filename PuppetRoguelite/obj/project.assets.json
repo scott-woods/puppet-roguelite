@@ -2,6 +2,31 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "FmodForFoxes/3.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/FmodForFoxes.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/FmodForFoxes.dll": {}
+        }
+      },
+      "FmodForFoxes.Desktop/3.0.0": {
+        "type": "package",
+        "dependencies": {
+          "FmodForFoxes": "3.0.0"
+        },
+        "compile": {
+          "lib/net6.0/FmodForFoxes.Desktop.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/FmodForFoxes.Desktop.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.NETCore.Platforms/5.0.0": {
         "type": "package",
         "compile": {
@@ -122,6 +147,36 @@
     }
   },
   "libraries": {
+    "FmodForFoxes/3.0.0": {
+      "sha512": "/xJNEJD7YgNoZW65yOaMsfpwCYFUcP+EqABKijj7xlXQnc9gcEgQrDOUuYbkQN6OX2qBMJW0oHCBxYJipUfxOA==",
+      "type": "package",
+      "path": "fmodforfoxes/3.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "fmodforfoxes.3.0.0.nupkg.sha512",
+        "fmodforfoxes.nuspec",
+        "icon.png",
+        "lib/net6.0/FmodForFoxes.dll",
+        "readme.txt"
+      ]
+    },
+    "FmodForFoxes.Desktop/3.0.0": {
+      "sha512": "sL6j/h39OYV8pqZtm0KtalOExgMf88mBLzfdYax4P/iy1FTNcz3aSlvZT715WGzEWg7/WbWITKx+08P/jpmiLQ==",
+      "type": "package",
+      "path": "fmodforfoxes.desktop/3.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "fmodforfoxes.desktop.3.0.0.nupkg.sha512",
+        "fmodforfoxes.desktop.nuspec",
+        "icon.png",
+        "lib/net6.0/FmodForFoxes.Desktop.dll",
+        "lib/net6.0/FmodForFoxes.Desktop.xml"
+      ]
+    },
     "Microsoft.NETCore.Platforms/5.0.0": {
       "sha512": "VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
       "type": "package",
@@ -240,6 +295,8 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "FmodForFoxes >= 3.0.0",
+      "FmodForFoxes.Desktop >= 3.0.0",
       "MonoGame.Framework.DesktopGL >= 3.8.1.303",
       "Nez >= 1.0.0"
     ]
@@ -299,6 +356,14 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "FmodForFoxes": {
+            "target": "Package",
+            "version": "[3.0.0, )"
+          },
+          "FmodForFoxes.Desktop": {
+            "target": "Package",
+            "version": "[3.0.0, )"
+          },
           "MonoGame.Framework.DesktopGL": {
             "target": "Package",
             "version": "[3.8.1.303, )"

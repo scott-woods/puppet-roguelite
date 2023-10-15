@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "eRseuYiqhKg46qGGlgusIIM+fhX5HCZPX1KuFSwYgL2cTPaW0wSL/5Z+ZdwQS+z694PBzgQMzRiPpT6zIO9Kbw==",
+  "dgSpecHash": "vRs4jBJ/wME548Z0RRfAC3exqW8MLPsuHqqy/jRGdTvfku2DI2Pcyu3B9q4hTU7/dNdWYXCexCKvD6FJvSRiqg==",
   "success": true,
   "projectFilePath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\scott\\.nuget\\packages\\fmodforfoxes\\3.0.0\\fmodforfoxes.3.0.0.nupkg.sha512",
+    "C:\\Users\\scott\\.nuget\\packages\\fmodforfoxes.desktop\\3.0.0\\fmodforfoxes.desktop.3.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512",

@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,10 +43,10 @@ namespace PuppetRoguelite.Components.TiledComponents
             _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
 
             _interactable = Entity.AddComponent(new Interactable());
-            _interactable.Emitter.AddObserver(InteractableEvents.Interacted, OnInteracted);
+            _interactable.Emitter.AddObserver(InteractableEvents.Interacted, () => Game1.StartCoroutine(OnInteracted()));
         }
 
-        void OnInteracted()
+        IEnumerator OnInteracted()
         {
             var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
 
@@ -60,18 +61,48 @@ namespace PuppetRoguelite.Components.TiledComponents
                     }
                     else
                     {
+                        //get key and make first line
                         var key = keys.First() as CerealBox;
-                        var lines = new List<DialogueLine>()
+                        var tryLines = new List<DialogueLine>()
                         {
-                            new DialogueLine($"You try slotting the {key.Name} box into the shelf..."),
-                            new DialogueLine($"Perfect fit! So, so satisfying.")
+                            new DialogueLine($"You try slotting the {key.Name} box into the shelf...")
                         };
+                        textboxManager.DisplayTextbox(tryLines);
+                        while (textboxManager.IsActive)
+                        {
+                            yield return null;
+                        }
+
+                        //remove key
                         inventory.RemoveItem(key);
                         _slottedBox = key;
                         _slotted = true;
 
-                        textboxManager.DisplayTextbox(lines);
+                        //play sound
+                        var sounds = new List<string>()
+                        {
+                            Nez.Content.Audio.Sounds.Cereal_slot_1,
+                            Nez.Content.Audio.Sounds.Cereal_slot_2,
+                            Nez.Content.Audio.Sounds.Cereal_slot_3,
+                        };
+                        var channel = Game1.AudioManager.PlaySound(sounds.RandomItem());
+                        while (channel.IsPlaying)
+                        {
+                            yield return null;
+                        }
 
+                        //second textbox
+                        var successLines = new List<DialogueLine>()
+                        {
+                            new DialogueLine($"Perfect fit! So, so satisfying.")
+                        };
+                        textboxManager.DisplayTextbox(successLines);
+                        while (textboxManager.IsActive)
+                        {
+                            yield return null;
+                        }
+
+                        //handle boss gate
                         var bossGate = Entity.Scene.FindComponentOfType<BossGate>();
                         if (bossGate != null)
                         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FmodForFoxes;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
@@ -11,6 +12,7 @@ namespace PuppetRoguelite
     {
         public static Point DesignResolution = new Point(480, 270);
         public static SceneManager SceneManager = new SceneManager();
+        public static AudioManager AudioManager = new AudioManager();
 
         protected override void Initialize()
         {
@@ -20,12 +22,29 @@ namespace PuppetRoguelite
             Window.AllowUserResizing = true;
             IsFixedTimeStep = false;
 
+            FmodManager.Init(new DesktopNativeFmodLibrary(), FmodInitMode.CoreAndStudio, "");
+
             RegisterGlobalManager(SceneManager);
+            RegisterGlobalManager(AudioManager);
 
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
 
             Scene = new TestScene();
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            FmodManager.Update();
+        }
+
+        protected override void UnloadContent()
+        {
+            base.UnloadContent();
+
+            FmodManager.Unload();
         }
     }
 }

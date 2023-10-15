@@ -12,6 +12,11 @@
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Audio\Music\babbulon_double.ogg" />
+    <None Remove="Content\Audio\Sounds\cereal_slot_1.wav" />
+    <None Remove="Content\Audio\Sounds\cereal_slot_2.wav" />
+    <None Remove="Content\Audio\Sounds\cereal_slot_3.wav" />
+    <None Remove="Content\Audio\Sounds\default_text.wav" />
     <None Remove="Content\Fonts\abaddon_light.fnt" />
     <None Remove="Content\Fonts\abaddon_light_0.png" />
     <None Remove="Content\Textures\Characters\ChainBot\charge.png" />
@@ -384,13 +389,14 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FmodForFoxes" Version="3.0.0" />
+    <PackageReference Include="FmodForFoxes.Desktop" Version="3.0.0" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez\Nez.Portable\Nez.MG38.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\Audio\Music\" />
     <Folder Include="Content\Textures\UI\Icons\Style3\Atlas\" />
     <Folder Include="Content\Textures\UI\Icons\Style4\Atlas\" />
     <Folder Include="Content\Textures\UI\Menu\Style3\Atlas\" />
@@ -418,4 +424,5 @@
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
   </Target>
+  <Import Project="..\Fmod.SharedLibrary\Fmod.SharedLibrary.projitems" Label="Shared" />
 </Project>
