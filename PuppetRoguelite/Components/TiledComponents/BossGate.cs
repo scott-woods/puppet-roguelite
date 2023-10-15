@@ -3,6 +3,7 @@ using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tiled;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         SpriteRenderer _renderer;
         Collider _collider;
         ExitArea _exitArea;
+        YSorter _ySorter;
 
         public BossGate(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
         {
@@ -39,6 +41,8 @@ namespace PuppetRoguelite.Components.TiledComponents
             _renderer.SetSprite(_closedSprite);
 
             _collider = Entity.AddComponent(new BoxCollider());
+
+            _ySorter = Entity.AddComponent(new YSorter(_renderer, (int)_renderer.Bounds.Height / 2));
 
             //_exitArea = new ExitArea(typeof(BossRoom), new Vector2(32, 16), new Vector2(0, 16));
         }

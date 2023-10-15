@@ -113,11 +113,11 @@
   <object id="20" type="EnemySpawnPoint" x="256" y="176">
    <point/>
   </object>
-  <object id="21" type="Gate" gid="235" x="192" y="112" width="16" height="16"/>
-  <object id="22" type="Gate" gid="235" x="176" y="112" width="16" height="16"/>
-  <object id="23" type="Gate" gid="235" x="320" y="224" width="16" height="16"/>
-  <object id="24" type="Gate" gid="235" x="320" y="208" width="16" height="16"/>
-  <object id="25" type="Gate" gid="235" x="16" y="224" width="16" height="16"/>
-  <object id="26" type="Gate" gid="235" x="16" y="208" width="16" height="16"/>
+  <object id="21" type="Gate" gid="235" x="192" y="96" width="16" height="16"/>
+  <object id="22" type="Gate" gid="235" x="176" y="96" width="16" height="16"/>
+  <object id="23" type="Gate" gid="235" x="320" y="208" width="16" height="16"/>
+  <object id="24" type="Gate" gid="235" x="320" y="192" width="16" height="16"/>
+  <object id="25" type="Gate" gid="235" x="16" y="208" width="16" height="16"/>
+  <object id="26" type="Gate" gid="235" x="16" y="192" width="16" height="16"/>
  </objectgroup>
 </map>

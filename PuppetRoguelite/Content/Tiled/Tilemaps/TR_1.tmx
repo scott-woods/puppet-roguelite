@@ -108,9 +108,9 @@
   <object id="17" type="EnemySpawnPoint" x="208" y="288">
    <point/>
   </object>
-  <object id="18" type="Gate" gid="235" x="176" y="144" width="16" height="16"/>
-  <object id="19" type="Gate" gid="235" x="192" y="144" width="16" height="16"/>
-  <object id="20" type="Gate" gid="235" x="304" y="224" width="16" height="16"/>
-  <object id="21" type="Gate" gid="235" x="304" y="208" width="16" height="16"/>
+  <object id="18" type="Gate" gid="235" x="176" y="128" width="16" height="16"/>
+  <object id="19" type="Gate" gid="235" x="192" y="128" width="16" height="16"/>
+  <object id="20" type="Gate" gid="235" x="304" y="208" width="16" height="16"/>
+  <object id="21" type="Gate" gid="235" x="304" y="192" width="16" height="16"/>
  </objectgroup>
 </map>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PuppetRoguelite.Components.Shared;
 
 namespace PuppetRoguelite.Components.Characters
 {
@@ -17,6 +18,7 @@ namespace PuppetRoguelite.Components.Characters
 
         //components
         SpriteAnimator _spriteAnimator;
+        YSorter _ySorter;
 
         public PlayerSim(Vector2 direction)
         {
@@ -35,6 +37,8 @@ namespace PuppetRoguelite.Components.Characters
         {
             _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
             _spriteAnimator.SetColor(new Color(Color.White, 128));
+
+            _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, 12));
         }
 
         void AddAnimations()

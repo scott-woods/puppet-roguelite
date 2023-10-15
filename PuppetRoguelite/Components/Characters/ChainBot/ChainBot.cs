@@ -37,6 +37,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         HealthComponent _healthComponent;
         public PathfindingComponent Pathfinder;
         Collider _collider;
+        YSorter _ySorter;
 
         Hitbox _melee;
 
@@ -100,6 +101,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //actions
             _doubleMeleeAttack = Entity.AddComponent(new DoubleMeleeAttack(this));
             _actions.Add(_doubleMeleeAttack);
+
+            //y sorter
+            _ySorter = Entity.AddComponent(new YSorter(Animator, 12));
         }
 
         void AddAnimations()

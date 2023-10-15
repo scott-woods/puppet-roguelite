@@ -36,6 +36,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         SpriteAnimator _animator;
         Hitbox _hitbox;
         Collider _hitboxCollider;
+        YSorter _ySorter;
 
         public override void Initialize()
         {
@@ -156,6 +157,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             _animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
+
+            _ySorter = Entity.AddComponent(new YSorter(_animator, 12));
         }
 
         void AddAnimations()

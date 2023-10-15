@@ -53,7 +53,7 @@ namespace PuppetRoguelite.Components
             //map renderer
             _map = Entity.Scene.Content.LoadTiledMap(_mapString);
             _mapRenderer = Entity.AddComponent(new TiledMapRenderer(_map, "collision"));
-            _mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities" });
+            _mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
             _mapRenderer.RenderLayer = 10;
             _mapComponent = Entity.AddComponent(new TiledMapComponent(_mapRenderer));
 

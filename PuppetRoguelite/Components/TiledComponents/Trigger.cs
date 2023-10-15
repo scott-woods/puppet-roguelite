@@ -33,7 +33,6 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //collider
             _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
-            _collider.LocalOffset = new Vector2(TmxObject.Width / 2, TmxObject.Height / 2);
             _collider.IsTrigger = true;
             Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Collider);
             Entity.AddComponent(_collider);

@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tiled;
@@ -25,7 +26,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         bool _slotted = false;
         CerealBox _slottedBox;
 
-        SpriteRenderer _renderer;
+        //SpriteRenderer _renderer;
         Collider _collider;
         Interactable _interactable;
 
@@ -38,11 +39,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             base.Initialize();
 
-            _renderer = Entity.AddComponent(new SpriteRenderer());
-            _renderer.SetSprite(new Sprite(Entity.Scene.Content.LoadTexture(Content.Textures.Objects.Shelf)));
-
-            _collider = Entity.AddComponent(new BoxCollider());
-            _collider.PhysicsLayer = (int)PhysicsLayers.Interactable;
+            _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
 
             _interactable = Entity.AddComponent(new Interactable());
             _interactable.Emitter.AddObserver(InteractableEvents.Interacted, OnInteracted);

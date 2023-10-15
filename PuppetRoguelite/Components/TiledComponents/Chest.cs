@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PuppetRoguelite.Components.Shared;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {
@@ -32,6 +33,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         SpriteRenderer _renderer;
         Collider _collider;
         Interactable _interactable;
+        YSorter _ySorter;
 
         Sprite _openSprite;
         Sprite _closedSprite;
@@ -67,9 +69,9 @@ namespace PuppetRoguelite.Components.TiledComponents
             _closedSprite = new Sprite(chestTexture, new RectangleF(TmxObject.Width, 0, TmxObject.Width, TmxObject.Height));
             _renderer.SetSprite(_closedSprite);
 
-            _collider = Entity.AddComponent(new BoxCollider(16, 16)); //TODO: adjust for large chest
-            _collider.LocalOffset += new Vector2(0, _renderer.Height / 4);
-            _collider.PhysicsLayer = (int)PhysicsLayers.Collider;
+            _ySorter = Entity.AddComponent(new YSorter(_renderer, (int)_renderer.Bounds.Height / 2));
+
+            _collider = Entity.AddComponent(new BoxCollider(-8, 0, 16, 16)); //TODO: adjust for large chest
 
             _interactable = Entity.AddComponent(new Interactable());
             _interactable.Emitter.AddObserver(InteractableEvents.Interacted, OnInteracted);

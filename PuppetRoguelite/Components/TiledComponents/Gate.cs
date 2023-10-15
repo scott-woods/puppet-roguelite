@@ -24,11 +24,10 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
-            //_collider.LocalOffset = new Vector2(TmxObject.Width / 2, TmxObject.Height / 2);
             Entity.AddComponent(_collider);
             _collider.SetEnabled(false);
 
-            TmxObject.Visible = true;
+            TmxObject.Visible = false;
         }
 
         public void Lock()

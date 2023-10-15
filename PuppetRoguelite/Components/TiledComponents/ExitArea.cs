@@ -19,7 +19,6 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         Type _sceneType;
         Vector2 _size;
-        Vector2 _offset;
 
         public ExitArea(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
         {
@@ -31,7 +30,6 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _collider = Entity.AddComponent(new BoxCollider(_size.X, _size.Y));
-            _collider.LocalOffset += _offset;
             _collider.IsTrigger = true;
         }
 

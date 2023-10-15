@@ -9,6 +9,40 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx": {
+            "scale": 1.2182870370370371,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 216.28728861865858,
+                "y": 216.6977009310279
+            }
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#CollisionTileset": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#Stardew-Spring-Outdoors": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#bunny_npc": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#edge_test_tileset": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#large_sprite_test": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx": {
+            "scale": 0.7831845238095237,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 336.44689340680225,
+                "y": 337.0853125593768
+            }
+        },
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx#tileset": {
+            "scaleInDock": 1
+        },
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx": {
             "scale": 1.096458333333333,
             "selectedLayer": 3,
@@ -28,31 +62,26 @@
             "selectedLayer": 3,
             "viewCenter": {
                 "x": 112.72658179745395,
-                "y": 216.69770093102792
+                "y": 215.96807904237127
             }
         },
         "Tilemaps/BL_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
                 "x": 111.5,
-                "y": 315
+                "y": 314
             }
         },
         "Tilemaps/BR_1.tmx": {
             "expandedObjectLayers": [
-                4,
-                5,
-                7
+                8
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 224.5,
-                "y": 252
+                "x": 183.5,
+                "y": 391
             }
         },
         "Tilemaps/B_1.tmx": {
@@ -60,7 +89,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 192.25536766102988,
-                "y": 192.62017860535818
+                "y": 191.16093482804487
             }
         },
         "Tilemaps/LR_1.tmx": {
@@ -87,45 +116,45 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 192.25536766102988,
-                "y": 192.62017860535818
+                "y": 190.43131293938822
             }
         },
         "Tilemaps/TBLR_1.tmx": {
             "expandedObjectLayers": [
-                6
+                8
             ],
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 342.55747672430175,
-                "y": 207.2126163784914
+                "x": 183.49990499714994,
+                "y": 54.72164164924948
             }
         },
         "Tilemaps/TBL_1.tmx": {
             "expandedObjectLayers": [
-                6
+                8
             ],
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 55.816074482234484,
-                "y": 207.2126163784914
+                "x": 199.55158654759646,
+                "y": 375.02565076952317
             }
         },
         "Tilemaps/TBR_1.tmx": {
             "expandedObjectLayers": [
-                5
+                7
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 327.5,
-                "y": 207
+                "x": 183.5,
+                "y": 134
             }
         },
         "Tilemaps/TB_1.tmx": {
             "expandedObjectLayers": [
-                5
+                7
             ],
             "scale": 1,
             "selectedLayer": 3,
@@ -136,24 +165,24 @@
         },
         "Tilemaps/TLR_1.tmx": {
             "expandedObjectLayers": [
-                6
+                7
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5,
+                "x": 199.5,
                 "y": 119
             }
         },
         "Tilemaps/TL_1.tmx": {
             "expandedObjectLayers": [
-                6
+                7
             ],
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5,
-                "y": 151
+                "x": 71.5,
+                "y": 231
             }
         },
         "Tilemaps/TR_1.tmx": {
@@ -163,8 +192,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 295.5,
-                "y": 206
+                "x": 183.5,
+                "y": 151
             }
         },
         "Tilemaps/boss_room.tmx": {
@@ -173,29 +202,32 @@
                 5
             ],
             "scale": 1,
-            "selectedLayer": 3,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 191.5,
-                "y": 374
+                "x": 183.5,
+                "y": -25
             }
         },
         "Tilemaps/left_key_room.tmx": {
             "expandedObjectLayers": [
-                6
+                9
             ],
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 240.4104123123694,
-                "y": 218.15694470834129
+                "x": 252.08436253087598,
+                "y": 178.02774083222496
             }
         },
         "Tilemaps/pre_boss_room.tmx": {
+            "expandedObjectLayers": [
+                10
+            ],
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 122.21166634999054,
-                "y": 155.40946228386855
+                "x": 191.5257457723732,
+                "y": 23.347900437013095
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -205,9 +237,15 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 128.0486414592438,
-                "y": 202.10526315789477
+                "x": 71.867756032681,
+                "y": 229.83089492684783
             }
+        },
+        "Tilesets/dungeon_prison_props.tsx": {
+            "scaleInEditor": 1
+        },
+        "Tilesets/dungeon_prison_tileset.tsx": {
+            "scaleInEditor": 1
         }
     },
     "last.objectTemplatePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Templates",
@@ -216,6 +254,15 @@
     "project": "puppet-roguelite.tiled-project",
     "property.type": "triggerType",
     "recentFiles": [
+        "Tilesets/dungeon_prison_tileset.tsx",
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx",
+        "Tilesets/dungeon_prison_props.tsx",
+        "Tilemaps/TB_1.tmx",
+        "Tilemaps/TBL_1.tmx",
+        "Tilemaps/BLR_1.tmx",
+        "Tilemaps/BL_1.tmx",
+        "Tilemaps/BR_1.tmx",
+        "Tilemaps/TBLR_1.tmx",
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx",
         "Tilemaps/R_1.tmx",
         "Tilemaps/L_1.tmx"

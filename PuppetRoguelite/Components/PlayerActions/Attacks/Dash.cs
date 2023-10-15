@@ -38,6 +38,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         Hitbox _hitbox;
         Collider _hitboxCollider;
         PrototypeSpriteRenderer _target;
+        YSorter _ySorter;
 
         List<Component> _componentsList = new List<Component>();
 
@@ -59,6 +60,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _componentsList.Add(_hitboxCollider);
             _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, _damage, _targetLayers));
             _componentsList.Add(_hitbox);
+
+            _ySorter = Entity.AddComponent(new YSorter(_animator, 12));
+            _componentsList.Add(_ySorter);
 
             _target = new PrototypeSpriteRenderer(8, 8);
         }

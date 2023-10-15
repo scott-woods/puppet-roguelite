@@ -48,6 +48,7 @@ namespace PuppetRoguelite.Components.Characters
         public ActionPointComponent ActionPointComponent;
         public AttacksList AttacksList;
         Inventory _inventory;
+        YSorter _ySorter;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -85,13 +86,11 @@ namespace PuppetRoguelite.Components.Characters
             var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
-            //hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.PlayerHurtbox;
             _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Collider);
-            //_collider.PhysicsLayer = (int)PhysicsLayers.Collider;
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
@@ -106,6 +105,9 @@ namespace PuppetRoguelite.Components.Characters
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
+
+            //ySort
+            _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, 12));
         }
 
         void AddObservers()
