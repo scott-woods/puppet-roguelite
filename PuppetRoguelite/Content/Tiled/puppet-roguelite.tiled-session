@@ -14,7 +14,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 216.28728861865858,
-                "y": 216.6977009310279
+                "y": 215.87687630628915
             }
         },
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#CollisionTileset": {
@@ -61,16 +61,16 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 112.72658179745395,
-                "y": 215.96807904237127
+                "x": 295.1320539616189,
+                "y": 207.2126163784914
             }
         },
         "Tilemaps/BL_1.tmx": {
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 111.5,
-                "y": 314
+                "x": 191.5,
+                "y": 359
             }
         },
         "Tilemaps/BR_1.tmx": {
@@ -80,8 +80,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 183.5,
-                "y": 391
+                "x": 359.5,
+                "y": 207
             }
         },
         "Tilemaps/B_1.tmx": {
@@ -99,8 +99,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 111.5,
-                "y": 126
+                "x": 23.5,
+                "y": 206
             }
         },
         "Tilemaps/L_1.tmx": {
@@ -126,8 +126,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 183.49990499714994,
-                "y": 54.72164164924948
+                "x": 191.5257457723732,
+                "y": 358.9739692190766
             }
         },
         "Tilemaps/TBL_1.tmx": {
@@ -137,8 +137,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 199.55158654759646,
-                "y": 375.02565076952317
+                "x": 55.816074482234484,
+                "y": 207.2126163784914
             }
         },
         "Tilemaps/TBR_1.tmx": {
@@ -148,8 +148,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 183.5,
-                "y": 134
+                "x": 191.5,
+                "y": 135
             }
         },
         "Tilemaps/TB_1.tmx": {
@@ -159,8 +159,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 125.5,
-                "y": 163
+                "x": 191.5,
+                "y": 311
             }
         },
         "Tilemaps/TLR_1.tmx": {
@@ -170,8 +170,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 199.5,
-                "y": 119
+                "x": 311.5,
+                "y": 207
             }
         },
         "Tilemaps/TL_1.tmx": {
@@ -181,8 +181,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 71.5,
-                "y": 231
+                "x": 87.5,
+                "y": 207
             }
         },
         "Tilemaps/TR_1.tmx": {
@@ -192,8 +192,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 183.5,
-                "y": 151
+                "x": 295.5,
+                "y": 207
             }
         },
         "Tilemaps/boss_room.tmx": {
@@ -202,10 +202,10 @@
                 5
             ],
             "scale": 1,
-            "selectedLayer": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 183.5,
-                "y": -25
+                "x": 154.5,
+                "y": 569
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -215,8 +215,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 252.08436253087598,
-                "y": 178.02774083222496
+                "x": 295.1320539616189,
+                "y": 207.2126163784914
             }
         },
         "Tilemaps/pre_boss_room.tmx": {
@@ -227,7 +227,7 @@
             "selectedLayer": 4,
             "viewCenter": {
                 "x": 191.5257457723732,
-                "y": 23.347900437013095
+                "y": 22.618278548356443
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -237,8 +237,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 71.867756032681,
-                "y": 229.83089492684783
+                "x": 87.91943758312752,
+                "y": 207.2126163784914
             }
         },
         "Tilesets/dungeon_prison_props.tsx": {

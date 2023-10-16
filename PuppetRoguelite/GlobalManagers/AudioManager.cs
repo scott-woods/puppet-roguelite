@@ -21,16 +21,32 @@ namespace PuppetRoguelite.GlobalManagers
         Sound _currentMusic;
         Channel _currentMusicChannel;
 
-        public Channel PlaySound(string soundName)
+        public void PlaySound(string soundName)
+        {
+            var sound = CoreSystem.LoadSound(soundName);
+            sound.Play();
+        }
+
+        public IEnumerator PlaySoundCoroutine(string soundName)
         {
             var sound = CoreSystem.LoadSound(soundName);
             var channel = sound.Play();
 
-            return channel;
+            while (channel.IsPlaying)
+            {
+                yield return null;
+            }
         }
 
         public void PlayMusic(string musicName, bool looping = true, uint loopTime = 0)
         {
+            if (_currentMusicChannel.IsPlaying)
+            {
+                _currentMusicChannel.Stop();
+                _currentMusic = null;
+                _loopPoint = 0;
+            }
+
             var music = CoreSystem.LoadStreamedSound(musicName);
             var channel = music.Play();
             channel.Looping = looping;
@@ -38,6 +54,23 @@ namespace PuppetRoguelite.GlobalManagers
             _currentMusicChannel = channel;
 
             _loopPoint = loopTime;
+        }
+
+        public void PauseMusic()
+        {
+            _currentMusicChannel.Pause();
+        }
+
+        public void ResumeMusic()
+        {
+            _currentMusicChannel.Resume();
+        }
+
+        public void StopMusic()
+        {
+            _currentMusicChannel.Stop();
+            _currentMusic = null;
+            _loopPoint = 0;
         }
 
         public override void Update()

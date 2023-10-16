@@ -16,6 +16,7 @@ namespace PuppetRoguelite
         public static Emitter<PlayerActionEvents, PlayerAction> PlayerActionEmitter = new Emitter<PlayerActionEvents, PlayerAction>();
         public static Emitter<CombatEvents> CombatEventsEmitter = new Emitter<CombatEvents>();
         public static Emitter<ActionPointEvents, ActionPointComponent> ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
+        public static Emitter<InteractableEvents> InteractableEmitter = new Emitter<InteractableEvents>();
     }
 
     public enum PlayerActionEvents
@@ -42,5 +43,10 @@ namespace PuppetRoguelite
         MaxActionPointsChanged,
         ActionPointsTimerStarted,
         ActionPointsTimerUpdated
+    }
+    public enum InteractableEvents
+    {
+        Interacted,
+        InteractionFinished
     }
 }

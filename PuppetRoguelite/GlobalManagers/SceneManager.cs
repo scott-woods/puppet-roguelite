@@ -14,9 +14,9 @@ namespace PuppetRoguelite.GlobalManagers
 
         public Scene ActiveScene { get; set; }
 
-        public void ChangeScene(Scene scene)
+        public void ChangeScene(Type sceneType)
         {
-            var transition = Core.StartSceneTransition(new FadeTransition(() => scene));
+            var transition = Game1.StartSceneTransition(new FadeTransition(() => Activator.CreateInstance(sceneType) as Scene));
             transition.OnTransitionCompleted += OnTransitionCompleted;
 
             Emitter.Emit(SceneEvents.TransitionStarted);

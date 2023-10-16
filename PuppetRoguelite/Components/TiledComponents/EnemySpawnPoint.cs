@@ -36,23 +36,5 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             return null;
         }
-
-        //public Enemy SpawnEnemy(List<Type> enemyTypes, DungeonRoom room)
-        //{
-        //    var type = _enemyTypes.RandomItem();
-
-        //    ConstructorInfo info = type.GetConstructor(new Type[] {typeof(DungeonRoom)});
-        //    if (info != null)
-        //    {
-        //        var ent = new PausableEntity(type.Name);
-        //        Entity.Scene.AddEntity(ent);
-        //        var enemy = ent.AddComponent((Enemy)info.Invoke(new object[] {room}));
-        //        ent.SetPosition(Entity.Position);
-
-        //        return enemy;
-        //    }
-
-        //    return null;
-        //}
     }
 }

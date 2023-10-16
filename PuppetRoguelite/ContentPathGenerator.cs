@@ -16,12 +16,14 @@ namespace Nez
 			public static class Music
 			{
 				public const string Babbulon_double = @"Content\Audio\Music\babbulon_double.ogg";
+				public const string Galacta_knight = @"Content\Audio\Music\galacta_knight.ogg";
 				public const string The_bay = @"Content\Audio\Music\the_bay.ogg";
 			}
 
 			public static class Sounds
 			{
 				public const string Attack = @"Content\Audio\Sounds\attack.wav";
+				public const string Burp = @"Content\Audio\Sounds\burp.wav";
 				public const string Cereal_slot_1 = @"Content\Audio\Sounds\cereal_slot_1.wav";
 				public const string Cereal_slot_2 = @"Content\Audio\Sounds\cereal_slot_2.wav";
 				public const string Cereal_slot_3 = @"Content\Audio\Sounds\cereal_slot_3.wav";

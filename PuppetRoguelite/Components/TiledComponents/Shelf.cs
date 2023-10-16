@@ -44,13 +44,13 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
 
-            _interactable = Entity.AddComponent(new Interactable());
-            _interactable.Emitter.AddObserver(InteractableEvents.Interacted, () => Game1.StartCoroutine(OnInteracted()));
+            _interactable = Entity.AddComponent(new Interactable(OnInteracted, true));
         }
 
         IEnumerator OnInteracted()
         {
             var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
+            var player = PlayerController.Instance;
 
             if (!_slotted)
             {
@@ -59,7 +59,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                     var keys = inventory.GetItems().Where(i => i.Type == ItemType.Key).ToList();
                     if (!keys.Any())
                     {
-                        textboxManager.DisplayTextbox(_noKeyLines);
+                        yield return textboxManager.DisplayTextbox(_noKeyLines);
                     }
                     else
                     {
@@ -69,11 +69,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                         {
                             new DialogueLine($"You try slotting the {key.Name} box into the shelf...")
                         };
-                        textboxManager.DisplayTextbox(tryLines);
-                        while (textboxManager.IsActive)
-                        {
-                            yield return null;
-                        }
+                        yield return textboxManager.DisplayTextbox(tryLines);
 
                         //remove key
                         inventory.RemoveItem(key);
@@ -87,22 +83,20 @@ namespace PuppetRoguelite.Components.TiledComponents
                             Nez.Content.Audio.Sounds.Cereal_slot_2,
                             Nez.Content.Audio.Sounds.Cereal_slot_3,
                         };
-                        var channel = Game1.AudioManager.PlaySound(sounds.RandomItem());
-                        while (channel.IsPlaying)
-                        {
-                            yield return null;
-                        }
+                        Game1.AudioManager.PauseMusic();
+                        yield return Game1.AudioManager.PlaySoundCoroutine(sounds.RandomItem());
+
+                        yield return Coroutine.WaitForSeconds(1.25f);
+
+                        //resume music
+                        Game1.AudioManager.ResumeMusic();
 
                         //second textbox
                         var successLines = new List<DialogueLine>()
                         {
                             new DialogueLine($"Perfect fit! So, so satisfying.")
                         };
-                        textboxManager.DisplayTextbox(successLines);
-                        while (textboxManager.IsActive)
-                        {
-                            yield return null;
-                        }
+                        yield return textboxManager.DisplayTextbox(successLines);
 
                         //handle boss gate
                         var bossGate = Entity.Scene.FindComponentOfType<BossGate>();
@@ -115,7 +109,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             }
             else
             {
-                textboxManager.DisplayTextbox(new List<DialogueLine>()
+                yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
                 {
                     new DialogueLine($"The box of {_slottedBox.Name} is resting just where you left it.")
                 });

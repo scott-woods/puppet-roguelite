@@ -15,7 +15,7 @@ namespace PuppetRoguelite.Components.TiledComponents
     /// <summary>
     /// trigger created from tiled object
     /// </summary>
-    public class Trigger : TiledComponent, ITriggerListener
+    public abstract class Trigger : TiledComponent, ITriggerListener
     {
         public Emitter<TriggerEventTypes> Emitter = new Emitter<TriggerEventTypes>();
 
@@ -38,33 +38,25 @@ namespace PuppetRoguelite.Components.TiledComponents
             Entity.AddComponent(_collider);
         }
 
-        public void OnTriggerEnter(Collider other, Collider local)
+        public virtual void OnTriggerEnter(Collider other, Collider local)
         {
             if (other.PhysicsLayer == 1 << (int)PhysicsLayers.Collider)
             {
-                if (TmxObject.Properties != null)
-                {
-                    if (TmxObject.Properties.TryGetValue("TriggerType", out var triggerType))
-                    {
-                        switch (triggerType)
-                        {
-                            case nameof(TriggerType.EnemySpawn):
-                                Emitter.Emit(TriggerEventTypes.EnemySpawnTriggered);
-                                break;
-                        }
-                    }
-                }
+                Emitter.Emit(TriggerEventTypes.Triggered);
+                HandleTriggered();
             }
         }
 
-        public void OnTriggerExit(Collider other, Collider local)
+        public virtual void OnTriggerExit(Collider other, Collider local)
         {
             //throw new NotImplementedException();
         }
+
+        public abstract void HandleTriggered();
     }
 
     public enum TriggerEventTypes
     {
-        EnemySpawnTriggered
+        Triggered
     }
 }

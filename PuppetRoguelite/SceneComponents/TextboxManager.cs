@@ -3,6 +3,7 @@ using Nez.Systems;
 using Nez.Textures;
 using PuppetRoguelite.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace PuppetRoguelite.SceneComponents
 
         Textbox _textbox;
 
-        public void DisplayTextbox(List<DialogueLine> lines)
+        public IEnumerator DisplayTextbox(List<DialogueLine> lines)
         {
             if (!IsActive)
             {
@@ -33,11 +34,27 @@ namespace PuppetRoguelite.SceneComponents
                 //create textbox
                 _textbox = Scene.Camera.Entity.AddComponent(new Textbox());
 
-                //start reading first line
-                _textbox.ReadLine(_dialogueLines[_page]);
-
                 //emit started event
                 Emitter.Emit(TextboxEvents.TextboxOpened);
+
+                //read
+                while (_page < _dialogueLines.Count)
+                {
+                    //read and wait until finished
+                    yield return _textbox.ReadLine(_dialogueLines[_page]);
+
+                    //wait until z key is pressed
+                    while (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Z))
+                    {
+                        yield return null;
+                    }
+
+                    //increment page
+                    _page += 1;
+                }
+
+                //close
+                CloseTextbox();
             }
         }
 
@@ -58,24 +75,28 @@ namespace PuppetRoguelite.SceneComponents
         {
             base.Update();
 
-            if (IsActive)
+            if (IsActive && !_textbox.IsFinishedReading)
             {
-                if (_textbox.IsFinishedReading && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Z))
-                {
-                    _page += 1;
-                    if (_page < _dialogueLines.Count) //if there are more pages, read next page
-                    {
-                        _textbox.ReadLine(_dialogueLines[_page]);
-                    }
-                    else //otherwise, close textbox
-                    {
-                        CloseTextbox();
-                    }
-                }
-                else if (!_textbox.IsFinishedReading && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
                 {
                     _textbox.SkipText();
                 }
+                //if (_textbox.IsFinishedReading && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Z))
+                //{
+                //    _page += 1;
+                //    if (_page < _dialogueLines.Count) //if there are more pages, read next page
+                //    {
+                //        _textbox.ReadLine(_dialogueLines[_page]);
+                //    }
+                //    else //otherwise, close textbox
+                //    {
+                //        CloseTextbox();
+                //    }
+                //}
+                //else if (!_textbox.IsFinishedReading && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+                //{
+                //    _textbox.SkipText();
+                //}
             }
         }
     }

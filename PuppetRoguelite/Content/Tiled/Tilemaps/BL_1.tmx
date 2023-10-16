@@ -86,12 +86,12 @@
 </data>
  </layer>
  <objectgroup id="4" name="entities">
-  <object id="5" type="Trigger" x="176" y="352" width="32" height="16">
+  <object id="5" type="EnemySpawnTrigger" x="176" y="352" width="32" height="16">
    <properties>
     <property name="TriggerType" propertytype="triggerType" value="EnemySpawn"/>
    </properties>
   </object>
-  <object id="6" type="Trigger" x="16" y="192" width="16" height="32">
+  <object id="6" type="EnemySpawnTrigger" x="16" y="192" width="16" height="32">
    <properties>
     <property name="TriggerType" propertytype="triggerType" value="EnemySpawn"/>
    </properties>

@@ -9,6 +9,7 @@ using Nez.UI;
 using PuppetRoguelite.Components.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Items;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI;
@@ -89,8 +90,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             //_hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
 
             //add collision box
-            //_collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
-            //Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Collider);
+            _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Collider);
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
@@ -105,6 +106,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
+            _inventory.AddItem(new CerealBox("Reese's Puffs"));
 
             //ySort
             _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, 12));
@@ -117,9 +119,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
 
-            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            textboxManager.Emitter.AddObserver(TextboxEvents.TextboxOpened, OnTextboxOpened);
-            textboxManager.Emitter.AddObserver(TextboxEvents.TextboxClosed, OnTextboxClosed);
+            Emitters.InteractableEmitter.AddObserver(InteractableEvents.Interacted, OnInteractionStarted);
+            Emitters.InteractableEmitter.AddObserver(InteractableEvents.InteractionFinished, OnInteractionFinished);
         }
 
         void SetupInput()
@@ -318,12 +319,12 @@ namespace PuppetRoguelite.Components.Characters.Player
             StateMachine.ChangeState<PlayerDefault>();
         }
 
-        void OnTextboxOpened()
+        void OnInteractionStarted()
         {
             StateMachine.ChangeState<PlayerIdle>();
         }
 
-        void OnTextboxClosed()
+        void OnInteractionFinished()
         {
             Core.Schedule(.1f, timer => StateMachine.ChangeState<PlayerDefault>());
         }

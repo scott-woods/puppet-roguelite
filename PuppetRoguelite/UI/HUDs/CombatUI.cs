@@ -101,7 +101,7 @@ namespace PuppetRoguelite.UI.HUDs
         void OnEncounterStarted()
         {
             //get initial hp values
-            var playerHealthComponent = Entity.Scene.FindComponentsOfType<HealthComponent>().FirstOrDefault(h => h.Entity.Name == "player");
+            var playerHealthComponent = PlayerController.Instance.Entity.GetComponent<HealthComponent>();
             if (playerHealthComponent != null)
             {
                 OnPlayerHealthChanged(playerHealthComponent);

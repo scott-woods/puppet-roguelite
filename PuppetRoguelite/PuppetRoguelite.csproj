@@ -13,6 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\Audio\Music\babbulon_double.ogg" />
+    <None Remove="Content\Audio\Sounds\burp with extra reverb.wav" />
     <None Remove="Content\Audio\Sounds\cereal_slot_1.wav" />
     <None Remove="Content\Audio\Sounds\cereal_slot_2.wav" />
     <None Remove="Content\Audio\Sounds\cereal_slot_3.wav" />

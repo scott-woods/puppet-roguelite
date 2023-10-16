@@ -118,6 +118,10 @@
   <object id="14" type="BossGate" x="176" y="0" width="32" height="48"/>
   <object id="15" type="Shelf" x="256" y="48" width="32" height="16"/>
   <object id="16" type="Shelf" x="96" y="48" width="32" height="16"/>
-  <object id="17" type="ExitArea" x="176" y="16" width="32" height="16"/>
+  <object id="17" type="ExitArea" x="176" y="16" width="32" height="16">
+   <properties>
+    <property name="TargetScene" value="BossRoom"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

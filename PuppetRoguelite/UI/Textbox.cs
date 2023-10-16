@@ -66,10 +66,11 @@ namespace PuppetRoguelite.UI
             _box.Add(_text).Grow().Top().Left().SetPadRight(_horizontalPad);
         }
 
-        public void ReadLine(DialogueLine line)
+        public IEnumerator ReadLine(DialogueLine line)
         {
             var maxWidth = _table.GetCell(_box).GetPrefWidth() - _box.GetCell(_asterisk).GetPrefWidth() - 32 - (_horizontalPad * 2) - _spacing;
             _readTextCoroutine = Game1.StartCoroutine(ReadText(GetWrappedText(line.Text, maxWidth)));
+            yield return _readTextCoroutine;
         }
 
         IEnumerator ReadText(string text)
@@ -82,7 +83,7 @@ namespace PuppetRoguelite.UI
             {
                 _text.SetText(text.Substring(0, count));
 
-                //TODO: sound
+                //play sound
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Default_text);
 
                 //Set frames to wait to 2, or 30 if the last character was a comma for extra pause

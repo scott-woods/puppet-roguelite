@@ -22,7 +22,10 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         public ExitArea(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
         {
-
+            if (tmxObject.Properties.TryGetValue("TargetScene", out var targetScene))
+            {
+                _sceneType = Type.GetType("PuppetRoguelite.Scenes." + targetScene);
+            }
         }
 
         public override void Initialize()
@@ -37,7 +40,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             if (other.HasComponent<PlayerController>())
             {
-                Game1.SceneManager.ChangeScene(Activator.CreateInstance(_sceneType) as Scene);
+                Game1.SceneManager.ChangeScene(_sceneType);
             }
         }
 

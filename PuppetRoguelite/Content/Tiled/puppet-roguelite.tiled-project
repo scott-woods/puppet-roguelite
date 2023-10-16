@@ -31,6 +31,46 @@
             ]
         },
         {
+            "color": "#ffaa0000",
+            "drawFill": true,
+            "id": 14,
+            "members": [
+            ],
+            "name": "BossSpawnPoint",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffaa0000",
+            "drawFill": true,
+            "id": 15,
+            "members": [
+            ],
+            "name": "BossTrigger",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 4,
@@ -92,12 +132,32 @@
             ]
         },
         {
-            "color": "#ffa0a0a4",
+            "color": "#ffaa0000",
             "drawFill": true,
-            "id": 9,
+            "id": 1,
             "members": [
             ],
             "name": "EnemySpawnTrigger",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 12,
+            "members": [
+            ],
+            "name": "ExitArea",
             "type": "class",
             "useAs": [
                 "property",
@@ -132,12 +192,12 @@
             ]
         },
         {
-            "color": "#ffa0a0a4",
+            "color": "#ff0000ff",
             "drawFill": true,
-            "id": 5,
+            "id": 13,
             "members": [
             ],
-            "name": "Shelf",
+            "name": "PlayerSpawnPoint",
             "type": "class",
             "useAs": [
                 "property",
@@ -154,10 +214,10 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
-            "id": 1,
+            "id": 5,
             "members": [
             ],
-            "name": "Trigger",
+            "name": "Shelf",
             "type": "class",
             "useAs": [
                 "property",
@@ -181,26 +241,6 @@
                 "BossSpawn"
             ],
             "valuesAsFlags": false
-        },
-        {
-            "color": "#ffa0a0a4",
-            "drawFill": true,
-            "id": 12,
-            "members": [
-            ],
-            "name": "ExitArea",
-            "type": "class",
-            "useAs": [
-                "property",
-                "map",
-                "layer",
-                "object",
-                "tile",
-                "tileset",
-                "wangcolor",
-                "wangset",
-                "project"
-            ]
         }
     ]
 }

@@ -25,12 +25,23 @@ namespace PuppetRoguelite.Components
 
         public void Update()
         {
-            Transform.Position = GetTargetPosition();
+            if (_targetEntity != null)
+            {
+                Transform.Position = GetTargetPosition();
+            }
         }
 
         public void SetFollowTarget(Entity target)
         {
             _targetEntity = target;
+        }
+
+        public void RemoveFollowTarget()
+        {
+            if (_targetEntity != null)
+            {
+                _targetEntity = null;
+            }
         }
 
         public Vector2 GetTargetPosition()

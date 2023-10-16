@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Items;
+using System.Collections;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {
@@ -74,11 +75,10 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             _collider = Entity.AddComponent(new BoxCollider(-8, 0, 16, 16)); //TODO: adjust for large chest
 
-            _interactable = Entity.AddComponent(new Interactable());
-            _interactable.Emitter.AddObserver(InteractableEvents.Interacted, OnInteracted);
+            _interactable = Entity.AddComponent(new Interactable(OnInteracted));
         }
 
-        void OnInteracted()
+        IEnumerator OnInteracted()
         {
             _renderer.SetSprite(_openSprite);
             _interactable.Active = false;
@@ -99,7 +99,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 new DialogueLine($"...what's this? Looks like there's something else in there..."),
                 new DialogueLine(cerealName.Value)
             };
-            textboxManager.DisplayTextbox(lines);
+            yield return textboxManager.DisplayTextbox(lines);
         }
     }
 }
