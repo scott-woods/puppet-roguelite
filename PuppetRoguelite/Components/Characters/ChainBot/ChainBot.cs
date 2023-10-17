@@ -137,6 +137,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector()
+                    .Sequence(AbortTypes.LowerPriority)
+                        .Conditional(c => c._isHurt)
+                    .EndComposite()
                     .Sequence(AbortTypes.LowerPriority) //perform action, then idle
                         .Conditional(e => !_isHurt)
                         .Selector(AbortTypes.LowerPriority) //select an attack/action

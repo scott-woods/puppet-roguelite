@@ -109,7 +109,7 @@ namespace PuppetRoguelite.Components
 
         void OnTurnPhaseCompleted()
         {
-            if (_encounterStarted)
+            if (_encounterStarted && !_isCleared)
             {
                 //remove enemies that have been killed
                 _enemies.RemoveAll(e => e.Entity == null);
