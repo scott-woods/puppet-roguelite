@@ -23,7 +23,6 @@ namespace PuppetRoguelite.Components.Characters.Boss
         //actions
         List<IEnemyAction> _actions = new List<IEnemyAction>();
         IEnemyAction _nextAction;
-        DoubleMeleeAttack _doubleMeleeAttack;
 
         Entity _meleeEntity;
 
@@ -84,7 +83,7 @@ namespace PuppetRoguelite.Components.Characters.Boss
             _hurtbox = Entity.AddComponent(new Hurtbox(_collider, 1));
 
             //velocity component
-            _velocityComponent = Entity.AddComponent(new VelocityComponent(_mover, MoveSpeed, new Vector2(0, 1), SubPixelV2));
+            _velocityComponent = Entity.AddComponent(new VelocityComponent(_mover, MoveSpeed, new Vector2(0, 1)));
 
             //pathfinding
             //Pathfinder = Entity.AddComponent(new PathfindingComponent(MapId));
@@ -98,10 +97,6 @@ namespace PuppetRoguelite.Components.Characters.Boss
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
-
-            //actions
-            //_doubleMeleeAttack = Entity.AddComponent(new DoubleMeleeAttack(this));
-            _actions.Add(_doubleMeleeAttack);
 
             //y sorter
             _ySorter = Entity.AddComponent(new YSorter(Animator, 12));

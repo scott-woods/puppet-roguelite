@@ -13,15 +13,14 @@ namespace PuppetRoguelite.Components.Shared
     {
         public Vector2 Direction;
         float _speed;
-        SubpixelVector2 _subpixelV2;
+        SubpixelVector2 _subPixelV2 = new SubpixelVector2();
 
         Mover _mover;
 
-        public VelocityComponent(Mover mover, float speed, Vector2 direction, SubpixelVector2 subpixelV2)
+        public VelocityComponent(Mover mover, float speed, Vector2 direction)
         {
             _speed = speed;
             Direction = direction;
-            _subpixelV2 = subpixelV2;
 
             _mover = mover;
         }
@@ -36,7 +35,7 @@ namespace PuppetRoguelite.Components.Shared
             //move
             var movement = Direction * _speed * Time.DeltaTime;
             _mover.CalculateMovement(ref movement, out var result);
-            _subpixelV2.Update(ref movement);
+            _subPixelV2.Update(ref movement);
             _mover.ApplyMovement(movement);
         }
     }

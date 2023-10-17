@@ -30,9 +30,10 @@ namespace PuppetRoguelite.Components.Shared
         {
             if (!_inRecovery)
             {
-                if (_collider.CollidesWithAny(out var result))
+                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
+                if (colliders.Count > 0)
                 {
-                    if (result.Collider.Entity.TryGetComponent<Hitbox>(out var hitbox))
+                    if (colliders.First().Entity.TryGetComponent<Hitbox>(out var hitbox))
                     {
                         _inRecovery = true;
                         Core.Schedule(_recoveryTime, timer => _inRecovery = false);

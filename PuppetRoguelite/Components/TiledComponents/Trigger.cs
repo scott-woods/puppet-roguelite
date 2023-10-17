@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Systems;
 using Nez.Tiled;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using System;
@@ -41,7 +42,8 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         public void Update()
         {
-            if (_collider.CollidesWithAny(out var result))
+            var colliders = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
+            if (colliders.Count > 0)
             {
                 Emitter.Emit(TriggerEventTypes.Triggered);
                 HandleTriggered();
