@@ -38,6 +38,12 @@ namespace PuppetRoguelite.Components
             return _map.TileToWorldPosition(gridPosition) + Entity.Position;
         }
 
+        /// <summary>
+        /// given a start and end point in world space, return list of world space positions along grid between them
+        /// </summary>
+        /// <param name="startPoint"></param>
+        /// <param name="endPoint"></param>
+        /// <returns></returns>
         public List<Vector2> FindPath(Vector2 startPoint, Vector2 endPoint)
         {
             //determine basic path along grid
@@ -49,7 +55,7 @@ namespace PuppetRoguelite.Components
                 return new List<Vector2> { endPoint };
             }
 
-            //modify path into list of Vector2
+            //modify path into list of Vector2 in world space (in center of tile)
             List<Vector2> path = new List<Vector2>();
             foreach (var pathItem in gridPath)
             {
@@ -80,36 +86,36 @@ namespace PuppetRoguelite.Components
             }
 
             //simplify path
-            List<Vector2> simplifiedPath = new List<Vector2>();
-            int currentIndex = 0;
-            while (currentIndex < path.Count - 1)
-            {
-                int furthestVisibleIndex = currentIndex;
-                for (int i = currentIndex + 1; i < path.Count; i++)
-                {
-                    var raycastHit = Physics.Linecast(path[currentIndex], path[i], 1 << 0);
-                    if (raycastHit.Collider == null)
-                    {
-                        furthestVisibleIndex = i;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+            //List<Vector2> simplifiedPath = new List<Vector2>();
+            //int currentIndex = 0;
+            //while (currentIndex < path.Count - 1)
+            //{
+            //    int furthestVisibleIndex = currentIndex;
+            //    for (int i = currentIndex + 1; i < path.Count; i++)
+            //    {
+            //        var raycastHit = Physics.Linecast(path[currentIndex], path[i], 1 << 0);
+            //        if (raycastHit.Collider == null)
+            //        {
+            //            furthestVisibleIndex = i;
+            //        }
+            //        else
+            //        {
+            //            break;
+            //        }
+            //    }
 
-                //safeguard against getting stuck in while loop
-                if (furthestVisibleIndex == currentIndex)
-                {
-                    currentIndex++;
-                }
-                else
-                {
-                    currentIndex = furthestVisibleIndex;
-                }
+            //    //safeguard against getting stuck in while loop
+            //    if (furthestVisibleIndex == currentIndex)
+            //    {
+            //        currentIndex++;
+            //    }
+            //    else
+            //    {
+            //        currentIndex = furthestVisibleIndex;
+            //    }
 
-                simplifiedPath.Add(path[currentIndex]);
-            }
+            //    simplifiedPath.Add(path[currentIndex]);
+            //}
 
             //smooth path
             //List<Vector2> smoothedPath = new List<Vector2>();
@@ -139,7 +145,8 @@ namespace PuppetRoguelite.Components
             //    }
             //}
 
-            return simplifiedPath;
+            //return simplifiedPath;
+            return path;
         }
     }
 }

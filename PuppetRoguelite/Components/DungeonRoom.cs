@@ -5,6 +5,7 @@ using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,7 @@ namespace PuppetRoguelite.Components
             _mapRenderer = Entity.AddComponent(new TiledMapRenderer(_map, "collision"));
             _mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
             _mapRenderer.RenderLayer = 10;
+            Flags.SetFlagExclusive(ref _mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
             _mapComponent = Entity.AddComponent(new TiledMapComponent(_mapRenderer));
 
             //connect to TurnPhaseCompleted event
@@ -87,10 +89,11 @@ namespace PuppetRoguelite.Components
 
                 //spawn enemies
                 var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapId == _mapComponent.Id).ToList();
-                foreach (var spawn in enemySpawns)
-                {
-                    _enemies.Add(spawn.SpawnEnemy());
-                }
+                //foreach (var spawn in enemySpawns)
+                //{
+                //    _enemies.Add(spawn.SpawnEnemy());
+                //}
+                _enemies.Add(enemySpawns[0].SpawnEnemy());
 
                 //emit
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);

@@ -12,18 +12,16 @@ namespace PuppetRoguelite.Components.Shared
     {
         public Collider Collider;
         int _damage;
-        int[] _targetLayers;
 
         public int Damage
         {
             get { return _damage; }
         }
 
-        public Hitbox(Collider collider, int damage, int[] targetLayers)
+        public Hitbox(Collider collider, int damage)
         {
             Collider = collider;
             _damage = damage;
-            _targetLayers = targetLayers;
         }
 
         public override void Initialize()

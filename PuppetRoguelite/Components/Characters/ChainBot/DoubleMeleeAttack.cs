@@ -50,7 +50,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
             _behaviorTree = BehaviorTreeBuilder<Enemy>.Begin(_chainBot)
                 .Sequence()
-                    .Action(enemy => ChasePlayer())
+                    .Action(enemy => EnemyTasks.ChasePlayer(_chainBot.Pathfinder, _chainBot.VelocityComponent))
                     .Action(enemy => TransitionToCharge())
                     .Action(enemy => ChargeAttack())
                     .WaitAction(.25f)
@@ -73,50 +73,50 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             return _behaviorTree;
         }
 
-        public TaskStatus ChasePlayer()
-        {
-            var player = PlayerController.Instance;
-            if (player != null)
-            {
-                //check if finished
-                if (_chainBot.Pathfinder.IsNavigationFinished())
-                {
-                    return TaskStatus.Success;
-                }
+        //public TaskStatus ChasePlayer()
+        //{
+        //    var player = PlayerController.Instance;
+        //    if (player != null)
+        //    {
+        //        //check if finished
+        //        if (_chainBot.Pathfinder.IsNavigationFinished())
+        //        {
+        //            return TaskStatus.Success;
+        //        }
 
-                //if close enough to player, return success
-                var distanceToPlayer = Vector2.Distance(_chainBot.Entity.Position, player.Entity.Position);
-                if (distanceToPlayer < 20)
-                {
-                    return TaskStatus.Success;
-                }
+        //        //if close enough to player, return success
+        //        var distanceToPlayer = Vector2.Distance(_chainBot.Entity.Position, player.Entity.Position);
+        //        if (distanceToPlayer < 20)
+        //        {
+        //            return TaskStatus.Success;
+        //        }
 
-                //get next path position
-                _chainBot.Pathfinder.SetTarget(player.Entity.Position);
-                var target = _chainBot.Pathfinder.GetNextPosition();
+        //        //get next path position
+        //        _chainBot.Pathfinder.SetTarget(player.Entity.Position);
+        //        var target = _chainBot._pathfinder.GetNextPosition();
 
-                //determine direction
-                _chainBot.Direction = target - _chainBot.Entity.Position;
-                _chainBot.Direction.Normalize();
+        //        //determine direction
+        //        _chainBot.Direction = target - _chainBot.Entity.Position;
+        //        _chainBot.Direction.Normalize();
 
-                //handle animation
-                var animation = _chainBot.Direction.X >= 0 ? "RunRight" : "RunLeft";
-                if (!_chainBot.Animator.IsAnimationActive(animation))
-                {
-                    _chainBot.Animator.Play(animation);
-                }
+        //        //handle animation
+        //        var animation = _chainBot.Direction.X >= 0 ? "RunRight" : "RunLeft";
+        //        if (!_chainBot.Animator.IsAnimationActive(animation))
+        //        {
+        //            _chainBot.Animator.Play(animation);
+        //        }
 
-                //move
-                var movement = _chainBot.Direction * _chainBot.MoveSpeed * Time.DeltaTime;
-                _chainBot.Mover.CalculateMovement(ref movement, out var result);
-                _chainBot.SubPixelV2.Update(ref movement);
-                _chainBot.Mover.ApplyMovement(movement);
+        //        //move
+        //        var movement = _chainBot.Direction * _chainBot.MoveSpeed * Time.DeltaTime;
+        //        _chainBot.Mover.CalculateMovement(ref movement, out var result);
+        //        _chainBot.SubPixelV2.Update(ref movement);
+        //        _chainBot.Mover.ApplyMovement(movement);
 
-                return TaskStatus.Running;
-            }
+        //        return TaskStatus.Running;
+        //    }
 
-            return TaskStatus.Failure;
-        }
+        //    return TaskStatus.Failure;
+        //}
 
         public TaskStatus TransitionToCharge()
         {
@@ -163,9 +163,10 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                 }
                 _hitboxCollider = Entity.AddComponent(new PolygonCollider(shape));
                 _hitboxCollider.IsTrigger = true;
-                _hitboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyDamage;
+                Flags.SetFlagExclusive(ref _hitboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+                Flags.SetFlagExclusive(ref _hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
                 _hitboxCollider.LocalOffset += offset;
-                _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, 3, new int[] { (int)PhysicsLayers.PlayerHurtbox }));
+                _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, 3));
 
                 return TaskStatus.Running;
             }

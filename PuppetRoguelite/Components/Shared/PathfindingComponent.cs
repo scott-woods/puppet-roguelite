@@ -44,6 +44,45 @@ namespace PuppetRoguelite.Components.Shared
             _timer = Core.Schedule(_updatePathInterval, true, timer => CalculatePath());
         }
 
+        public void FollowPath(Vector2 target, bool applySmoothing = true)
+        {
+            var path = _gridGraphManager.FindPath(Entity.Position, target);
+
+            if (applySmoothing)
+            {
+                List<Vector2> simplifiedPath = new List<Vector2>();
+                int currentIndex = 0;
+                while (currentIndex < path.Count - 1)
+                {
+                    int furthestVisibleIndex = currentIndex;
+                    for (int i = currentIndex + 1; i < path.Count; i++)
+                    {
+                        var raycastHit = Physics.Linecast(path[currentIndex], path[i], 1 << 0);
+                        if (raycastHit.Collider == null)
+                        {
+                            furthestVisibleIndex = i;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    //safeguard against getting stuck in while loop
+                    if (furthestVisibleIndex == currentIndex)
+                    {
+                        currentIndex++;
+                    }
+                    else
+                    {
+                        currentIndex = furthestVisibleIndex;
+                    }
+
+                    simplifiedPath.Add(path[currentIndex]);
+                }
+            }
+        }
+
         /// <summary>
         /// calculate a path using the grid graph manager of the scene
         /// </summary>

@@ -23,7 +23,7 @@ namespace PuppetRoguelite
 
         public IEnumerator PlayScene()
         {
-            PlayerController.Instance.SetEnabled(false);
+            Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
             var cam = _bossRoom.Camera.Entity.GetComponent<DeadzoneFollowCamera>();
             cam.RemoveFollowTarget();
@@ -47,7 +47,7 @@ namespace PuppetRoguelite
 
             cam.SetFollowTarget(PlayerController.Instance.Entity);
 
-            PlayerController.Instance.SetEnabled(true);
+            Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
             _bossRoom.Boss.SetActive(true);
 
             Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);

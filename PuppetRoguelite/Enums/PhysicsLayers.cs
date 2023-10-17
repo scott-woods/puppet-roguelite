@@ -6,15 +6,29 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Enums
 {
-    public enum PhysicsLayers 
+    public enum PhysicsLayers
     {
-        PlayerHurtbox = 1,
-        Damage = 999,
-        EnemyHurtbox = 2,
-        PlayerDamage = 3,
-        EnemyDamage = 4,
-        Collider = 5,
-        Chest = 6,
-        Interactable = 7
+        None,
+        Environment,
+        PlayerCollider,
+        PlayerHitbox,
+        PlayerHurtbox,
+        EnemyCollider,
+        EnemyHitbox,
+        EnemyHurtbox,
+        Interactable,
+        Trigger
     }
+
+    //public enum PhysicsLayers 
+    //{
+    //    PlayerHurtbox = 1,
+    //    Damage = 999,
+    //    EnemyHurtbox = 2,
+    //    PlayerDamage = 3,
+    //    EnemyDamage = 4,
+    //    Collider = 5,
+    //    Chest = 6,
+    //    Interactable = 7
+    //}
 }

@@ -1,19 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.AI.BehaviorTrees;
-using Nez.AI.FSM;
 using Nez.Sprites;
 using Nez.Textures;
-using Nez.UI;
+using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
 namespace PuppetRoguelite.Components.Characters.ChainBot
@@ -21,25 +16,24 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
     public class ChainBot : Enemy, IUpdatable
     {
         //behavior tree
-        BehaviorTree<Enemy> BehaviorTree;
+        BehaviorTree<ChainBot> _tree;
 
         //actions
         List<IEnemyAction> _actions = new List<IEnemyAction>();
         IEnemyAction _nextAction;
         DoubleMeleeAttack _doubleMeleeAttack;
-
-        Entity _meleeEntity;
+        ChainBotMelee _chainBotMelee;
+        EnemyAction _currentAction;
 
         //components
         public Mover Mover;
         public SpriteAnimator Animator;
         Hurtbox _hurtbox;
         HealthComponent _healthComponent;
-        public PathfindingComponent Pathfinder;
+        public NewPathfindingComponent Pathfinder;
         Collider _collider;
         YSorter _ySorter;
-
-        Hitbox _melee;
+        public VelocityComponent VelocityComponent;
 
         //properties
         public float MoveSpeed = 75f;
@@ -54,13 +48,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public ChainBot(string mapId) : base(mapId)
         {
 
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            
         }
 
         public override void OnAddedToEntity()
@@ -82,17 +69,23 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //hurtbox
             var hurtboxCollider = Entity.AddComponent(new BoxCollider(0, -9, 8, 18));
             hurtboxCollider.IsTrigger = true;
-            hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] {(int)PhysicsLayers.PlayerDamage}));
+            Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
+            Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(1, 1));
 
+            //velocity
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, MoveSpeed, new Vector2(1, 0), SubPixelV2));
+
             //pathfinding
-            Pathfinder = Entity.AddComponent(new PathfindingComponent(MapId));
+            Pathfinder = Entity.AddComponent(new NewPathfindingComponent(VelocityComponent, MapId));
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
+            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
@@ -101,6 +94,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //actions
             _doubleMeleeAttack = Entity.AddComponent(new DoubleMeleeAttack(this));
             _actions.Add(_doubleMeleeAttack);
+            //_chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));
 
             //y sorter
             _ySorter = Entity.AddComponent(new YSorter(Animator, 12));
@@ -149,30 +143,62 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         public void SetupBehaviorTree()
         {
-            BehaviorTree = BehaviorTreeBuilder<Enemy>.Begin(this)
+            _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector()
                     .Sequence(AbortTypes.LowerPriority)
                         .Conditional(e => _isHurt)
                         .Action(e => CancelAction())
                     .EndComposite()
-                    .Sequence(AbortTypes.LowerPriority)
-                        .Conditional(e => !_isHurt)
-                        .Action(enemy => SelectNextAction())
-                        .Action(enemy => ExecuteAction())
-                        //.SubTree(_nextAction.GetBehaviorTree(this))
-                        .Action(enemy => Idle())
-                        .WaitAction(.5f)
+                    .Sequence()
+                        .Selector()
+                            .Sequence()
+                                .ParallelSelector()
+                                    .Action(c => c.Move())
+                                    .Action(c => EnemyTasks.ChasePlayer(c.Pathfinder, c.VelocityComponent))
+                                .EndComposite()
+                                .Action(c => c.MeleeAttack())
+                                //.SubTree(_chainBotMelee.GetBehaviorTree())
+                            .EndComposite()
+                        .EndComposite()
+                        .ParallelSelector()
+                            .WaitAction(.5f)
+                            .Action(c => c.Idle())
+                        .EndComposite()
                     .EndComposite()
+                    //.Sequence(AbortTypes.LowerPriority)
+                    //    .Conditional(e => !_isHurt)
+                    //    .Action(enemy => SelectNextAction())
+                    //    .Action(enemy => ExecuteAction())
+                    //    //.SubTree(_nextAction.GetBehaviorTree(this))
+                    //    .Action(enemy => Idle())
+                    //    .WaitAction(.5f)
+                    //.EndComposite()
                 .EndComposite()
                 .Build();
-            BehaviorTree.UpdatePeriod = 0;
+            _tree.UpdatePeriod = 0;
         }
 
         #endregion
 
         public void Update()
         {
-            BehaviorTree.Tick();
+            _tree.Tick();
+        }
+
+        TaskStatus MeleeAttack()
+        {
+            if (_currentAction == null)
+            {
+                _currentAction = Entity.AddComponent(new ChainBotMelee(this));
+            }
+
+            if (_currentAction.Execute())
+            {
+                Entity.RemoveComponent(_currentAction);
+                _currentAction = null;
+                return TaskStatus.Success;
+            }
+            else return TaskStatus.Running;
         }
 
         public TaskStatus SelectNextAction()
@@ -207,11 +233,28 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             return TaskStatus.Success;
         }
 
-        public TaskStatus Idle()
+        TaskStatus Idle()
         {
-            var animation = Direction.X >= 0 ? "IdleRight" : "IdleLeft";
-            Animator.Play(animation);
-            return TaskStatus.Success;
+            var animation = VelocityComponent.Direction.X >= 0 ? "IdleRight" : "IdleLeft";
+
+            if (!Animator.IsAnimationActive(animation))
+            {
+                Animator.Play(animation);
+            }
+
+            return TaskStatus.Running;
+        }
+
+        TaskStatus Move()
+        {
+            var animation = VelocityComponent.Direction.X >= 0 ? "RunRight" : "RunLeft";
+
+            if (!Animator.IsAnimationActive(animation))
+            {
+                Animator.Play(animation);
+            }
+            
+            return TaskStatus.Running;
         }
 
         void OnDamageTaken(HealthComponent healthComponent)

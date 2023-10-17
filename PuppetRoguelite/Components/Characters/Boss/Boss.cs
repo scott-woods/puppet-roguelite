@@ -11,13 +11,14 @@ using Nez.Textures;
 using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Tools;
 using Microsoft.Xna.Framework;
+using PuppetRoguelite.Components.Characters.Player;
 
 namespace PuppetRoguelite.Components.Characters.Boss
 {
-    public class Boss : Enemy
+    public class Boss : Enemy, IUpdatable
     {
         //behavior tree
-        BehaviorTree<Enemy> BehaviorTree;
+        BehaviorTree<Boss> _tree;
 
         //actions
         List<IEnemyAction> _actions = new List<IEnemyAction>();
@@ -27,13 +28,16 @@ namespace PuppetRoguelite.Components.Characters.Boss
         Entity _meleeEntity;
 
         //components
-        public Mover Mover;
+        Mover _mover;
         public SpriteAnimator Animator;
         Hurtbox _hurtbox;
         HealthComponent _healthComponent;
-        public PathfindingComponent Pathfinder;
+        //public PathfindingComponent Pathfinder;
         Collider _collider;
         YSorter _ySorter;
+        //Chaser _chaser;
+        NewPathfindingComponent _pathfinder;
+        VelocityComponent _velocityComponent;
 
         Hitbox _melee;
 
@@ -67,22 +71,29 @@ namespace PuppetRoguelite.Components.Characters.Boss
         void AddComponents()
         {
             //Mover
-            Mover = Entity.AddComponent(new Mover());
-
-            //hurtbox
-            var hurtboxCollider = Entity.AddComponent(new BoxCollider(0, -9, 8, 18));
-            hurtboxCollider.IsTrigger = true;
-            hurtboxCollider.PhysicsLayer = (int)PhysicsLayers.EnemyHurtbox;
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.PlayerDamage }));
+            _mover = Entity.AddComponent(new Mover());
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(1, 1));
 
+            //hurtbox
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(0, -9, 8, 18));
+            hurtboxCollider.IsTrigger = true;
+            Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
+            Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
+            _hurtbox = Entity.AddComponent(new Hurtbox(_collider, 1));
+
+            //velocity component
+            _velocityComponent = Entity.AddComponent(new VelocityComponent(_mover, MoveSpeed, new Vector2(0, 1), SubPixelV2));
+
             //pathfinding
-            Pathfinder = Entity.AddComponent(new PathfindingComponent(MapId));
+            //Pathfinder = Entity.AddComponent(new PathfindingComponent(MapId));
+            _pathfinder = Entity.AddComponent(new NewPathfindingComponent(_velocityComponent, MapId));
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
+            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
@@ -94,6 +105,9 @@ namespace PuppetRoguelite.Components.Characters.Boss
 
             //y sorter
             _ySorter = Entity.AddComponent(new YSorter(Animator, 12));
+
+            //chaser
+            //_chaser = Entity.AddComponent(new Chaser(PlayerController.Instance.Entity, _mover, Pathfinder));
         }
 
         void AddAnimations()
@@ -139,23 +153,35 @@ namespace PuppetRoguelite.Components.Characters.Boss
 
         public void SetupBehaviorTree()
         {
-            BehaviorTree = BehaviorTreeBuilder<Enemy>.Begin(this)
+            _tree = BehaviorTreeBuilder<Boss>.Begin(this)
                 .Selector()
-                    .Sequence(AbortTypes.LowerPriority)
-                        .Conditional(e => _isHurt)
-                        .Action(e => CancelAction())
+                    .Sequence(AbortTypes.LowerPriority) //idle if not active
+                        .Conditional(b => !b._isActive)
+                        .Action(b => b.Idle())
                     .EndComposite()
-                    .Sequence(AbortTypes.LowerPriority)
-                        .Conditional(e => !_isHurt)
-                        .Action(enemy => SelectNextAction())
-                        .Action(enemy => ExecuteAction())
-                        //.SubTree(_nextAction.GetBehaviorTree(this))
-                        .Action(enemy => Idle())
-                        .WaitAction(.5f)
+                    .Sequence(AbortTypes.LowerPriority) //cancel action if hurt
+                        .Conditional(b => b._isHurt)
+                        .Action(b => b.CancelAction())
                     .EndComposite()
+                    .Selector(AbortTypes.LowerPriority)
+                        .Sequence(AbortTypes.LowerPriority)
+                            .Action(b => b.ChasePlayer())
+                            //.Action(b => b.Attack())
+                            .Action(b => b.Idle())
+                            .WaitAction(.5f)
+                        .EndComposite()
+                    .EndComposite()
+                    //.Sequence(AbortTypes.LowerPriority)
+                    //    .Conditional(e => !_isHurt)
+                    //    .Action(enemy => SelectNextAction())
+                    //    .Action(enemy => ExecuteAction())
+                    //    //.SubTree(_nextAction.GetBehaviorTree(this))
+                    //    .Action(enemy => Idle())
+                    //    .WaitAction(.5f)
+                    //.EndComposite()
                 .EndComposite()
                 .Build();
-            BehaviorTree.UpdatePeriod = 0;
+            _tree.UpdatePeriod = 0;
         }
 
         #endregion
@@ -167,11 +193,21 @@ namespace PuppetRoguelite.Components.Characters.Boss
 
         public void Update()
         {
-            if (_isActive)
+            _tree.Tick();
+        }
+
+        TaskStatus ChasePlayer()
+        {
+            var reachedTarget = _pathfinder.FollowPath(PlayerController.Instance.Entity.Position, true);
+            if (!reachedTarget)
             {
-                BehaviorTree.Tick();
+                _velocityComponent.Move();
+                return TaskStatus.Running;
             }
-            else Idle();
+            else
+            {
+                return TaskStatus.Success;
+            }
         }
 
         public TaskStatus SelectNextAction()
@@ -209,7 +245,11 @@ namespace PuppetRoguelite.Components.Characters.Boss
         public TaskStatus Idle()
         {
             var animation = Direction.X >= 0 ? "IdleRight" : "IdleLeft";
-            Animator.Play(animation);
+            if (!Animator.IsAnimationActive(animation))
+            {
+                Animator.Play(animation);
+            }
+            
             return TaskStatus.Success;
         }
 

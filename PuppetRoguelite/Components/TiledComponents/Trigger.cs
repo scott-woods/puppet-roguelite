@@ -15,7 +15,7 @@ namespace PuppetRoguelite.Components.TiledComponents
     /// <summary>
     /// trigger created from tiled object
     /// </summary>
-    public abstract class Trigger : TiledComponent, ITriggerListener
+    public abstract class Trigger : TiledComponent, IUpdatable
     {
         public Emitter<TriggerEventTypes> Emitter = new Emitter<TriggerEventTypes>();
 
@@ -34,22 +34,18 @@ namespace PuppetRoguelite.Components.TiledComponents
             //collider
             _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
             _collider.IsTrigger = true;
-            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Collider);
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Trigger);
+            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.PlayerCollider);
             Entity.AddComponent(_collider);
         }
 
-        public virtual void OnTriggerEnter(Collider other, Collider local)
+        public void Update()
         {
-            if (other.PhysicsLayer == 1 << (int)PhysicsLayers.Collider)
+            if (_collider.CollidesWithAny(out var result))
             {
                 Emitter.Emit(TriggerEventTypes.Triggered);
                 HandleTriggered();
             }
-        }
-
-        public virtual void OnTriggerExit(Collider other, Collider local)
-        {
-            //throw new NotImplementedException();
         }
 
         public abstract void HandleTriggered();

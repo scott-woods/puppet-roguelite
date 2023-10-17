@@ -18,8 +18,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     public class Dash : PlayerAction
     {
         int _damage = 1;
-        int[] _targetLayers = new int[] { (int)PhysicsLayers.EnemyHurtbox };
-        int _hitboxPhysicsLayer = (int)PhysicsLayers.PlayerDamage;
         int _range = 32;
         float _rotationSpeed = .05f;
         int _startFrame = 3;
@@ -56,9 +54,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             AddAnimations();
 
             _hitboxCollider = Entity.AddComponent(new BoxCollider(12, 24));
-            _hitboxCollider.PhysicsLayer = _hitboxPhysicsLayer;
+            Flags.SetFlagExclusive(ref _hitboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
+            Flags.SetFlagExclusive(ref _hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             _componentsList.Add(_hitboxCollider);
-            _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, _damage, _targetLayers));
+            _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, _damage));
             _componentsList.Add(_hitbox);
 
             _ySorter = Entity.AddComponent(new YSorter(_animator, 12));

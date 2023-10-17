@@ -84,14 +84,17 @@ namespace PuppetRoguelite.Components.Characters.Player
             _mover = Entity.AddComponent(new Mover());
 
             //Add hurtbox
-            //var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
-            //hurtboxCollider.IsTrigger = true;
-            //Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
-            //_hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1, new int[] { (int)PhysicsLayers.EnemyDamage }));
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
+            hurtboxCollider.IsTrigger = true;
+            Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
+            Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Collider);
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
+            Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
+            //Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
@@ -121,6 +124,9 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             Emitters.InteractableEmitter.AddObserver(InteractableEvents.Interacted, OnInteractionStarted);
             Emitters.InteractableEmitter.AddObserver(InteractableEvents.InteractionFinished, OnInteractionFinished);
+
+            Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneStarted, () => StateMachine.ChangeState<PlayerIdle>());
+            Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneEnded, () => StateMachine.ChangeState<PlayerDefault>());
         }
 
         void SetupInput()
