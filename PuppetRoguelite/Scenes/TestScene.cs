@@ -67,7 +67,7 @@ namespace PuppetRoguelite.Scenes
             base.Begin();
 
             _dungenerator.Generate();
-            Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.Babbulon_double, false, 125902);
+            //Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.Babbulon_double, false, 125902);
         }
 
         public override void End()

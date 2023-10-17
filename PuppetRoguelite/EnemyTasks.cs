@@ -10,7 +10,7 @@ namespace PuppetRoguelite
 {
     public static class EnemyTasks
     {
-        public static TaskStatus ChasePlayer(NewPathfindingComponent pathfinder, VelocityComponent velocityComponent)
+        public static TaskStatus ChasePlayer(PathfindingComponent pathfinder, VelocityComponent velocityComponent)
         {
             var reachedTarget = pathfinder.FollowPath(PlayerController.Instance.Entity.Position, true);
             if (!reachedTarget)

@@ -92,7 +92,7 @@ namespace PuppetRoguelite.Scenes
             var bossSpawn = FindComponentOfType<BossSpawnPoint>();
             var bossEntity = CreateEntity("boss", bossSpawn.Entity.Position);
             Boss = bossEntity.AddComponent(new Boss(_mapComponent.Id));
-            Boss.SetActive(false);
+            //Boss.SetActive(false);
         }
 
         void OnTriggered()

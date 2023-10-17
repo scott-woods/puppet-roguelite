@@ -3,6 +3,7 @@ using Nez;
 using Nez.AI.BehaviorTrees;
 using Nez.PhysicsShapes;
 using Nez.Sprites;
+using Nez.Systems;
 using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
@@ -19,26 +20,8 @@ namespace PuppetRoguelite.Components.EnemyActions
         ChainBot _chainBot;
 
         //components
-        Hitbox _hitbox;
-        Collider _hitboxCollider;
-
-        Shape _rightMeleeShape = new Polygon(new Vector2[]
-        {
-            new Vector2(0, -4),
-            new Vector2(35, -4),
-            new Vector2(40, 0),
-            new Vector2(35, 7),
-            new Vector2(0, 7)
-        });
-
-        Shape _leftMeleeShape = new Polygon(new Vector2[]
-        {
-            new Vector2(0, -4),
-            new Vector2(0, 7),
-            new Vector2(-35, 7),
-            new Vector2(-40, 0),
-            new Vector2(-35, -4)
-        });
+        Hitbox _leftHitbox, _rightHitbox;
+        Collider _leftCollider, _rightCollider;
 
         Vector2 _offset = new Vector2(8, 0);
 
@@ -51,16 +34,39 @@ namespace PuppetRoguelite.Components.EnemyActions
         {
             base.Initialize();
 
-            _hitboxCollider = Entity.AddComponent(new PolygonCollider());
-            _hitboxCollider.Shape = _rightMeleeShape;
-            _hitboxCollider.IsTrigger = true;
-            Flags.SetFlagExclusive(ref _hitboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref _hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            _hitboxCollider.SetLocalOffset(_offset);
-            _components.Add(_hitboxCollider);
+            //right facing hitbox
+            _rightCollider = Entity.AddComponent(new PolygonCollider(new Vector2[]
+            {
+                new Vector2(0, -4),
+                new Vector2(35, -4),
+                new Vector2(40, 0),
+                new Vector2(35, 7),
+                new Vector2(0, 7)
+            }));
+            _rightCollider.IsTrigger = true;
+            Flags.SetFlagExclusive(ref _rightCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref _rightCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
+            _rightCollider.SetLocalOffset(_offset);
+            _components.Add(_rightCollider);
+            _rightHitbox = Entity.AddComponent(new Hitbox(_rightCollider, 3));
+            _components.Add(_rightHitbox);
 
-            _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, 3));
-            _components.Add(_hitbox);
+            //left facing hitbox
+            _leftCollider = Entity.AddComponent(new PolygonCollider(new Vector2[]
+            {
+                new Vector2(0, -4),
+                new Vector2(0, 7),
+                new Vector2(-35, 7),
+                new Vector2(-40, 0),
+                new Vector2(-35, -4)
+            }));
+            _leftCollider.IsTrigger = true;
+            Flags.SetFlagExclusive(ref _leftCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref _leftCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
+            _leftCollider.SetLocalOffset(-_offset);
+            _components.Add(_leftCollider);
+            _leftHitbox = Entity.AddComponent(new Hitbox(this._leftCollider, 3));
+            _components.Add(_leftHitbox);
         }
 
         protected override IEnumerator HandleExecution()
@@ -92,17 +98,8 @@ namespace PuppetRoguelite.Components.EnemyActions
 
         IEnumerator AttackPlayer()
         {
-            //set direction
-            if (_chainBot.VelocityComponent.Direction.X >= 0)
-            {
-                _hitboxCollider.Shape = _rightMeleeShape;
-                _hitboxCollider.SetLocalOffset(_offset);
-            }
-            else
-            {
-                _hitboxCollider.Shape = _leftMeleeShape;
-                _hitboxCollider.SetLocalOffset(-_offset);
-            }
+            //select hitbox
+            var hitbox = _chainBot.VelocityComponent.Direction.X >= 0 ? _rightHitbox : _leftHitbox;
 
             //play animation
             var attackAnimation = _chainBot.VelocityComponent.Direction.X >= 0 ? "AttackRight" : "AttackLeft";
@@ -113,9 +110,9 @@ namespace PuppetRoguelite.Components.EnemyActions
             {
                 if (new[] { 0, 4 }.Contains(_chainBot.Animator.CurrentFrame))
                 {
-                    _hitbox.Enable();
+                    hitbox.Enable();
                 }
-                else _hitbox.Disable();
+                else hitbox.Disable();
 
                 yield return null;
             }

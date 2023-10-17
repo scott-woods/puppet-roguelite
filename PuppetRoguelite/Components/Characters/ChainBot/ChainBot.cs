@@ -27,7 +27,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public SpriteAnimator Animator;
         Hurtbox _hurtbox;
         HealthComponent _healthComponent;
-        public NewPathfindingComponent Pathfinder;
+        public PathfindingComponent Pathfinder;
         Collider _collider;
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
@@ -73,7 +73,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, MoveSpeed, new Vector2(1, 0)));
 
             //pathfinding
-            Pathfinder = Entity.AddComponent(new NewPathfindingComponent(VelocityComponent, MapId));
+            Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapId));
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));

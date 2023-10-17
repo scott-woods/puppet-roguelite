@@ -48,7 +48,7 @@ namespace PuppetRoguelite
             cam.SetFollowTarget(PlayerController.Instance.Entity);
 
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
-            _bossRoom.Boss.SetActive(true);
+            //_bossRoom.Boss.SetActive(true);
 
             Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
         }

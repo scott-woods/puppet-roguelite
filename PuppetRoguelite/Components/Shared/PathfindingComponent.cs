@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
-using Nez.Timers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,53 +10,57 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class PathfindingComponent : Component
     {
-        string _mapId;
+        int _pathDesiredDistance;
+        int _targetDesiredDistance;
 
         GridGraphManager _gridGraphManager;
+        VelocityComponent _velocityComponent;
 
-        List<Vector2> _currentPath;
-        int _currentPathIndex = 0;
+        string _mapId;
 
-        float _minimumDistance = 3f;
-        float _updatePathInterval = .2f;
-
-        ITimer _timer;
-
-        Vector2? _target;
-
-        //public PathfindingComponent(GridGraphManager gridGraphManager)
-        //{
-        //    _gridGraphManager = gridGraphManager;
-        //}
-
-        public PathfindingComponent(string mapId)
+        public PathfindingComponent(VelocityComponent velocityComponent, string mapId, int pathDesiredDistance = 16, int targetDesiredDistance = 16)
         {
             _mapId = mapId;
+            _velocityComponent = velocityComponent;
+            _pathDesiredDistance = pathDesiredDistance;
+            _targetDesiredDistance = targetDesiredDistance;
         }
 
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
 
-            _gridGraphManager = Entity.Scene.FindComponentsOfType<GridGraphManager>().Where(g => g.MapId == _mapId).FirstOrDefault();
-
-            _timer = Core.Schedule(_updatePathInterval, true, timer => CalculatePath());
+            _gridGraphManager = Entity.Scene.FindComponentsOfType<GridGraphManager>().FirstOrDefault(g => g.MapId == _mapId);
         }
 
-        public void FollowPath(Vector2 target, bool applySmoothing = true)
+        /// <summary>
+        /// follow a path to a target. returns true when the entity is within a set distance of the target
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="applySmoothing"></param>
+        /// <returns></returns>
+        public bool FollowPath(Vector2 target, bool applySmoothing = true)
         {
+            if (Math.Abs(Vector2.Distance(Entity.Position, target)) <= _targetDesiredDistance)
+            {
+                return true;
+            }
+
+            //get basic path on grid
             var path = _gridGraphManager.FindPath(Entity.Position, target);
 
+            var finalPath = new List<Vector2>();
+
+            //apply smoothing if desired
             if (applySmoothing)
             {
-                List<Vector2> simplifiedPath = new List<Vector2>();
                 int currentIndex = 0;
                 while (currentIndex < path.Count - 1)
                 {
                     int furthestVisibleIndex = currentIndex;
                     for (int i = currentIndex + 1; i < path.Count; i++)
                     {
-                        var raycastHit = Physics.Linecast(path[currentIndex], path[i], 1 << 0);
+                        var raycastHit = Physics.Linecast(path[currentIndex], path[i]);
                         if (raycastHit.Collider == null)
                         {
                             furthestVisibleIndex = i;
@@ -78,102 +81,36 @@ namespace PuppetRoguelite.Components.Shared
                         currentIndex = furthestVisibleIndex;
                     }
 
-                    simplifiedPath.Add(path[currentIndex]);
+                    finalPath.Add(path[currentIndex]);
                 }
             }
-        }
-
-        /// <summary>
-        /// calculate a path using the grid graph manager of the scene
-        /// </summary>
-        public void CalculatePath()
-        {
-            if (Entity != null)
+            else
             {
-                if (_target != null)
-                {
-                    if (_gridGraphManager != null)
-                    {
-                        _currentPath = _gridGraphManager.FindPath(Entity.Position, _target.Value);
-                        _currentPathIndex = 0;
-                    }
-                }
+                finalPath = path;
             }
-        }
 
-        /// <summary>
-        /// Get the next point on the path, incrementing if within min distance to it
-        /// </summary>
-        /// <returns></returns>
-        public Vector2 GetNextPosition()
-        {
-            var currentTarget = _currentPath[_currentPathIndex];
-            if (Math.Abs(Vector2.Distance(Entity.Position, currentTarget)) < _minimumDistance)
+            //loop through points along path
+            foreach(var pos in finalPath)
             {
-                if (_currentPathIndex < _currentPath.Count - 1)
+                //if within set distance to the next point on path, continue to the next one
+                if (Math.Abs(Vector2.Distance(Entity.Position, pos)) <= _pathDesiredDistance)
                 {
-                    _currentPathIndex++;
+                    continue;
+                }
+                else //if not within distance to next point, we need to move there. update direction of velocity component
+                {
+                    var direction = pos - Entity.Position;
+                    direction.Normalize();
+                    _velocityComponent.SetDirection(direction);
+                    return false;
                 }
             }
 
-            return _currentPath[_currentPathIndex];
-        }
-
-        /// <summary>
-        /// returns true if our position is within the minimum distance of the final target
-        /// </summary>
-        /// <returns></returns>
-        public bool IsNavigationFinished()
-        {
-            if (_currentPath == null) return false;
-            if (_currentPathIndex == _currentPath.Count - 1)
-            {
-                var currentTarget = _currentPath[_currentPathIndex];
-                if (Math.Abs(Vector2.Distance(Entity.Position, currentTarget)) < _minimumDistance)
-                {
-                    return true;
-                }
-            }
-
+            //no points along the path were good, just go to target
+            var dir = target - Entity.Position;
+            dir.Normalize();
+            _velocityComponent.SetDirection(dir);
             return false;
-        }
-
-        /// <summary>
-        /// set target position
-        /// </summary>
-        /// <param name="target"></param>
-        public void SetTarget(Vector2 target)
-        {
-            _target = target;
-            CalculatePath();
-        }
-
-        /// <summary>
-        /// Change frequency that path is calculated
-        /// </summary>
-        /// <param name="interval"></param>
-        public void SetUpdateInterval(float interval)
-        {
-            _updatePathInterval = interval;
-            _timer.Stop();
-            _timer = Core.Schedule(_updatePathInterval, true, timer => CalculatePath());
-        }
-
-        /// <summary>
-        /// Render path in debug mode
-        /// </summary>
-        /// <param name="batcher"></param>
-        public override void DebugRender(Batcher batcher)
-        {
-            base.DebugRender(batcher);
-
-            if (_currentPath != null)
-            {
-                foreach (var node in _currentPath)
-                {
-                    batcher.DrawPixel(node.X, node.Y, Color.Orange, 4);
-                }
-            }
         }
     }
 }

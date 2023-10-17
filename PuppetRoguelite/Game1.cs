@@ -19,9 +19,11 @@ namespace PuppetRoguelite
         {
             base.Initialize();
 
-            DebugRenderEnabled = true;
+            DebugRenderEnabled = false;
             Window.AllowUserResizing = true;
             IsFixedTimeStep = false;
+
+            Physics.SpatialHashCellSize = 32;
 
             FmodManager.Init(new DesktopNativeFmodLibrary(), FmodInitMode.CoreAndStudio, "");
 
