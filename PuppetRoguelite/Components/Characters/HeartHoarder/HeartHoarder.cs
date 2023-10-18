@@ -30,6 +30,10 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public PathfindingComponent PathfindingComponent;
         public CombatComponent CombatComponent;
 
+        //misc
+        float _normalMoveSpeed = 50f;
+        float _attackingMoveSpeed = 80f;
+
         #region SETUP
 
         public HeartHoarder(string mapId) : base(mapId)
@@ -51,7 +55,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
             HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
 
-            Collider = Entity.AddComponent(new BoxCollider());
+            Collider = Entity.AddComponent(new BoxCollider(-13, 43, 26, 16));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
 
             var hurtboxCollider = Entity.AddComponent(new BoxCollider());
@@ -60,7 +64,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
             Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, 1));
 
-            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, 75f, new Vector2(1, 0)));
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed, new Vector2(1, 0)));
 
             PathfindingComponent = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapId));
 
@@ -73,7 +77,9 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         void AddAnimations()
         {
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.HeartHoarder.Heart_hoarder);
+            var leftTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.HeartHoarder.Heart_hoarder_left);
             var sprites = Sprite.SpritesFromAtlas(texture, 222, 119);
+            var leftSprites = Sprite.SpritesFromAtlas(texture, 222, 119);
             int totalColumns = 36;
 
             Animator.AddAnimation("Idle", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 0, 9, totalColumns));
@@ -81,22 +87,29 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             Animator.AddAnimation("StationaryAttack", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 1, 9, totalColumns));
 
             Animator.AddAnimation("StartMovingRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 2, 2, totalColumns));
+            Animator.AddAnimation("StartMovingLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 2, 2, totalColumns));
 
             Animator.AddAnimation("MoveRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 3, 8, totalColumns));
+            Animator.AddAnimation("MoveLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 3, 8, totalColumns));
 
             Animator.AddAnimation("MoveAttackPrepRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 4, 8, totalColumns));
+            Animator.AddAnimation("MoveAttackPrepLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 4, 8, totalColumns));
 
             Animator.AddAnimation("MoveAttackRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 5, 16, totalColumns));
+            Animator.AddAnimation("MoveAttackLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 5, 16, totalColumns));
 
             Animator.AddAnimation("StopMovingAfterAttackRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 6, 4, totalColumns));
+            Animator.AddAnimation("StopMovingAfterAttackLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 6, 4, totalColumns));
 
             Animator.AddAnimation("StopMovingRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 7, 4, totalColumns));
+            Animator.AddAnimation("StopMovingLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 7, 4, totalColumns));
 
             Animator.AddAnimation("Vanish", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 8, 10, totalColumns));
 
             Animator.AddAnimation("Appear", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 9, 9, totalColumns));
 
             Animator.AddAnimation("HitRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 11, 2, totalColumns));
+            Animator.AddAnimation("HitLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 11, 2, totalColumns));
 
             Animator.AddAnimation("Death", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 12, 36, totalColumns));
         }
@@ -106,9 +119,31 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             _tree = BehaviorTreeBuilder<HeartHoarder>
                 .Begin(this)
                     .Selector(AbortTypes.Self)
-                        .ConditionalDecorator(h => !h.Hurtbox.IsStunned)
-                        .Sequence()
-                            .Action(h => h.Idle())
+                        .ConditionalDecorator(h => !h.Hurtbox.IsStunned, true)
+                        .RandomSelector()
+                            .Sequence()
+                                .ParallelSelector()
+                                    .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
+                                    .Action(h => h.WaitForAnimation("StartMovingRight"))
+                                .EndComposite()
+                                .ParallelSelector() //move towards player for a few seconds
+                                    .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
+                                    .Action(h => h.PlayAnimationLoop("MoveRight"))
+                                    .Conditional(h => Math.Abs(Vector2.Distance(h.Entity.Position, PlayerController.Instance.Entity.Position)) < 32)
+                                    .WaitAction(3f)
+                                .EndComposite()
+                                .Action(h => h.WaitForAnimation("MoveAttackPrepRight", .5f))
+                                .ParallelSelector()
+                                    .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _attackingMoveSpeed))
+                                    .Action(h => h.PlayAnimationLoop("MoveAttackRight"))
+                                    .WaitAction(4f)
+                                .EndComposite()
+                                .Action(h => h.WaitForAnimation("StopMovingAfterAttackRight"))
+                                .ParallelSelector()
+                                    .Action(h => h.PlayAnimationLoop("Idle"))
+                                    .WaitAction(1f)
+                                .EndComposite()
+                            .EndComposite()
                         .EndComposite()
                     .EndComposite()
                 .Build();
@@ -121,19 +156,62 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public void Update()
         {
             _tree.Tick();
+
+            var dir = VelocityComponent.Direction;
+            var flip = dir.X < 0;
+            Animator.FlipX = flip;
         }
 
         #region TASKS
 
-        TaskStatus Idle()
+        TaskStatus WaitForAnimation(string animationName, float animationSpeed = 1)
         {
-            if (!Animator.IsAnimationActive("Idle"))
+            Animator.Speed = animationSpeed;
+
+            if (!Animator.IsAnimationActive(animationName))
             {
-                Animator.Play("Idle");
+                Animator.Play(animationName, SpriteAnimator.LoopMode.Once);
+                return TaskStatus.Running;
+            }
+            else if (Animator.AnimationState != SpriteAnimator.State.Completed) //still running
+            {
+                return TaskStatus.Running;
             }
 
             return TaskStatus.Success;
         }
+
+        TaskStatus MoveTowardsPosition(Vector2 target, float speed)
+        {
+            PathfindingComponent.FollowPath(target, true);
+            VelocityComponent.Move(speed);
+            return TaskStatus.Running;
+        }
+
+        TaskStatus PlayAnimationLoop(string animationName)
+        {
+            if (!Animator.IsAnimationActive(animationName))
+            {
+                Animator.Play(animationName);
+            }
+
+            return TaskStatus.Running;
+        }
+
+        //TaskStatus ChargeMovingAttack()
+        //{
+        //    if (!Animator.IsAnimationActive("MoveAttackPrepRight"))
+        //    {
+        //        Animator.Play("MoveAttackPrepRight", SpriteAnimator.LoopMode.Once);
+        //        return TaskStatus.Running;
+        //    }
+        //    else if (Animator.AnimationState != SpriteAnimator.State.Completed)
+        //    {
+        //        return TaskStatus.Running;
+        //    }
+
+        //    return TaskStatus.Success;
+        //}
 
         #endregion
 

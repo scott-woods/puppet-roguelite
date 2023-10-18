@@ -56,6 +56,7 @@ namespace Nez
 				public static class HeartHoarder
 				{
 					public const string Heart_hoarder = @"Content\Textures\Characters\HeartHoarder\heart_hoarder.png";
+					public const string Heart_hoarder_left = @"Content\Textures\Characters\HeartHoarder\heart_hoarder_left.png";
 				}
 
 				public static class Player

@@ -30,10 +30,11 @@ namespace PuppetRoguelite.Components.Shared
             Direction = direction;
         }
 
-        public void Move()
+        public void Move(float speed = 0)
         {
+            speed = speed == 0 ? _speed : speed;
             //move
-            var movement = Direction * _speed * Time.DeltaTime;
+            var movement = Direction * speed * Time.DeltaTime;
             _mover.CalculateMovement(ref movement, out var result);
             _subPixelV2.Update(ref movement);
             _mover.ApplyMovement(movement);
