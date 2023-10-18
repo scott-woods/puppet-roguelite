@@ -15,6 +15,11 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 {
     public class ChainBot : Enemy, IUpdatable
     {
+        //stats
+        float _moveSpeed = 75f;
+        int _hp = 3;
+        int _maxHp = 3;
+
         //behavior tree
         BehaviorTree<ChainBot> _tree;
 
@@ -31,10 +36,10 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         Collider _collider;
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
+        public CombatComponent CombatComponent;
 
         //properties
-        public float MoveSpeed = 75f;
-        bool _isHurt = false;
+        public bool IsDamaged = false;
 
         #region SETUP
 
@@ -43,15 +48,12 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         }
 
-        public override void OnAddedToEntity()
+        public override void Initialize()
         {
-            base.OnAddedToEntity();
+            base.Initialize();
 
             AddComponents();
             SetupBehaviorTree();
-
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
         }
 
         void AddComponents()
@@ -67,10 +69,12 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //health
-            _healthComponent = Entity.AddComponent(new HealthComponent(5, 5));
+            _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //velocity
-            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, MoveSpeed, new Vector2(1, 0)));
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed, new Vector2(1, 0)));
 
             //pathfinding
             Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapId));
@@ -90,6 +94,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //actions
             _chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));
             _chainBotMelee.SetEnabled(false);
+
+            //combat
+            CombatComponent = Entity.AddComponent(new CombatComponent());
         }
 
         void AddAnimations()
@@ -136,28 +143,27 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public void SetupBehaviorTree()
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
-                .Selector()
-                    .Sequence(AbortTypes.LowerPriority)
-                        .Conditional(c => c._isHurt)
-                    .EndComposite()
-                    .Sequence(AbortTypes.LowerPriority) //perform action, then idle
-                        .Conditional(e => !_isHurt)
-                        .Selector(AbortTypes.LowerPriority) //select an attack/action
-                            .Sequence(AbortTypes.LowerPriority) //melee attack sequence
+                .Selector(AbortTypes.Self)
+                    .ConditionalDecorator(c => !c.IsDamaged, true)
+                    .Sequence()
+                        .Selector()
+                            .Sequence()
+                                .Conditional(c => c.CombatComponent.IsInCombat)
                                 .ParallelSelector()
                                     .Action(c => c.Move())
                                     .Action(c => EnemyTasks.ChasePlayer(c.Pathfinder, c.VelocityComponent))
                                 .EndComposite()
                                 .Action(c => c.MeleeAttack())
                             .EndComposite()
-                        .EndComposite()
-                        .ParallelSelector() //idle for a bit
-                            .Action(c => c.Idle())
-                            .WaitAction(.5f)
+                            .Sequence()
+                                .Conditional(c => !c.CombatComponent.IsInCombat)
+                                .Action(c => c.Idle())
+                            .EndComposite()
                         .EndComposite()
                     .EndComposite()
                 .EndComposite()
                 .Build();
+
             _tree.UpdatePeriod = 0;
         }
 
@@ -167,6 +173,8 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree.Tick();
         }
+
+        #region TASKS
 
         TaskStatus MeleeAttack()
         {
@@ -183,17 +191,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                 return TaskStatus.Success;
             }
             else return TaskStatus.Running;
-        }
-
-        public TaskStatus CancelAction()
-        {
-            if (_currentAction != null)
-            {
-                _currentAction.SetEnabled(false);
-                _currentAction = null;
-            }
-
-            return TaskStatus.Success;
         }
 
         TaskStatus Idle()
@@ -220,9 +217,17 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             return TaskStatus.Running;
         }
 
+        #endregion
+
+        #region OBSERVERS
+
         void OnDamageTaken(HealthComponent healthComponent)
         {
-            CancelAction();
+            if (_currentAction != null)
+            {
+                _currentAction.SetEnabled(false);
+                _currentAction = null;
+            }
 
             var hurtAnimation = VelocityComponent.Direction.X >= 0 ? "HurtRight" : "HurtLeft";
             int plays = 0;
@@ -234,7 +239,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                 {
                     Animator.Stop();
                     Animator.OnAnimationCompletedEvent -= handler;
-                    _isHurt = false;
+                    IsDamaged = false;
                 }
                 else
                 {
@@ -242,12 +247,14 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                 }
             }
             Animator.OnAnimationCompletedEvent += handler;
-            _isHurt = true;
+            IsDamaged = true;
         }
 
         void OnHealthDepleted(HealthComponent healthComponent)
         {
             Entity.Destroy();
         }
+
+        #endregion
     }
 }

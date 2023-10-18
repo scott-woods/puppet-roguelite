@@ -53,6 +53,11 @@ namespace Nez
 					public const string Transitiontocharge = @"Content\Textures\Characters\ChainBot\transition to charge.png";
 				}
 
+				public static class HeartHoarder
+				{
+					public const string Heart_hoarder = @"Content\Textures\Characters\HeartHoarder\heart_hoarder.png";
+				}
+
 				public static class Player
 				{
 					public const string Hooded_knight_attack = @"Content\Textures\Characters\Player\hooded_knight_attack.png";
