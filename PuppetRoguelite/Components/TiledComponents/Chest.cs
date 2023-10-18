@@ -40,7 +40,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         Sprite _openSprite;
         Sprite _closedSprite;
 
-        public Chest(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        public Chest(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
 
         }

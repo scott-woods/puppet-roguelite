@@ -1,4 +1,5 @@
-﻿using Nez.Tiled;
+﻿using Nez;
+using Nez.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class BossTrigger : Trigger
     {
-        public BossTrigger(TmxObject tmxTriggerObject, string mapId) : base(tmxTriggerObject, mapId)
+        public BossTrigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {
         }
 

@@ -1,4 +1,5 @@
-﻿using Nez.Tiled;
+﻿using Nez;
+using Nez.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class BossSpawnPoint : TiledComponent
     {
-        public BossSpawnPoint(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        public BossSpawnPoint(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
         }
     }

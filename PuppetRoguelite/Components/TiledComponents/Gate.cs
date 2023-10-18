@@ -14,7 +14,7 @@ namespace PuppetRoguelite.Components.TiledComponents
     {
         Collider _collider;
 
-        public Gate(TmxObject gateObj, string mapId) : base(gateObj, mapId)
+        public Gate(TmxObject gateObj, Entity mapEntity) : base(gateObj, mapEntity)
         {
 
         }

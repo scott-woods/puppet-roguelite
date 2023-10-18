@@ -40,7 +40,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         #region SETUP
 
-        public ChainBot(string mapId) : base(mapId)
+        public ChainBot(Entity mapEntity) : base(mapEntity)
         {
 
         }
@@ -74,7 +74,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed, new Vector2(1, 0)));
 
             //pathfinding
-            Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapId));
+            Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));

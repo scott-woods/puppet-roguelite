@@ -30,16 +30,10 @@ namespace PuppetRoguelite.Components
         Vector2 _initialPlayerPosition;
         Entity _finalPlayerPositionEntity;
 
-        CombatManager _combatManager;
         ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
         Entity _playerSimEntity;
 
         DeadzoneFollowCamera _camera;
-
-        public TurnHandler(CombatManager combatManager)
-        {
-            _combatManager = combatManager;
-        }
 
         public override void Initialize()
         {
@@ -275,6 +269,7 @@ namespace PuppetRoguelite.Components
                     animator.SetEnabled(true);
                 }
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseCompleted);
+                Entity.Destroy();
             }
         }
 

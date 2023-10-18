@@ -20,7 +20,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         Type _sceneType;
         Vector2 _size;
 
-        public ExitArea(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        public ExitArea(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
             if (tmxObject.Properties.TryGetValue("TargetScene", out var targetScene))
             {

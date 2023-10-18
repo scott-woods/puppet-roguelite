@@ -16,11 +16,11 @@ namespace PuppetRoguelite.Components.Shared
         GridGraphManager _gridGraphManager;
         VelocityComponent _velocityComponent;
 
-        string _mapId;
+        public Entity MapEntity;
 
-        public PathfindingComponent(VelocityComponent velocityComponent, string mapId, int pathDesiredDistance = 16, int targetDesiredDistance = 16)
+        public PathfindingComponent(VelocityComponent velocityComponent, Entity mapEntity, int pathDesiredDistance = 16, int targetDesiredDistance = 16)
         {
-            _mapId = mapId;
+            MapEntity = mapEntity;
             _velocityComponent = velocityComponent;
             _pathDesiredDistance = pathDesiredDistance;
             _targetDesiredDistance = targetDesiredDistance;
@@ -30,7 +30,7 @@ namespace PuppetRoguelite.Components.Shared
         {
             base.OnAddedToEntity();
 
-            _gridGraphManager = Entity.Scene.FindComponentsOfType<GridGraphManager>().FirstOrDefault(g => g.MapId == _mapId);
+            _gridGraphManager = Entity.Scene.FindComponentsOfType<GridGraphManager>().FirstOrDefault(g => g.Entity == MapEntity);
         }
 
         /// <summary>

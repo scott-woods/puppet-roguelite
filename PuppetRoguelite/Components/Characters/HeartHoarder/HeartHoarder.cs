@@ -36,7 +36,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         #region SETUP
 
-        public HeartHoarder(string mapId) : base(mapId)
+        public HeartHoarder(Entity mapEntity) : base(mapEntity)
         {
         }
 
@@ -66,7 +66,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed, new Vector2(1, 0)));
 
-            PathfindingComponent = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapId));
+            PathfindingComponent = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
 
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();

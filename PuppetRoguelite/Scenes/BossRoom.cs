@@ -24,10 +24,11 @@ namespace PuppetRoguelite.Scenes
 
         //entities
         Entity _playerEntity;
+        Entity _mapEntity;
 
         //components
         TiledMapRenderer _mapRenderer;
-        TiledMapComponent _mapComponent;
+        //TiledMapComponent _mapComponent;
 
         public BossSpawnPoint BossSpawnPoint;
         public HeartHoarder Boss;
@@ -36,19 +37,35 @@ namespace PuppetRoguelite.Scenes
         {
             base.Initialize();
 
-            ClearColor = Color.Green;
+            //CREATE MAP
+
+            //map renderer
+            _mapEntity = CreateEntity("map");
+            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Boss_room);
+            var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
+            mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+            mapRenderer.RenderLayer = 10;
+
+            //grid graph
+            var gridGraphManager = _mapEntity.AddComponent(new GridGraphManager(mapRenderer));
 
             //tiled obj handler
-            TiledObjectHandler = AddSceneComponent(new TiledObjectHandler());
+            var tiledObjectHandler = _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
-            //load map
-            var map = Content.LoadTiledMap(MapString);
-            var mapEntity = CreateEntity("map");
-            _mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-            _mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
-            _mapRenderer.RenderLayer = 10;
-            _mapComponent = mapEntity.AddComponent(new TiledMapComponent(_mapRenderer));
-            TiledObjectHandler.ProcessTiledMap(_mapRenderer, _mapComponent.Id);
+            //map combat handler
+            var mapCombatHandler = _mapEntity.AddComponent(new MapCombatHandler());
+
+            //tiled obj handler
+            //TiledObjectHandler = AddSceneComponent(new TiledObjectHandler());
+
+            ////load map
+            //var map = Content.LoadTiledMap(MapString);
+            //var mapEntity = CreateEntity("map");
+            //_mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
+            //_mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+            //_mapRenderer.RenderLayer = 10;
+            //_mapComponent = mapEntity.AddComponent(new TiledMapComponent(_mapRenderer));
+            //TiledObjectHandler.ProcessTiledMap(_mapRenderer, _mapComponent.Id);
 
             //ui
             Camera.Entity.AddComponent(new CombatUI());
@@ -64,10 +81,10 @@ namespace PuppetRoguelite.Scenes
             Camera.Entity.SetUpdateOrder(int.MaxValue);
 
             //add combat manager
-            AddSceneComponent(new CombatManager());
+            //AddSceneComponent(new CombatManager());
 
             //add tiled object handler
-            AddSceneComponent(new TiledObjectHandler());
+            //AddSceneComponent(new TiledObjectHandler());
         }
 
         public override void Begin()
@@ -91,7 +108,7 @@ namespace PuppetRoguelite.Scenes
 
             var bossSpawn = FindComponentOfType<BossSpawnPoint>();
             var bossEntity = CreateEntity("boss", bossSpawn.Entity.Position);
-            Boss = bossEntity.AddComponent(new HeartHoarder(_mapComponent.Id));
+            Boss = bossEntity.AddComponent(new HeartHoarder(_mapEntity));
             //Boss.SetActive(false);
         }
 

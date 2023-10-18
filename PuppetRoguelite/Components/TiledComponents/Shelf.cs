@@ -33,7 +33,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         Collider _collider;
         Interactable _interactable;
 
-        public Shelf(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        public Shelf(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
 
         }

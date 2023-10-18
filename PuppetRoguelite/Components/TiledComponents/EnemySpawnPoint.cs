@@ -14,7 +14,7 @@ namespace PuppetRoguelite.Components.TiledComponents
     {
         List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot) };
 
-        public EnemySpawnPoint(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        public EnemySpawnPoint(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
 
         }
@@ -23,13 +23,13 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             var type = _enemyTypes.RandomItem();
 
-            ConstructorInfo info = type.GetConstructor(new Type[] { typeof(string) });
+            ConstructorInfo info = type.GetConstructor(new Type[] { typeof(Entity) });
             if (info != null)
             {
                 var ent = new PausableEntity(type.Name);
                 Entity.Scene.AddEntity(ent);
                 ent.SetPosition(Entity.Position);
-                var enemy = ent.AddComponent((Enemy)info.Invoke(new object[] { MapId }));
+                var enemy = ent.AddComponent((Enemy)info.Invoke(new object[] { MapEntity }));
 
                 return enemy;
             }

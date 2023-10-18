@@ -257,7 +257,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             base.OnRemovedFromEntity();
 
-            foreach(var component in _componentsList)
+            foreach (var component in _componentsList)
             {
                 Entity.RemoveComponent(component);
             }

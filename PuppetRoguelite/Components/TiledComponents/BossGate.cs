@@ -24,7 +24,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         ExitArea _exitArea;
         YSorter _ySorter;
 
-        public BossGate(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        public BossGate(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
 
         }
@@ -50,7 +50,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             base.OnAddedToEntity();
 
-            _exitArea = Entity.Scene.FindComponentsOfType<ExitArea>().Where(e => e.MapId == MapId).FirstOrDefault();
+            _exitArea = Entity.Scene.FindComponentsOfType<ExitArea>().Where(e => e.MapEntity == MapEntity).FirstOrDefault();
         }
 
         public void AddKey()

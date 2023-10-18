@@ -53,10 +53,10 @@ namespace PuppetRoguelite.Scenes
             Camera.Entity.SetUpdateOrder(int.MaxValue);
 
             //add combat manager
-            AddSceneComponent(new CombatManager());
+            //AddSceneComponent(new CombatManager());
 
             //add tiled object handler
-            AddSceneComponent(new TiledObjectHandler());
+            //AddSceneComponent(new TiledObjectHandler());
 
             //add dungenerator
             _dungenerator = AddSceneComponent(new Dungenerator());

@@ -13,29 +13,31 @@ namespace PuppetRoguelite.Components
 {
     public class GridGraphManager : Component
     {
-        public string MapId { get; set; }
-
+        TiledMapRenderer _mapRenderer;
         AstarGridGraph _graph;
-        TmxMap _map;
 
-        public GridGraphManager(AstarGridGraph graph, TmxMap map, string mapId)
+        public GridGraphManager(TiledMapRenderer mapRenderer)
         {
-            _graph = graph;
-            _map = map;
+            _mapRenderer = mapRenderer;
+        }
 
-            MapId = mapId;
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            _graph = new AstarGridGraph(_mapRenderer.CollisionLayer);
         }
 
         public Point WorldToGridPosition(Vector2 worldPosition)
         {
             //subtract entity position to get position relative to this grid graph
-            return _map.WorldToTilePosition(worldPosition - Entity.Position);
+            return _mapRenderer.TiledMap.WorldToTilePosition(worldPosition - Entity.Position);
         }
 
         public Vector2 GridToWorldPosition(Point gridPosition)
         {
             //subtract entity position to get position relative to this grid graph
-            return _map.TileToWorldPosition(gridPosition) + Entity.Position;
+            return _mapRenderer.TiledMap.TileToWorldPosition(gridPosition) + Entity.Position;
         }
 
         /// <summary>

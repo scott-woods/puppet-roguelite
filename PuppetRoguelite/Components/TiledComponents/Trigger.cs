@@ -23,7 +23,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         //components
         BoxCollider _collider;
 
-        public Trigger(TmxObject tmxTriggerObject, string mapId) : base(tmxTriggerObject, mapId)
+        public Trigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {
         }
 

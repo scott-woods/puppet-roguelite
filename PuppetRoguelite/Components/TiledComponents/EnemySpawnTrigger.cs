@@ -1,4 +1,5 @@
-﻿using Nez.Tiled;
+﻿using Nez;
+using Nez.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,13 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnTrigger : Trigger
     {
-        public EnemySpawnTrigger(TmxObject tmxTriggerObject, string mapId) : base(tmxTriggerObject, mapId)
+        public EnemySpawnTrigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {
         }
 
         public override void HandleTriggered()
         {
-
+            Entity.Destroy();
         }
     }
 }

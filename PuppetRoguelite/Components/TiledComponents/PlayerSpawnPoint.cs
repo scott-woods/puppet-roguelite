@@ -10,7 +10,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class PlayerSpawnPoint : TiledComponent
     {
-        public PlayerSpawnPoint(TmxObject tmxObject, string mapId) : base(tmxObject, mapId)
+        public PlayerSpawnPoint(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
 
         }

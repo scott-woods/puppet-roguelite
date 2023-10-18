@@ -13,13 +13,20 @@ namespace PuppetRoguelite.Components.TiledComponents
     /// </summary>
     public abstract class TiledComponent : Component
     {
+        /// <summary>
+        /// the tmx object this was made from
+        /// </summary>
         public TmxObject TmxObject { get; set; }
-        public string MapId { get; set; }
 
-        public TiledComponent(TmxObject tmxObject, string mapId)
+        /// <summary>
+        /// the entity of the map that this belongs to
+        /// </summary>
+        public Entity MapEntity { get; set; }
+
+        public TiledComponent(TmxObject tmxObject, Entity mapEntity)
         {
             TmxObject = tmxObject;
-            MapId = mapId;
+            MapEntity = mapEntity;
         }
     }
 }

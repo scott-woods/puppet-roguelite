@@ -360,12 +360,24 @@ namespace PuppetRoguelite.SceneComponents
                 else return false;
             }
 
+            //var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
+            //var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
+            //mapEntity.SetPosition(mapPosition);
+            //Scene.AddEntity(mapEntity);
+            //mapEntity.AddComponent(new DungeonRoom(node, mapString));
+            //_roomDictionary.Add(node.Point, mapEntity);
+
             var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
             var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
             mapEntity.SetPosition(mapPosition);
             Scene.AddEntity(mapEntity);
-            mapEntity.AddComponent(new DungeonRoom(node, mapString));
-            _roomDictionary.Add(node.Point, mapEntity);
+            var map = Scene.Content.LoadTiledMap(mapString);
+            var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
+            mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+            mapRenderer.RenderLayer = 10;
+            mapEntity.AddComponent(new GridGraphManager(mapRenderer));
+            mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
+            mapEntity.AddComponent(new MapCombatHandler());
 
             return true;
         }
