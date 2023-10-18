@@ -38,9 +38,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public VelocityComponent VelocityComponent;
         public CombatComponent CombatComponent;
 
-        //properties
-        public bool IsDamaged = false;
-
         #region SETUP
 
         public ChainBot(string mapId) : base(mapId)
@@ -66,7 +63,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, 1f));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
@@ -144,7 +141,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector(AbortTypes.Self)
-                    .ConditionalDecorator(c => !c.IsDamaged, true)
+                    .ConditionalDecorator(c => !c._hurtbox.IsStunned, true)
                     .Sequence()
                         .Selector()
                             .Sequence()
@@ -230,24 +227,26 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             }
 
             var hurtAnimation = VelocityComponent.Direction.X >= 0 ? "HurtRight" : "HurtLeft";
-            int plays = 0;
-            Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-            void handler(string obj)
-            {
-                plays += 1;
-                if (plays >= 4)
-                {
-                    Animator.Stop();
-                    Animator.OnAnimationCompletedEvent -= handler;
-                    IsDamaged = false;
-                }
-                else
-                {
-                    Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-                }
-            }
-            Animator.OnAnimationCompletedEvent += handler;
-            IsDamaged = true;
+
+            Animator.Play(hurtAnimation);
+            //int plays = 0;
+            //Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+            //void handler(string obj)
+            //{
+            //    plays += 1;
+            //    if (plays >= 4)
+            //    {
+            //        Animator.Stop();
+            //        Animator.OnAnimationCompletedEvent -= handler;
+            //        IsDamaged = false;
+            //    }
+            //    else
+            //    {
+            //        Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
+            //    }
+            //}
+            //Animator.OnAnimationCompletedEvent += handler;
+            //IsDamaged = true;
         }
 
         void OnHealthDepleted(HealthComponent healthComponent)

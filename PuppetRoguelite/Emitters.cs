@@ -18,6 +18,15 @@ namespace PuppetRoguelite
         public static Emitter<ActionPointEvents, ActionPointComponent> ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
         public static Emitter<InteractableEvents> InteractableEmitter = new Emitter<InteractableEvents>();
         public static Emitter<CutsceneEvents> CutsceneEmitter = new Emitter<CutsceneEvents>();
+
+        public static void ResetEmitters()
+        {
+            PlayerActionEmitter = new Emitter<PlayerActionEvents, PlayerAction>();
+            CombatEventsEmitter = new Emitter<CombatEvents>();
+            ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
+            InteractableEmitter = new Emitter<InteractableEvents>();
+            CutsceneEmitter = new Emitter<CutsceneEvents>();
+        }
     }
 
     public enum PlayerActionEvents

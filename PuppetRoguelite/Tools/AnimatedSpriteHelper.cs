@@ -23,6 +23,26 @@ namespace PuppetRoguelite.Tools
         }
 
         /// <summary>
+        /// For spritesheets with several animations in one file. Row is the zero-based row in the sheet, columns is how many this animation is, and total is total number of columns
+        /// </summary>
+        /// <param name="spriteList"></param>
+        /// <param name="row"></param>
+        /// <param name="columns"></param>
+        /// <param name="totalColumns"></param>
+        /// <returns></returns>
+        public static Sprite[] GetSpriteArrayByRow(List<Sprite> spriteList, int row, int columns, int totalColumns)
+        {
+            var sprites = new List<Sprite>();
+
+            for (int i = 0; i < columns; i++)
+            {
+                sprites.Add(spriteList[i + (row * totalColumns)]);
+            }
+
+            return sprites.ToArray();
+        }
+
+        /// <summary>
         /// Get a sprite array with all sprites matching any of the given indicies
         /// </summary>
         /// <param name="spriteList"></param>

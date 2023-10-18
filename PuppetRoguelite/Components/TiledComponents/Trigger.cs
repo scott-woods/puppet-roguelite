@@ -25,7 +25,6 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         public Trigger(TmxObject tmxTriggerObject, string mapId) : base(tmxTriggerObject, mapId)
         {
-
         }
 
         public override void Initialize()

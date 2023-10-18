@@ -15,7 +15,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         public override void HandleTriggered()
         {
-
+            Entity.Destroy();
         }
     }
 }

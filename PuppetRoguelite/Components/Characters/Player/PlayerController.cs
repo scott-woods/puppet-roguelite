@@ -9,6 +9,7 @@ using Nez.UI;
 using PuppetRoguelite.Components.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Items;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
@@ -88,7 +89,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, 1));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));

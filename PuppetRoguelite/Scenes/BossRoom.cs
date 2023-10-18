@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Characters.Boss;
+using PuppetRoguelite.Components.Characters.HeartHoarder;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.SceneComponents;
@@ -30,7 +30,7 @@ namespace PuppetRoguelite.Scenes
         TiledMapComponent _mapComponent;
 
         public BossSpawnPoint BossSpawnPoint;
-        public Boss Boss;
+        public HeartHoarder Boss;
 
         public override void Initialize()
         {
@@ -91,14 +91,15 @@ namespace PuppetRoguelite.Scenes
 
             var bossSpawn = FindComponentOfType<BossSpawnPoint>();
             var bossEntity = CreateEntity("boss", bossSpawn.Entity.Position);
-            Boss = bossEntity.AddComponent(new Boss(_mapComponent.Id));
+            Boss = bossEntity.AddComponent(new HeartHoarder(_mapComponent.Id));
             //Boss.SetActive(false);
         }
 
         void OnTriggered()
         {
-            var cutscene = new BossCutscene(this);
-            Game1.StartCoroutine(cutscene.PlayScene());
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
+            //var cutscene = new BossCutscene(this);
+            //Game1.StartCoroutine(cutscene.PlayScene());
         }
     }
 }

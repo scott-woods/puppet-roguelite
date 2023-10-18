@@ -12,10 +12,11 @@ namespace PuppetRoguelite.GlobalManagers
     {
         public Emitter<SceneEvents> Emitter = new Emitter<SceneEvents>();
 
-        public Scene ActiveScene { get; set; }
+        //public Scene ActiveScene { get; set; }
 
         public void ChangeScene(Type sceneType)
         {
+            Emitters.ResetEmitters();
             var transition = Game1.StartSceneTransition(new FadeTransition(() => Activator.CreateInstance(sceneType) as Scene));
             transition.OnTransitionCompleted += OnTransitionCompleted;
 
