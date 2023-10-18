@@ -4,9 +4,11 @@ using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.HeartHoarder;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.UI.HUDs;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,6 +47,7 @@ namespace PuppetRoguelite.Scenes
             var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
             mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
             mapRenderer.RenderLayer = 10;
+            Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
 
             //grid graph
             var gridGraphManager = _mapEntity.AddComponent(new GridGraphManager(mapRenderer));
@@ -102,21 +105,40 @@ namespace PuppetRoguelite.Scenes
         {
             base.OnStart();
 
+            //spawn player
             var spawn = FindComponentOfType<PlayerSpawnPoint>();
             _playerEntity.SetPosition(spawn.Entity.Position.X, spawn.Entity.Position.Y);
             _playerEntity.SetEnabled(true);
 
+            //spawn boss
             var bossSpawn = FindComponentOfType<BossSpawnPoint>();
             var bossEntity = CreateEntity("boss", bossSpawn.Entity.Position);
             Boss = bossEntity.AddComponent(new HeartHoarder(_mapEntity));
-            //Boss.SetActive(false);
+            Boss.SetEnabled(false);
         }
 
         void OnTriggered()
         {
-            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
+            Game1.StartCoroutine(StartBattle());
             //var cutscene = new BossCutscene(this);
             //Game1.StartCoroutine(cutscene.PlayScene());
+        }
+
+        IEnumerator StartBattle()
+        {
+            Boss.SetEnabled(true);
+
+            //play animation
+            yield return Boss.PlayAppearanceAnimation();
+
+            //activate boss so it can start idling
+            Boss.Activate();
+
+            yield return Coroutine.WaitForSeconds(2f);
+
+            //start combat
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
+            Boss.StartCombat();
         }
     }
 }

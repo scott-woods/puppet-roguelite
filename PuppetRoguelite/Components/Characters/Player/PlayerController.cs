@@ -95,6 +95,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
+            Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
             //Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
 
             //Add health component

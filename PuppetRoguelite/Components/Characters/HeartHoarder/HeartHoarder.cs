@@ -12,6 +12,7 @@ using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.Tools;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.Components.Characters.Player;
+using System.Collections;
 
 namespace PuppetRoguelite.Components.Characters.HeartHoarder
 {
@@ -34,6 +35,9 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         float _normalMoveSpeed = 50f;
         float _attackingMoveSpeed = 80f;
 
+        bool _isActive = false;
+        bool _isInCombat = false;
+
         #region SETUP
 
         public HeartHoarder(Entity mapEntity) : base(mapEntity)
@@ -55,8 +59,9 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
             HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
 
-            Collider = Entity.AddComponent(new BoxCollider(-13, 43, 26, 16));
+            Collider = Entity.AddComponent(new BoxCollider(-13, 35, 26, 16));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
+            Flags.SetFlagExclusive(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
 
             var hurtboxCollider = Entity.AddComponent(new BoxCollider());
             hurtboxCollider.IsTrigger = true;
@@ -67,6 +72,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed, new Vector2(1, 0)));
 
             PathfindingComponent = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
+            PathfindingComponent.Offset = new Vector2(0, Collider.LocalOffset.Y + (Collider.Height / 2));
 
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
@@ -119,6 +125,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             _tree = BehaviorTreeBuilder<HeartHoarder>
                 .Begin(this)
                     .Selector(AbortTypes.Self)
+                        .ConditionalDecorator(h => !h._isInCombat)
+                        .Action(h => h.PlayAnimationLoop("Idle"))
                         .ConditionalDecorator(h => !h.Hurtbox.IsStunned, true)
                         .RandomSelector()
                             .Sequence()
@@ -136,7 +144,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                                 .ParallelSelector()
                                     .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _attackingMoveSpeed))
                                     .Action(h => h.PlayAnimationLoop("MoveAttackRight"))
-                                    .WaitAction(4f)
+                                    .WaitAction(6f)
                                 .EndComposite()
                                 .Action(h => h.WaitForAnimation("StopMovingAfterAttackRight"))
                                 .ParallelSelector()
@@ -155,11 +163,33 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         public void Update()
         {
-            _tree.Tick();
+            if (_isActive)
+            {
+                _tree.Tick();
+            }
 
             var dir = VelocityComponent.Direction;
             var flip = dir.X < 0;
             Animator.FlipX = flip;
+        }
+
+        public IEnumerator PlayAppearanceAnimation()
+        {
+            Animator.Play("Appear", SpriteAnimator.LoopMode.Once);
+            while (Animator.IsAnimationActive("Appear") && Animator.AnimationState != SpriteAnimator.State.Completed)
+            {
+                yield return null;
+            }
+        }
+
+        public void Activate()
+        {
+            _isActive = true;
+        }
+
+        public void StartCombat()
+        {
+            _isInCombat = true;
         }
 
         #region TASKS
@@ -188,8 +218,10 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             return TaskStatus.Running;
         }
 
-        TaskStatus PlayAnimationLoop(string animationName)
+        TaskStatus PlayAnimationLoop(string animationName, float speed = 1)
         {
+            Animator.Speed = speed;
+
             if (!Animator.IsAnimationActive(animationName))
             {
                 Animator.Play(animationName);

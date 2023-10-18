@@ -10,6 +10,11 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class PathfindingComponent : Component
     {
+        /// <summary>
+        /// offset from the entity's position to calculate path from
+        /// </summary>
+        public Vector2 Offset = Vector2.Zero;
+
         int _pathDesiredDistance;
         int _targetDesiredDistance;
 
@@ -41,13 +46,15 @@ namespace PuppetRoguelite.Components.Shared
         /// <returns></returns>
         public bool FollowPath(Vector2 target, bool applySmoothing = true)
         {
-            if (Math.Abs(Vector2.Distance(Entity.Position, target)) <= _targetDesiredDistance)
+            var origin = Entity.Position + Offset;
+
+            if (Math.Abs(Vector2.Distance(origin, target)) <= _targetDesiredDistance)
             {
                 return true;
             }
 
             //get basic path on grid
-            var path = _gridGraphManager.FindPath(Entity.Position, target);
+            var path = _gridGraphManager.FindPath(origin, target);
 
             var finalPath = new List<Vector2>();
 
@@ -93,13 +100,13 @@ namespace PuppetRoguelite.Components.Shared
             foreach(var pos in finalPath)
             {
                 //if within set distance to the next point on path, continue to the next one
-                if (Math.Abs(Vector2.Distance(Entity.Position, pos)) <= _pathDesiredDistance)
+                if (Math.Abs(Vector2.Distance(origin, pos)) <= _pathDesiredDistance)
                 {
                     continue;
                 }
                 else //if not within distance to next point, we need to move there. update direction of velocity component
                 {
-                    var direction = pos - Entity.Position;
+                    var direction = pos - origin;
                     direction.Normalize();
                     _velocityComponent.SetDirection(direction);
                     return false;
@@ -107,7 +114,7 @@ namespace PuppetRoguelite.Components.Shared
             }
 
             //no points along the path were good, just go to target
-            var dir = target - Entity.Position;
+            var dir = target - origin;
             dir.Normalize();
             _velocityComponent.SetDirection(dir);
             return false;
