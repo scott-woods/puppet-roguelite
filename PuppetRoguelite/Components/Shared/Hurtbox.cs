@@ -23,6 +23,9 @@ namespace PuppetRoguelite.Components.Shared
         float _recoveryTime;
         float _stunTime;
 
+        ITimer _recoveryTimer;
+        ITimer _stunTimer;
+
         /// <summary>
         /// Stun time is how long entity is frozen. Recovery time is how long before entity can be hit again.
         /// </summary>
@@ -43,7 +46,6 @@ namespace PuppetRoguelite.Components.Shared
                 var colliders = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
                 if (colliders.Count > 0)
                 {
-                    Debug.Log("colliders found: " + colliders.Count.ToString());
                     HandleHit(colliders.First());
                 }
             }
@@ -51,29 +53,31 @@ namespace PuppetRoguelite.Components.Shared
 
         void HandleHit(Collider collider)
         {
-            Debug.Log(collider.Entity.Name);
             if (collider.Entity.TryGetComponent<Hitbox>(out var hitbox))
             {
-                Debug.Log(hitbox.Entity.Name);
                 if (_recoveryTime > 0)
                 {
-                    Debug.Log("recovery time not 0");
                     IsInRecovery = true;
-                    Core.Schedule(_recoveryTime, timer =>
+                    _recoveryTimer = Core.Schedule(_recoveryTime, timer =>
                     {
-                        Debug.Log("recovery ended");
                         IsInRecovery = false;
                     });
                 }
                 if (_stunTime > 0)
                 {
-                    Debug.Log("stun time not 0");
-                    IsStunned = true;
-                    Core.Schedule(_stunTime, timer =>
+                    //if already stunned, reset stun timer and stun again
+                    if (IsStunned)
                     {
-                        Debug.Log("stun ended");
-                        IsStunned = false;
-                    });
+                        _stunTimer.Reset();
+                    }
+                    else
+                    {
+                        IsStunned = true;
+                        _stunTimer = Core.Schedule(_stunTime, timer =>
+                        {
+                            IsStunned = false;
+                        });
+                    }
                 }
 
                 Emitter.Emit(HurtboxEventTypes.Hit, hitbox);

@@ -32,6 +32,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public CombatComponent CombatComponent;
         public Hitbox MovingAttackHitbox;
         public Hitbox StationaryAttackHitboxTopLeft, StationaryAttackHitboxBottomLeft, StationaryAttackHitboxTopRight, StationaryAttackHitboxBottomRight;
+        public Healthbar Healthbar;
 
         //misc
         float _normalMoveSpeed = 50f;
@@ -69,7 +70,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 2f, 1));
+            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, .2f));
 
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed, new Vector2(1, 0)));
 
@@ -80,6 +81,9 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             AddAnimations();
 
             CombatComponent = Entity.AddComponent(new CombatComponent());
+
+            Healthbar = Entity.AddComponent(new Healthbar(HealthComponent));
+            Healthbar.SetLocalOffset(new Vector2(0, -8));
 
             var movingAttackCollider = Entity.AddComponent(new BoxCollider(-35, 35, 71, 18));
             movingAttackCollider.IsTrigger = true;

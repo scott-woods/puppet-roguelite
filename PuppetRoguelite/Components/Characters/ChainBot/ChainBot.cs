@@ -37,6 +37,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
         public CombatComponent CombatComponent;
+        public Healthbar Healthbar;
 
         #region SETUP
 
@@ -63,7 +64,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, 1f));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, .2f));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
@@ -95,6 +96,10 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
             //combat
             CombatComponent = Entity.AddComponent(new CombatComponent());
+
+            //healthbar
+            Healthbar = Entity.AddComponent(new Healthbar(_healthComponent));
+            Healthbar.SetLocalOffset(new Vector2(0, -20));
         }
 
         void AddAnimations()

@@ -801,6 +801,7 @@ namespace Nez
 
 				}
 
+				public const string Borders_and_hp = @"Content\Textures\UI\borders_and_hp.png";
 			}
 
 		}
