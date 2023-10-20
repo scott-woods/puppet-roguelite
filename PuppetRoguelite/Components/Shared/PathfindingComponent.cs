@@ -15,6 +15,11 @@ namespace PuppetRoguelite.Components.Shared
         /// </summary>
         public Vector2 Offset = Vector2.Zero;
 
+        /// <summary>
+        /// Returns the entity's position + the pathfinding offset
+        /// </summary>
+        public Vector2 Origin { get => Entity.Position + Offset; }
+
         int _pathDesiredDistance;
         int _targetDesiredDistance;
 

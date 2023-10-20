@@ -4,6 +4,7 @@ using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.HeartHoarder;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
+using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.UI.HUDs;
@@ -27,6 +28,7 @@ namespace PuppetRoguelite.Scenes
         //entities
         Entity _playerEntity;
         Entity _mapEntity;
+        Entity TurnHandlerEntity;
 
         //components
         TiledMapRenderer _mapRenderer;
@@ -34,6 +36,8 @@ namespace PuppetRoguelite.Scenes
 
         public BossSpawnPoint BossSpawnPoint;
         public HeartHoarder Boss;
+
+        public int Turns = 0;
 
         public override void Initialize()
         {
@@ -54,9 +58,6 @@ namespace PuppetRoguelite.Scenes
 
             //tiled obj handler
             var tiledObjectHandler = _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
-
-            //map combat handler
-            var mapCombatHandler = _mapEntity.AddComponent(new MapCombatHandler());
 
             //tiled obj handler
             //TiledObjectHandler = AddSceneComponent(new TiledObjectHandler());
@@ -99,6 +100,10 @@ namespace PuppetRoguelite.Scenes
             //connect to trigger
             var trigger = FindComponentOfType<BossTrigger>();
             trigger.Emitter.AddObserver(TriggerEventTypes.Triggered, OnTriggered);
+
+            //connect to combat events
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
         public override void OnStart()
@@ -112,7 +117,8 @@ namespace PuppetRoguelite.Scenes
 
             //spawn boss
             var bossSpawn = FindComponentOfType<BossSpawnPoint>();
-            var bossEntity = CreateEntity("boss", bossSpawn.Entity.Position);
+            var bossEntity = AddEntity(new PausableEntity("boss"));
+            bossEntity.SetPosition(bossSpawn.Entity.Position);
             Boss = bossEntity.AddComponent(new HeartHoarder(_mapEntity));
             Boss.SetEnabled(false);
         }
@@ -122,6 +128,34 @@ namespace PuppetRoguelite.Scenes
             Game1.StartCoroutine(StartBattle());
             //var cutscene = new BossCutscene(this);
             //Game1.StartCoroutine(cutscene.PlayScene());
+        }
+
+        void OnTurnPhaseTriggered()
+        {
+            Turns += 1;
+
+            //create turn handler
+            TurnHandlerEntity = CreateEntity("turn-handler");
+            TurnHandlerEntity.AddComponent(new TurnHandler());
+        }
+
+        void OnTurnPhaseCompleted()
+        {
+            if (Boss.Entity != null)
+            {
+                Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
+            }
+            else
+            {
+                //unlock gates
+                var gates = FindComponentsOfType<Gate>().Where(g => g.MapEntity == _mapEntity).ToList();
+                foreach (var gate in gates)
+                {
+                    gate.Unlock();
+                }
+
+                Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterEnded);
+            }
         }
 
         IEnumerator StartBattle()
@@ -138,6 +172,7 @@ namespace PuppetRoguelite.Scenes
 
             //start combat
             Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
             Boss.StartCombat();
         }
     }

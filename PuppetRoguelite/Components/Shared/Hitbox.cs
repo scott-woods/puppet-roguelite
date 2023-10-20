@@ -31,14 +31,18 @@ namespace PuppetRoguelite.Components.Shared
             Collider.IsTrigger = true;
         }
 
-        public void Enable()
+        public override void OnEnabled()
         {
-            Collider.Enabled = true;
+            base.OnEnabled();
+
+            Collider.SetEnabled(true);
         }
 
-        public void Disable()
+        public override void OnDisabled()
         {
-            Collider.Enabled = false;
+            base.OnDisabled();
+
+            Collider.SetEnabled(false);
         }
     }
 }

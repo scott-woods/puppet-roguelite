@@ -38,7 +38,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         VirtualButton _checkInput;
 
         //stats
-        float _moveSpeed = 150f;
+        float _moveSpeed = 115f;
         float _raycastDistance = 10f;
 
         //components
@@ -85,18 +85,17 @@ namespace PuppetRoguelite.Components.Characters.Player
             _mover = Entity.AddComponent(new Mover());
 
             //Add hurtbox
-            var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
-            hurtboxCollider.IsTrigger = true;
-            Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
-            Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, 1));
+            //var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
+            //hurtboxCollider.IsTrigger = true;
+            //Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
+            //Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
+            //_hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, 1));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
-            //Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
 
             //Add health component
             _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));

@@ -110,9 +110,9 @@ namespace PuppetRoguelite.Components.EnemyActions
             {
                 if (new[] { 0, 4 }.Contains(_chainBot.Animator.CurrentFrame))
                 {
-                    hitbox.Enable();
+                    hitbox.SetEnabled(true);
                 }
-                else hitbox.Disable();
+                else hitbox.SetEnabled(false);
 
                 yield return null;
             }

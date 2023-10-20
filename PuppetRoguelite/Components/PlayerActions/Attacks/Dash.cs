@@ -238,17 +238,17 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             if (_isPreparing || _isSimulation)
             {
-                _hitbox.Disable();
+                _hitbox.SetEnabled(false);
             }
             else
             {
                 if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
                 {
-                    _hitbox.Enable();
+                    _hitbox.SetEnabled(true);
                 }
                 else
                 {
-                    _hitbox.Disable();
+                    _hitbox.SetEnabled(false);
                 }
             }
         }
