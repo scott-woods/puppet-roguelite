@@ -22,6 +22,7 @@ namespace PuppetRoguelite
             DebugRenderEnabled = false;
             Window.AllowUserResizing = true;
             IsFixedTimeStep = false;
+            IsMouseVisible = false;
 
             Physics.SpatialHashCellSize = 32;
 

@@ -59,6 +59,10 @@ namespace PuppetRoguelite.Scenes
             //add tiled object handler
             //AddSceneComponent(new TiledObjectHandler());
 
+            //mouse cursor
+            var mouseEntity = CreateEntity("mouse-cursor");
+            mouseEntity.AddComponent(new MouseCursor());
+
             //add dungenerator
             _dungenerator = AddSceneComponent(new Dungenerator());
         }
