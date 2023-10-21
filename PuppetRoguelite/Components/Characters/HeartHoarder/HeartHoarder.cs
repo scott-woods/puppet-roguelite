@@ -72,7 +72,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
             Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, .2f));
 
-            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed, new Vector2(1, 0)));
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed));
 
             PathfindingComponent = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
             PathfindingComponent.Offset = new Vector2(0, Collider.LocalOffset.Y + (Collider.Height / 2));

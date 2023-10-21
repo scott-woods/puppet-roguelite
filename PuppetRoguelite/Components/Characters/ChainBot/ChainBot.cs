@@ -72,7 +72,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //velocity
-            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed, new Vector2(1, 0)));
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
 
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));

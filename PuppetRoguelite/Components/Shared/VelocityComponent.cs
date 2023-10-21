@@ -11,16 +11,21 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class VelocityComponent : Component
     {
-        public Vector2 Direction;
+        public Vector2 Direction = new Vector2(1, 0);
         float _speed;
         SubpixelVector2 _subPixelV2 = new SubpixelVector2();
 
         Mover _mover;
 
-        public VelocityComponent(Mover mover, float speed, Vector2 direction)
+        /// <summary>
+        /// requires a Mover, default speed, and optionally a subpixelV2
+        /// </summary>
+        /// <param name="mover"></param>
+        /// <param name="speed"></param>
+        /// <param name="subPixelV2"></param>
+        public VelocityComponent(Mover mover, float speed)
         {
             _speed = speed;
-            Direction = direction;
 
             _mover = mover;
         }
@@ -30,6 +35,10 @@ namespace PuppetRoguelite.Components.Shared
             Direction = direction;
         }
 
+        /// <summary>
+        /// Move, optionally override the default speed
+        /// </summary>
+        /// <param name="speed"></param>
         public void Move(float speed = 0)
         {
             speed = speed == 0 ? _speed : speed;

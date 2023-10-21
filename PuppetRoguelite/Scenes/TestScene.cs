@@ -32,6 +32,7 @@ namespace PuppetRoguelite.Scenes
 
         //scene components
         Dungenerator _dungenerator;
+        CombatManager _combatManager;
 
         public override void Initialize()
         {
@@ -53,7 +54,7 @@ namespace PuppetRoguelite.Scenes
             Camera.Entity.SetUpdateOrder(int.MaxValue);
 
             //add combat manager
-            //AddSceneComponent(new CombatManager());
+            _combatManager = AddSceneComponent(new CombatManager());
 
             //add tiled object handler
             //AddSceneComponent(new TiledObjectHandler());

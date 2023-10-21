@@ -6,6 +6,7 @@ using Nez.Sprites;
 using Nez.Systems;
 using Nez.Textures;
 using Nez.UI;
+using PuppetRoguelite.Components.Characters.Player.Superstates;
 using PuppetRoguelite.Components.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
@@ -29,13 +30,15 @@ namespace PuppetRoguelite.Components.Characters.Player
         public static PlayerController Instance { get; private set; } = new PlayerController();
 
         //state machine
-        internal PlayerStateMachine StateMachine;
+        //internal PlayerStateMachine StateMachine;
+        public StateMachine<PlayerController> StateMachine;
 
         //input
-        VirtualIntegerAxis _xAxisInput;
-        VirtualIntegerAxis _yAxisInput;
-        VirtualButton _actionInput;
-        VirtualButton _checkInput;
+        public VirtualIntegerAxis XAxisInput;
+        public VirtualIntegerAxis YAxisInput;
+        public VirtualButton ActionInput;
+        public VirtualButton CheckInput;
+        public VirtualButton DashInput;
 
         //stats
         float _moveSpeed = 115f;
@@ -43,19 +46,19 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         //components
         Mover _mover;
-        SpriteAnimator _spriteAnimator;
+        public SpriteAnimator SpriteAnimator;
         Collider _collider;
-        HealthComponent _healthComponent;
+        public HealthComponent HealthComponent;
         Hurtbox _hurtbox;
         public ActionPointComponent ActionPointComponent;
         public AttacksList AttacksList;
         Inventory _inventory;
         YSorter _ySorter;
+        public VelocityComponent VelocityComponent;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
-        Vector2 _lastNonZeroDirection = new Vector2(1, 0);
-        SubpixelVector2 _subPixelV2 = new SubpixelVector2();
+        public Vector2 LastNonZeroDirection = new Vector2(1, 0);
 
         #region SETUP
 
@@ -72,13 +75,16 @@ namespace PuppetRoguelite.Components.Characters.Player
             AddObservers();
             SetupInput();
 
-            StateMachine = new PlayerStateMachine(this, new PlayerDefault());
+            StateMachine = new StateMachine<PlayerController>(this, new ExploreState());
+            StateMachine.AddState(new CombatState());
+            StateMachine.AddState(new CutsceneState());
+            StateMachine.AddState(new TurnState());
         }
 
         void AddComponents()
         {
             //add sprites
-            _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
+            SpriteAnimator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
 
             //add mover
@@ -98,9 +104,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
 
             //Add health component
-            _healthComponent = Entity.AddComponent(new HealthComponent(10, 10));
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
 
             //action points
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
@@ -113,40 +117,42 @@ namespace PuppetRoguelite.Components.Characters.Player
             _inventory.AddItem(new CerealBox("Reese's Puffs"));
 
             //ySort
-            _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, 12));
+            _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, 12));
+
+            //velocity component
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, _moveSpeed));
         }
 
         void AddObservers()
         {
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
 
             Emitters.InteractableEmitter.AddObserver(InteractableEvents.Interacted, OnInteractionStarted);
             Emitters.InteractableEmitter.AddObserver(InteractableEvents.InteractionFinished, OnInteractionFinished);
-
-            Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneStarted, () => StateMachine.ChangeState<PlayerIdle>());
-            Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneEnded, () => StateMachine.ChangeState<PlayerDefault>());
         }
 
         void SetupInput()
         {
-            _xAxisInput = new VirtualIntegerAxis();
-            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
-            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
-            _xAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right));
+            XAxisInput = new VirtualIntegerAxis();
+            XAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
+            XAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
+            XAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D));
 
-            _yAxisInput = new VirtualIntegerAxis();
-            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
-            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
-            _yAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
+            YAxisInput = new VirtualIntegerAxis();
+            YAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
+            YAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
+            YAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S));
 
-            _actionInput = new VirtualButton();
-            _actionInput.AddKeyboardKey(Keys.Space);
+            ActionInput = new VirtualButton();
+            ActionInput.AddKeyboardKey(Keys.E);
 
-            _checkInput = new VirtualButton();
-            _checkInput.AddKeyboardKey(Keys.Z);
+            CheckInput = new VirtualButton();
+            CheckInput.AddKeyboardKey(Keys.Z);
+
+            DashInput = new VirtualButton();
+            DashInput.AddKeyboardKey(Keys.Space);
         }
 
         void AddAnimations()
@@ -154,30 +160,30 @@ namespace PuppetRoguelite.Components.Characters.Player
             //idle
             var idleTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_idle);
             var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 64, 64);
-            _spriteAnimator.AddAnimation("IdleDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 0, 2));
-            _spriteAnimator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 3, 5));
-            _spriteAnimator.AddAnimation("IdleUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 6, 8));
-            _spriteAnimator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 9, 11));
+            SpriteAnimator.AddAnimation("IdleDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 0, 2));
+            SpriteAnimator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 3, 5));
+            SpriteAnimator.AddAnimation("IdleUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 6, 8));
+            SpriteAnimator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 9, 11));
 
             //run
             var runTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_run);
             var runSprites = Sprite.SpritesFromAtlas(runTexture, 64, 64);
-            _spriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9));
-            _spriteAnimator.AddAnimation("RunLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 10, 19));
-            _spriteAnimator.AddAnimation("RunDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 20, 27));
-            _spriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37));
+            SpriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9));
+            SpriteAnimator.AddAnimation("RunLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 10, 19));
+            SpriteAnimator.AddAnimation("RunDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 20, 27));
+            SpriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37));
 
             //hurt
             var hurtTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_hurt);
             var hurtSprites = Sprite.SpritesFromAtlas(hurtTexture, 64, 64);
-            _spriteAnimator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 0, 4));
-            _spriteAnimator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 5, 9));
+            SpriteAnimator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 0, 4));
+            SpriteAnimator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 5, 9));
 
             //death
             var deathTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_death);
             var deathSprites = Sprite.SpritesFromAtlas(deathTexture, 64, 64);
-            _spriteAnimator.AddAnimation("DeathRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 0, 9));
-            _spriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
+            SpriteAnimator.AddAnimation("DeathRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 0, 9));
+            SpriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
         }
 
         #endregion
@@ -187,233 +193,166 @@ namespace PuppetRoguelite.Components.Characters.Player
             StateMachine.Update(Time.DeltaTime);
         }
 
-        public void Idle()
+        public bool CanMove()
         {
-            //handle animation
-            var animation = "IdleDown";
-            if (_lastNonZeroDirection.X != 0)
-            {
-                animation = _lastNonZeroDirection.X >= 0 ? "IdleRight" : "IdleLeft";
-            }
-            else if (_lastNonZeroDirection.Y != 0)
-            {
-                animation = _lastNonZeroDirection.Y >= 0 ? "IdleDown" : "IdleUp";
-            }
-            if (!_spriteAnimator.IsAnimationActive(animation))
-            {
-                _spriteAnimator.Play(animation);
-            }
+            var invalidTypes = new List<Type> { typeof(CutsceneState), typeof(TurnState) };
+            return !invalidTypes.Contains(StateMachine.CurrentState.GetType());
         }
 
-        public void Move()
+        public bool CanTriggerTurn()
         {
-            //animation
-            var animation = "RunDown";
-            if (Direction.X != 0)
-            {
-                animation = Direction.X >= 0 ? "RunRight" : "RunLeft";
-            }
-            else if (Direction.Y != 0)
-            {
-                animation = Direction.Y >= 0 ? "RunDown" : "RunUp";
-            }
-            if (!_spriteAnimator.IsAnimationActive(animation))
-            {
-                _spriteAnimator.Play(animation);
-            }
-
-            //move
-            var movement = Direction * _moveSpeed * Time.DeltaTime;
-            _mover.CalculateMovement(ref movement, out var result);
-            _subPixelV2.Update(ref movement);
-            _mover.ApplyMovement(movement);
+            return StateMachine.CurrentState.GetType() == typeof(CombatState);
         }
 
-        public bool IsActionInputPressed()
+        public void TryTriggerTurn()
         {
-            return _actionInput.IsPressed;
-        }
-
-        public void HandleCheck()
-        {
-            if (_checkInput.IsPressed)
+            if (StateMachine.CurrentState.GetType() == typeof(CombatState))
             {
-                var raycastHit = Physics.Linecast(Entity.Position, Entity.Position + _lastNonZeroDirection * _raycastDistance);
-
-                if (raycastHit.Collider != null)
+                if (ActionInput.IsPressed)
                 {
-                    if (raycastHit.Collider.Entity.TryGetComponent<Interactable>(out var interactable))
-                    {
-                        interactable.Interact();
-                    }
+                    Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
                 }
-                else
+            }
+        }
+
+        public void TryCheck()
+        {
+            if (StateMachine.CurrentState.GetType() == typeof(ExploreState))
+            {
+                if (CheckInput.IsPressed)
                 {
-                    var overlap = Physics.OverlapRectangle(new RectangleF(Entity.Position, new Vector2(16, 16)));
-                    if (overlap != null)
+                    var raycastHit = Physics.Linecast(Entity.Position, Entity.Position + LastNonZeroDirection * _raycastDistance);
+
+                    if (raycastHit.Collider != null)
                     {
-                        if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))
+                        if (raycastHit.Collider.Entity.TryGetComponent<Interactable>(out var interactable))
                         {
                             interactable.Interact();
+                        }
+                    }
+                    else
+                    {
+                        var overlap = Physics.OverlapRectangle(new RectangleF(Entity.Position, new Vector2(16, 16)));
+                        if (overlap != null)
+                        {
+                            if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))
+                            {
+                                interactable.Interact();
+                            }
                         }
                     }
                 }
             }
         }
 
-        public void HandleMovementInput()
-        {
-            //get movement inputs
-            var newDirection = new Vector2(_xAxisInput.Value, _yAxisInput.Value);
-
-            //if no movement, switch to idle and return
-            if (newDirection == Vector2.Zero)
-            {
-                Idle();
-            }
-            else
-            {
-                Direction = newDirection;
-                Direction.Normalize();
-                _lastNonZeroDirection = Direction;
-                Move();
-            }
-        }
-
-        public void OnDamageTaken(HealthComponent healthComponent)
-        {
-            var hurtAnimation = Direction.X >= 0 ? "HurtRight" : "HurtLeft";
-            _spriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-            void handler(string obj)
-            {
-                _spriteAnimator.OnAnimationCompletedEvent -= handler;
-                StateMachine.ChangeState<PlayerInCombat>();
-            }
-            _spriteAnimator.OnAnimationCompletedEvent += handler;
-            StateMachine.ChangeState<PlayerHurt>();
-        }
-
-        public void OnHealthDepleted(HealthComponent healthComponent)
-        {
-            var deathAnimation = Direction.X >= 0 ? "DeathRight" : "DeathLeft";
-            _spriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
-            void handler(string obj)
-            {
-                _spriteAnimator.OnAnimationCompletedEvent -= handler;
-                Core.Exit();
-            }
-            _spriteAnimator.OnAnimationCompletedEvent += handler;
-            StateMachine.ChangeState<PlayerDying>();
-        }
+        #region COMBAT EVENTS OBSERVERS
 
         void OnTurnPhaseTriggered()
         {
-            StateMachine.ChangeState<PlayerInTurn>();
+            StateMachine.ChangeState<TurnState>();
         }
 
         void OnDodgePhaseStarted()
         {
-            StateMachine.ChangeState<PlayerInCombat>();
-        }
-
-        void OnEncounterStarted()
-        {
-            StateMachine.ChangeState<PlayerInCombat>();
+            StateMachine.ChangeState<CombatState>();
         }
 
         void OnEncounterEnded()
         {
-            StateMachine.ChangeState<PlayerDefault>();
+            StateMachine.ChangeState<ExploreState>();
         }
+
+        #endregion
+
+        #region INTERACTION OBSERVERS
 
         void OnInteractionStarted()
         {
-            StateMachine.ChangeState<PlayerIdle>();
+            StateMachine.ChangeState<CutsceneState>();
         }
 
         void OnInteractionFinished()
         {
-            Core.Schedule(.1f, timer => StateMachine.ChangeState<PlayerDefault>());
+            Core.Schedule(.1f, timer => StateMachine.ChangeState<ExploreState>());
         }
+
+        #endregion
     }
 
     #region STATE MACHINE
 
-    public class PlayerStateMachine : StateMachine<PlayerController>
-    {
-        public PlayerStateMachine(PlayerController context, State<PlayerController> initialState) : base(context, initialState)
-        {
-            AddState(new PlayerIdle());
-            AddState(new PlayerRunning());
-            AddState(new PlayerHurt());
-            AddState(new PlayerDying());
-            AddState(new PlayerInCombat());
-            AddState(new PlayerInTurn());
-        }
-    }
+    //public class PlayerStateMachine : StateMachine<PlayerController>
+    //{
+    //    public PlayerStateMachine(PlayerController context, State<PlayerController> initialState) : base(context, initialState)
+    //    {
+    //        AddState(new PlayerHurt());
+    //        AddState(new PlayerDying());
+    //        AddState(new PlayerInTurn());
+    //        AddState(new PlayerMove());
+    //    }
+    //}
 
-    public class PlayerInCombat : State<PlayerController>
-    {
-        public override void Update(float deltaTime)
-        {
-            if (_context.IsActionInputPressed() && _context.ActionPointComponent.ActionPoints > 0)
-            {
-                Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
-                return;
-            }
+    //public class PlayerMove : State<PlayerController>
+    //{
+    //    public override void Update(float deltaTime)
+    //    {
+    //        //get movement inputs
+    //        var newDirection = new Vector2(_context.XAxisInput.Value, _context.YAxisInput.Value);
 
-            _context.HandleMovementInput();
-        }
-    }
+    //        //if no movement, switch to idle and return
+    //        if (newDirection == Vector2.Zero)
+    //        {
+    //            _context.PlayIdleAnimation();
+    //        }
+    //        else
+    //        {
+    //            newDirection.Normalize();
+    //            _context.VelocityComponent.SetDirection(newDirection);
+    //            _context.Move();
+    //        }
 
-    public class PlayerDefault : State<PlayerController>
-    {
-        public override void Update(float deltaTime)
-        {
-            _context.HandleCheck();
-            _context.HandleMovementInput();
-        }
-    }
+    //        var combatManager = _context.Entity.Scene.GetSceneComponent<CombatManager>();
+    //        if (combatManager != null)
+    //        {
+    //            if (combatManager.GameState == GameState.Combat)
+    //            {
+    //                if (_context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
+    //                {
+    //                    Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
+    //                }
+    //                //TODO: ATTACK
+    //            }
+    //            else if (combatManager.GameState == GameState.Exploration)
+    //            {
+    //                _context.HandleCheck();
+    //            }
+    //        }
+    //    }
+    //}
 
-    public class PlayerIdle : State<PlayerController>
-    {
-        public override void Update(float deltaTime)
-        {
-            _context.Idle();
-        }
-    }
+    //public class PlayerHurt : State<PlayerController>
+    //{
+    //    public override void Update(float deltaTime)
+    //    {
 
-    public class PlayerRunning : State<PlayerController>
-    {
-        public override void Update(float deltaTime)
-        {
-            _context.Move();
-        }
-    }
+    //    }
+    //}
 
-    public class PlayerHurt : State<PlayerController>
-    {
-        public override void Update(float deltaTime)
-        {
+    //public class PlayerDying : State<PlayerController>
+    //{
+    //    public override void Update(float deltaTime)
+    //    {
 
-        }
-    }
+    //    }
+    //}
 
-    public class PlayerDying : State<PlayerController>
-    {
-        public override void Update(float deltaTime)
-        {
-
-        }
-    }
-
-    public class PlayerInTurn : State<PlayerController>
-    {
-        public override void Update(float deltaTime)
-        {
-            _context.Idle();
-        }
-    }
+    //public class PlayerInTurn : State<PlayerController>
+    //{
+    //    public override void Update(float deltaTime)
+    //    {
+    //        _context.PlayIdleAnimation();
+    //    }
+    //}
 
     #endregion
 }
