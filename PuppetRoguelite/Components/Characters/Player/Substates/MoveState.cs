@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.AI.FSM;
 using Nez.Sprites;
 using PuppetRoguelite.Components.Shared;
@@ -35,7 +36,7 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
             }
 
             //move
-            _context.VelocityComponent.Move();
+            _context.VelocityComponent.Move(_context.MoveSpeed);
         }
 
         public override void Reason()
@@ -45,7 +46,10 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
             _context.TryTriggerTurn();
             _context.TryCheck();
 
-            //TODO: attack
+            if (Input.LeftMouseButtonPressed)
+            {
+                _machine.ChangeState<AttackState>();
+            }
 
             //check for no input, return to idle
             if (_context.XAxisInput.Value == 0 && _context.YAxisInput.Value == 0)

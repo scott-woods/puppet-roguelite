@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Tweens;
 using Nez.UI;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Shared
 {
-    public class VelocityComponent : Component
+    public class VelocityComponent : Component, ITweenTarget<float>
     {
         public Vector2 Direction = new Vector2(1, 0);
-        float _speed;
+        public float Speed;
         SubpixelVector2 _subPixelV2 = new SubpixelVector2();
 
         Mover _mover;
@@ -25,7 +26,7 @@ namespace PuppetRoguelite.Components.Shared
         /// <param name="subPixelV2"></param>
         public VelocityComponent(Mover mover, float speed)
         {
-            _speed = speed;
+            Speed = speed;
 
             _mover = mover;
         }
@@ -41,12 +42,27 @@ namespace PuppetRoguelite.Components.Shared
         /// <param name="speed"></param>
         public void Move(float speed = 0)
         {
-            speed = speed == 0 ? _speed : speed;
+            speed = speed == 0 ? Speed : speed;
             //move
             var movement = Direction * speed * Time.DeltaTime;
             _mover.CalculateMovement(ref movement, out var result);
             _subPixelV2.Update(ref movement);
             _mover.ApplyMovement(movement);
+        }
+
+        public void SetTweenedValue(float value)
+        {
+            Speed = value;
+        }
+
+        public float GetTweenedValue()
+        {
+            return Speed;
+        }
+
+        public object GetTargetObject()
+        {
+            return this;
         }
     }
 }

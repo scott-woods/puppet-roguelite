@@ -44,6 +44,11 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
                     _machine.ChangeState<MoveState>();
                 }
             }
+
+            if (Input.LeftMouseButtonPressed)
+            {
+                _machine.ChangeState<AttackState>();
+            }
         }
     }
 }

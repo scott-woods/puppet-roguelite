@@ -41,7 +41,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public VirtualButton DashInput;
 
         //stats
-        float _moveSpeed = 115f;
+        public float MoveSpeed = 115f;
         float _raycastDistance = 10f;
 
         //components
@@ -55,6 +55,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         Inventory _inventory;
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
+        public MeleeAttack MeleeAttack;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -120,7 +121,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, 12));
 
             //velocity component
-            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, _moveSpeed));
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, MoveSpeed));
+
+            MeleeAttack = Entity.AddComponent(new MeleeAttack(SpriteAnimator, VelocityComponent));
         }
 
         void AddObservers()
@@ -243,6 +246,11 @@ namespace PuppetRoguelite.Components.Characters.Player
                     }
                 }
             }
+        }
+
+        public void ExecuteMeleeAttack(Action attackCompleteCallback)
+        {
+            MeleeAttack.ExecuteAttack(attackCompleteCallback);
         }
 
         #region COMBAT EVENTS OBSERVERS
