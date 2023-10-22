@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -122,6 +123,11 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         void PerformAttack()
         {
+            _timeSinceLastClick = 0f;
+            _timeSinceAttackStarted = 0f;
+            _continueCombo = false;
+            _activeFrame = -1;
+
             //increment combo
             _comboCounter += 1;
 
@@ -189,11 +195,6 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
             else if (_continueCombo || Input.LeftMouseButtonDown)
             {
-                _timeSinceLastClick = 0f;
-                _timeSinceAttackStarted = 0f;
-                _continueCombo = false;
-                _activeFrame = -1;
-
                 if (_comboCounter == _maxCombo - 1)
                 {
                     _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
@@ -206,7 +207,19 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
             else
             {
-                EndAttack();
+                //hold last frame for a moment, give player a chance to extend combo
+                _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
+                Game1.Schedule(.16f, timer =>
+                {
+                    if (_continueCombo || Input.LeftMouseButtonDown)
+                    {
+                        PerformAttack();
+                    }
+                    else
+                    {
+                        EndAttack();
+                    }
+                });
             }
         }
 

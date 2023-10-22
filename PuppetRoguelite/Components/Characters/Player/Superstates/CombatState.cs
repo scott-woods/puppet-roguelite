@@ -22,6 +22,7 @@ namespace PuppetRoguelite.Components.Characters.Player.Superstates
             _subStateMachine = new StateMachine<PlayerController>(_context, new IdleState());
             _subStateMachine.AddState(new MoveState());
             _subStateMachine.AddState(new AttackState());
+            _subStateMachine.AddState(new DashState());
             _subStateMachine.AddState(new HurtState());
             _subStateMachine.AddState(new DyingState());
         }

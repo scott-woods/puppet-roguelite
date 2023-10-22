@@ -51,6 +51,7 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
                 if (Input.LeftMouseButtonPressed)
                 {
                     _machine.ChangeState<AttackState>();
+                    return;
                 }
             }
 
@@ -58,6 +59,12 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
             if (_context.XAxisInput.Value == 0 && _context.YAxisInput.Value == 0)
             {
                 _machine.ChangeState<IdleState>();
+                return;
+            }
+
+            if (_context.CanDash() && _context.DashInput.IsPressed)
+            {
+                _machine.ChangeState<DashState>();
             }
         }
     }

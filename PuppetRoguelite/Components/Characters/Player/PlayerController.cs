@@ -56,6 +56,8 @@ namespace PuppetRoguelite.Components.Characters.Player
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
         public MeleeAttack MeleeAttack;
+        public Dash Dash;
+        public SpriteTrail _spriteTrail;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -111,7 +113,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
 
             //attacks list
-            AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash), typeof(Dash) }));
+            AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash), typeof(DashAttack) }));
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
@@ -124,6 +126,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, MoveSpeed));
 
             MeleeAttack = Entity.AddComponent(new MeleeAttack(SpriteAnimator, VelocityComponent));
+
+            Dash = Entity.AddComponent(new Dash());
+
+            _spriteTrail = Entity.AddComponent(new SpriteTrail(SpriteAnimator));
+            _spriteTrail.DisableSpriteTrail();
         }
 
         void AddObservers()
@@ -187,6 +194,14 @@ namespace PuppetRoguelite.Components.Characters.Player
             var deathSprites = Sprite.SpritesFromAtlas(deathTexture, 64, 64);
             SpriteAnimator.AddAnimation("DeathRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 0, 9));
             SpriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
+
+            //dash
+            var dashTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
+            var dashSprites = Sprite.SpritesFromAtlas(dashTexture, 64, 64);
+            SpriteAnimator.AddAnimation("DashRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 4, 4));
+            SpriteAnimator.AddAnimation("DashLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 13, 13));
+            SpriteAnimator.AddAnimation("DashDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 26, 26));
+            SpriteAnimator.AddAnimation("DashUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 35, 35));
         }
 
         #endregion
@@ -210,6 +225,11 @@ namespace PuppetRoguelite.Components.Characters.Player
         public bool CanMelee()
         {
             return !MeleeAttack.IsOnCooldown;
+        }
+
+        public bool CanDash()
+        {
+            return !Dash.IsOnCooldown;
         }
 
         public void TryTriggerTurn()
@@ -256,6 +276,11 @@ namespace PuppetRoguelite.Components.Characters.Player
         public void ExecuteMeleeAttack(Action attackCompleteCallback)
         {
             MeleeAttack.ExecuteAttack(attackCompleteCallback);
+        }
+
+        public void ExecuteDash(Action dashCompleteCallback)
+        {
+            Dash.ExecuteDash(dashCompleteCallback, SpriteAnimator, VelocityComponent, _spriteTrail);
         }
 
         #region COMBAT EVENTS OBSERVERS
