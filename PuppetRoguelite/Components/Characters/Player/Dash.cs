@@ -15,7 +15,10 @@ namespace PuppetRoguelite.Components.Characters.Player
     {
         const float _dashSpeed = 350f;
         const float _dashDuration = .2f;
-        const float _dashCooldown = .5f;
+        const float _shortDashCooldown = .025f;
+        const float _dashCooldown = .75f;
+        const float _successionLifespan = .75f;
+        const int _maxSuccession = 2;
 
         public bool IsOnCooldown = false;
 
@@ -26,6 +29,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         bool _isDashing = false;
         float _dashTimer = 0f;
+        int _successionCount = 0;
 
         public void ExecuteDash(Action dashCompleteCallback, SpriteAnimator animator, VelocityComponent velocityComponent,
             SpriteTrail spriteTrail)
@@ -37,11 +41,10 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             _isDashing = true;
             _dashTimer = _dashDuration;
+            _successionCount += 1;
+            Game1.Schedule(_successionLifespan, timer => _successionCount -= 1);
 
             _velocityComponent.Speed = _dashSpeed;
-            //var tween = new FloatTween(_velocityComponent, 0, _dashDuration);
-            //tween.SetEaseType(EaseType.QuintOut);
-            //tween.Start();
 
             //configure trail
             _spriteTrail.FadeDelay = 0;
@@ -76,6 +79,11 @@ namespace PuppetRoguelite.Components.Characters.Player
                 }
                 else
                 {
+                    var cooldown = _successionCount >= _maxSuccession ? _dashCooldown : _shortDashCooldown;
+
+                    IsOnCooldown = true;
+                    Game1.Schedule(cooldown, timer => IsOnCooldown = false);
+
                     _spriteAnimator.Color = Color.White;
                     _spriteTrail.DisableSpriteTrail();
                     _isDashing = false;

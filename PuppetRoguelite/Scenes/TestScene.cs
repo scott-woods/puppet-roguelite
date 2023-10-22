@@ -56,6 +56,9 @@ namespace PuppetRoguelite.Scenes
             //add combat manager
             _combatManager = AddSceneComponent(new CombatManager());
 
+            //game state
+            AddSceneComponent(new GameStateManager());
+
             //add tiled object handler
             //AddSceneComponent(new TiledObjectHandler());
 

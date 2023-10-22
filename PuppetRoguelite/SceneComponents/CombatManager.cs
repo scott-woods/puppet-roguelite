@@ -31,6 +31,7 @@ namespace PuppetRoguelite.SceneComponents
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
         public void AddEnemy(Enemy enemy)
@@ -86,6 +87,11 @@ namespace PuppetRoguelite.SceneComponents
             //create turn handler
             TurnHandlerEntity = Scene.CreateEntity("turn-handler");
             TurnHandlerEntity.AddComponent(new TurnHandler());
+        }
+
+        void OnTurnPhaseCompleted()
+        {
+            CheckForCompletion();
         }
 
         void OnEncounterEnded()

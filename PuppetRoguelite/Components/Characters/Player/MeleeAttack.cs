@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Sprites;
+using Nez.Systems;
 using Nez.Textures;
 using Nez.Tweens;
 using PuppetRoguelite.Components.Shared;
@@ -18,6 +19,8 @@ namespace PuppetRoguelite.Components.Characters.Player
 {
     public class MeleeAttack : Component, IUpdatable
     {
+        public Emitter<MeleeAttackEvents, int> Emitter = new Emitter<MeleeAttackEvents, int>();
+
         public bool IsOnCooldown = false;
 
         //const float _comboThreshold = .8f;
@@ -28,6 +31,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         const float _fps = 15;
         const float _cooldown = .2f;
         const float _delayBeforeFinisher = .1f;
+        const int _damage = 1;
 
         int _comboCounter = 0;
         float _timeSinceLastClick = 0f;
@@ -45,6 +49,8 @@ namespace PuppetRoguelite.Components.Characters.Player
         //added components
         Hitbox _hitbox;
 
+        List<Collider> _hitColliders = new List<Collider>();
+
         public MeleeAttack(SpriteAnimator animator, VelocityComponent velocityComponent)
         {
             _animator = animator;
@@ -59,7 +65,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             Flags.SetFlagExclusive(ref hitboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             hitboxCollider.IsTrigger = true;
-            _hitbox = Entity.AddComponent(new Hitbox(hitboxCollider, 1));
+            _hitbox = Entity.AddComponent(new Hitbox(hitboxCollider, _damage));
             _hitbox.SetEnabled(false);
 
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
@@ -105,6 +111,20 @@ namespace PuppetRoguelite.Components.Characters.Player
 
                 //move
                 _velocityComponent.Move();
+
+                //check for hit
+                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_hitbox.Collider, _hitbox.Collider.CollidesWithLayers);
+                if (colliders.Count > 0)
+                {
+                    foreach(var collider in colliders)
+                    {
+                        if (!_hitColliders.Contains(collider))
+                        {
+                            Emitter.Emit(MeleeAttackEvents.Hit, _damage);
+                            _hitColliders.Add(collider);
+                        }
+                    }
+                }
             }
         }
 
@@ -127,6 +147,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _timeSinceAttackStarted = 0f;
             _continueCombo = false;
             _activeFrame = -1;
+            _hitColliders.Clear();
 
             //increment combo
             _comboCounter += 1;
@@ -241,5 +262,10 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             _attackCompleteCallback?.Invoke();
         }
+    }
+
+    public enum MeleeAttackEvents
+    {
+        Hit
     }
 }

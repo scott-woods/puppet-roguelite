@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.Systems;
 using PuppetRoguelite.Components.PlayerActions;
+using PuppetRoguelite.Components.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +12,18 @@ namespace PuppetRoguelite.Components.Characters.Player
 {
     public class ActionPointComponent : Component, IUpdatable
     {
-        int _maxActionPoints;
-        int _actionPoints;
-        float _totalChargeTime;
-        float _currentChargeTimer;
-        bool _active = false;
+        const float _baseChargeRate = 1.25f;
+        const float _baseDamageMultiplier = 4f;
 
-        public int MaxActionPoints
-        {
-            get => _maxActionPoints;
-            set
-            {
-                _maxActionPoints = value;
-                Emitters.ActionPointEmitter.Emit(ActionPointEvents.MaxActionPointsChanged, this);
-            }
-        }
+        bool _isCharging = false;
+
+        HealthComponent _healthComponent;
+
+        public float MaxCharge = 100f;
+        public float ApThreshold = 100f / 5;
+        public int MaxActionPoints = 5;
+
+        int _actionPoints;
         public int ActionPoints
         {
             get => _actionPoints;
@@ -35,7 +33,8 @@ namespace PuppetRoguelite.Components.Characters.Player
                 Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsChanged, this);
             }
         }
-        public float ChargeRate;
+
+        float _currentChargeTimer;
         public float CurrentChargeTimer
         {
             get => _currentChargeTimer;
@@ -46,11 +45,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
         }
 
-        public ActionPointComponent(int maxActionPoints, float totalChargeTime)
+        public ActionPointComponent(HealthComponent healthComponent)
         {
-            MaxActionPoints = maxActionPoints;
-            _totalChargeTime = totalChargeTime;
-            ChargeRate = _totalChargeTime / MaxActionPoints;
+            _healthComponent = healthComponent;
         }
 
         public override void OnAddedToEntity()
@@ -61,37 +58,29 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
+
+            if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
+            {
+                meleeAttack.Emitter.AddObserver(MeleeAttackEvents.Hit, OnMeleeAttackHit);
+            }
         }
 
         public void Update()
         {
-            if (_active)
+            if (_isCharging && (ActionPoints < MaxActionPoints))
             {
-                if (ActionPoints < MaxActionPoints)
+                float healthMultiplier = 2 - (_healthComponent.Health / _healthComponent.MaxHealth);
+                CurrentChargeTimer += Time.DeltaTime * (_baseChargeRate * healthMultiplier);
+
+                //if timer has finished
+                if (CurrentChargeTimer >= ApThreshold * (ActionPoints + 1))
                 {
-                    //increment timer
-                    CurrentChargeTimer += Time.DeltaTime;
-
-                    //if timer has finished
-                    if (CurrentChargeTimer >= ChargeRate)
-                    {
-                        ActionPoints++;
-
-                        //if we haven't hit the max ap
-                        if (ActionPoints < MaxActionPoints)
-                        {
-                            StartTimer();
-                        }
-                    }
+                    ActionPoints++;
                 }
             }
         }
 
-        void StartTimer()
-        {
-            CurrentChargeTimer = 0;
-            Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsTimerStarted, this);
-        }
+        #region OBSERVERS
 
         /// <summary>
         /// decrement ap when an action is successfully prepared
@@ -105,14 +94,20 @@ namespace PuppetRoguelite.Components.Characters.Player
         void OnDodgePhaseStarted()
         {
             ActionPoints = 0;
-            StartTimer();
-            _active = true;
+            _isCharging = true;
+            CurrentChargeTimer = 0;
         }
 
         void OnTurnPhaseTriggered()
         {
-            CurrentChargeTimer = 0;
-            _active = false;
+            _isCharging = false;
         }
+
+        void OnMeleeAttackHit(int damageAmount)
+        {
+            CurrentChargeTimer += (_baseDamageMultiplier * damageAmount);
+        }
+
+        #endregion
     }
 }

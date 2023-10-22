@@ -14,75 +14,50 @@ namespace PuppetRoguelite.UI.Elements
     public class ApProgressBar : ProgressBar
     {
         int _index;
+        float _min;
+        float _max;
 
-        public ApProgressBar(int index, Skin skin, string styleName = null) : base(skin, styleName)
+        ActionPointComponent _apComponent;
+
+        public ApProgressBar(ActionPointComponent actionPointComponent, int index, Skin skin, string styleName = null) : base(skin, styleName)
         {
             _index = index;
+            _apComponent = actionPointComponent;
 
-            Setup();
-            AddObservers();
-        }
+            _min = _apComponent.ApThreshold * _index;
+            _max = _apComponent.ApThreshold * (_index + 1);
+            SetMinMax(_min, _max);
 
-        void Setup()
-        {
             SetStepSize(.1f);
+
+            AddObservers();
         }
 
         void AddObservers()
         {
-            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerStarted, OnActionPointsTimerStarted);
-            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerUpdated, OnActionPointsTimerUpdated);
             Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsChanged, OnActionPointsChanged);
+            Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerUpdated, OnActionPointsChargeTimerChanged);
 
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
         }
 
-        void OnActionPointsTimerStarted(ActionPointComponent actionPointComponent)
+        void OnActionPointsChargeTimerChanged(ActionPointComponent actionPointComponent)
         {
-            if (actionPointComponent.ActionPoints == _index)
-            {
-                SetMinMax(0, actionPointComponent.ChargeRate);
-            }
-        }
-
-        void OnActionPointsTimerUpdated(ActionPointComponent actionPointComponent)
-        {
-            if (actionPointComponent.ActionPoints == _index)
-            {
-                SetValue(actionPointComponent.CurrentChargeTimer);
-            }
+            SetValue(_apComponent.CurrentChargeTimer);
         }
 
         void OnTurnPhaseTriggered()
         {
-            //SetIsVisible(false);
-            var actionPointComponent = Game1.Scene.FindComponentOfType<ActionPointComponent>();
-            if (actionPointComponent != null)
+            if (_index == _apComponent.ActionPoints)
             {
-                if (_index == actionPointComponent.ActionPoints)
-                {
-                    Value = 0;
-                }
+                Value = 0;
             }
         }
 
         void OnTurnPhaseCompleted()
         {
-            //SetIsVisible(true);
             Value = 0;
-        }
-
-        void OnDodgePhaseStarted()
-        {
-            //get initial action point values
-            var actionPointComponent = Game1.Scene.FindComponentOfType<ActionPointComponent>();
-            if (actionPointComponent != null)
-            {
-                SetMinMax(0, actionPointComponent.ChargeRate);
-                SetValue(actionPointComponent.CurrentChargeTimer);
-            }
         }
 
         void OnActionPointsChanged(ActionPointComponent actionPointComponent)

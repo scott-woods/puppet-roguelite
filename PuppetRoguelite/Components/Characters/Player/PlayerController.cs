@@ -115,7 +115,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
 
             //action points
-            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(5, 10));
+            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(HealthComponent));
 
             //attacks list
             AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash), typeof(DashAttack) }));
