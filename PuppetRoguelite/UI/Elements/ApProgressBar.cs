@@ -44,18 +44,22 @@ namespace PuppetRoguelite.UI.Elements
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
-        void OnActionPointsChargeTimerChanged(ActionPointComponent actionPointComponent)
+        void UpdateStyle()
         {
             int num = 0;
             if (_apComponent.CurrentChargeTimer > Min)
             {
-                var percentage = _apComponent.CurrentChargeTimer / Max;
+                var percentage = (_apComponent.CurrentChargeTimer - Min) / (Max - Min);
                 num = Math.Min(((int)(percentage * 10)), 9);
             }
 
             var style = $"progressBar_{num}";
             SetStyle(_skin.Get<ProgressBarStyle>(style));
+        }
 
+        void OnActionPointsChargeTimerChanged(ActionPointComponent actionPointComponent)
+        {
+            UpdateStyle();
             SetValue(_apComponent.CurrentChargeTimer);
         }
 
@@ -63,17 +67,20 @@ namespace PuppetRoguelite.UI.Elements
         {
             if (_index == _apComponent.ActionPoints)
             {
+                UpdateStyle();
                 Value = 0;
             }
         }
 
         void OnTurnPhaseCompleted()
         {
+            UpdateStyle();
             Value = 0;
         }
 
         void OnActionPointsChanged(ActionPointComponent actionPointComponent)
         {
+            UpdateStyle();
             if (actionPointComponent.ActionPoints <= _index)
             {
                 SetValue(0);
