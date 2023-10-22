@@ -16,6 +16,7 @@ namespace PuppetRoguelite.UI.Elements
         int _index;
         float _min;
         float _max;
+        Skin _skin;
 
         ActionPointComponent _apComponent;
 
@@ -23,6 +24,7 @@ namespace PuppetRoguelite.UI.Elements
         {
             _index = index;
             _apComponent = actionPointComponent;
+            _skin = skin;
 
             _min = _apComponent.ApThreshold * _index;
             _max = _apComponent.ApThreshold * (_index + 1);
@@ -44,6 +46,16 @@ namespace PuppetRoguelite.UI.Elements
 
         void OnActionPointsChargeTimerChanged(ActionPointComponent actionPointComponent)
         {
+            int num = 0;
+            if (_apComponent.CurrentChargeTimer > Min)
+            {
+                var percentage = _apComponent.CurrentChargeTimer / Max;
+                num = Math.Min(((int)(percentage * 10)), 9);
+            }
+
+            var style = $"progressBar_{num}";
+            SetStyle(_skin.Get<ProgressBarStyle>(style));
+
             SetValue(_apComponent.CurrentChargeTimer);
         }
 

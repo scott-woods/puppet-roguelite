@@ -802,6 +802,8 @@ namespace Nez
 				}
 
 				public const string Borders_and_hp = @"Content\Textures\UI\borders_and_hp.png";
+				public const string Glow_sliders = @"Content\Textures\UI\glow_sliders.png";
+				public const string Sliders = @"Content\Textures\UI\sliders.png";
 			}
 
 		}

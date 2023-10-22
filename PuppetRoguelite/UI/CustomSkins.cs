@@ -37,6 +37,14 @@ namespace PuppetRoguelite.UI
             skin.Add("executeButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 324"),
                 skin.GetDrawable("Style 3 Icon 324"), skin.GetDrawable("Style 3 Icon 324")));
 
+            //progress bar sprites
+            var progressBarTextures = Game1.Content.LoadTexture(Nez.Content.Textures.UI.Sliders);
+            var progressBarSprites = Sprite.SpritesFromAtlas(progressBarTextures, 35, 16);
+            for (int i = 0; i < 10; i++)
+            {
+                skin.Add($"progressBarBackground_{i}", progressBarSprites[i]);
+            }
+
             //text buttons
             skin.Add("listButton", new TextButtonStyle()
             {
@@ -64,12 +72,18 @@ namespace PuppetRoguelite.UI
             });
 
             //progress bar
-            var progressBarStyle = new ProgressBarStyle
+            for (int i = 0; i < 10; i++)
             {
-                Background = new PrimitiveDrawable(0, 5, Color.LightGray),
-                KnobBefore = new PrimitiveDrawable(0, 5, Color.Green)
-            };
-            skin.Add("default", progressBarStyle);
+                var progressBarStyle = new ProgressBarStyle
+                {
+                    Background = skin.GetSpriteDrawable($"progressBarBackground_{i}")
+                    //KnobBefore = skin.GetSpriteDrawable("progressBarKnobBefore"),
+                    //KnobAfter = skin.GetSpriteDrawable("progressBarKnobAfter"),
+                    //Background = new PrimitiveDrawable(0, 5, Color.LightGray),
+                    //KnobBefore = new PrimitiveDrawable(0, 5, Color.Green)
+                };
+                skin.Add($"progressBar_{i}", progressBarStyle);
+            }
 
             return skin;
         }

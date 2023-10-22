@@ -34,6 +34,7 @@
     <None Remove="Content\Textures\Objects\boss_gate.png" />
     <None Remove="Content\Textures\Objects\shelf.png" />
     <None Remove="Content\Textures\UI\borders_and_hp.png" />
+    <None Remove="Content\Textures\UI\glow_sliders.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 000.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 001.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 002.png" />
@@ -378,6 +379,7 @@
     <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_04.png" />
     <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_05.png" />
     <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_06.png" />
+    <None Remove="Content\Textures\UI\sliders.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
