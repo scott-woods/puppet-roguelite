@@ -1,22 +1,19 @@
-﻿using Microsoft.Xna.Framework;
-using Nez;
-using Nez.AI.FSM;
-using PuppetRoguelite.Tools;
+﻿using Nez.AI.FSM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components.Characters.Player.Substates
+namespace PuppetRoguelite.Components.Characters.Player.States
 {
-    public class AttackState : State<PlayerController>
+    public class DashState : State<PlayerController>
     {
         public override void Begin()
         {
             base.Begin();
 
-            _context.ExecuteMeleeAttack(AttackSequenceComplete);
+            _context.ExecuteDash(OnDashCompleted);
         }
 
         public override void Update(float deltaTime)
@@ -24,7 +21,7 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
             //throw new NotImplementedException();
         }
 
-        void AttackSequenceComplete()
+        void OnDashCompleted()
         {
             _machine.ChangeState<IdleState>();
         }

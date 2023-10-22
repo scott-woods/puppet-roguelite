@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components.Characters.Player.Substates
+namespace PuppetRoguelite.Components.Characters.Player.States
 {
     public class HurtState : State<PlayerController>
     {

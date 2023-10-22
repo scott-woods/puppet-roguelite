@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components.Characters.Player.Substates
+namespace PuppetRoguelite.Components.Characters.Player.States
 {
-    public class MoveState : State<PlayerController>
+    public class MoveState : PlayerState
     {
         public override void Update(float deltaTime)
         {
@@ -43,29 +43,11 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
         {
             base.Reason();
 
-            _context.TryTriggerTurn();
-            _context.TryCheck();
-
-            if (_context.CanMelee())
-            {
-                if (Input.LeftMouseButtonPressed)
-                {
-                    _machine.ChangeState<AttackState>();
-                    return;
-                }
-            }
-
-            //check for no input, return to idle
-            if (_context.XAxisInput.Value == 0 && _context.YAxisInput.Value == 0)
-            {
-                _machine.ChangeState<IdleState>();
-                return;
-            }
-
-            if (_context.CanDash() && _context.DashInput.IsPressed)
-            {
-                _machine.ChangeState<DashState>();
-            }
+            TryTriggerTurn();
+            TryCheck();
+            TryMelee();
+            TryDash();
+            TryIdle();
         }
     }
 }

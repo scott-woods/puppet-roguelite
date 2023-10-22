@@ -6,7 +6,7 @@ using Nez.Sprites;
 using Nez.Systems;
 using Nez.Textures;
 using Nez.UI;
-using PuppetRoguelite.Components.Characters.Player.Superstates;
+using PuppetRoguelite.Components.Characters.Player.States;
 using PuppetRoguelite.Components.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
@@ -42,7 +42,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         //stats
         public float MoveSpeed = 115f;
-        float _raycastDistance = 10f;
+        public float RaycastDistance = 10f;
 
         //components
         Mover _mover;
@@ -75,13 +75,18 @@ namespace PuppetRoguelite.Components.Characters.Player
             base.Initialize();
 
             AddComponents();
-            AddObservers();
             SetupInput();
 
-            StateMachine = new StateMachine<PlayerController>(this, new ExploreState());
-            StateMachine.AddState(new CombatState());
+            StateMachine = new StateMachine<PlayerController>(this, new IdleState());
+            StateMachine.AddState(new AttackState());
+            StateMachine.AddState(new DashState());
+            StateMachine.AddState(new DyingState());
+            StateMachine.AddState(new HurtState());
+            StateMachine.AddState(new MoveState());
             StateMachine.AddState(new CutsceneState());
             StateMachine.AddState(new TurnState());
+
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
         void AddComponents()
@@ -131,16 +136,6 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             _spriteTrail = Entity.AddComponent(new SpriteTrail(SpriteAnimator));
             _spriteTrail.DisableSpriteTrail();
-        }
-
-        void AddObservers()
-        {
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
-
-            Emitters.InteractableEmitter.AddObserver(InteractableEvents.Interacted, OnInteractionStarted);
-            Emitters.InteractableEmitter.AddObserver(InteractableEvents.InteractionFinished, OnInteractionFinished);
         }
 
         void SetupInput()
@@ -211,65 +206,21 @@ namespace PuppetRoguelite.Components.Characters.Player
             StateMachine.Update(Time.DeltaTime);
         }
 
-        public bool CanMove()
+        public void Idle()
         {
-            var invalidTypes = new List<Type> { typeof(CutsceneState), typeof(TurnState) };
-            return !invalidTypes.Contains(StateMachine.CurrentState.GetType());
-        }
-
-        public bool CanTriggerTurn()
-        {
-            return StateMachine.CurrentState.GetType() == typeof(CombatState);
-        }
-
-        public bool CanMelee()
-        {
-            return !MeleeAttack.IsOnCooldown;
-        }
-
-        public bool CanDash()
-        {
-            return !Dash.IsOnCooldown;
-        }
-
-        public void TryTriggerTurn()
-        {
-            if (StateMachine.CurrentState.GetType() == typeof(CombatState))
+            //handle animation
+            var animation = "IdleDown";
+            if (VelocityComponent.Direction.X != 0)
             {
-                if (ActionInput.IsPressed)
-                {
-                    Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
-                }
+                animation = VelocityComponent.Direction.X >= 0 ? "IdleRight" : "IdleLeft";
             }
-        }
-
-        public void TryCheck()
-        {
-            if (StateMachine.CurrentState.GetType() == typeof(ExploreState))
+            else if (VelocityComponent.Direction.Y != 0)
             {
-                if (CheckInput.IsPressed)
-                {
-                    var raycastHit = Physics.Linecast(Entity.Position, Entity.Position + LastNonZeroDirection * _raycastDistance);
-
-                    if (raycastHit.Collider != null)
-                    {
-                        if (raycastHit.Collider.Entity.TryGetComponent<Interactable>(out var interactable))
-                        {
-                            interactable.Interact();
-                        }
-                    }
-                    else
-                    {
-                        var overlap = Physics.OverlapRectangle(new RectangleF(Entity.Position, new Vector2(16, 16)));
-                        if (overlap != null)
-                        {
-                            if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))
-                            {
-                                interactable.Interact();
-                            }
-                        }
-                    }
-                }
+                animation = VelocityComponent.Direction.Y >= 0 ? "IdleDown" : "IdleUp";
+            }
+            if (!SpriteAnimator.IsAnimationActive(animation))
+            {
+                SpriteAnimator.Play(animation);
             }
         }
 
@@ -283,114 +234,13 @@ namespace PuppetRoguelite.Components.Characters.Player
             Dash.ExecuteDash(dashCompleteCallback, SpriteAnimator, VelocityComponent, _spriteTrail);
         }
 
-        #region COMBAT EVENTS OBSERVERS
+        #region OBSERVERS
 
-        void OnTurnPhaseTriggered()
+        void OnTurnPhaseCompleted()
         {
-            StateMachine.ChangeState<TurnState>();
-        }
-
-        void OnDodgePhaseStarted()
-        {
-            StateMachine.ChangeState<CombatState>();
-        }
-
-        void OnEncounterEnded()
-        {
-            StateMachine.ChangeState<ExploreState>();
-        }
-
-        #endregion
-
-        #region INTERACTION OBSERVERS
-
-        void OnInteractionStarted()
-        {
-            StateMachine.ChangeState<CutsceneState>();
-        }
-
-        void OnInteractionFinished()
-        {
-            Core.Schedule(.1f, timer => StateMachine.ChangeState<ExploreState>());
+            StateMachine.ChangeState<IdleState>();
         }
 
         #endregion
     }
-
-    #region STATE MACHINE
-
-    //public class PlayerStateMachine : StateMachine<PlayerController>
-    //{
-    //    public PlayerStateMachine(PlayerController context, State<PlayerController> initialState) : base(context, initialState)
-    //    {
-    //        AddState(new PlayerHurt());
-    //        AddState(new PlayerDying());
-    //        AddState(new PlayerInTurn());
-    //        AddState(new PlayerMove());
-    //    }
-    //}
-
-    //public class PlayerMove : State<PlayerController>
-    //{
-    //    public override void Update(float deltaTime)
-    //    {
-    //        //get movement inputs
-    //        var newDirection = new Vector2(_context.XAxisInput.Value, _context.YAxisInput.Value);
-
-    //        //if no movement, switch to idle and return
-    //        if (newDirection == Vector2.Zero)
-    //        {
-    //            _context.PlayIdleAnimation();
-    //        }
-    //        else
-    //        {
-    //            newDirection.Normalize();
-    //            _context.VelocityComponent.SetDirection(newDirection);
-    //            _context.Move();
-    //        }
-
-    //        var combatManager = _context.Entity.Scene.GetSceneComponent<CombatManager>();
-    //        if (combatManager != null)
-    //        {
-    //            if (combatManager.GameState == GameState.Combat)
-    //            {
-    //                if (_context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
-    //                {
-    //                    Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
-    //                }
-    //                //TODO: ATTACK
-    //            }
-    //            else if (combatManager.GameState == GameState.Exploration)
-    //            {
-    //                _context.HandleCheck();
-    //            }
-    //        }
-    //    }
-    //}
-
-    //public class PlayerHurt : State<PlayerController>
-    //{
-    //    public override void Update(float deltaTime)
-    //    {
-
-    //    }
-    //}
-
-    //public class PlayerDying : State<PlayerController>
-    //{
-    //    public override void Update(float deltaTime)
-    //    {
-
-    //    }
-    //}
-
-    //public class PlayerInTurn : State<PlayerController>
-    //{
-    //    public override void Update(float deltaTime)
-    //    {
-    //        _context.PlayIdleAnimation();
-    //    }
-    //}
-
-    #endregion
 }

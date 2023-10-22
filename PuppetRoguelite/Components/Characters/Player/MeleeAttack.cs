@@ -188,6 +188,8 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
 
+            _activeFrame = -1;
+
             //if reached max combo, end attack
             if (_comboCounter >= _maxCombo)
             {
@@ -232,6 +234,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _comboCounter = 0;
             _activeFrame = -1;
             _hitbox.PushForce = 1f;
+            _hitbox.SetEnabled(false);
 
             IsOnCooldown = true;
             Game1.Schedule(_cooldown, timer => IsOnCooldown = false);

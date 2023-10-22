@@ -377,7 +377,6 @@ namespace PuppetRoguelite.SceneComponents
             mapRenderer.RenderLayer = 10;
             mapEntity.AddComponent(new GridGraphManager(mapRenderer));
             mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
-            mapEntity.AddComponent(new MapCombatHandler());
 
             return true;
         }

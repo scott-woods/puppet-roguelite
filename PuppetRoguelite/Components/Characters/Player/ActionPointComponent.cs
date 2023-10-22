@@ -51,6 +51,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             MaxActionPoints = maxActionPoints;
             _totalChargeTime = totalChargeTime;
             ChargeRate = _totalChargeTime / MaxActionPoints;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
 
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);

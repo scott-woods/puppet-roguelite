@@ -17,6 +17,7 @@ namespace PuppetRoguelite.Components.Shared
         public bool Active { get; set; }
 
         Func<IEnumerator> _onInteracted;
+        Action _interactionCompletedCallback;
 
         public Interactable(Func<IEnumerator> onInteracted, bool active = true)
         {
@@ -24,12 +25,13 @@ namespace PuppetRoguelite.Components.Shared
             _onInteracted = onInteracted;
         }
 
-        public void Interact()
+        public void Interact(Action interactionCompletedCallback)
         {
             if (Active)
             {
                 if (_onInteracted != null)
                 {
+                    _interactionCompletedCallback = interactionCompletedCallback;
                     Game1.StartCoroutine(InteractionCoroutine());
                 }
             }
@@ -37,9 +39,8 @@ namespace PuppetRoguelite.Components.Shared
 
         IEnumerator InteractionCoroutine()
         {
-            Emitters.InteractableEmitter.Emit(InteractableEvents.Interacted);
             yield return Game1.StartCoroutine(_onInteracted());
-            Emitters.InteractableEmitter.Emit(InteractableEvents.InteractionFinished);
+            _interactionCompletedCallback?.Invoke();
         }
     }
 }
