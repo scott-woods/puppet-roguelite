@@ -33,6 +33,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public Hitbox MovingAttackHitbox;
         public Hitbox StationaryAttackHitboxTopLeft, StationaryAttackHitboxBottomLeft, StationaryAttackHitboxTopRight, StationaryAttackHitboxBottomRight;
         public Healthbar Healthbar;
+        public KnockbackComponent KnockbackComponent;
 
         //misc
         float _normalMoveSpeed = 50f;
@@ -70,7 +71,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, .2f));
+            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .1f));
 
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed));
 
@@ -84,6 +85,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             Healthbar = Entity.AddComponent(new Healthbar(HealthComponent));
             Healthbar.SetLocalOffset(new Vector2(0, -8));
+
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, VelocityComponent, Hurtbox));
 
             var movingAttackCollider = Entity.AddComponent(new BoxCollider(-35, 35, 71, 18));
             movingAttackCollider.IsTrigger = true;
@@ -170,7 +173,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                     .Selector(AbortTypes.Self)
                         .ConditionalDecorator(h => !h._isInCombat) //if not in combat, idle
                             .Action(h => h.PlayAnimationLoop("Idle"))
-                        .ConditionalDecorator(h => !h.Hurtbox.IsStunned, true) //if not stunned, select something to do
+                        .ConditionalDecorator(h => !h.KnockbackComponent.IsStunned, true) //if not stunned, select something to do
                             .RandomSelector()
                                 .Sequence() //moving attack sequence
                                     .ParallelSelector()

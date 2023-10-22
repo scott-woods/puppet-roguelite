@@ -3,6 +3,7 @@ using Nez;
 using Nez.AI.BehaviorTrees;
 using Nez.Sprites;
 using Nez.Textures;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
@@ -17,8 +18,8 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
     {
         //stats
         float _moveSpeed = 75f;
-        int _hp = 3;
-        int _maxHp = 3;
+        int _hp = 12;
+        int _maxHp = 12;
 
         //behavior tree
         BehaviorTree<ChainBot> _tree;
@@ -38,6 +39,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public VelocityComponent VelocityComponent;
         public CombatComponent CombatComponent;
         public Healthbar Healthbar;
+        public KnockbackComponent KnockbackComponent;
 
         #region SETUP
 
@@ -64,7 +66,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, .2f));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .2f));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
@@ -77,7 +79,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //collider
             _collider = Entity.AddComponent(new BoxCollider(0, 5, 8, 5));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
-            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
+            Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
 
             //pathfinding
             Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
@@ -100,6 +102,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //healthbar
             Healthbar = Entity.AddComponent(new Healthbar(_healthComponent));
             Healthbar.SetLocalOffset(new Vector2(0, -20));
+
+            //knockback
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, VelocityComponent, _hurtbox));
         }
 
         void AddAnimations()
@@ -147,14 +152,14 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector(AbortTypes.Self)
-                    .ConditionalDecorator(c => !c._hurtbox.IsStunned, true)
+                    .ConditionalDecorator(c => !c.KnockbackComponent.IsStunned, true)
                     .Sequence()
                         .Selector()
                             .Sequence()
                                 .Conditional(c => c.CombatComponent.IsInCombat)
                                 .ParallelSelector()
                                     .Action(c => c.Move())
-                                    .Action(c => EnemyTasks.ChasePlayer(c.Pathfinder, c.VelocityComponent))
+                                    .Action(c => ChasePlayer())
                                 .EndComposite()
                                 .Action(c => c.MeleeAttack())
                             .EndComposite()
@@ -220,6 +225,20 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             return TaskStatus.Running;
         }
 
+        TaskStatus ChasePlayer()
+        {
+            var reachedTarget = Pathfinder.FollowPath(PlayerController.Instance.Entity.Position, true);
+            if (!reachedTarget)
+            {
+                VelocityComponent.Move(_moveSpeed);
+                return TaskStatus.Running;
+            }
+            else
+            {
+                return TaskStatus.Success;
+            }
+        }
+
         #endregion
 
         #region OBSERVERS
@@ -234,7 +253,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
             var hurtAnimation = VelocityComponent.Direction.X >= 0 ? "HurtRight" : "HurtLeft";
 
-            Animator.Play(hurtAnimation);
+            Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
             //int plays = 0;
             //Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
             //void handler(string obj)

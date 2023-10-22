@@ -17,11 +17,16 @@ namespace PuppetRoguelite.Components.Characters.Player
 {
     public class MeleeAttack : Component, IUpdatable
     {
-        const float _comboThreshold = .5f;
-        const float _maxCombo = 2;
-        const float _minComboThreshold = .2f;
-        const float _offset = 8;
-        const float _attackMoveSpeed = 65f;
+        public bool IsOnCooldown = false;
+
+        //const float _comboThreshold = .8f;
+        const float _maxCombo = 3;
+        const float _minComboThreshold = .05f;
+        const float _offset = 12;
+        const float _attackMoveSpeed = 350f;
+        const float _fps = 15;
+        const float _cooldown = .2f;
+        const float _delayBeforeFinisher = .1f;
 
         int _comboCounter = 0;
         float _timeSinceLastClick = 0f;
@@ -49,7 +54,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             base.Initialize();
 
-            var hitboxCollider = Entity.AddComponent(new CircleCollider(8));
+            var hitboxCollider = Entity.AddComponent(new CircleCollider(12));
             Flags.SetFlagExclusive(ref hitboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             hitboxCollider.IsTrigger = true;
@@ -58,14 +63,18 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
             var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
-            _animator.AddAnimation("MeleeRight_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 1, 4));
-            _animator.AddAnimation("MeleeRight_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 5, 7));
-            _animator.AddAnimation("MeleeLeft_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 10, 13));
-            _animator.AddAnimation("MeleeLeft_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 14, 16));
-            _animator.AddAnimation("MeleeDown_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 19, 22));
-            _animator.AddAnimation("MeleeDown_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 23, 25));
-            _animator.AddAnimation("MeleeUp_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 28, 31));
-            _animator.AddAnimation("MeleeUp_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 32, 34));
+            _animator.AddAnimation("MeleeRight_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 1, 4), _fps);
+            _animator.AddAnimation("MeleeRight_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 5, 7), _fps);
+            _animator.AddAnimation("MeleeRight_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 1, 4), _fps);
+            _animator.AddAnimation("MeleeLeft_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 10, 13), _fps);
+            _animator.AddAnimation("MeleeLeft_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 14, 16), _fps);
+            _animator.AddAnimation("MeleeLeft_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 10, 13), _fps);
+            _animator.AddAnimation("MeleeDown_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 19, 22), _fps);
+            _animator.AddAnimation("MeleeDown_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 23, 25), _fps);
+            _animator.AddAnimation("MeleeDown_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 19, 22), _fps);
+            _animator.AddAnimation("MeleeUp_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 28, 31), _fps);
+            _animator.AddAnimation("MeleeUp_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 32, 34), _fps);
+            _animator.AddAnimation("MeleeUp_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 28, 31), _fps);
         }
 
         public override void OnDisabled()
@@ -84,7 +93,7 @@ namespace PuppetRoguelite.Components.Characters.Player
                 _timeSinceAttackStarted += Time.DeltaTime;
 
                 //spam clicking for combo
-                if (Input.LeftMouseButtonPressed && _timeSinceAttackStarted >= _minComboThreshold && _timeSinceLastClick <= _comboThreshold)
+                if (Input.LeftMouseButtonPressed && _timeSinceAttackStarted >= _minComboThreshold)
                 {
                     _timeSinceLastClick = 0f;
                     _continueCombo = true;
@@ -123,7 +132,14 @@ namespace PuppetRoguelite.Components.Characters.Player
             //set hitbox position
             var hitboxPosition = Entity.Position + (dir * _offset);
             _hitbox.Collider.SetLocalOffset(hitboxPosition - Entity.Position);
+            _hitbox.Direction = dir;
             _hitbox.SetEnabled(true);
+
+            //if this is the final hit in combo, increase force
+            if (_comboCounter == _maxCombo)
+            {
+                _hitbox.PushForce = 1.5f;
+            }
 
             //get angle in degrees
             var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(Entity.Position, hitboxPosition));
@@ -141,7 +157,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //start moving
             _velocityComponent.SetDirection(dir);
-            _velocityComponent.Speed = _attackMoveSpeed;
+            _velocityComponent.Speed = _comboCounter == _maxCombo ? _attackMoveSpeed * 1.25f : _attackMoveSpeed;
             var animationDuration = _animator.CurrentAnimation.Sprites.Count() / _animator.CurrentAnimation.FrameRate;
             var tween = new FloatTween(_velocityComponent, 0, animationDuration);
             tween.SetEaseType(EaseType.CubicOut);
@@ -154,6 +170,9 @@ namespace PuppetRoguelite.Components.Characters.Player
                     _activeFrame = 0;
                     break;
                 case 2:
+                    _activeFrame = 0;
+                    break;
+                case 3:
                     _activeFrame = 0;
                     break;
             }
@@ -175,7 +194,15 @@ namespace PuppetRoguelite.Components.Characters.Player
                 _continueCombo = false;
                 _activeFrame = -1;
 
-                PerformAttack();
+                if (_comboCounter == _maxCombo - 1)
+                {
+                    _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
+                    Game1.Schedule(_delayBeforeFinisher, timer => PerformAttack());
+                }
+                else
+                {
+                    PerformAttack();
+                }
             }
             else
             {
@@ -191,6 +218,10 @@ namespace PuppetRoguelite.Components.Characters.Player
             _timeSinceAttackStarted = 0f;
             _comboCounter = 0;
             _activeFrame = -1;
+            _hitbox.PushForce = 1f;
+
+            IsOnCooldown = true;
+            Game1.Schedule(_cooldown, timer => IsOnCooldown = false);
 
             _attackCompleteCallback?.Invoke();
         }

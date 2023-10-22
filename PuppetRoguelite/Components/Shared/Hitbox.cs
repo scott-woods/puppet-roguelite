@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
@@ -11,17 +12,14 @@ namespace PuppetRoguelite.Components.Shared
     public class Hitbox : Component
     {
         public Collider Collider;
-        int _damage;
-
-        public int Damage
-        {
-            get { return _damage; }
-        }
+        public int Damage;
+        public float PushForce = 1f;
+        public Vector2 Direction = Vector2.Zero;
 
         public Hitbox(Collider collider, int damage)
         {
             Collider = collider;
-            _damage = damage;
+            Damage = damage;
         }
 
         public override void Initialize()

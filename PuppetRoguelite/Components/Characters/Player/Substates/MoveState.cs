@@ -46,9 +46,12 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
             _context.TryTriggerTurn();
             _context.TryCheck();
 
-            if (Input.LeftMouseButtonPressed)
+            if (_context.CanMelee())
             {
-                _machine.ChangeState<AttackState>();
+                if (Input.LeftMouseButtonPressed)
+                {
+                    _machine.ChangeState<AttackState>();
+                }
             }
 
             //check for no input, return to idle

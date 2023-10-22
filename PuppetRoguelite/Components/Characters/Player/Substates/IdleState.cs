@@ -45,9 +45,12 @@ namespace PuppetRoguelite.Components.Characters.Player.Substates
                 }
             }
 
-            if (Input.LeftMouseButtonPressed)
+            if (_context.CanMelee())
             {
-                _machine.ChangeState<AttackState>();
+                if (Input.LeftMouseButtonPressed)
+                {
+                    _machine.ChangeState<AttackState>();
+                }
             }
         }
     }

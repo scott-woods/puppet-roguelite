@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.Systems;
+using PuppetRoguelite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,9 +77,9 @@ namespace PuppetRoguelite.Components.Shared
             }
         }
 
-        void OnHurtboxHit(Hitbox hitbox)
+        void OnHurtboxHit(HurtboxHit hurtboxHit)
         {
-            Health -= hitbox.Damage;
+            Health -= hurtboxHit.Hitbox.Damage;
         }
 
         //public int DecrementHealth(int amount)

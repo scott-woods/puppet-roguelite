@@ -207,6 +207,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             return StateMachine.CurrentState.GetType() == typeof(CombatState);
         }
 
+        public bool CanMelee()
+        {
+            return !MeleeAttack.IsOnCooldown;
+        }
+
         public void TryTriggerTurn()
         {
             if (StateMachine.CurrentState.GetType() == typeof(CombatState))
