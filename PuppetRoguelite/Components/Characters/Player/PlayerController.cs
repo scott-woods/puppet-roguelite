@@ -58,6 +58,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public MeleeAttack MeleeAttack;
         public Dash Dash;
         public SpriteTrail _spriteTrail;
+        public KnockbackComponent KnockbackComponent;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -99,11 +100,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             _mover = Entity.AddComponent(new Mover());
 
             //Add hurtbox
-            //var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
-            //hurtboxCollider.IsTrigger = true;
-            //Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
-            //Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
-            //_hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .5f, 1));
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
+            hurtboxCollider.IsTrigger = true;
+            Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
+            Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
@@ -113,6 +114,8 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //Add health component
             HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //action points
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(HealthComponent));
@@ -136,6 +139,9 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             _spriteTrail = Entity.AddComponent(new SpriteTrail(SpriteAnimator));
             _spriteTrail.DisableSpriteTrail();
+
+            //knockback
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .75f, VelocityComponent, _hurtbox));
         }
 
         void SetupInput()
@@ -239,6 +245,16 @@ namespace PuppetRoguelite.Components.Characters.Player
         void OnTurnPhaseCompleted()
         {
             StateMachine.ChangeState<IdleState>();
+        }
+
+        void OnDamageTaken(HealthComponent hc)
+        {
+            StateMachine.ChangeState<HurtState>();
+        }
+
+        void OnHealthDepleted(HealthComponent hc)
+        {
+            StateMachine.ChangeState<DyingState>();
         }
 
         #endregion

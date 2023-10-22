@@ -100,6 +100,7 @@ namespace PuppetRoguelite.Components.EnemyActions
         {
             //select hitbox
             var hitbox = _chainBot.VelocityComponent.Direction.X >= 0 ? _rightHitbox : _leftHitbox;
+            hitbox.Direction = _chainBot.VelocityComponent.Direction;
 
             //play animation
             var attackAnimation = _chainBot.VelocityComponent.Direction.X >= 0 ? "AttackRight" : "AttackLeft";

@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Dash", 1)]
+    [PlayerActionInfo("Dash", 2)]
     public class DashAttack : PlayerAction
     {
-        int _damage = 1;
+        int _damage = 3;
         int _range = 32;
         float _rotationSpeed = .05f;
         int _startFrame = 3;

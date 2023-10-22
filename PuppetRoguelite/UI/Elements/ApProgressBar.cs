@@ -80,10 +80,10 @@ namespace PuppetRoguelite.UI.Elements
 
         void OnActionPointsChanged(ActionPointComponent actionPointComponent)
         {
-            UpdateStyle();
             if (actionPointComponent.ActionPoints <= _index)
             {
                 SetValue(0);
+                SetStyle(_skin.Get<ProgressBarStyle>("progressBar_0"));
             }
         }
     }

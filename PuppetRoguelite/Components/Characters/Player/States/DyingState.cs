@@ -37,7 +37,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             if (animationName == "DeathRight" || animationName == "DeathLeft")
             {
-                _machine.ChangeState<IdleState>();
+                Game1.Exit();
             }
         }
     }
