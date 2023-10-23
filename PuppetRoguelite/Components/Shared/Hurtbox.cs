@@ -14,6 +14,8 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class Hurtbox : Component, IUpdatable
     {
+        const float _attackLifespan = 2f;
+
         public Emitter<HurtboxEventTypes, HurtboxHit> Emitter = new Emitter<HurtboxEventTypes, HurtboxHit>();
 
         public bool IsInRecovery { get; set; }
@@ -23,6 +25,8 @@ namespace PuppetRoguelite.Components.Shared
         float _recoveryTime;
 
         ITimer _recoveryTimer;
+
+        List<string> _recentAttackIds = new List<string>();
 
         /// <summary>
         /// Stun time is how long entity is frozen. Recovery time is how long before entity can be hit again.
@@ -40,21 +44,30 @@ namespace PuppetRoguelite.Components.Shared
         {
             if (!IsInRecovery)
             {
-                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
-                if (colliders.Count > 0)
+                var hitboxes = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
+                foreach (IHitbox hitbox in hitboxes)
                 {
-                    HandleHit(colliders.First());
+                    if (IsInRecovery) break;
+                    if (!_recentAttackIds.Contains(hitbox.AttackId))
+                    {
+                        var id = hitbox.AttackId;
+                        _recentAttackIds.Add(id);
+                        Game1.Schedule(_attackLifespan, timer => _recentAttackIds.Remove(id));
+                        HandleHit(hitbox);
+                    }
                 }
             }
         }
 
-        void HandleHit(Collider collider)
+        void HandleHit(IHitbox hitbox)
         {
+            //play enemy hit sound
             if (Entity.HasComponent<Enemy>())
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._14_Impact_flesh_01, .5f);
             }
 
+            //start recovery timer if necessary
             if (_recoveryTime > 0)
             {
                 IsInRecovery = true;
@@ -64,9 +77,11 @@ namespace PuppetRoguelite.Components.Shared
                 });
             }
 
+            //emit hit signal
+            var collider = hitbox as Collider;
             if (collider.CollidesWith(_collider, out CollisionResult collisionResult))
             {
-                Emitter.Emit(HurtboxEventTypes.Hit, new HurtboxHit(collisionResult, collider as IHitbox));
+                Emitter.Emit(HurtboxEventTypes.Hit, new HurtboxHit(collisionResult, hitbox));
             }
         }
 

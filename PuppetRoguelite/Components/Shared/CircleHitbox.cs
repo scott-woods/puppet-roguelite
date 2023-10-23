@@ -22,6 +22,9 @@ namespace PuppetRoguelite.Components.Shared
         Vector2 _direction;
         public Vector2 Direction { get => _direction; set => _direction = value; }
 
+        string _attackId;
+        public string AttackId { get => _attackId; set => _attackId = value; }
+
         #endregion
 
         public CircleHitbox(int damage) : base()
@@ -39,6 +42,21 @@ namespace PuppetRoguelite.Components.Shared
             base.Initialize();
 
             IsTrigger = true;
+        }
+
+        public override void OnEnabled()
+        {
+            base.OnEnabled();
+
+            //every time the hitbox is enabled, consider it a separate attack and generate a unique id
+            AttackId = Guid.NewGuid().ToString();
+        }
+
+        public override void OnDisabled()
+        {
+            base.OnDisabled();
+
+            AttackId = null;
         }
     }
 }

@@ -12,5 +12,6 @@ namespace PuppetRoguelite.Components.Shared
         int Damage { get; set; }
         float PushForce { get; set; }
         Vector2 Direction { get; set; }
+        string AttackId { get; set; }
     }
 }

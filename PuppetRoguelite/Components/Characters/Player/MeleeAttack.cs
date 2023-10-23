@@ -267,6 +267,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _speedTween?.Stop();
             _delayBeforeFinisherTimer?.Stop();
             _delayBeforeEndTimer?.Stop();
+            _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
         }
 
         void EndAttack()
