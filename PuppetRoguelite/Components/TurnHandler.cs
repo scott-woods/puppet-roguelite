@@ -368,6 +368,7 @@ namespace PuppetRoguelite.Components
             }
             if (_cancelInput.IsPressed)
             {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
                 _context.GoBack();
             }
         }

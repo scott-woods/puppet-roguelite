@@ -15,6 +15,8 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Begin();
 
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._64_Get_hit_03, 1.4f);
+
             var hurtAnimation = _context.VelocityComponent.Direction.X >= 0 ? "HurtRight" : "HurtLeft";
             _context.SpriteAnimator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
             _context.SpriteAnimator.OnAnimationCompletedEvent += HandleAnimationCompleted;

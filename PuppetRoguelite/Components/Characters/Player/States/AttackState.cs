@@ -24,6 +24,13 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             //throw new NotImplementedException();
         }
 
+        public override void End()
+        {
+            base.End();
+
+            _context.MeleeAttack.CancelAttack();
+        }
+
         void AttackSequenceComplete()
         {
             _machine.ChangeState<IdleState>();

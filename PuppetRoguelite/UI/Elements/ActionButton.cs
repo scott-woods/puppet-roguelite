@@ -22,6 +22,11 @@ namespace PuppetRoguelite.UI.Elements
         {
             base.OnFocused();
 
+            if (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+            {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02, 1.2f);
+            }
+
             if (_label != null)
             {
                 _label.SetVisible(true);
@@ -36,6 +41,13 @@ namespace PuppetRoguelite.UI.Elements
             {
                 _label.SetVisible(false);
             }
+        }
+
+        protected override void OnActionButtonPressed()
+        {
+            base.OnActionButtonPressed();
+
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
         }
     }
 }

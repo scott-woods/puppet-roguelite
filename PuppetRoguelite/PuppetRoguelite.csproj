@@ -13,11 +13,24 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\Audio\Music\babbulon_double.ogg" />
+    <None Remove="Content\Audio\Sounds\002_Hover_02.wav" />
+    <None Remove="Content\Audio\Sounds\021_Decline_01.wav" />
+    <None Remove="Content\Audio\Sounds\14_Impact_flesh_01.wav" />
+    <None Remove="Content\Audio\Sounds\18_Impact_flesh_05.wav" />
+    <None Remove="Content\Audio\Sounds\20_Slash_02.wav" />
+    <None Remove="Content\Audio\Sounds\26_Pierce_03.wav" />
+    <None Remove="Content\Audio\Sounds\31_swoosh_sword_1.wav" />
+    <None Remove="Content\Audio\Sounds\32_Swoosh_sword_2.wav" />
+    <None Remove="Content\Audio\Sounds\33_Swoosh_Sword_3.wav" />
+    <None Remove="Content\Audio\Sounds\35_Miss_Evade_02.wav" />
+    <None Remove="Content\Audio\Sounds\64_Get_hit_03.wav" />
+    <None Remove="Content\Audio\Sounds\69_Die_02.wav" />
     <None Remove="Content\Audio\Sounds\burp with extra reverb.wav" />
     <None Remove="Content\Audio\Sounds\cereal_slot_1.wav" />
     <None Remove="Content\Audio\Sounds\cereal_slot_2.wav" />
     <None Remove="Content\Audio\Sounds\cereal_slot_3.wav" />
     <None Remove="Content\Audio\Sounds\default_text.wav" />
+    <None Remove="Content\Audio\Sounds\menu_select.wav" />
     <None Remove="Content\Fonts\abaddon_light.fnt" />
     <None Remove="Content\Fonts\abaddon_light_0.png" />
     <None Remove="Content\Textures\Characters\ChainBot\charge.png" />

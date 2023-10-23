@@ -40,7 +40,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             get => _currentChargeTimer;
             set
             {
-                _currentChargeTimer = value;
+                _currentChargeTimer = Math.Max(0, Math.Min(value, MaxCharge));
                 Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsTimerUpdated, this);
             }
         }
@@ -105,7 +105,10 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         void OnMeleeAttackHit(int damageAmount)
         {
-            CurrentChargeTimer += (_baseDamageMultiplier * damageAmount);
+            if (ActionPoints < MaxActionPoints)
+            {
+                CurrentChargeTimer += (_baseDamageMultiplier * damageAmount);
+            }
         }
 
         #endregion

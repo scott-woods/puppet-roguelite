@@ -50,22 +50,23 @@ namespace PuppetRoguelite.Components.Shared
 
         void HandleHit(Collider collider)
         {
-            Debug.Log("hit");
-            if (collider.Entity.TryGetComponent<Hitbox>(out var hitbox))
+            if (Entity.HasComponent<Enemy>())
             {
-                if (_recoveryTime > 0)
-                {
-                    IsInRecovery = true;
-                    _recoveryTimer = Core.Schedule(_recoveryTime, timer =>
-                    {
-                        IsInRecovery = false;
-                    });
-                }
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._14_Impact_flesh_01, .5f);
+            }
 
-                if (collider.CollidesWith(_collider, out CollisionResult collisionResult))
+            if (_recoveryTime > 0)
+            {
+                IsInRecovery = true;
+                _recoveryTimer = Core.Schedule(_recoveryTime, timer =>
                 {
-                    Emitter.Emit(HurtboxEventTypes.Hit, new HurtboxHit(collisionResult, hitbox));
-                }
+                    IsInRecovery = false;
+                });
+            }
+
+            if (collider.CollidesWith(_collider, out CollisionResult collisionResult))
+            {
+                Emitter.Emit(HurtboxEventTypes.Hit, new HurtboxHit(collisionResult, collider as IHitbox));
             }
         }
 

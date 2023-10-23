@@ -35,8 +35,13 @@ namespace PuppetRoguelite.Components.PlayerActions
         {
             if (_isPreparing)
             {
+                if (Input.IsKeyPressed(Keys.Z))
+                {
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
+                }
                 if (Input.IsKeyPressed(Keys.X))
                 {
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
                     Core.Schedule(.1f, timer =>
                     {
                         _isPreparing = false;

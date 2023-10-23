@@ -30,8 +30,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public VelocityComponent VelocityComponent;
         public PathfindingComponent PathfindingComponent;
         public CombatComponent CombatComponent;
-        public Hitbox MovingAttackHitbox;
-        public Hitbox StationaryAttackHitboxTopLeft, StationaryAttackHitboxBottomLeft, StationaryAttackHitboxTopRight, StationaryAttackHitboxBottomRight;
+        public BoxHitbox MovingAttackHitbox;
+        public BoxHitbox StationaryAttackHitboxTopLeft, StationaryAttackHitboxBottomLeft, StationaryAttackHitboxTopRight, StationaryAttackHitboxBottomRight;
         public Healthbar Healthbar;
         public KnockbackComponent KnockbackComponent;
 
@@ -88,39 +88,29 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, VelocityComponent, Hurtbox));
 
-            var movingAttackCollider = Entity.AddComponent(new BoxCollider(-35, 35, 71, 18));
-            movingAttackCollider.IsTrigger = true;
-            Flags.SetFlagExclusive(ref movingAttackCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref movingAttackCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            MovingAttackHitbox = Entity.AddComponent(new Hitbox(movingAttackCollider, 2));
+            MovingAttackHitbox = Entity.AddComponent(new BoxHitbox(2, new Rectangle(-35, 35, 71, 18)));
+            Flags.SetFlagExclusive(ref MovingAttackHitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref MovingAttackHitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
             MovingAttackHitbox.SetEnabled(false);
 
-            var stationaryAttackColliderTopLeft = Entity.AddComponent(new BoxCollider(-110, 27, 81, 12));
-            stationaryAttackColliderTopLeft.IsTrigger = true;
-            Flags.SetFlagExclusive(ref stationaryAttackColliderTopLeft.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref stationaryAttackColliderTopLeft.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            StationaryAttackHitboxTopLeft = Entity.AddComponent(new Hitbox(stationaryAttackColliderTopLeft, 4));
+            StationaryAttackHitboxTopLeft = Entity.AddComponent(new BoxHitbox(4, new Rectangle(-110, 27, 81, 12)));
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxTopLeft.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxTopLeft.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
             StationaryAttackHitboxTopLeft.SetEnabled(false);
 
-            var stationaryAttackColliderBottomLeft = Entity.AddComponent(new BoxCollider(-80, 47, 56, 12));
-            stationaryAttackColliderBottomLeft.IsTrigger = true;
-            Flags.SetFlagExclusive(ref stationaryAttackColliderBottomLeft.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref stationaryAttackColliderBottomLeft.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            StationaryAttackHitboxBottomLeft = Entity.AddComponent(new Hitbox(stationaryAttackColliderBottomLeft, 4));
+            StationaryAttackHitboxBottomLeft = Entity.AddComponent(new BoxHitbox(4, new Rectangle(-80, 47, 56, 12)));
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxBottomLeft.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxBottomLeft.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
             StationaryAttackHitboxBottomLeft.SetEnabled(false);
 
-            var stationaryAttackColliderTopRight = Entity.AddComponent(new BoxCollider(30, 28, 79, 11));
-            stationaryAttackColliderTopRight.IsTrigger = true;
-            Flags.SetFlagExclusive(ref stationaryAttackColliderTopRight.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref stationaryAttackColliderTopRight.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            StationaryAttackHitboxTopRight = Entity.AddComponent(new Hitbox(stationaryAttackColliderTopRight, 4));
+            StationaryAttackHitboxTopRight = Entity.AddComponent(new BoxHitbox(4, new Rectangle(30, 28, 79, 11)));
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxTopRight.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxTopRight.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
             StationaryAttackHitboxTopRight.SetEnabled(false);
 
-            var stationaryAttackColliderBottomRight = Entity.AddComponent(new BoxCollider(29, 50, 58, 10));
-            stationaryAttackColliderBottomRight.IsTrigger = true;
-            Flags.SetFlagExclusive(ref stationaryAttackColliderBottomRight.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref stationaryAttackColliderBottomRight.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            StationaryAttackHitboxBottomRight = Entity.AddComponent(new Hitbox(stationaryAttackColliderBottomRight, 4));
+            StationaryAttackHitboxBottomRight = Entity.AddComponent(new BoxHitbox(4, new Rectangle(29, 50, 58, 10)));
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxBottomRight.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref StationaryAttackHitboxBottomRight.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
             StationaryAttackHitboxBottomRight.SetEnabled(false);
         }
 

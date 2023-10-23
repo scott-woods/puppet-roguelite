@@ -44,7 +44,7 @@ namespace PuppetRoguelite.SceneComponents
                     yield return _textbox.ReadLine(_dialogueLines[_page]);
 
                     //wait until z key is pressed
-                    while (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Z))
+                    while (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
                     {
                         yield return null;
                     }
@@ -77,7 +77,7 @@ namespace PuppetRoguelite.SceneComponents
 
             if (IsActive && !_textbox.IsFinishedReading)
             {
-                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
                 {
                     _textbox.SkipText();
                 }

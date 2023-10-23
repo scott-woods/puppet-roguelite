@@ -160,7 +160,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             ActionInput.AddKeyboardKey(Keys.E);
 
             CheckInput = new VirtualButton();
-            CheckInput.AddKeyboardKey(Keys.Z);
+            CheckInput.AddKeyboardKey(Keys.E);
 
             DashInput = new VirtualButton();
             DashInput.AddKeyboardKey(Keys.Space);

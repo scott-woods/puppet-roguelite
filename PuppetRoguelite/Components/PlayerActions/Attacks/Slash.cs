@@ -22,7 +22,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         int _offset = 16;
         Vector2 _hitboxHorizontalSize = new Vector2(16, 32);
         Vector2 _hitboxVerticalSize = new Vector2(32, 16);
-        int _damage = 2;
+        int _damage = 4;
 
         Vector2 _direction = new Vector2(1, 0);
         int _currentIndex;
@@ -34,8 +34,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         //components
         SpriteAnimator _animator;
-        Hitbox _hitbox;
-        Collider _hitboxCollider;
+        BoxHitbox _hitbox;
         YSorter _ySorter;
 
         public override void Initialize()
@@ -114,12 +113,14 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 else if (_direction.Y != 0) hitboxSize = _hitboxVerticalSize;
 
                 //add hitbox
-                _hitboxCollider = Entity.AddComponent(new BoxCollider(hitboxSize.X, hitboxSize.Y));
-                Flags.SetFlagExclusive(ref _hitboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
-                Flags.SetFlagExclusive(ref _hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
-                _hitboxCollider.LocalOffset += (_direction * _offset);
-                _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, _damage));
+                _hitbox = Entity.AddComponent(new BoxHitbox(_damage, hitboxSize.X, hitboxSize.Y));
+                Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
+                Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
+                _hitbox.LocalOffset += (_direction * _offset);
                 _hitbox.SetEnabled(true);
+
+                //play sound
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._26_Pierce_03);
             }
         }
 
@@ -212,7 +213,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             {
                 if (_animator != null) Entity.RemoveComponent(_animator);
                 if (_hitbox != null) Entity.RemoveComponent(_hitbox);
-                if (_hitboxCollider != null) Entity.RemoveComponent(_hitboxCollider);
             }
 
             base.OnRemovedFromEntity();

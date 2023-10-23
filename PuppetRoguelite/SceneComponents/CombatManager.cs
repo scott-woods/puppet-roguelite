@@ -44,24 +44,21 @@ namespace PuppetRoguelite.SceneComponents
             Enemies.Add(enemy);
         }
 
-        void CheckForCompletion()
+        void EndCombat()
         {
-            //if any enemies left, continue combat by entering dodge phase
-            if (Enemies.Any())
+            //unlock gates
+            var gates = Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
+            foreach (var gate in gates)
             {
-                Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
+                gate.Unlock();
             }
-            else //no enemies left
-            {
-                //unlock gates
-                var gates = Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
-                foreach (var gate in gates)
-                {
-                    gate.Unlock();
-                }
 
-                Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterEnded);
-            }
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterEnded);
+        }
+
+        bool CheckForCompletion()
+        {
+            return !Enemies.Any();
         }
 
         #region OBSERVERS
@@ -70,7 +67,10 @@ namespace PuppetRoguelite.SceneComponents
         {
             var enemy = healthComponent.Entity.GetComponent<Enemy>();
             Enemies.Remove(enemy);
-            CheckForCompletion();
+            if (CheckForCompletion())
+            {
+                EndCombat();
+            }
         }
 
         void OnEncounterStarted()
@@ -84,6 +84,8 @@ namespace PuppetRoguelite.SceneComponents
         {
             Turns += 1;
 
+            CombatState = CombatState.Turn;
+
             //create turn handler
             TurnHandlerEntity = Scene.CreateEntity("turn-handler");
             TurnHandlerEntity.AddComponent(new TurnHandler());
@@ -91,7 +93,15 @@ namespace PuppetRoguelite.SceneComponents
 
         void OnTurnPhaseCompleted()
         {
-            CheckForCompletion();
+            if (CheckForCompletion())
+            {
+                EndCombat();
+            }
+            else
+            {
+                CombatState = CombatState.Dodge;
+                Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
+            }
         }
 
         void OnEncounterEnded()

@@ -17,13 +17,15 @@ namespace PuppetRoguelite.Components.EnemyActions
 {
     public class ChainBotMelee : EnemyAction
     {
+        const int _damage = 3;
+
         ChainBot _chainBot;
 
         //components
-        Hitbox _leftHitbox, _rightHitbox;
+        PolygonHitbox _leftHitbox, _rightHitbox;
         Collider _leftCollider, _rightCollider;
 
-        Vector2 _offset = new Vector2(8, 0);
+        Vector2 _offset = new Vector2(24, 0);
 
         public ChainBotMelee(ChainBot chainBot)
         {
@@ -35,7 +37,7 @@ namespace PuppetRoguelite.Components.EnemyActions
             base.Initialize();
 
             //right facing hitbox
-            _rightCollider = Entity.AddComponent(new PolygonCollider(new Vector2[]
+            _rightHitbox = Entity.AddComponent(new PolygonHitbox(_damage, new Vector2[]
             {
                 new Vector2(0, -4),
                 new Vector2(35, -4),
@@ -43,16 +45,13 @@ namespace PuppetRoguelite.Components.EnemyActions
                 new Vector2(35, 7),
                 new Vector2(0, 7)
             }));
-            _rightCollider.IsTrigger = true;
-            Flags.SetFlagExclusive(ref _rightCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref _rightCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            _rightCollider.SetLocalOffset(_offset);
-            _components.Add(_rightCollider);
-            _rightHitbox = Entity.AddComponent(new Hitbox(_rightCollider, 3));
+            Flags.SetFlagExclusive(ref _rightHitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref _rightHitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
+            _rightHitbox.SetLocalOffset(_offset);
             _components.Add(_rightHitbox);
 
             //left facing hitbox
-            _leftCollider = Entity.AddComponent(new PolygonCollider(new Vector2[]
+            _leftHitbox = Entity.AddComponent(new PolygonHitbox(_damage, new Vector2[]
             {
                 new Vector2(0, -4),
                 new Vector2(0, 7),
@@ -60,12 +59,9 @@ namespace PuppetRoguelite.Components.EnemyActions
                 new Vector2(-40, 0),
                 new Vector2(-35, -4)
             }));
-            _leftCollider.IsTrigger = true;
-            Flags.SetFlagExclusive(ref _leftCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref _leftCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
-            _leftCollider.SetLocalOffset(-_offset);
-            _components.Add(_leftCollider);
-            _leftHitbox = Entity.AddComponent(new Hitbox(this._leftCollider, 3));
+            Flags.SetFlagExclusive(ref _leftHitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref _leftHitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
+            _leftHitbox.SetLocalOffset(-_offset);
             _components.Add(_leftHitbox);
         }
 

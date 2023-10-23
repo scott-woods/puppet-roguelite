@@ -53,6 +53,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             _spriteTrail.InitialColor = Color.White * .5f;
             _spriteTrail.EnableSpriteTrail();
 
+            //play sound
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._35_Miss_Evade_02);
+
             //animation
             var animation = "DashRight";
             if (_velocityComponent.Direction.X != 0)

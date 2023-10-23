@@ -11,9 +11,9 @@ namespace PuppetRoguelite.Models
     public class HurtboxHit
     {
         public CollisionResult CollisionResult { get; set; }
-        public Hitbox Hitbox { get; set; }
+        public IHitbox Hitbox { get; set; }
 
-        public HurtboxHit(CollisionResult collisionResult, Hitbox hitbox)
+        public HurtboxHit(CollisionResult collisionResult, IHitbox hitbox)
         {
             CollisionResult = collisionResult;
             Hitbox = hitbox;

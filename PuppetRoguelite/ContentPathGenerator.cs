@@ -22,12 +22,25 @@ namespace Nez
 
 			public static class Sounds
 			{
+				public const string _002_Hover_02 = @"Content\Audio\Sounds\002_Hover_02.wav";
+				public const string _021_Decline_01 = @"Content\Audio\Sounds\021_Decline_01.wav";
+				public const string _14_Impact_flesh_01 = @"Content\Audio\Sounds\14_Impact_flesh_01.wav";
+				public const string _18_Impact_flesh_05 = @"Content\Audio\Sounds\18_Impact_flesh_05.wav";
+				public const string _20_Slash_02 = @"Content\Audio\Sounds\20_Slash_02.wav";
+				public const string _26_Pierce_03 = @"Content\Audio\Sounds\26_Pierce_03.wav";
+				public const string _31_swoosh_sword_1 = @"Content\Audio\Sounds\31_swoosh_sword_1.wav";
+				public const string _32_Swoosh_sword_2 = @"Content\Audio\Sounds\32_Swoosh_sword_2.wav";
+				public const string _33_Swoosh_Sword_3 = @"Content\Audio\Sounds\33_Swoosh_Sword_3.wav";
+				public const string _35_Miss_Evade_02 = @"Content\Audio\Sounds\35_Miss_Evade_02.wav";
+				public const string _64_Get_hit_03 = @"Content\Audio\Sounds\64_Get_hit_03.wav";
+				public const string _69_Die_02 = @"Content\Audio\Sounds\69_Die_02.wav";
 				public const string Attack = @"Content\Audio\Sounds\attack.wav";
 				public const string Burp = @"Content\Audio\Sounds\burp.wav";
 				public const string Cereal_slot_1 = @"Content\Audio\Sounds\cereal_slot_1.wav";
 				public const string Cereal_slot_2 = @"Content\Audio\Sounds\cereal_slot_2.wav";
 				public const string Cereal_slot_3 = @"Content\Audio\Sounds\cereal_slot_3.wav";
 				public const string Default_text = @"Content\Audio\Sounds\default_text.wav";
+				public const string Menu_select = @"Content\Audio\Sounds\menu_select.wav";
 			}
 
 		}

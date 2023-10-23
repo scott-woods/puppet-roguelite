@@ -16,6 +16,8 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Begin();
 
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._69_Die_02, 1.1f);
+
             var deathAnimation = _context.VelocityComponent.Direction.X >= 0 ? "DeathRight" : "DeathLeft";
             _context.SpriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
             _context.SpriteAnimator.OnAnimationCompletedEvent += HandleAnimationCompleted;

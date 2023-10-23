@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Shared
 {
-    public class Hitbox : Component
+    public class Hitbox : CircleCollider
     {
         public Collider Collider;
         public int Damage;

@@ -33,7 +33,7 @@ namespace PuppetRoguelite.Components.Shared
                 }
                 
                 //update health value
-                _health = value;
+                _health = Math.Max(0, value);
 
                 //emit health changed signal to update ui
                 Emitter.Emit(HealthComponentEventType.HealthChanged, this);

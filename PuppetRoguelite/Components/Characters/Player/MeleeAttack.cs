@@ -6,6 +6,7 @@ using Nez.Textures;
 using Nez.Tweens;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Tools;
 using System;
 using System.Collections;
@@ -47,9 +48,13 @@ namespace PuppetRoguelite.Components.Characters.Player
         VelocityComponent _velocityComponent;
 
         //added components
-        Hitbox _hitbox;
+        CircleHitbox _hitbox;
 
         List<Collider> _hitColliders = new List<Collider>();
+
+        FloatTween _speedTween;
+        ITimer _delayBeforeFinisherTimer;
+        ITimer _delayBeforeEndTimer;
 
         public MeleeAttack(SpriteAnimator animator, VelocityComponent velocityComponent)
         {
@@ -61,11 +66,9 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             base.Initialize();
 
-            var hitboxCollider = Entity.AddComponent(new CircleCollider(12));
-            Flags.SetFlagExclusive(ref hitboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
-            Flags.SetFlagExclusive(ref hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
-            hitboxCollider.IsTrigger = true;
-            _hitbox = Entity.AddComponent(new Hitbox(hitboxCollider, _damage));
+            _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 12));
+            Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
+            Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             _hitbox.SetEnabled(false);
 
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
@@ -113,7 +116,7 @@ namespace PuppetRoguelite.Components.Characters.Player
                 _velocityComponent.Move();
 
                 //check for hit
-                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_hitbox.Collider, _hitbox.Collider.CollidesWithLayers);
+                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_hitbox, _hitbox.CollidesWithLayers);
                 if (colliders.Count > 0)
                 {
                     foreach(var collider in colliders)
@@ -158,7 +161,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //set hitbox position
             var hitboxPosition = Entity.Position + (dir * _offset);
-            _hitbox.Collider.SetLocalOffset(hitboxPosition - Entity.Position);
+            _hitbox.SetLocalOffset(hitboxPosition - Entity.Position);
             _hitbox.Direction = dir;
             _hitbox.SetEnabled(true);
 
@@ -186,21 +189,25 @@ namespace PuppetRoguelite.Components.Characters.Player
             _velocityComponent.SetDirection(dir);
             _velocityComponent.Speed = _comboCounter == _maxCombo ? _attackMoveSpeed * 1.25f : _attackMoveSpeed;
             var animationDuration = _animator.CurrentAnimation.Sprites.Count() / _animator.CurrentAnimation.FrameRate;
-            var tween = new FloatTween(_velocityComponent, 0, animationDuration);
-            tween.SetEaseType(EaseType.CubicOut);
-            tween.Start();
+            _speedTween = new FloatTween(_velocityComponent, 0, 1);
+            _speedTween.SetEaseType(EaseType.CubicOut);
+            _speedTween.SetDuration(animationDuration);
+            _speedTween.Start();
 
-            //determine active frame
+            //determine active frame and sound
             switch (_comboCounter)
             {
                 case 1:
                     _activeFrame = 0;
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._32_Swoosh_sword_2, .5f);
                     break;
                 case 2:
                     _activeFrame = 0;
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._33_Swoosh_Sword_3, .5f);
                     break;
                 case 3:
                     _activeFrame = 0;
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._31_swoosh_sword_1, .5f);
                     break;
             }
         }
@@ -221,7 +228,7 @@ namespace PuppetRoguelite.Components.Characters.Player
                 if (_comboCounter == _maxCombo - 1)
                 {
                     _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
-                    Game1.Schedule(_delayBeforeFinisher, timer => PerformAttack());
+                    _delayBeforeFinisherTimer = Game1.Schedule(_delayBeforeFinisher, timer => PerformAttack());
                 }
                 else
                 {
@@ -232,7 +239,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             {
                 //hold last frame for a moment, give player a chance to extend combo
                 _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
-                Game1.Schedule(.16f, timer =>
+                _delayBeforeEndTimer = Game1.Schedule(.16f, timer =>
                 {
                     if (_continueCombo || Input.LeftMouseButtonDown)
                     {
@@ -244,6 +251,22 @@ namespace PuppetRoguelite.Components.Characters.Player
                     }
                 });
             }
+        }
+
+        public void CancelAttack()
+        {
+            _isAttacking = false;
+            _continueCombo = false;
+            _timeSinceLastClick = 0f;
+            _timeSinceAttackStarted = 0f;
+            _comboCounter = 0;
+            _activeFrame = -1;
+            _hitbox.PushForce = 1f;
+            _hitbox.SetEnabled(false);
+            _hitColliders.Clear();
+            _speedTween?.Stop();
+            _delayBeforeFinisherTimer?.Stop();
+            _delayBeforeEndTimer?.Stop();
         }
 
         void EndAttack()

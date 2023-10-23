@@ -33,10 +33,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         //components
         Mover _mover;
         SpriteAnimator _animator;
-        Hitbox _hitbox;
-        Collider _hitboxCollider;
+        CircleHitbox _hitbox;
         PrototypeSpriteRenderer _target;
         YSorter _ySorter;
+        SpriteTrail _trail;
 
         List<Component> _componentsList = new List<Component>();
 
@@ -53,17 +53,23 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _componentsList.Add(_animator );
             AddAnimations();
 
-            _hitboxCollider = Entity.AddComponent(new BoxCollider(12, 24));
-            Flags.SetFlagExclusive(ref _hitboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
-            Flags.SetFlagExclusive(ref _hitboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
-            _componentsList.Add(_hitboxCollider);
-            _hitbox = Entity.AddComponent(new Hitbox(_hitboxCollider, _damage));
+            //hitbox
+            _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 8));
+            Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
+            Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
+            _hitbox.PushForce = 0f;
             _componentsList.Add(_hitbox);
 
             _ySorter = Entity.AddComponent(new YSorter(_animator, 12));
             _componentsList.Add(_ySorter);
 
             _target = new PrototypeSpriteRenderer(8, 8);
+
+            _trail = Entity.AddComponent(new SpriteTrail(_animator));
+            _trail.FadeDelay = 0f;
+            _trail.FadeDuration = .5f;
+            _trail.MinDistanceBetweenInstances = 8;
+            _componentsList.Add(_trail);
         }
 
         void AddAnimations()
@@ -107,8 +113,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             if (!_isSimulation)
             {
                 var animationName = GetNextAnimation();
+                _hitbox.PushForce = 0;
                 _animator.SetColor(new Color(Color.White, 255));
                 _animator.Play(animationName, SpriteAnimator.LoopMode.Once);
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._20_Slash_02, .5f);
             }
             else
             {
