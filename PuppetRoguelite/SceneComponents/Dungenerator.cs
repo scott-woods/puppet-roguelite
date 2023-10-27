@@ -4,6 +4,7 @@ using Nez.AI.Pathfinding;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Entities;
+using PuppetRoguelite.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

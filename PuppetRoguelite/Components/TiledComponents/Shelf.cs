@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Items;
+using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using System;
 using System.Collections;

@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.UI;
+using PuppetRoguelite.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;

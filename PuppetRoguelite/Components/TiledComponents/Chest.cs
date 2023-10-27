@@ -14,6 +14,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Items;
 using System.Collections;
+using PuppetRoguelite.Models;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {
