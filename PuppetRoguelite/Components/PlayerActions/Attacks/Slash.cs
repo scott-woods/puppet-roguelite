@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     [PlayerActionInfo("Slash", 1)]
     public class Slash : PlayerAction, IUpdatable
     {
-        int _offset = 16;
+        int _offset = 12;
         Vector2 _hitboxHorizontalSize = new Vector2(16, 32);
         Vector2 _hitboxVerticalSize = new Vector2(32, 16);
         int _damage = 4;
@@ -34,7 +34,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         //components
         SpriteAnimator _animator;
-        BoxHitbox _hitbox;
+        CircleHitbox _hitbox;
         YSorter _ySorter;
 
         public override void Initialize()
@@ -65,6 +65,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             if (_animator.IsRunning)
             {
                 _currentIndex = _animator.CurrentFrame;
+            }
+
+            if (!_isPreparing)
+            {
+                _hitbox.SetEnabled(_animator.CurrentFrame == 1);
             }
         }
 
@@ -104,20 +109,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 _animator.Play(animation, SpriteAnimator.LoopMode.Once);
                 _animator.OnAnimationCompletedEvent += _animator_OnAnimationCompletedEvent;
 
-                //determine hitbox position
-                var hitboxPos = Entity.Position + (_direction * _offset);
-
-                //determine hitbox size
-                var hitboxSize = _hitboxHorizontalSize;
-                if (_direction.X != 0) hitboxSize = _hitboxHorizontalSize;
-                else if (_direction.Y != 0) hitboxSize = _hitboxVerticalSize;
-
-                //add hitbox
-                _hitbox = Entity.AddComponent(new BoxHitbox(_damage, hitboxSize.X, hitboxSize.Y));
-                Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
-                Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
-                _hitbox.LocalOffset += (_direction * _offset);
-                _hitbox.SetEnabled(true);
+                _hitbox.SetLocalOffset(_direction * _offset);
 
                 //play sound
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._26_Pierce_03);
@@ -161,6 +153,12 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             AddAnimations();
 
             _ySorter = Entity.AddComponent(new YSorter(_animator, 12));
+
+            //add hitbox
+            _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 10));
+            Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
+            Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
+            _hitbox.SetEnabled(false);
         }
 
         void AddAnimations()
@@ -213,6 +211,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             {
                 if (_animator != null) Entity.RemoveComponent(_animator);
                 if (_hitbox != null) Entity.RemoveComponent(_hitbox);
+                if (_ySorter != null) Entity.RemoveComponent(_ySorter);
             }
 
             base.OnRemovedFromEntity();

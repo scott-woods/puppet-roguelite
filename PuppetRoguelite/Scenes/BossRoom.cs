@@ -165,6 +165,8 @@ namespace PuppetRoguelite.Scenes
         {
             Boss.SetEnabled(true);
 
+            Game1.AudioManager.PlayMusic(Music.HaveAHeart, true);
+
             //play animation
             yield return Boss.PlayAppearanceAnimation();
 

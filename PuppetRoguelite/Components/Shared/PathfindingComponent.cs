@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace PuppetRoguelite.Components.Shared
         VelocityComponent _velocityComponent;
 
         public Entity MapEntity;
+
+        List<Entity> points = new List<Entity>();
 
         public PathfindingComponent(VelocityComponent velocityComponent, Entity mapEntity, int pathDesiredDistance = 16, int targetDesiredDistance = 16)
         {
@@ -60,6 +63,19 @@ namespace PuppetRoguelite.Components.Shared
 
             //get basic path on grid
             var path = _gridGraphManager.FindPath(origin, target);
+
+            //foreach(var point in points)
+            //{
+            //    point.Destroy();
+            //}
+            //points.Clear();
+            //foreach(var point in path)
+            //{
+            //    var ent = Entity.Scene.CreateEntity("path-point");
+            //    ent.SetPosition(point);
+            //    ent.AddComponent(new PrototypeSpriteRenderer(2, 2));
+            //    points.Add(ent);
+            //}
 
             var finalPath = new List<Vector2>();
 
@@ -102,7 +118,7 @@ namespace PuppetRoguelite.Components.Shared
             }
 
             //loop through points along path
-            foreach(var pos in finalPath)
+            foreach (var pos in finalPath)
             {
                 //if within set distance to the next point on path, continue to the next one
                 if (Math.Abs(Vector2.Distance(origin, pos)) <= _pathDesiredDistance)

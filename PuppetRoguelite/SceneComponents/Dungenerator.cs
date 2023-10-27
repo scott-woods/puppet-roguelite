@@ -48,7 +48,7 @@ namespace PuppetRoguelite.SceneComponents
 
         List<RoomNode> _nodes = new List<RoomNode>();
 
-        int _maxAttempts = 10;
+        int _maxAttempts = 1000;
 
         public void Generate()
         {

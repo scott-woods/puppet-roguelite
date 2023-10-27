@@ -1,12 +1,15 @@
 ﻿using FmodForFoxes;
 using Microsoft.Xna.Framework.Media;
 using Nez;
+using Nez.Tweens;
+using PuppetRoguelite.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Song = PuppetRoguelite.Models.Song;
 
 namespace PuppetRoguelite.GlobalManagers
 {
@@ -58,6 +61,41 @@ namespace PuppetRoguelite.GlobalManagers
             _currentMusicChannel = channel;
 
             _loopPoint = loopTime;
+        }
+
+        public void PlayMusic(Song song, bool looping = true)
+        {
+            if (_currentMusicChannel.IsPlaying)
+            {
+                _currentMusicChannel.Stop();
+                _currentMusic = null;
+                _loopPoint = 0;
+            }
+
+            var music = CoreSystem.LoadStreamedSound(song.Path);
+            var channel = music.Play();
+            channel.Volume = _defaultMusicVolume;
+            _currentMusic = music;
+            _currentMusicChannel = channel;
+
+            if (looping)
+            {
+                if (song.LoopTime > 0)
+                {
+                    _loopPoint = song.LoopTime;
+                    channel.Looping = false;
+                }
+                else
+                {
+                    _loopPoint = 0;
+                    channel.Looping = true;
+                }
+            }
+            else
+            {
+                _loopPoint = 0;
+                channel.Looping = false;
+            }
         }
 
         public void PauseMusic()

@@ -54,7 +54,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             AddAnimations();
 
             //hitbox
-            _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 8));
+            _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 16));
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             _hitbox.PushForce = 0f;

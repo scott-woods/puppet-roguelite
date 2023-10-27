@@ -17,6 +17,7 @@ namespace Nez
 			{
 				public const string Babbulon_double = @"Content\Audio\Music\babbulon_double.ogg";
 				public const string Galacta_knight = @"Content\Audio\Music\galacta_knight.ogg";
+				public const string Have_a_heart = @"Content\Audio\Music\have_a_heart.ogg";
 				public const string The_bay = @"Content\Audio\Music\the_bay.ogg";
 			}
 

@@ -21,7 +21,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public void TryTriggerTurn()
         {
             var gameStateManager = _context.Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
-            if (gameStateManager.GameState == GameState.Combat && _context.ActionInput.IsPressed)
+            if (gameStateManager.GameState == GameState.Combat && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
             {
                 _machine.ChangeState<TurnState>();
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);

@@ -77,14 +77,15 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
 
             //collider
-            _collider = Entity.AddComponent(new BoxCollider(0, 5, 10, 8));
+            _collider = Entity.AddComponent(new BoxCollider(10, 5));
+            _collider.SetLocalOffset(new Vector2(-1, 7));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 
             //pathfinding
             Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
-            Pathfinder.Offset = new Vector2(0, _collider.LocalOffset.Y + (_collider.Height / 2));
+            Pathfinder.Offset = new Vector2(_collider.LocalOffset.X + (_collider.Width / 2), _collider.LocalOffset.Y + (_collider.Height / 2));
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
