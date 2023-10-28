@@ -1,17 +1,28 @@
 ﻿using Nez;
+using Nez.AI.BehaviorTrees;
+using PuppetRoguelite.Components.Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.EnemyActions
 {
-    public abstract class EnemyAction : Component
+    public abstract class EnemyAction<T> : Component where T : Enemy
     {
-        protected bool _isExecuting = false;
-        protected bool _isExecutionCompleted = false;
+        protected enum EnemyActionState
+        {
+            NotStarted,
+            Running,
+            Succeeded,
+            Failed
+        }
+
+        protected EnemyActionState _state = EnemyActionState.NotStarted;
+
+        protected T _enemy { get; set; }
+
         protected List<Component> _components = new List<Component>();
         protected ICoroutine _executionCoroutine;
 
@@ -19,25 +30,52 @@ namespace PuppetRoguelite.Components.EnemyActions
         /// Execute this action. Returns true if execution has completed, otherwise false
         /// </summary>
         /// <returns></returns>
-        public virtual bool Execute()
+        public TaskStatus Execute(T enemy)
         {
-            if (_isExecutionCompleted)
+            _enemy = enemy;
+            switch (_state)
             {
-                return true;
+                case EnemyActionState.NotStarted:
+                    _executionCoroutine = Game1.StartCoroutine(StartAction());
+                    _state = EnemyActionState.Running;
+                    return TaskStatus.Running;
+                case EnemyActionState.Running:
+                    return TaskStatus.Running;
+                case EnemyActionState.Succeeded:
+                    _state = EnemyActionState.NotStarted;
+                    return TaskStatus.Success;
+                case EnemyActionState.Failed:
+                    _state = EnemyActionState.NotStarted;
+                    return TaskStatus.Failure;
+                default:
+                    throw new InvalidOperationException("Unknown state.");
             }
-            else if (_isExecuting)
-            {
-                return false;
-            }
-            else
-            {
-                _isExecuting = true;
-                _executionCoroutine = Game1.StartCoroutine(HandleExecution());
-                return false;
-            }
+            //if (_isExecutionCompleted)
+            //{
+            //    return true;
+            //}
+            //else if (_isExecuting)
+            //{
+            //    return false;
+            //}
+            //else
+            //{
+            //    _isExecuting = true;
+            //    _executionCoroutine = Game1.StartCoroutine(HandleExecution());
+            //    return false;
+            //}
         }
 
-        protected abstract IEnumerator HandleExecution();
+        protected abstract IEnumerator StartAction();
+
+        /// <summary>
+        /// stops the execution coroutine
+        /// </summary>
+        public virtual void Abort()
+        {
+            _state = EnemyActionState.NotStarted;
+            _executionCoroutine?.Stop();
+        }
 
         public override void OnDisabled()
         {
@@ -52,9 +90,6 @@ namespace PuppetRoguelite.Components.EnemyActions
             {
                 component.SetEnabled(false);
             }
-
-            _isExecuting = false;
-            _isExecutionCompleted = false;
         }
     }
 }

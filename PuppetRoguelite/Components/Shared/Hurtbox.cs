@@ -29,7 +29,7 @@ namespace PuppetRoguelite.Components.Shared
         List<string> _recentAttackIds = new List<string>();
 
         /// <summary>
-        /// Stun time is how long entity is frozen. Recovery time is how long before entity can be hit again.
+        /// Recovery time is how long before entity can be hit again.
         /// </summary>
         /// <param name="collider"></param>
         /// <param name="stunTime"></param>

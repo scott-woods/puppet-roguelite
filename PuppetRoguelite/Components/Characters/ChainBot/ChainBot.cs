@@ -25,7 +25,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         BehaviorTree<ChainBot> _tree;
 
         //actions
-        EnemyAction _currentAction;
         ChainBotMelee _chainBotMelee;
 
         //components
@@ -96,8 +95,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _ySorter = Entity.AddComponent(new YSorter(Animator, 12));
 
             //actions
-            _chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));
-            _chainBotMelee.SetEnabled(false);
+            _chainBotMelee = Entity.AddComponent(new ChainBotMelee());
 
             //combat
             CombatComponent = Entity.AddComponent(new CombatComponent());
@@ -159,23 +157,25 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector(AbortTypes.Self)
+                    .ConditionalDecorator(c => c.KnockbackComponent.IsStunned)
+                        .Action(c => c.AbortActions())
                     .ConditionalDecorator(c => !c.KnockbackComponent.IsStunned, true)
-                    .Sequence()
-                        .Selector()
-                            .Sequence()
-                                .Conditional(c => c.CombatComponent.IsInCombat)
-                                .ParallelSelector()
-                                    .Action(c => c.Move())
-                                    .Action(c => ChasePlayer())
+                        .Sequence()
+                            .Selector()
+                                .Sequence()
+                                    .Conditional(c => c.CombatComponent.IsInCombat)
+                                    .ParallelSelector()
+                                        .Action(c => c.Move())
+                                        .Action(c => ChasePlayer())
+                                    .EndComposite()
+                                    .Action(_chainBotMelee.Execute)
                                 .EndComposite()
-                                .Action(c => c.MeleeAttack())
-                            .EndComposite()
-                            .Sequence()
-                                .Conditional(c => !c.CombatComponent.IsInCombat)
-                                .Action(c => c.Idle())
+                                .Sequence()
+                                    .Conditional(c => !c.CombatComponent.IsInCombat)
+                                    .Action(c => c.Idle())
+                                .EndComposite()
                             .EndComposite()
                         .EndComposite()
-                    .EndComposite()
                 .EndComposite()
                 .Build();
 
@@ -191,21 +191,10 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         #region TASKS
 
-        TaskStatus MeleeAttack()
+        TaskStatus AbortActions()
         {
-            if (!_chainBotMelee.Enabled)
-            {
-                  _chainBotMelee.SetEnabled(true);
-                _currentAction = _chainBotMelee;
-            }
-
-            if (_chainBotMelee.Execute())
-            {
-                _chainBotMelee.SetEnabled(false);
-                _currentAction = null;
-                return TaskStatus.Success;
-            }
-            else return TaskStatus.Running;
+            _chainBotMelee.Abort();
+            return TaskStatus.Success;
         }
 
         TaskStatus Idle()
@@ -252,33 +241,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         void OnDamageTaken(HealthComponent healthComponent)
         {
-            if (_currentAction != null)
-            {
-                _currentAction.SetEnabled(false);
-                _currentAction = null;
-            }
-
             var hurtAnimation = VelocityComponent.Direction.X >= 0 ? "HurtRight" : "HurtLeft";
 
             Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-            //int plays = 0;
-            //Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-            //void handler(string obj)
-            //{
-            //    plays += 1;
-            //    if (plays >= 4)
-            //    {
-            //        Animator.Stop();
-            //        Animator.OnAnimationCompletedEvent -= handler;
-            //        IsDamaged = false;
-            //    }
-            //    else
-            //    {
-            //        Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-            //    }
-            //}
-            //Animator.OnAnimationCompletedEvent += handler;
-            //IsDamaged = true;
         }
 
         void OnHealthDepleted(HealthComponent healthComponent)
