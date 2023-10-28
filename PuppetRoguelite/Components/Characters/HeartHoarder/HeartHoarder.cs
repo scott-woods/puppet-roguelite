@@ -32,7 +32,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public CombatComponent CombatComponent;
         public BoxHitbox MovingAttackHitbox;
         public BoxHitbox StationaryAttackHitboxTopLeft, StationaryAttackHitboxBottomLeft, StationaryAttackHitboxTopRight, StationaryAttackHitboxBottomRight;
-        public Healthbar Healthbar;
+        public NewHealthbar NewHealthbar;
         public KnockbackComponent KnockbackComponent;
 
         //misc
@@ -83,8 +83,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             CombatComponent = Entity.AddComponent(new CombatComponent());
 
-            Healthbar = Entity.AddComponent(new Healthbar(HealthComponent));
-            Healthbar.SetLocalOffset(new Vector2(0, -8));
+            NewHealthbar = Entity.AddComponent(new NewHealthbar(HealthComponent, 48));
+            NewHealthbar.SetLocalOffset(new Vector2(0, -24));
 
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, VelocityComponent, Hurtbox));
 

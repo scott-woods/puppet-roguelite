@@ -39,6 +39,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public VelocityComponent VelocityComponent;
         public CombatComponent CombatComponent;
         public Healthbar Healthbar;
+        public NewHealthbar NewHealthbar;
         public KnockbackComponent KnockbackComponent;
 
         #region SETUP
@@ -102,8 +103,12 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             CombatComponent = Entity.AddComponent(new CombatComponent());
 
             //healthbar
-            Healthbar = Entity.AddComponent(new Healthbar(_healthComponent));
-            Healthbar.SetLocalOffset(new Vector2(0, -20));
+            //Healthbar = Entity.AddComponent(new Healthbar(_healthComponent));
+            //Healthbar.SetLocalOffset(new Vector2(0, -20));
+
+            //new healthbar
+            NewHealthbar = Entity.AddComponent(new NewHealthbar(_healthComponent));
+            NewHealthbar.SetLocalOffset(new Vector2(0, -25));
 
             //knockback
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, VelocityComponent, _hurtbox));

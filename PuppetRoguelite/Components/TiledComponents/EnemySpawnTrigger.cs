@@ -35,11 +35,11 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //spawn enemies
             var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapEntity == MapEntity).ToList();
-            foreach (var spawn in enemySpawns)
-            {
-                combatManager.AddEnemy(spawn.SpawnEnemy());
-            }
-            //combatManager.AddEnemy(enemySpawns[0].SpawnEnemy());
+            //foreach (var spawn in enemySpawns)
+            //{
+            //    combatManager.AddEnemy(spawn.SpawnEnemy());
+            //}
+            combatManager.AddEnemy(enemySpawns[0].SpawnEnemy());
 
             Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
             
