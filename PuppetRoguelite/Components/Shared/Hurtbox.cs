@@ -20,7 +20,7 @@ namespace PuppetRoguelite.Components.Shared
 
         public bool IsInRecovery { get; set; }
 
-        Collider _collider;
+        public Collider Collider;
 
         float _recoveryTime;
 
@@ -36,7 +36,7 @@ namespace PuppetRoguelite.Components.Shared
         /// <param name="recoveryTime"></param>
         public Hurtbox(Collider collider, float recoveryTime)
         {
-            _collider = collider;
+            Collider = collider;
             _recoveryTime = recoveryTime;
         }
 
@@ -44,7 +44,7 @@ namespace PuppetRoguelite.Components.Shared
         {
             if (!IsInRecovery)
             {
-                var hitboxes = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
+                var hitboxes = Physics.BoxcastBroadphaseExcludingSelf(Collider, Collider.CollidesWithLayers);
                 foreach (IHitbox hitbox in hitboxes)
                 {
                     if (IsInRecovery) break;
@@ -79,7 +79,7 @@ namespace PuppetRoguelite.Components.Shared
 
             //emit hit signal
             var collider = hitbox as Collider;
-            if (collider.CollidesWith(_collider, out CollisionResult collisionResult))
+            if (collider.CollidesWith(Collider, out CollisionResult collisionResult))
             {
                 Emitter.Emit(HurtboxEventTypes.Hit, new HurtboxHit(collisionResult, hitbox));
             }

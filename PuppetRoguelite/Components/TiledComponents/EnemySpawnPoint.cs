@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.ChainBot;
+using PuppetRoguelite.Components.Characters.Spitter;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Entities;
 using System;
@@ -12,7 +13,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnPoint : TiledComponent
     {
-        List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot) };
+        List<Type> _enemyTypes = new List<Type>() { typeof(Spitter) };
 
         public EnemySpawnPoint(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {

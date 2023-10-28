@@ -50,20 +50,6 @@ namespace PuppetRoguelite.Components.EnemyActions
                 default:
                     throw new InvalidOperationException("Unknown state.");
             }
-            //if (_isExecutionCompleted)
-            //{
-            //    return true;
-            //}
-            //else if (_isExecuting)
-            //{
-            //    return false;
-            //}
-            //else
-            //{
-            //    _isExecuting = true;
-            //    _executionCoroutine = Game1.StartCoroutine(HandleExecution());
-            //    return false;
-            //}
         }
 
         protected abstract IEnumerator StartAction();

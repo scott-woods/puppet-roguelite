@@ -82,6 +82,12 @@ namespace Nez
 					public const string Hooded_knight_run = @"Content\Textures\Characters\Player\hooded_knight_run.png";
 				}
 
+				public static class Spitter
+				{
+					public const string Spitter_projectile = @"Content\Textures\Characters\Spitter\spitter_projectile.png";
+					public const string Spitter_sheet = @"Content\Textures\Characters\Spitter\spitter_sheet.png";
+				}
+
 			}
 
 			public static class Objects

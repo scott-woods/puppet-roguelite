@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Sprites;
 using Nez.Tweens;
 using PuppetRoguelite.Models;
 using System;
@@ -30,6 +31,13 @@ namespace PuppetRoguelite.Components.Shared
 
         FloatTween _tween;
 
+        /// <summary>
+        /// constructor with no immunity parameters
+        /// </summary>
+        /// <param name="knockbackSpeed"></param>
+        /// <param name="knockbackDuration"></param>
+        /// <param name="velocityComponent"></param>
+        /// <param name="hurtbox"></param>
         public KnockbackComponent(float knockbackSpeed, float knockbackDuration, VelocityComponent velocityComponent, Hurtbox hurtbox)
         {
             _knockbackSpeed = knockbackSpeed;
@@ -38,6 +46,15 @@ namespace PuppetRoguelite.Components.Shared
             _hurtbox = hurtbox;
         }
 
+        /// <summary>
+        /// constructor that allows immunity after a certain number of hits
+        /// </summary>
+        /// <param name="knockbackSpeed"></param>
+        /// <param name="knockbackDuration"></param>
+        /// <param name="hitsUntilImmune"></param>
+        /// <param name="immunityDuration"></param>
+        /// <param name="velocityComponent"></param>
+        /// <param name="hurtbox"></param>
         public KnockbackComponent(float knockbackSpeed, float knockbackDuration, int hitsUntilImmune, float immunityDuration, VelocityComponent velocityComponent, Hurtbox hurtbox)
         {
             _knockbackSpeed = knockbackSpeed;
@@ -69,6 +86,18 @@ namespace PuppetRoguelite.Components.Shared
                     {
                         _tween = null;
                         IsStunned = false;
+                        return;
+                    }
+                }
+
+                if (Entity.TryGetComponent<SpriteAnimator> (out var animator))
+                {
+                    if (animator.Animations.ContainsKey("Hit"))
+                    {
+                        if (animator.CurrentAnimationName != "Hit")
+                        {
+                            animator.Play("Hit");
+                        }
                     }
                 }
             }
@@ -78,11 +107,13 @@ namespace PuppetRoguelite.Components.Shared
         {
             if (!_isImmune)
             {
+                //if can become immune, increment hits
                 if (_hitsUntilImmune > 0)
                 {
                     _hitCounter += 1;
                     Game1.Schedule(_hitLifespan, timer => _hitCounter = Math.Max(0, _hitCounter - 1));
 
+                    //if hits are greater or equal to hits until immune, become immune
                     if (_hitCounter >= _hitsUntilImmune)
                     {
                         _isImmune = true;
@@ -94,6 +125,7 @@ namespace PuppetRoguelite.Components.Shared
 
                 IsStunned = true;
 
+                //move in direction of Hitbox direction if it exists, otherwise just use collision normal
                 var dir = hurtboxHit.Hitbox.Direction;
                 if (dir == Vector2.Zero)
                 {
