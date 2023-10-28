@@ -4,7 +4,7 @@ using Nez.AI.BehaviorTrees;
 using Nez.PhysicsShapes;
 using Nez.Sprites;
 using Nez.Systems;
-using PuppetRoguelite.Components.Characters.ChainBot;
+using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using System;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PuppetRoguelite.Components.EnemyActions
+namespace PuppetRoguelite.Components.Characters.ChainBot
 {
     public class ChainBotMelee : EnemyAction<ChainBot>
     {
@@ -22,6 +22,8 @@ namespace PuppetRoguelite.Components.EnemyActions
 
         //components
         PolygonHitbox _leftHitbox, _rightHitbox;
+
+        public ChainBotMelee(ChainBot chainBot) : base(chainBot) { }
 
         public override void Initialize()
         {
@@ -94,11 +96,24 @@ namespace PuppetRoguelite.Components.EnemyActions
             var attackAnimation = _enemy.VelocityComponent.Direction.X >= 0 ? "AttackRight" : "AttackLeft";
             _enemy.Animator.Play(attackAnimation, SpriteAnimator.LoopMode.Once);
 
+            var soundCounter = 0;
+
             //yield until animation is completed
             while (_enemy.Animator.IsAnimationActive(attackAnimation) && _enemy.Animator.AnimationState != SpriteAnimator.State.Completed)
             {
                 if (new[] { 0, 4 }.Contains(_enemy.Animator.CurrentFrame))
                 {
+                    if (_enemy.Animator.CurrentFrame == 0 && soundCounter == 0)
+                    {
+                        soundCounter += 1;
+                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._81_Whip_woosh_1, .5f);
+                    }
+                    else if (_enemy.Animator.CurrentFrame == 4 && soundCounter == 1)
+                    {
+                        soundCounter += 1;
+                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._81_Whip_woosh_1, .5f);
+                    }
+                    
                     hitbox.SetEnabled(true);
                 }
                 else hitbox.SetEnabled(false);

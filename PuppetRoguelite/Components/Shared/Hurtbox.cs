@@ -28,16 +28,36 @@ namespace PuppetRoguelite.Components.Shared
 
         List<string> _recentAttackIds = new List<string>();
 
+        string _damageSound;
+
         /// <summary>
         /// Recovery time is how long before entity can be hit again.
         /// </summary>
         /// <param name="collider"></param>
         /// <param name="stunTime"></param>
         /// <param name="recoveryTime"></param>
-        public Hurtbox(Collider collider, float recoveryTime)
+        public Hurtbox(Collider collider, float recoveryTime, string damageSound = "")
         {
             Collider = collider;
             _recoveryTime = recoveryTime;
+            _damageSound = damageSound;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            if (Entity.TryGetComponent<HealthComponent>(out var hc))
+            {
+                hc.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            }
+        }
+
+        public override void OnDisabled()
+        {
+            base.OnDisabled();
+
+            Collider.SetEnabled(false);
         }
 
         public void Update()
@@ -61,10 +81,9 @@ namespace PuppetRoguelite.Components.Shared
 
         void HandleHit(IHitbox hitbox)
         {
-            //play enemy hit sound
-            if (Entity.HasComponent<Enemy>())
+            if (!String.IsNullOrWhiteSpace(_damageSound))
             {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._14_Impact_flesh_01, .5f);
+                Game1.AudioManager.PlaySound(_damageSound, .5f);
             }
 
             //start recovery timer if necessary
@@ -85,18 +104,10 @@ namespace PuppetRoguelite.Components.Shared
             }
         }
 
-        //public void OnTriggerEnter(Collider other, Collider local)
-        //{
-        //    if (!IsInRecovery)
-        //    {
-        //        HandleHit(other);
-        //    }
-        //}
-
-        //public void OnTriggerExit(Collider other, Collider local)
-        //{
-        //    //throw new NotImplementedException();
-        //}
+        void OnHealthDepleted(HealthComponent hc)
+        {
+            SetEnabled(false);
+        }
     }
 
     public enum HurtboxEventTypes

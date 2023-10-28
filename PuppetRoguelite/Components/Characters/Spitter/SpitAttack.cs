@@ -15,6 +15,11 @@ namespace PuppetRoguelite.Components.Characters.Spitter
     {
         bool _hasLaunchedProjectile = false;
 
+        public SpitAttack(Spitter enemy) : base(enemy)
+        {
+
+        }
+
         protected override IEnumerator StartAction()
         {
             _hasLaunchedProjectile = false;
@@ -31,6 +36,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
                 {
                     if (_enemy.Animator.CurrentAnimationName == "Attack" && _enemy.Animator.CurrentFrame == 3)
                     {
+                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Spitter_fire, 1.4f);
                         _hasLaunchedProjectile = true;
                         var dir = PlayerController.Instance.Entity.Position - _enemy.Entity.Position;
                         dir.Normalize();

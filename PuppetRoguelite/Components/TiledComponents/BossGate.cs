@@ -61,7 +61,6 @@ namespace PuppetRoguelite.Components.TiledComponents
             {
                 _renderer.SetSprite(_openSprite);
                 _collider.SetEnabled(false);
-                Entity.AddComponent(_exitArea);
             }
         }
     }

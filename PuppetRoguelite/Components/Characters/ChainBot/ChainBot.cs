@@ -4,7 +4,6 @@ using Nez.AI.BehaviorTrees;
 using Nez.Sprites;
 using Nez.Textures;
 using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
@@ -41,6 +40,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public NewHealthbar NewHealthbar;
         public KnockbackComponent KnockbackComponent;
 
+        //misc
+        bool _isActive = true;
+
         #region SETUP
 
         public ChainBot(Entity mapEntity) : base(mapEntity)
@@ -66,11 +68,10 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .2f));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .2f, Nez.Content.Audio.Sounds.Chain_bot_damaged));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
             _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //velocity
@@ -95,7 +96,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _ySorter = Entity.AddComponent(new YSorter(Animator, 12));
 
             //actions
-            _chainBotMelee = Entity.AddComponent(new ChainBotMelee());
+            _chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));
 
             //combat
             CombatComponent = Entity.AddComponent(new CombatComponent());
@@ -150,7 +151,12 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             var hitTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.ChainBot.Hit);
             var hitSprites = Sprite.SpritesFromAtlas(hitTexture, 126, 39);
             Animator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 1, 3 }));
-            Animator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 0, 2 }));
+            Animator.AddAnimation("Hit", AnimatedSpriteHelper.GetSpriteArray(hitSprites, new List<int>() { 0, 2 }));
+
+            //die
+            var dieTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.ChainBot.Death);
+            var dieSprites = Sprite.SpritesFromAtlas(dieTexture, 126, 39);
+            Animator.AddAnimation("Die", AnimatedSpriteHelper.GetSpriteArrayFromRange(dieSprites, 0, 4));
         }
 
         public void SetupBehaviorTree()
@@ -168,7 +174,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                                         .Action(c => c.Move())
                                         .Action(c => ChasePlayer())
                                     .EndComposite()
-                                    .Action(_chainBotMelee.Execute)
+                                    .Action(c => c._chainBotMelee.Execute())
                                 .EndComposite()
                                 .Sequence()
                                     .Conditional(c => !c.CombatComponent.IsInCombat)
@@ -186,7 +192,10 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         public void Update()
         {
-            _tree.Tick();
+            if (_isActive)
+            {
+                _tree.Tick();
+            }
         }
 
         #region TASKS
@@ -239,16 +248,16 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         #region OBSERVERS
 
-        void OnDamageTaken(HealthComponent healthComponent)
-        {
-            var hurtAnimation = VelocityComponent.Direction.X >= 0 ? "HurtRight" : "HurtLeft";
-
-            Animator.Play(hurtAnimation, SpriteAnimator.LoopMode.Once);
-        }
-
         void OnHealthDepleted(HealthComponent healthComponent)
         {
-            Entity.Destroy();
+            AbortActions();
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_death_1);
+            _isActive = false;
+            Animator.Play("Die", SpriteAnimator.LoopMode.Once);
+            Animator.OnAnimationCompletedEvent += (animationName) =>
+            {
+                Entity.Destroy();
+            };
         }
 
         #endregion

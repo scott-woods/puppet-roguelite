@@ -13,7 +13,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnPoint : TiledComponent
     {
-        List<Type> _enemyTypes = new List<Type>() { typeof(Spitter) };
+        List<Type> _enemyTypes = new List<Type>() { typeof(Spitter), typeof(ChainBot) };
 
         public EnemySpawnPoint(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {

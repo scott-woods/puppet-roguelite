@@ -15,22 +15,30 @@ namespace PuppetRoguelite.Components.Shared
 
         SpriteRenderer _renderer;
         VelocityComponent _velocityComponent;
+        float _cooldown;
+        bool _isOnCooldown = false;
 
-        public SpriteFlipper(SpriteRenderer renderer, VelocityComponent velocityComponent)
+        public SpriteFlipper(SpriteRenderer renderer, VelocityComponent velocityComponent, float cooldown = .2f)
         {
             _renderer = renderer;
             _velocityComponent = velocityComponent;
+            _cooldown = cooldown;
         }
 
         public void Update()
         {
-            var dir = _velocityComponent.Direction;
-            var flip = dir.X < 0;
-            if (_renderer.FlipX != flip)
+            if (!_isOnCooldown)
             {
-                Emitter.Emit(SpriteFlipperEvents.Flipped, flip);
+                var dir = _velocityComponent.Direction;
+                var flip = dir.X < 0;
+                if (_renderer.FlipX != flip)
+                {
+                    Emitter.Emit(SpriteFlipperEvents.Flipped, flip);
+                    _isOnCooldown = true;
+                    Game1.Schedule(_cooldown, timer => _isOnCooldown = false);
+                }
+                _renderer.FlipX = flip;
             }
-            _renderer.FlipX = flip;
         }
     }
 

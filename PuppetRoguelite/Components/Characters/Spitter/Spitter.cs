@@ -21,7 +21,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
     {
         //stats
         int _maxHp = 10;
-        float _fastMoveSpeed = 120f;
+        float _fastMoveSpeed = 75f;
         float _moveSpeed = 50f;
         float _slowMoveSpeed = 25f;
 
@@ -46,6 +46,9 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         //actions
         public SpitAttack SpitAttack;
 
+        //misc
+        bool _isActive = true;
+
         public Spitter(Entity mapEntity) : base(mapEntity)
         {
         }
@@ -66,22 +69,22 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             Mover = Entity.AddComponent(new Mover());
 
             //hurtbox
-            var hurtboxCollider = Entity.AddComponent(new BoxCollider(4, -3, 11, 20));
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(-5, -3, 11, 20));
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 0));
+            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 0, Nez.Content.Audio.Sounds.Chain_bot_damaged));
 
             //health
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp, _maxHp));
             //HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
-            //HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //velocity
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
 
             //collider
-            Collider = Entity.AddComponent(new BoxCollider(4, 13, 9, 6));
+            Collider = Entity.AddComponent(new BoxCollider(-5, 13, 9, 6));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
@@ -114,7 +117,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         void AddAnimations()
         {
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Spitter.Spitter_sheet);
-            var sprites = Sprite.SpritesFromAtlas(texture, 57, 39);
+            var sprites = Sprite.SpritesFromAtlas(texture, 77, 39);
 
             Animator.AddAnimation("Idle", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 0, 6, 9));
             Animator.AddAnimation("Move", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 1, 7, 9));
@@ -125,7 +128,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
         void AddActions()
         {
-            SpitAttack = Entity.AddComponent(new SpitAttack());
+            SpitAttack = Entity.AddComponent(new SpitAttack(this));
         }
 
         void SetupBehaviorTree()
@@ -203,7 +206,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
                                 })
                             .EndComposite()
                             //execute attack
-                            .Action(SpitAttack.Execute)
+                            .Action(s => s.SpitAttack.Execute())
                         .EndComposite()
                 .EndComposite()
                 .Build();
@@ -213,7 +216,10 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
         public void Update()
         {
-            _tree.Tick();
+            if (_isActive)
+            {
+                _tree.Tick();
+            }
         }
 
         TaskStatus AbortActions()
@@ -231,6 +237,18 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             var newHurtboxOffsetX = Hurtbox.Collider.LocalOffset.X * -1;
             var newHurtboxOffset = new Vector2(newHurtboxOffsetX, Hurtbox.Collider.LocalOffset.Y);
             Hurtbox.Collider.SetLocalOffset(newHurtboxOffset);
+        }
+
+        void OnHealthDepleted(HealthComponent healthComponent)
+        {
+            AbortActions();
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_death_1);
+            _isActive = false;
+            Animator.Play("Die", SpriteAnimator.LoopMode.Once);
+            Animator.OnAnimationCompletedEvent += (animationName) =>
+            {
+                Entity.Destroy();
+            };
         }
     }
 }

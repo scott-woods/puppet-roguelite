@@ -72,6 +72,16 @@ namespace PuppetRoguelite.Components.Shared
             _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
         }
 
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            if (Entity.TryGetComponent<HealthComponent>(out var hc))
+            {
+                hc.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            }
+        }
+
         public void Update()
         {
             if (IsStunned)
@@ -145,6 +155,11 @@ namespace PuppetRoguelite.Components.Shared
                 _tween.SetEaseType(EaseType.CubicOut);
                 _tween.Start();
             }
+        }
+
+        void OnHealthDepleted(HealthComponent hc)
+        {
+            SetEnabled(false);
         }
     }
 }

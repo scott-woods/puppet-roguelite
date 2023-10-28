@@ -21,18 +21,22 @@ namespace PuppetRoguelite.Components.EnemyActions
 
         protected EnemyActionState _state = EnemyActionState.NotStarted;
 
-        protected T _enemy { get; set; }
+        protected T _enemy { get; }
 
         protected List<Component> _components = new List<Component>();
         protected ICoroutine _executionCoroutine;
+
+        public EnemyAction(T enemy)
+        {
+            _enemy = enemy;
+        }
 
         /// <summary>
         /// Execute this action. Returns true if execution has completed, otherwise false
         /// </summary>
         /// <returns></returns>
-        public TaskStatus Execute(T enemy)
+        public TaskStatus Execute()
         {
-            _enemy = enemy;
             switch (_state)
             {
                 case EnemyActionState.NotStarted:
