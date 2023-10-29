@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="26" height="71" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="30">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="26" height="71" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="36">
+ <properties>
+  <property name="type" value=""/>
+ </properties>
  <tileset firstgid="1" source="../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="3" name="floor" width="26" height="71">
   <data encoding="csv">
@@ -237,6 +240,39 @@
   <object id="28" type="Gate" gid="235" x="192" y="400" width="16" height="16"/>
   <object id="29" type="BossSpawnPoint" x="208" y="608">
    <point/>
+  </object>
+  <object id="30" type="EnemySpawnPoint" x="208" y="544">
+   <properties>
+    <property name="type" value="spitter"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="31" type="EnemySpawnPoint" x="96" y="528">
+   <properties>
+    <property name="type" value="spitter"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="32" type="EnemySpawnPoint" x="320" y="528">
+   <properties>
+    <property name="type" value="spitter"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="33" type="EnemySpawnPoint" x="96" y="688">
+   <properties>
+    <property name="type" value="chainBot"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="34" type="EnemySpawnPoint" x="320" y="688">
+   <properties>
+    <property name="type" value="chainBot"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="35" x="160" y="48" width="112" height="64">
+   <text pixelsize="22" wrap="1" color="#00aaff" bold="1">why are you gay</text>
   </object>
  </objectgroup>
 </map>

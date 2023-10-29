@@ -29,6 +29,7 @@ namespace PuppetRoguelite.Components
 
             foreach (var obj in _mapRenderer.TiledMap.ObjectGroups.SelectMany(g => g.Objects))
             {
+                if (string.IsNullOrWhiteSpace(obj.Type)) return;
                 var type = Type.GetType("PuppetRoguelite.Components.TiledComponents." + obj.Type);
                 var instance = Activator.CreateInstance(type, obj, Entity) as TiledComponent;
 

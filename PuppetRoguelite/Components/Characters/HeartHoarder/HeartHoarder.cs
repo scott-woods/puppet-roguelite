@@ -13,6 +13,7 @@ using PuppetRoguelite.Tools;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.Components.Characters.Player;
 using System.Collections;
+using PuppetRoguelite.SceneComponents;
 
 namespace PuppetRoguelite.Components.Characters.HeartHoarder
 {
@@ -29,7 +30,6 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public Hurtbox Hurtbox;
         public VelocityComponent VelocityComponent;
         public PathfindingComponent PathfindingComponent;
-        public CombatComponent CombatComponent;
         public BoxHitbox MovingAttackHitbox;
         public BoxHitbox StationaryAttackHitboxTopLeft, StationaryAttackHitboxBottomLeft, StationaryAttackHitboxTopRight, StationaryAttackHitboxBottomRight;
         public NewHealthbar NewHealthbar;
@@ -39,9 +39,11 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         //misc
         float _normalMoveSpeed = 110f;
         float _attackingMoveSpeed = 130f;
+        int _maxHp = 1;
 
-        bool _isActive = false;
-        bool _isInCombat = false;
+        bool _isBehaviorTreeEnabled = false;
+
+        int _prevAnimatorFrame = 0;
 
         #region SETUP
 
@@ -61,8 +63,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         {
             Mover = Entity.AddComponent(new Mover());
 
-            HealthComponent = Entity.AddComponent(new HealthComponent(35, 35));
-            HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
+            HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp, _maxHp));
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             Collider = Entity.AddComponent(new BoxCollider(-13, 35, 26, 16));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
@@ -72,7 +74,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .1f));
+            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .1f, Nez.Content.Audio.Sounds.Chain_bot_damaged));
 
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed));
 
@@ -81,8 +83,6 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
-
-            CombatComponent = Entity.AddComponent(new CombatComponent());
 
             NewHealthbar = Entity.AddComponent(new NewHealthbar(HealthComponent, 48));
             NewHealthbar.SetLocalOffset(new Vector2(0, -24));
@@ -153,10 +153,10 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             Animator.AddAnimation("PostStationaryAttack", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 10, 9, totalColumns));
 
-            Animator.AddAnimation("HitRight", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 11, 2, totalColumns));
+            Animator.AddAnimation("Hit", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 11, 2, totalColumns));
             Animator.AddAnimation("HitLeft", AnimatedSpriteHelper.GetSpriteArrayByRow(leftSprites, 11, 2, totalColumns));
 
-            Animator.AddAnimation("Death", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 12, 36, totalColumns));
+            Animator.AddAnimation("Die", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 12, 36, totalColumns), 7);
         }
 
         void SetupBehaviorTree()
@@ -164,7 +164,12 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             _tree = BehaviorTreeBuilder<HeartHoarder>
                 .Begin(this)
                     .Selector(AbortTypes.Self)
-                        .ConditionalDecorator(h => !h._isInCombat) //if not in combat, idle
+                        //if not in combat, idle
+                        .ConditionalDecorator(h =>
+                        {
+                            var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                            return gameStateManager.GameState != GameState.Combat;
+                        }) 
                             .Action(h => h.PlayAnimationLoop("Idle"))
                         .ConditionalDecorator(h => h.KnockbackComponent.IsStunned, true)
                             .Action(h => h.AbortActions())
@@ -184,7 +189,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                                     {
                                         var xDist = Math.Abs(h.Entity.Position.X - PlayerController.Instance.Entity.Position.X);
                                         var yDist = Math.Abs(h.Entity.Position.Y - PlayerController.Instance.Entity.Position.Y);
-                                         if (yDist <= 32 && xDist <= 64) return true;
+                                        if (yDist <= 32 && xDist <= 64) return true;
                                         else return false;
                                     }, false)
                                         .Sequence() //stationary attack
@@ -268,7 +273,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         public void Update()
         {
-            if (_isActive)
+            if (_isBehaviorTreeEnabled)
             {
                 _tree.Tick();
             }
@@ -278,23 +283,21 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             Animator.FlipX = flip;
         }
 
+        public void SetBehaviorTreeEnabled(bool enabled)
+        {
+            _isBehaviorTreeEnabled = enabled;
+        }
+
         public IEnumerator PlayAppearanceAnimation()
         {
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Hh_appear);
+            Animator.Speed = .75f;
             Animator.Play("Appear", SpriteAnimator.LoopMode.Once);
             while (Animator.IsAnimationActive("Appear") && Animator.AnimationState != SpriteAnimator.State.Completed)
             {
                 yield return null;
             }
-        }
-
-        public void Activate()
-        {
-            _isActive = true;
-        }
-
-        public void StartCombat()
-        {
-            _isInCombat = true;
+            Animator.Speed = 1f;
         }
 
         #region TASKS
@@ -312,11 +315,13 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         TaskStatus Emerge()
         {
-            if (!Animator.IsAnimationActive("Appear"))
+             if (!Animator.IsAnimationActive("Appear"))
             {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Hh_appear);
                 Animator.SetColor(Color.White);
                 Animator.Speed = 2f;
                 Animator.Play("Appear", SpriteAnimator.LoopMode.Once);
+                return TaskStatus.Running;
             }
 
             if (Animator.IsAnimationActive("Appear") && Animator.AnimationState == SpriteAnimator.State.Completed)
@@ -333,6 +338,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         {
             if (!Animator.IsAnimationActive("Vanish"))
             {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Hh_vanish);
                 Animator.Play("Vanish", SpriteAnimator.LoopMode.Once);
                 Hurtbox.SetEnabled(false);
                 NewHealthbar.SetEnabled(false);
@@ -350,6 +356,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         {
             if (!Animator.IsAnimationActive("StationaryAttack"))
             {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Hh_stationary_attack);
                 Animator.Play("StationaryAttack", SpriteAnimator.LoopMode.Once);
             }
 
@@ -390,16 +397,24 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             if (!Animator.IsAnimationActive("MoveAttackRight"))
             {
-                Animator.Speed = 1.5f;
                 Animator.Play("MoveAttackRight");
+                return TaskStatus.Running;
             }
+
+            Animator.Speed += .15f * Time.DeltaTime;
 
             var activeFrames = new int[] { 2, 9 };
             if (activeFrames.Contains(Animator.CurrentFrame))
             {
                 MovingAttackHitbox.SetEnabled(true);
+                if (_prevAnimatorFrame != Animator.CurrentFrame)
+                {
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Hh_slash);
+                }
             }
             else MovingAttackHitbox.SetEnabled(false);
+
+            _prevAnimatorFrame = Animator.CurrentFrame;
 
             return TaskStatus.Running;
         }
@@ -444,12 +459,17 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         #region Observers
 
-        void OnDamageTaken(HealthComponent healthComponent)
+        void OnHealthDepleted(HealthComponent hc)
         {
-            if (!Animator.IsAnimationActive("HitRight"))
+            AbortActions();
+            NewHealthbar.SetEnabled(false);
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Boss_death);
+            _isBehaviorTreeEnabled = false;
+            Animator.Play("Die", SpriteAnimator.LoopMode.Once);
+            Animator.OnAnimationCompletedEvent += (animationName) =>
             {
-                Animator.Play("HitRight");
-            }
+                Entity.Destroy();
+            };
         }
 
         #endregion

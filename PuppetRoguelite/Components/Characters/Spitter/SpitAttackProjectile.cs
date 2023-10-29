@@ -17,7 +17,8 @@ namespace PuppetRoguelite.Components.Characters.Spitter
     {
         //stats
         int _damage = 2;
-        float _speed = 200f;
+        float _speed = 240f;
+        float _radius = 3f;
 
         //components
         public SpriteAnimator Animator;
@@ -44,7 +45,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
             Mover = Entity.AddComponent(new ProjectileMover());
 
-            Hitbox = Entity.AddComponent(new CircleHitbox(_damage));
+            Hitbox = Entity.AddComponent(new CircleHitbox(_damage, _radius));
             Flags.SetFlagExclusive(ref Hitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
             Flags.SetFlagExclusive(ref Hitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
 

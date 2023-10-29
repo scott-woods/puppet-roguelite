@@ -1,7 +1,10 @@
 ﻿using Nez;
 using Nez.Tiled;
+using PuppetRoguelite.Components.Characters.ChainBot;
+using PuppetRoguelite.Components.Characters.Spitter;
 using PuppetRoguelite.SceneComponents;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,40 +14,62 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnTrigger : Trigger
     {
+        List<Type> _enemyTypes = new List<Type>() { typeof(Spitter), typeof(ChainBot) };
+
         public EnemySpawnTrigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {
         }
 
         public override void HandleTriggered()
         {
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
+            //disable self
+            SetEnabled(false);
 
             //destroy other enemy spawn triggers
             var triggers = Entity.Scene.FindComponentsOfType<EnemySpawnTrigger>().Where(t => t.MapEntity == MapEntity).ToList();
             foreach (var trigger in triggers)
             {
-                trigger.Entity.Destroy();
+                if (trigger != this)
+                {
+                    trigger.Entity.Destroy();
+                }
             }
 
+            //start encounter coroutine
+            Game1.StartCoroutine(HandleEncounterStart());
+        }
+
+        IEnumerator HandleEncounterStart()
+        {
             //lock gates
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
             var gates = Entity.Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
             foreach (var gate in gates)
             {
                 gate.Lock();
             }
 
-            var combatManager = Entity.Scene.GetOrCreateSceneComponent<CombatManager>();
+            //wait 1 second before spawning enemies
+            yield return Coroutine.WaitForSeconds(1f);
+
+            //emit combat started
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
 
             //spawn enemies
+            var combatManager = Entity.Scene.GetOrCreateSceneComponent<CombatManager>();
             var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapEntity == MapEntity).ToList();
-            foreach (var spawn in enemySpawns)
+            int i = 0;
+            while (i < enemySpawns.Count)
             {
-                combatManager.AddEnemy(spawn.SpawnEnemy());
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
+                var spawn = enemySpawns[i];
+                combatManager.AddEnemy(spawn.SpawnEnemy(_enemyTypes.RandomItem()));
+                i++;
+                yield return Coroutine.WaitForSeconds(.2f);
             }
             //combatManager.AddEnemy(enemySpawns[0].SpawnEnemy());
 
-            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
-            
+            //destroy entity
             Entity.Destroy();
         }
     }

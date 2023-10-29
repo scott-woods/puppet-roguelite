@@ -21,7 +21,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         public Emitter<TriggerEventTypes> Emitter = new Emitter<TriggerEventTypes>();
 
         //components
-        BoxCollider _collider;
+        protected BoxCollider _collider;
 
         public Trigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {

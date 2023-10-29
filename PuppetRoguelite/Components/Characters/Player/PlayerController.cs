@@ -87,7 +87,10 @@ namespace PuppetRoguelite.Components.Characters.Player
             StateMachine.AddState(new CutsceneState());
             StateMachine.AddState(new TurnState());
 
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+            Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
+            Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
         }
 
         void AddComponents()
@@ -104,7 +107,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 2f));
 
             //add collision box
             _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
@@ -179,10 +182,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             //run
             var runTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_run);
             var runSprites = Sprite.SpritesFromAtlas(runTexture, 64, 64);
-            SpriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9));
-            SpriteAnimator.AddAnimation("RunLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 10, 19));
-            SpriteAnimator.AddAnimation("RunDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 20, 27));
-            SpriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37));
+            var runFps = 13;
+            SpriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9), runFps);
+            SpriteAnimator.AddAnimation("RunLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 10, 19), runFps);
+            SpriteAnimator.AddAnimation("RunDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 20, 27), runFps);
+            SpriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37), runFps);
 
             //hurt
             var hurtTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_hurt);
@@ -242,19 +246,38 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         #region OBSERVERS
 
+        void OnTurnPhaseTriggered()
+        {
+            _hurtbox.SetEnabled(false);
+        }
+
         void OnTurnPhaseCompleted()
         {
+            _hurtbox.SetEnabled(true);
             StateMachine.ChangeState<IdleState>();
         }
 
         void OnDamageTaken(HealthComponent hc)
         {
-            StateMachine.ChangeState<HurtState>();
+            if (StateMachine.CurrentState.GetType() != typeof(DyingState))
+            {
+                StateMachine.ChangeState<HurtState>();
+            }
         }
 
         void OnHealthDepleted(HealthComponent hc)
         {
             StateMachine.ChangeState<DyingState>();
+        }
+
+        void OnCutsceneStarted()
+        {
+            StateMachine.ChangeState<CutsceneState>();
+        }
+
+        void OnCutsceneEnded()
+        {
+            StateMachine.ChangeState<IdleState>();
         }
 
         #endregion

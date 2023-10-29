@@ -53,6 +53,13 @@ namespace PuppetRoguelite.Components.Shared
             }
         }
 
+        public override void OnEnabled()
+        {
+            base.OnEnabled();
+
+            Collider.SetEnabled(true);
+        }
+
         public override void OnDisabled()
         {
             base.OnDisabled();

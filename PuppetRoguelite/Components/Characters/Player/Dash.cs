@@ -54,7 +54,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _spriteTrail.EnableSpriteTrail();
 
             //play sound
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._35_Miss_Evade_02);
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Player_dash);
 
             //animation
             var animation = "DashRight";
@@ -93,6 +93,13 @@ namespace PuppetRoguelite.Components.Characters.Player
                     _dashCompleteCallback?.Invoke();
                 }
             }
+        }
+
+        public void Abort()
+        {
+            _spriteAnimator.Color = Color.White;
+            _spriteTrail.DisableSpriteTrail();
+            _isDashing = false;
         }
     }
 }

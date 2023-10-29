@@ -32,12 +32,12 @@ namespace Nez
 				public const string _31_swoosh_sword_1 = @"Content\Audio\Sounds\31_swoosh_sword_1.wav";
 				public const string _32_Swoosh_sword_2 = @"Content\Audio\Sounds\32_Swoosh_sword_2.wav";
 				public const string _33_Swoosh_Sword_3 = @"Content\Audio\Sounds\33_Swoosh_Sword_3.wav";
-				public const string _35_Miss_Evade_02 = @"Content\Audio\Sounds\35_Miss_Evade_02.wav";
 				public const string _64_Get_hit_03 = @"Content\Audio\Sounds\64_Get_hit_03.wav";
 				public const string _69_Die_02 = @"Content\Audio\Sounds\69_Die_02.wav";
 				public const string _81_Whip_woosh_1 = @"Content\Audio\Sounds\81_Whip_woosh_1.wav";
 				public const string _86_Whip_hit_03 = @"Content\Audio\Sounds\86_Whip_hit_03.wav";
 				public const string Attack = @"Content\Audio\Sounds\attack.wav";
+				public const string Boss_death = @"Content\Audio\Sounds\boss_death.wav";
 				public const string Burp = @"Content\Audio\Sounds\burp.wav";
 				public const string Cereal_slot_1 = @"Content\Audio\Sounds\cereal_slot_1.wav";
 				public const string Cereal_slot_2 = @"Content\Audio\Sounds\cereal_slot_2.wav";
@@ -45,8 +45,14 @@ namespace Nez
 				public const string Chain_bot_damaged = @"Content\Audio\Sounds\chain_bot_damaged.wav";
 				public const string Default_text = @"Content\Audio\Sounds\default_text.wav";
 				public const string Enemy_death_1 = @"Content\Audio\Sounds\enemy_death_1.wav";
+				public const string Enemy_spawn = @"Content\Audio\Sounds\enemy_spawn.wav";
 				public const string Gate_close = @"Content\Audio\Sounds\gate_close.wav";
+				public const string Hh_appear = @"Content\Audio\Sounds\hh_appear.wav";
+				public const string Hh_slash = @"Content\Audio\Sounds\hh_slash.wav";
+				public const string Hh_stationary_attack = @"Content\Audio\Sounds\hh_stationary_attack.wav";
+				public const string Hh_vanish = @"Content\Audio\Sounds\hh_vanish.wav";
 				public const string Menu_select = @"Content\Audio\Sounds\menu_select.wav";
+				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
 			}
 

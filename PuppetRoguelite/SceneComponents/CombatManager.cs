@@ -44,7 +44,7 @@ namespace PuppetRoguelite.SceneComponents
             Enemies.Add(enemy);
         }
 
-        void EndCombat()
+        public void EndCombat()
         {
             //unlock gates
             var gates = Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();

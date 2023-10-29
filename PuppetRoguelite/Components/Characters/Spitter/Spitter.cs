@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,6 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         public BoxCollider Collider;
         public YSorter YSorter;
         public VelocityComponent VelocityComponent;
-        public CombatComponent CombatComponent;
         public Healthbar Healthbar;
         public NewHealthbar NewHealthbar;
         public KnockbackComponent KnockbackComponent;
@@ -99,9 +99,6 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             //y sorter
             YSorter = Entity.AddComponent(new YSorter(Animator, 12));
 
-            //combat
-            CombatComponent = Entity.AddComponent(new CombatComponent());
-
             //new healthbar
             NewHealthbar = Entity.AddComponent(new NewHealthbar(HealthComponent));
             NewHealthbar.SetLocalOffset(new Vector2(0, -25));
@@ -135,6 +132,19 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         {
             _tree = BehaviorTreeBuilder<Spitter>.Begin(this)
                 .Selector(AbortTypes.Self)
+                    .ConditionalDecorator(s =>
+                    {
+                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                        return gameStateManager.GameState != GameState.Combat;
+                    })
+                        .Action(s =>
+                        {
+                            if (s.Animator.CurrentAnimationName != "Idle")
+                            {
+                                s.Animator.Play("Idle");
+                            }
+                            return TaskStatus.Running;
+                        })
                     .ConditionalDecorator(s => s.KnockbackComponent.IsStunned, true) //stun handler
                         .Sequence()
                             .Action(s => s.AbortActions())
@@ -142,7 +152,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
                     .ConditionalDecorator(s => !s.KnockbackComponent.IsStunned, true) //main sequence
                         .Sequence()
                             .ParallelSelector()
-                                .WaitAction(3.5f) //after 2 seconds, fire no matter where we are
+                                .WaitAction(Nez.Random.Range(3f, 5f)) //after certain time, fire no matter where we are
                                 .Action(s =>
                                 {
                                     //get dist to player

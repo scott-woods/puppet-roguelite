@@ -6,6 +6,7 @@ using Nez.Textures;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         BoxCollider _collider;
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
-        public CombatComponent CombatComponent;
         public Healthbar Healthbar;
         public NewHealthbar NewHealthbar;
         public KnockbackComponent KnockbackComponent;
@@ -97,9 +97,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
             //actions
             _chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));
-
-            //combat
-            CombatComponent = Entity.AddComponent(new CombatComponent());
 
             //healthbar
             //Healthbar = Entity.AddComponent(new Healthbar(_healthComponent));
@@ -163,13 +160,23 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector(AbortTypes.Self)
+                    .ConditionalDecorator(c =>
+                    {
+                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                        return gameStateManager.GameState != GameState.Combat;
+                    })
+                        .Action(c => c.Idle())
                     .ConditionalDecorator(c => c.KnockbackComponent.IsStunned)
                         .Action(c => c.AbortActions())
                     .ConditionalDecorator(c => !c.KnockbackComponent.IsStunned, true)
                         .Sequence()
                             .Selector()
                                 .Sequence()
-                                    .Conditional(c => c.CombatComponent.IsInCombat)
+                                    .Conditional(c =>
+                                    {
+                                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                                        return gameStateManager.GameState == GameState.Combat;
+                                    })
                                     .ParallelSelector()
                                         .Action(c => c.Move())
                                         .Action(c => ChasePlayer())
@@ -177,7 +184,11 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                                     .Action(c => c._chainBotMelee.Execute())
                                 .EndComposite()
                                 .Sequence()
-                                    .Conditional(c => !c.CombatComponent.IsInCombat)
+                                    .Conditional(c =>
+                                    {
+                                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                                        return gameStateManager.GameState == GameState.Combat;
+                                    })
                                     .Action(c => c.Idle())
                                 .EndComposite()
                             .EndComposite()

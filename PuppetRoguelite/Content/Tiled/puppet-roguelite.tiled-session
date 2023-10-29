@@ -5,10 +5,10 @@
     },
     "activeFile": "Tilemaps/boss_room.tmx",
     "expandedProjectPaths": [
+        ".",
         "Tilesets",
         "Templates",
-        "Tilemaps",
-        "."
+        "Tilemaps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -16,8 +16,8 @@
             "scale": 1.2182870370370371,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 216.28728861865858,
-                "y": 215.87687630628915
+                "x": 64.84514535436062,
+                "y": 215.46646399391977
             }
         },
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#CollisionTileset": {
@@ -64,8 +64,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 295.1320539616189,
-                "y": 207.2126163784914
+                "x": 325.77617328519864,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/BL_1.tmx": {
@@ -75,8 +75,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5,
-                "y": 359
+                "x": 192,
+                "y": 192.5
             }
         },
         "Tilemaps/BR_1.tmx": {
@@ -86,16 +86,16 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 359.5,
-                "y": 207
+                "x": 192.5,
+                "y": 192.5
             }
         },
         "Tilemaps/B_1.tmx": {
             "scale": 1.3705729166666665,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 192.25536766102988,
-                "y": 191.16093482804487
+                "x": 191.5257457723732,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/LR_1.tmx": {
@@ -105,8 +105,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 23.5,
-                "y": 206
+                "x": 192.5,
+                "y": 192.5
             }
         },
         "Tilemaps/L_1.tmx": {
@@ -121,8 +121,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 192.25536766102988,
-                "y": 190.43131293938822
+                "x": 191.5257457723732,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/TBLR_1.tmx": {
@@ -133,7 +133,7 @@
             "selectedLayer": 3,
             "viewCenter": {
                 "x": 191.5257457723732,
-                "y": 358.9739692190766
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/TBL_1.tmx": {
@@ -143,8 +143,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 55.816074482234484,
-                "y": 207.2126163784914
+                "x": 191.5257457723732,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/TBR_1.tmx": {
@@ -154,8 +154,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5,
-                "y": 135
+                "x": 192.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TB_1.tmx": {
@@ -165,8 +165,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5,
-                "y": 311
+                "x": 192.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TLR_1.tmx": {
@@ -176,8 +176,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 311.5,
-                "y": 207
+                "x": 192.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TL_1.tmx": {
@@ -187,8 +187,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 87.5,
-                "y": 207
+                "x": 192.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TR_1.tmx": {
@@ -198,8 +198,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 295.5,
-                "y": 207
+                "x": 192.5,
+                "y": 192.5
             }
         },
         "Tilemaps/boss_room.tmx": {
@@ -209,8 +209,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 154.5,
-                "y": 566
+                "x": 224.5,
+                "y": 567.5
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -220,8 +220,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 295.1320539616189,
-                "y": 207.2126163784914
+                "x": 191.5257457723732,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/pre_boss_room.tmx": {
@@ -231,8 +231,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 22.618278548356443
+                "x": 179.85179555386665,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -242,8 +242,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 87.91943758312752,
-                "y": 207.2126163784914
+                "x": 191.5257457723732,
+                "y": 191.52574577237317
             }
         },
         "Tilesets/dungeon_prison_props.tsx": {
@@ -277,7 +277,7 @@
         "Tilemaps/TBLR_1.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
-    "property.type": "triggerType",
+    "property.type": "string",
     "recentFiles": [
         "Tilemaps/TBLR_1.tmx",
         "Tilemaps/TBL_1.tmx",

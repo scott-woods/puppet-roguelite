@@ -13,17 +13,13 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnPoint : TiledComponent
     {
-        List<Type> _enemyTypes = new List<Type>() { typeof(Spitter), typeof(ChainBot) };
-
         public EnemySpawnPoint(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
 
         }
 
-        public Enemy SpawnEnemy()
+        public Enemy SpawnEnemy(Type type)
         {
-            var type = _enemyTypes.RandomItem();
-
             ConstructorInfo info = type.GetConstructor(new Type[] { typeof(Entity) });
             if (info != null)
             {

@@ -21,6 +21,13 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             //throw new NotImplementedException();
         }
 
+        public override void End()
+        {
+            base.End();
+
+            _context.Dash.Abort();
+        }
+
         void OnDashCompleted()
         {
             _machine.ChangeState<IdleState>();
