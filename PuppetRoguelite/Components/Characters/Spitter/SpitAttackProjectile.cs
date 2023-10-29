@@ -17,7 +17,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
     {
         //stats
         int _damage = 2;
-        float _speed = 240f;
+        float _speed = 210f;
         float _radius = 3f;
 
         //components
