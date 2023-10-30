@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Scenes
 {
-    public class TestScene : BaseScene
+    public class MainDungeon : BaseScene
     {
         //entities
         Entity _playerEntity;
@@ -46,8 +46,7 @@ namespace PuppetRoguelite.Scenes
             //add player
             _playerEntity = new Entity("player");
             AddEntity(_playerEntity);
-            var player = _playerEntity.AddComponent(new PlayerController());
-            _playerEntity.SetPosition(new Vector2(64, 64));
+            _playerEntity.AddComponent(new PlayerController());
 
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
@@ -55,12 +54,6 @@ namespace PuppetRoguelite.Scenes
 
             //add combat manager
             _combatManager = AddSceneComponent(new CombatManager());
-
-            //game state
-            AddSceneComponent(new GameStateManager());
-
-            //add tiled object handler
-            //AddSceneComponent(new TiledObjectHandler());
 
             //mouse cursor
             var mouseEntity = CreateEntity("mouse-cursor");
@@ -75,6 +68,10 @@ namespace PuppetRoguelite.Scenes
             base.Begin();
 
             _dungenerator.Generate();
+
+            var spawn = _dungenerator.GetPlayerSpawnPoint();
+            _playerEntity.SetPosition(spawn);
+
             Game1.AudioManager.PlayMusic(Music.Babbulon, true);
         }
 

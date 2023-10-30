@@ -100,10 +100,10 @@ namespace PuppetRoguelite.UI.Menus
             }
 
             //setup explicit focus control
-            _attackButton.EnableExplicitFocusableControl(null, null, null, _toolButton);
-            _toolButton.EnableExplicitFocusableControl(null, null, _attackButton, _itemButton);
-            _itemButton.EnableExplicitFocusableControl(null, null, _toolButton, _executeButton.GetDisabled() ? null : _executeButton);
-            _executeButton.EnableExplicitFocusableControl(null, null, _itemButton, null);
+            //_attackButton.EnableExplicitFocusableControl(null, null, null, _toolButton);
+            //_toolButton.EnableExplicitFocusableControl(null, null, _attackButton, _itemButton);
+            //_itemButton.EnableExplicitFocusableControl(null, null, _toolButton, _executeButton.GetDisabled() ? null : _executeButton);
+            //_executeButton.EnableExplicitFocusableControl(null, null, _itemButton, null);
         }
 
         public override void DetermineDefaultElement()

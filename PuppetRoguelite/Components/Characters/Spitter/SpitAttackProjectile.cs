@@ -16,7 +16,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
     public class SpitAttackProjectile : Component, IUpdatable
     {
         //stats
-        int _damage = 2;
+        int _damage = 1;
         float _speed = 210f;
         float _radius = 3f;
 

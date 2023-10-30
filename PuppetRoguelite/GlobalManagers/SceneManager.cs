@@ -1,5 +1,7 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.Systems;
+using Nez.Tweens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +14,26 @@ namespace PuppetRoguelite.GlobalManagers
     {
         public Emitter<SceneEvents> Emitter = new Emitter<SceneEvents>();
 
-        //public Scene ActiveScene { get; set; }
+        public string TargetEntranceId { get; set; }
 
-        public void ChangeScene(Type sceneType)
+        public void ChangeScene(Type targetSceneType, string targetEntranceId = "", Color? fadeToColor = null,
+            float delayBeforeFadeInDuration = .5f, float fadeInDuration = .8f, float fadeOutDuration = .8f,
+            EaseType fadeEaseType = EaseType.Linear)
         {
+            //reset emitters. this is kind of a hack but whatever
             Emitters.ResetEmitters();
-            var transition = Game1.StartSceneTransition(new FadeTransition(() => Activator.CreateInstance(sceneType) as Scene));
+
+            TargetEntranceId = targetEntranceId;
+
+            var transition = new FadeTransition(() => Activator.CreateInstance(targetSceneType) as Scene);
+            transition.DelayBeforeFadeInDuration = delayBeforeFadeInDuration;
+            transition.FadeToColor = fadeToColor == null ? Color.Black : fadeToColor.Value;
+            transition.FadeInDuration = fadeInDuration;
+            transition.FadeOutDuration = fadeOutDuration;
+            transition.FadeEaseType = fadeEaseType;
             transition.OnTransitionCompleted += OnTransitionCompleted;
+
+            Game1.StartSceneTransition(transition);
 
             Emitter.Emit(SceneEvents.TransitionStarted);
         }

@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     {
         int _damage = 3;
         int _range = 32;
-        float _rotationSpeed = .05f;
+        float _rotationSpeed = 175f;
         int _startFrame = 3;
         int[] _hitboxActiveFrames = new int[] { 3, 4, 5 };
 
@@ -182,6 +182,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             float speed = 0;
             if (Input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left)) speed = -_rotationSpeed;
             else if (Input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right)) speed = _rotationSpeed;
+
+            speed *= Time.DeltaTime;
 
             //if pressing left or right, apply rotation
             if (speed != 0)

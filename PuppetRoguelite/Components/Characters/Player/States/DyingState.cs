@@ -16,6 +16,8 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Begin();
 
+            Emitters.PlayerEventsEmitter.Emit(PlayerEvents.PlayerDied);
+
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._69_Die_02, 1.1f);
 
             var deathAnimation = _context.VelocityComponent.Direction.X >= 0 ? "DeathRight" : "DeathLeft";
@@ -39,7 +41,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             if (animationName == "DeathRight" || animationName == "DeathLeft")
             {
-                Game1.Exit();
+                _context.Entity.Destroy();
             }
         }
     }

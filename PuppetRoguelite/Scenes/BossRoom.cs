@@ -82,9 +82,6 @@ namespace PuppetRoguelite.Scenes
             //add combat manager
             CombatManager = AddSceneComponent(new CombatManager());
 
-            //game state
-            AddSceneComponent(new GameStateManager());
-
             var mouseEntity = CreateEntity("mouse");
             mouseEntity.AddComponent(new MouseCursor());
         }
@@ -152,7 +149,7 @@ namespace PuppetRoguelite.Scenes
             ui.SetEnabled(false);
 
             //lock gates
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close, .5f);
             var gates = FindComponentsOfType<Gate>().Where(g => g.MapEntity == _mapEntity).ToList();
             foreach (var gate in gates)
             {

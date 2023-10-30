@@ -42,7 +42,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         IEnumerator HandleEncounterStart()
         {
             //lock gates
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close, .5f);
             var gates = Entity.Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
             foreach (var gate in gates)
             {

@@ -3,6 +3,7 @@ using Nez;
 using Nez.AI.Pathfinding;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Models;
 using System;
@@ -39,17 +40,29 @@ namespace PuppetRoguelite.SceneComponents
             new Map(Content.Tiled.Tilemaps.R_1, false, false, false, true)
         };
 
+        Map _leftKeyMap = new Map(Content.Tiled.Tilemaps.Left_key_room, false, false, false, true);
+        Map _rightKeyMap = new Map(Content.Tiled.Tilemaps.Right_key_room, false, false, true, false);
         Map _preBossMap = new Map(Content.Tiled.Tilemaps.Pre_boss_room, false, true, true, true);
 
         AstarGridGraph _graph;
 
         Point _hubPoint, _preBossPoint, _bossPoint, _leftKeyPoint, _rightKeyPoint;
 
-        Dictionary<Point, Entity> _roomDictionary = new Dictionary<Point, Entity>();
-
         List<RoomNode> _nodes = new List<RoomNode>();
 
         int _maxAttempts = 1000;
+
+        public Vector2 GetPlayerSpawnPoint()
+        {
+            var point = _preBossPoint * _roomSize * _tileSize;
+            var midPoint = point + new Point(_roomSize.X * _tileSize.X / 2, _roomSize.Y * _tileSize.Y / 2);
+            return midPoint.ToVector2();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+        }
 
         public void Generate()
         {
@@ -57,35 +70,50 @@ namespace PuppetRoguelite.SceneComponents
             bool success = false;
             while (!success && attempts < _maxAttempts)
             {
-                var graphSuccess = CreateGraph();
-                var pathsSuccess = CreatePaths();
-                var mapsSuccess = CreateMaps();
+                if (!CreateGraph())
+                {
+                    attempts++;
+                    Reset();
+                    continue;
+                }
+                if (!CreatePaths())
+                {
+                    attempts++;
+                    Reset();
+                    continue;
+                }
+                if (!CreateMaps())
+                {
+                    attempts++;
+                    Reset();
+                    continue;
+                }
+
                 ProcessUnconnectedDoors();
 
-                if (!graphSuccess || !pathsSuccess || !mapsSuccess)
-                {
-                    Reset();
-                    attempts += 1;
-                }
-                else
-                {
-                    success = true;
-                }
+                success = true;
             }
 
-            var point = _preBossPoint * _roomSize * _tileSize;
-            var midPoint = point + new Point(_roomSize.X * _tileSize.X / 2, _roomSize.Y * _tileSize.Y / 2);
-            PlayerController.Instance.Entity.SetPosition(midPoint.ToVector2());
+            //destroy spawn triggers in the hub room
+            Game1.Schedule(.1f, timer =>
+            {
+                var hubNode = _nodes.First(n => n.RoomType == RoomType.Hub);
+                var enemySpawnTriggers = Scene.FindComponentsOfType<EnemySpawnTrigger>().Where(s => s.MapEntity == hubNode.MapEntity).ToList();
+                foreach (var trigger in enemySpawnTriggers)
+                {
+                    trigger.Entity.Destroy();
+                }
+            });
         }
 
         void Reset()
         {
+            Debug.Log("resetting dungeon generation");
             _graph = null;
-            foreach (var room in _roomDictionary)
+            foreach(var node in _nodes)
             {
-                room.Value.Destroy();
+                node.MapEntity?.Destroy();
             }
-            _roomDictionary.Clear();
             _nodes.Clear();
         }
 
@@ -94,97 +122,229 @@ namespace PuppetRoguelite.SceneComponents
         /// </summary>
         public bool CreateGraph()
         {
+            //create graph
             _graph = new AstarGridGraph(_gridSize.X, _gridSize.Y);
 
             //random position for starting location
             _hubPoint = new Point(Nez.Random.NextInt(_gridSize.X), Nez.Random.NextInt(_gridSize.Y));
-            _nodes.Add(new RoomNode(_hubPoint, true, true, true, true, RoomType.Hub, _nodes));
+            _nodes.Add(new RoomNode(_hubPoint, false, false, false, false, RoomType.Hub, _nodes));
 
             //pre boss room a certain distance from starting room
-            bool bossRoomPlaced = false;
-            while (!bossRoomPlaced)
+            bool preBossPlaced = false;
+            while (!preBossPlaced)
             {
-                int x = Nez.Random.Range(0, _gridSize.X);
-                int y = Nez.Random.Range(1, _gridSize.Y); //boss room is always entered from bottom, so need space above pre boss
+                //get random point
+                int x = Nez.Random.Range(1, _gridSize.X - 1);
+                int y = Nez.Random.Range(0, _gridSize.Y - 1); //boss room is always entered from bottom, so need space above pre boss
                 Point potentialPos = new Point(x, y);
 
+                //determine if pos is valid
+                if (!IsGridPositionValid(potentialPos)) continue;
+
+                //check map validity
+                if (!IsGridPositionValidByMap(potentialPos, _preBossMap)) continue;
+
+                //find path from hub to this point
                 var path = _graph.Search(_hubPoint, potentialPos);
 
-                if (path.Count >= 4)
-                {
-                    _preBossPoint = potentialPos;
-                    _nodes.Add(new RoomNode(_preBossPoint, false, true, true, true, RoomType.PreBoss, _nodes));
-                    bossRoomPlaced = true;
-                }
+                //if no path, pos is invalid
+                if (path == null) continue;
+
+                //if path isn't far enough away from start, invalid
+                if (path.Count < 3) continue;
+
+                //point is valid. add to list
+                _preBossPoint = potentialPos;
+                var node = new RoomNode(_preBossPoint, false, true, true, true, RoomType.PreBoss, _nodes);
+                node.Map = _preBossMap;
+                _nodes.Add(node);
+                preBossPlaced = true;
             }
 
-            //boss above pre boss
-            _bossPoint = new Point(_preBossPoint.X, _preBossPoint.Y - 1);
-            //_nodes.Add(new RoomNode(_bossPoint, false, true, false, false, RoomType.Boss));
-            _graph.Walls.Add(_bossPoint);
+            //add wall at point above pre boss if it is in the grid
+            if (_preBossPoint.Y > 0)
+            {
+                _graph.Walls.Add(new Point(_preBossPoint.X, _preBossPoint.Y - 1));
+            }
 
-            //left key
+            //key room with door on right
             bool leftKeyPlaced = false;
             while (!leftKeyPlaced)
             {
-                int x = Nez.Random.NextInt(_gridSize.X - 1);
-                int y = Nez.Random.NextInt(_gridSize.Y);
+                //get random point
+                int x = Nez.Random.Range(0, _gridSize.X - 1);
+                int y = Nez.Random.Range(0, _gridSize.Y);
                 Point potentialPoint = new Point(x, y);
 
-                if (_nodes.Where(n => n.Point == potentialPoint).FirstOrDefault() != null)
-                {
-                    continue;
-                }
-                var top = potentialPoint + new Point(0, -1);
-                var bottom = potentialPoint + new Point(0, 1);
-                var left = potentialPoint + new Point(-1, 0);
-                var surroundingSpaces = new List<Point>() { top, bottom, left };
-                if (surroundingSpaces.Contains(_hubPoint) || surroundingSpaces.Contains(_preBossPoint))
-                {
-                    continue;
-                }
-                var right = potentialPoint + new Point(1, 0);
-                if (_bossPoint == right || _rightKeyPoint == right)
-                {
-                    continue;
-                }
+                //determine if pos is valid
+                if (!IsGridPositionValid(potentialPoint)) continue;
 
+                //map validity
+                if (!IsGridPositionValidByMap(potentialPoint, _leftKeyMap)) continue;
+
+                //point is valid
                 _leftKeyPoint = potentialPoint;
-                _nodes.Add(new RoomNode(_leftKeyPoint, false, false, false, true, RoomType.Key, _nodes));
-                _graph.Walls.Add(_leftKeyPoint);
+                var node = new RoomNode(_leftKeyPoint, false, false, false, true, RoomType.Key, _nodes);
+                node.Map = _leftKeyMap;
+                _nodes.Add(node);
+                //_graph.Walls.Add(_leftKeyPoint);
                 leftKeyPlaced = true;
             }
 
-            //right key
+            //key room with door on left
             bool rightKeyPlaced = false;
             while (!rightKeyPlaced)
             {
+                //random point
                 int x = Nez.Random.Range(1, _gridSize.X);
-                int y = Nez.Random.NextInt(_gridSize.Y);
+                int y = Nez.Random.Range(0, _gridSize.Y);
                 Point potentialPoint = new Point(x, y);
 
-                if (_nodes.Where(n => n.Point == potentialPoint).FirstOrDefault() != null)
+                //determine if pos is valid
+                if (!IsGridPositionValid(potentialPoint)) continue;
+
+                //map validity
+                if (!IsGridPositionValidByMap(potentialPoint, _rightKeyMap)) continue;
+
+                //point valid
+                _rightKeyPoint = potentialPoint;
+                var node = new RoomNode(_rightKeyPoint, false, false, true, false, RoomType.Key, _nodes);
+                node.Map = _rightKeyMap;
+                _nodes.Add(node);
+                //_graph.Walls.Add(_rightKeyPoint);
+                rightKeyPlaced = true;
+            }
+
+            return true;
+        }
+
+        bool IsGridPositionValid(Point gridPosition)
+        {
+            if (_nodes.Any(n => n.Point == gridPosition)) return false;
+            if (gridPosition == _preBossPoint + new Point(0, -1)) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// check that map has no entrances leading out of grid, and that it won't block surrounding nodes doorways
+        /// </summary>
+        /// <param name="gridPosition"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        bool IsGridPositionValidByMap(Point gridPosition, Map map)
+        {
+            var topPoint = gridPosition + new Point(0, -1);
+            if (topPoint.Y < 0 && map.HasTop) return false;
+            var topNode = _nodes.FirstOrDefault(n => n.Point == topPoint);
+            if (topNode != null)
+            {
+                if (topNode.NeedsBottomDoor && !map.HasTop) return false;
+            }
+
+            var bottomPoint = gridPosition + new Point(0, 1);
+            if (bottomPoint.Y >= _gridSize.Y && map.HasBottom) return false;
+            var bottomNode = _nodes.FirstOrDefault(n => n.Point == bottomPoint);
+            if (bottomNode != null)
+            {
+                if (bottomNode.NeedsTopDoor && !map.HasBottom) return false;
+            }
+
+            var leftPoint = gridPosition + new Point(-1, 0);
+            if (leftPoint.X < 0 && map.HasLeft) return false;
+            var leftNode = _nodes.FirstOrDefault(n => n.Point == leftPoint);
+            if (leftNode != null)
+            {
+                if (leftNode.NeedsRightDoor && !map.HasLeft) return false;
+            }
+
+            var rightPoint = gridPosition + new Point(1, 0);
+            if (rightPoint.X >= _gridSize.X && map.HasRight) return false;
+            var rightNode = _nodes.FirstOrDefault(n => n.Point == rightPoint);
+            if (rightNode != null)
+            {
+                if (rightNode.NeedsLeftDoor && !map.HasRight) return false;
+            }
+
+            return true;
+        }
+
+        bool CreatePathAndNodes(Point startPoint, Point endPoint)
+        {
+            var finalPath = new List<Point>();
+            var walledPoints = new List<Point>();
+            var pathFound = false;
+            var currentPathStartPoint = startPoint;
+            while (!pathFound)
+            {
+                var newPath = _graph.Search(currentPathStartPoint, endPoint);
+                if (newPath == null) return false;
+                foreach (var point in newPath)
                 {
+                    if (point == endPoint)
+                    {
+                        finalPath.Add(point);
+                        pathFound = true;
+                        break;
+                    }
+
+                    if (point == _leftKeyPoint || point == _rightKeyPoint || point == _preBossPoint + new Point(0, -1))
+                    {
+                        _graph.Walls.Add(point);
+                        walledPoints.Add(point);
+                        if (finalPath.Count > 0)
+                        {
+                            currentPathStartPoint = finalPath.Last();
+                            break;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        finalPath.Add(point);
+                    }
+                }
+            }
+
+            //unwall points
+            foreach (var point in walledPoints)
+            {
+                _graph.Walls.Remove(point);
+            }
+
+            //loop through final path, add node if necessary, and set where doors are needed
+            for (int i = 0; i < finalPath.Count; i++)
+            {
+                var point = finalPath[i];
+
+                RoomNode node;
+                if (_nodes.FirstOrDefault(n => n.Point == point) != null)
+                {
+                    node = _nodes.FirstOrDefault(n => n.Point == point);
                     continue;
                 }
-                var top = potentialPoint + new Point(0, -1);
-                var bottom = potentialPoint + new Point(0, 1);
-                var right = potentialPoint + new Point(1, 0);
-                var surroundingSpaces = new List<Point>() { top, bottom, right };
-                if (surroundingSpaces.Contains(_hubPoint) || surroundingSpaces.Contains(_preBossPoint))
+                else
                 {
-                    continue;
-                }
-                var left = potentialPoint + new Point(-1, 0);
-                if (_bossPoint == left || _leftKeyPoint == left)
-                {
-                    continue;
+                    node = new RoomNode(point, false, false, false, false, RoomType.Normal, _nodes);
+                    _nodes.Add(node);
                 }
 
-                _rightKeyPoint = potentialPoint;
-                _nodes.Add(new RoomNode(_rightKeyPoint, false, false, true, false, RoomType.Key, _nodes));
-                _graph.Walls.Add(_rightKeyPoint);
-                rightKeyPlaced = true;
+                if (i > 0)
+                {
+                    Point previousPoint = finalPath[i - 1];
+                    node.NeedsLeftDoor = (previousPoint.X < node.Point.X);
+                    node.NeedsTopDoor = (previousPoint.Y < node.Point.Y);
+                    node.NeedsRightDoor = (previousPoint.X > node.Point.X);
+                    node.NeedsBottomDoor = (previousPoint.Y > node.Point.Y);
+                }
+
+                if (i < finalPath.Count - 1)
+                {
+                    Point nextPoint = finalPath[i + 1];
+                    node.NeedsLeftDoor |= (nextPoint.X < node.Point.X);
+                    node.NeedsTopDoor |= (nextPoint.Y < node.Point.Y);
+                    node.NeedsRightDoor |= (nextPoint.X > node.Point.X);
+                    node.NeedsBottomDoor |= (nextPoint.Y > node.Point.Y);
+                }
             }
 
             return true;
@@ -195,97 +355,115 @@ namespace PuppetRoguelite.SceneComponents
         /// </summary>
         public bool CreatePaths()
         {
-            var leftKeyEntrance = _leftKeyPoint + new Point(1, 0);
-            var leftKeyToHub = _graph.Search(leftKeyEntrance, _hubPoint);
-            if (leftKeyToHub == null)
-            {
-                return false;
-            }
-            for (int i = 0; i < leftKeyToHub.Count; i++)
-            {
-                var pathPoint = leftKeyToHub[i];
+            if (!CreatePathAndNodes(_leftKeyPoint + new Point(1, 0), _hubPoint)) return false;
+            if (!CreatePathAndNodes(_rightKeyPoint + new Point(-1, 0), _hubPoint)) return false;
 
-                var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
-                if (node != null)
-                {
-                    if (i == 0)
-                    {
-                        node.NeedsLeftDoor = true;
-                    }
-                    continue;
-                }
-                else
-                {
-                    node = new RoomNode(pathPoint, false, false, true, false, RoomType.Normal, _nodes);
-                    _nodes.Add(node);
-                }
-            }
-
-            var rightKeyEntrance = _rightKeyPoint + new Point(-1, 0);
-            var rightKeyToHub = _graph.Search(rightKeyEntrance, _hubPoint);
-            if (rightKeyToHub == null)
-            {
-                return false;
-            }
-            for (int i = 0; i < rightKeyToHub.Count; i++)
-            {
-                var pathPoint = rightKeyToHub[i];
-
-                var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
-                if (node != null)
-                {
-                    if (i == 0)
-                    {
-                        node.NeedsRightDoor = true;
-                    }
-                    continue;
-                }
-                else
-                {
-                    node = new RoomNode(pathPoint, false, false, false, true, RoomType.Normal, _nodes);
-                    _nodes.Add(node);
-                }
-            }
-
-            var preBossEntrances = new List<Point>
+            List<Point> preBossEntrances = new List<Point>()
             {
                 new Point(_preBossPoint.X + 1, _preBossPoint.Y),
                 new Point(_preBossPoint.X, _preBossPoint.Y + 1),
                 new Point(_preBossPoint.X - 1, _preBossPoint.Y)
             };
-            _graph.Walls.Add(_preBossPoint);
-            var shortestPath = new List<Point>();
-            foreach (var point in preBossEntrances)
-            {
-                var path = _graph.Search(point, _hubPoint);
-                if (path != null)
-                {
-                    if (path.Count < shortestPath.Count || shortestPath.Count == 0)
-                    {
-                        shortestPath = path;
-                    }
-                }
-            }
-            if (shortestPath.Count == 0)
-            {
-                return false;
-            }
-            for (int i = 0; i < shortestPath.Count; i++)
-            {
-                var pathPoint = shortestPath[i];
 
-                var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
-                if (node != null)
-                {
-                    continue;
-                }
-                else
-                {
-                    node = new RoomNode(pathPoint, false, false, false, false, RoomType.Normal, _nodes);
-                    _nodes.Add(node);
-                }
+            while (preBossEntrances.Count > 0)
+            {
+                var point = preBossEntrances.RandomItem();
+                preBossEntrances.Remove(point);
+                if (CreatePathAndNodes(point, _hubPoint)) break;
+                else if (preBossEntrances.Count == 0) return false;
             }
-            _graph.Walls.Remove(_preBossPoint);
+
+            //var leftKeyEntrance = _leftKeyPoint + new Point(1, 0);
+            //var leftKeyToHub = _graph.Search(leftKeyEntrance, _hubPoint);
+            //if (leftKeyToHub == null)
+            //{
+            //    return false;
+            //}
+            //for (int i = 0; i < leftKeyToHub.Count; i++)
+            //{
+            //    var pathPoint = leftKeyToHub[i];
+
+            //    var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
+            //    if (node != null)
+            //    {
+            //        if (i == 0)
+            //        {
+            //            node.NeedsLeftDoor = true;
+            //        }
+            //        continue;
+            //    }
+            //    else
+            //    {
+            //        node = new RoomNode(pathPoint, false, false, true, false, RoomType.Normal, _nodes);
+            //        _nodes.Add(node);
+            //    }
+            //}
+
+            //var rightKeyEntrance = _rightKeyPoint + new Point(-1, 0);
+            //var rightKeyToHub = _graph.Search(rightKeyEntrance, _hubPoint);
+            //if (rightKeyToHub == null)
+            //{
+            //    return false;
+            //}
+            //for (int i = 0; i < rightKeyToHub.Count; i++)
+            //{
+            //    var pathPoint = rightKeyToHub[i];
+
+            //    var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
+            //    if (node != null)
+            //    {
+            //        if (i == 0)
+            //        {
+            //            node.NeedsRightDoor = true;
+            //        }
+            //        continue;
+            //    }
+            //    else
+            //    {
+            //        node = new RoomNode(pathPoint, false, false, false, true, RoomType.Normal, _nodes);
+            //        _nodes.Add(node);
+            //    }
+            //}
+
+            //var preBossEntrances = new List<Point>
+            //{
+            //    new Point(_preBossPoint.X + 1, _preBossPoint.Y),
+            //    new Point(_preBossPoint.X, _preBossPoint.Y + 1),
+            //    new Point(_preBossPoint.X - 1, _preBossPoint.Y)
+            //};
+            //_graph.Walls.Add(_preBossPoint);
+            //var shortestPath = new List<Point>();
+            //foreach (var point in preBossEntrances)
+            //{
+            //    var path = _graph.Search(point, _hubPoint);
+            //    if (path != null)
+            //    {
+            //        if (path.Count < shortestPath.Count || shortestPath.Count == 0)
+            //        {
+            //            shortestPath = path;
+            //        }
+            //    }
+            //}
+            //if (shortestPath.Count == 0)
+            //{
+            //    return false;
+            //}
+            //for (int i = 0; i < shortestPath.Count; i++)
+            //{
+            //    var pathPoint = shortestPath[i];
+
+            //    var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
+            //    if (node != null)
+            //    {
+            //        continue;
+            //    }
+            //    else
+            //    {
+            //        node = new RoomNode(pathPoint, false, false, false, false, RoomType.Normal, _nodes);
+            //        _nodes.Add(node);
+            //    }
+            //}
+            //_graph.Walls.Remove(_preBossPoint);
 
             return true;
         }
@@ -356,7 +534,8 @@ namespace PuppetRoguelite.SceneComponents
 
                 if (possibleMaps.Any())
                 {
-                    mapString = possibleMaps.RandomItem().Name;
+                    node.Map = possibleMaps.RandomItem();
+                    mapString = node.Map.Name;
                 }
                 else return false;
             }
@@ -378,6 +557,7 @@ namespace PuppetRoguelite.SceneComponents
             mapRenderer.RenderLayer = 10;
             mapEntity.AddComponent(new GridGraphManager(mapRenderer));
             mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
+            node.MapEntity = mapEntity;
 
             return true;
         }
@@ -441,10 +621,12 @@ namespace PuppetRoguelite.SceneComponents
 
         void ProcessUnconnectedDoors()
         {
+            Debug.Log("starting processing unconnected doors");
             var nodesToProcess = new Queue<RoomNode>(_nodes);
             while (nodesToProcess.Count > 0)
             {
                 var node = nodesToProcess.Dequeue();
+                Debug.Log($"Processing node: {node.RoomType.ToString()}");
                 var unconnectedDoors = node.GetUnconnectedDoors();
                 foreach (var direction in unconnectedDoors)
                 {

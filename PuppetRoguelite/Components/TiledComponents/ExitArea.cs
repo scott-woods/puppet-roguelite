@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Systems;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +17,22 @@ namespace PuppetRoguelite.Components.TiledComponents
     /// </summary>
     public class ExitArea : TiledComponent, ITriggerListener
     {
+        public Emitter<ExitAreaEvents> Emitter = new Emitter<ExitAreaEvents>();
+
         Collider _collider;
 
-        Type _sceneType;
-        Vector2 _size;
+        public Type TargetSceneType;
+        string _targetEntranceId;
 
         public ExitArea(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
             if (tmxObject.Properties.TryGetValue("TargetScene", out var targetScene))
             {
-                _sceneType = Type.GetType("PuppetRoguelite.Scenes." + targetScene);
+                TargetSceneType = Type.GetType("PuppetRoguelite.Scenes." + targetScene);
+            }
+            if (tmxObject.Properties.TryGetValue("TargetEntrance", out var targetEntranceId))
+            {
+                _targetEntranceId = targetEntranceId;
             }
         }
 
@@ -32,15 +40,20 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             base.Initialize();
 
-            _collider = Entity.AddComponent(new BoxCollider(_size.X, _size.Y));
+            //collider
+            _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
             _collider.IsTrigger = true;
+            _collider.PhysicsLayer = 1 << (int)PhysicsLayers.Trigger;
+            Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.PlayerCollider);
+            Entity.AddComponent(_collider);
         }
 
         public void OnTriggerEnter(Collider other, Collider local)
         {
             if (other.HasComponent<PlayerController>())
             {
-                Game1.SceneManager.ChangeScene(_sceneType);
+                Emitter.Emit(ExitAreaEvents.Triggered);
+                Game1.SceneManager.ChangeScene(TargetSceneType, _targetEntranceId);
             }
         }
 
@@ -48,5 +61,10 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             //throw new NotImplementedException();
         }
+    }
+
+    public enum ExitAreaEvents
+    {
+        Triggered
     }
 }

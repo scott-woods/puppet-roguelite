@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="26" height="71" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="36">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="26" height="71" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="37">
  <properties>
   <property name="type" value=""/>
  </properties>
@@ -271,8 +271,6 @@
    </properties>
    <point/>
   </object>
-  <object id="35" x="160" y="48" width="112" height="64">
-   <text pixelsize="22" wrap="1" color="#00aaff" bold="1">why are you gay</text>
-  </object>
+  <object id="36" type="SpecialChest" x="192" y="32" width="32" height="32"/>
  </objectgroup>
 </map>

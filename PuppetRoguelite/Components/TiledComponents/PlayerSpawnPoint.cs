@@ -10,9 +10,17 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class PlayerSpawnPoint : TiledComponent
     {
+        public string Id { get; set; }
+
         public PlayerSpawnPoint(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
-
+            if (tmxObject.Properties != null)
+            {
+                if (tmxObject.Properties.TryGetValue("Id", out var id))
+                {
+                    Id = id;
+                }
+            }
         }
     }
 }

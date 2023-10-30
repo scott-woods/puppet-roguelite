@@ -24,6 +24,7 @@ namespace PuppetRoguelite.GlobalManagers
 
         Sound _currentMusic;
         Channel _currentMusicChannel;
+        public string CurrentSongName;
 
         public void PlaySound(string soundName, float volume = 0f)
         {
@@ -59,6 +60,7 @@ namespace PuppetRoguelite.GlobalManagers
             channel.Looping = looping;
             _currentMusic = music;
             _currentMusicChannel = channel;
+            CurrentSongName = musicName;
 
             _loopPoint = loopTime;
         }
@@ -77,6 +79,7 @@ namespace PuppetRoguelite.GlobalManagers
             channel.Volume = _defaultMusicVolume;
             _currentMusic = music;
             _currentMusicChannel = channel;
+            CurrentSongName = song.Path;
 
             if (looping)
             {
@@ -113,6 +116,13 @@ namespace PuppetRoguelite.GlobalManagers
             _currentMusicChannel.Stop();
             _currentMusic = null;
             _loopPoint = 0;
+            CurrentSongName = null;
+        }
+
+        public bool IsPlayingMusic(string music)
+        {
+            if (CurrentSongName == music && _currentMusicChannel.IsPlaying) return true;
+            return false;
         }
 
         public override void Update()

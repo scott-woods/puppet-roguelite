@@ -114,11 +114,6 @@
   <object id="22" type="Gate" gid="235" x="192" y="96" width="16" height="16"/>
   <object id="23" type="Gate" gid="235" x="208" y="96" width="16" height="16"/>
   <object id="24" type="Gate" gid="235" x="224" y="96" width="16" height="16"/>
-  <object id="25" type="Chest" x="208" y="48" width="16" height="32">
-   <properties>
-    <property name="ChestSize" propertytype="chestSize" value="Small"/>
-    <property name="ChestType" propertytype="chestType" value="Key"/>
-   </properties>
-  </object>
+  <object id="25" type="KeyChest" x="208" y="48" width="16" height="32"/>
  </objectgroup>
 </map>

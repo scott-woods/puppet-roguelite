@@ -47,9 +47,9 @@ namespace PuppetRoguelite.Components.Characters.Player
         //components
         Mover _mover;
         public SpriteAnimator SpriteAnimator;
-        Collider _collider;
+        public Collider Collider;
         public HealthComponent HealthComponent;
-        Hurtbox _hurtbox;
+        public Hurtbox Hurtbox;
         public ActionPointComponent ActionPointComponent;
         public AttacksList AttacksList;
         Inventory _inventory;
@@ -107,13 +107,15 @@ namespace PuppetRoguelite.Components.Characters.Player
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 2f));
+            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 2f));
 
             //add collision box
-            _collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
-            Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
-            Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
+            Collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
+            Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
+            Flags.UnsetFlag(ref Collider.CollidesWithLayers, -1);
+            Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
+            Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
+            //Collider.SetEnabled(false);
 
             //Add health component
             HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
@@ -128,7 +130,8 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
-            _inventory.AddItem(new CerealBox("Reese's Puffs"));
+            _inventory.AddItem(new CerealBox("feef"));
+            _inventory.AddItem(new CerealBox("feef"));
 
             //ySort
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, 12));
@@ -144,7 +147,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _spriteTrail.DisableSpriteTrail();
 
             //knockback
-            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .75f, VelocityComponent, _hurtbox));
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .75f, VelocityComponent, Hurtbox));
         }
 
         void SetupInput()
@@ -248,12 +251,12 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         void OnTurnPhaseTriggered()
         {
-            _hurtbox.SetEnabled(false);
+            Hurtbox.SetEnabled(false);
         }
 
         void OnTurnPhaseCompleted()
         {
-            _hurtbox.SetEnabled(true);
+            Game1.Schedule(.5f, timer => Hurtbox.SetEnabled(true));
             StateMachine.ChangeState<IdleState>();
         }
 

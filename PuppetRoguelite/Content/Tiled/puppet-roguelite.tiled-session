@@ -75,8 +75,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192,
-                "y": 192.5
+                "x": 191.5,
+                "y": 192
             }
         },
         "Tilemaps/BR_1.tmx": {
@@ -94,8 +94,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 191.52574577237317
+                "x": 190.79612388371658,
+                "y": 191.16093482804487
             }
         },
         "Tilemaps/LR_1.tmx": {
@@ -105,24 +105,24 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.5,
-                "y": 192.5
+                "x": 191.5,
+                "y": 192
             }
         },
         "Tilemaps/L_1.tmx": {
             "scale": 1.3705729166666665,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.25536766102988,
-                "y": 192.62017860535818
+                "x": 186.41839255177655,
+                "y": 209.40148204446137
             }
         },
         "Tilemaps/R_1.tmx": {
             "scale": 1.3705729166666665,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 191.52574577237317
+                "x": 284.187725631769,
+                "y": 183.13509405282161
             }
         },
         "Tilemaps/TBLR_1.tmx": {
@@ -130,10 +130,10 @@
                 8
             ],
             "scale": 1.3705729166666665,
-            "selectedLayer": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 191.52574577237317
+                "x": 190.79612388371658,
+                "y": 190.43131293938822
             }
         },
         "Tilemaps/TBL_1.tmx": {
@@ -143,8 +143,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 191.52574577237317
+                "x": 190.79612388371658,
+                "y": 191.16093482804487
             }
         },
         "Tilemaps/TBR_1.tmx": {
@@ -202,15 +202,45 @@
                 "y": 192.5
             }
         },
+        "Tilemaps/T_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": -99.5933878016341,
+                "y": 191.89055671670152
+            }
+        },
+        "Tilemaps/bedroom.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 342.3333333333333,
+                "y": 142.66666666666663
+            }
+        },
         "Tilemaps/boss_room.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 1,
+            "scale": 2,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 224.5,
-                "y": 567.5
+                "x": 206.75,
+                "y": 47
+            }
+        },
+        "Tilemaps/hub.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 255.66666666666663,
+                "y": 246
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -220,8 +250,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 191.52574577237317
+                "x": 166.71860155804671,
+                "y": 60.55861675850278
             }
         },
         "Tilemaps/pre_boss_room.tmx": {
@@ -231,8 +261,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 179.85179555386665,
-                "y": 191.52574577237317
+                "x": 191.52574577237323,
+                "y": 21.15903477104314
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -242,8 +272,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 191.52574577237317
+                "x": 214.87364620938627,
+                "y": 62.017860535816084
             }
         },
         "Tilesets/dungeon_prison_props.tsx": {
@@ -255,7 +285,12 @@
             "scaleInEditor": 1
         }
     },
+    "last.imagePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Textures/Tilesets",
     "last.objectTemplatePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Templates",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
     "openFiles": [
         "Tilemaps/boss_room.tmx",
         "Tilemaps/left_key_room.tmx",
@@ -277,19 +312,25 @@
         "Tilemaps/TBLR_1.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
-    "property.type": "string",
+    "property.type": "chestSize",
     "recentFiles": [
-        "Tilemaps/TBLR_1.tmx",
-        "Tilemaps/TBL_1.tmx",
-        "Tilemaps/TB_1.tmx",
-        "Tilemaps/BR_1.tmx",
-        "Tilemaps/BLR_1.tmx",
-        "Tilemaps/BL_1.tmx",
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx",
-        "Tilemaps/R_1.tmx",
-        "Tilemaps/B_1.tmx",
         "Tilemaps/pre_boss_room.tmx",
+        "Tilemaps/right_key_room.tmx",
+        "Tilemaps/left_key_room.tmx",
+        "Tilemaps/boss_room.tmx",
+        "Tilemaps/LR_1.tmx",
+        "Tilemaps/TBR_1.tmx",
+        "Tilemaps/TL_1.tmx",
+        "Tilemaps/TLR_1.tmx",
         "Tilemaps/TR_1.tmx",
-        "Tilemaps/TLR_1.tmx"
-    ]
+        "Tilemaps/B_1.tmx",
+        "Tilemaps/R_1.tmx",
+        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx"
+    ],
+    "resizeMap.removeObjects": true,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
 }

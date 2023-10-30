@@ -13,7 +13,7 @@ using PuppetRoguelite.Tools;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.Components.Characters.Player;
 using System.Collections;
-using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.GlobalManagers;
 
 namespace PuppetRoguelite.Components.Characters.HeartHoarder
 {
@@ -37,8 +37,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public YSorter YSorter;
 
         //misc
-        float _normalMoveSpeed = 110f;
-        float _attackingMoveSpeed = 130f;
+        float _normalMoveSpeed = 100f;
+        float _attackingMoveSpeed = 115f;
         int _maxHp = 40;
 
         bool _isBehaviorTreeEnabled = false;
@@ -167,7 +167,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                         //if not in combat, idle
                         .ConditionalDecorator(h =>
                         {
-                            var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                            var gameStateManager = Game1.GameStateManager;
                             return gameStateManager.GameState != GameState.Combat;
                         }) 
                             .Action(h => h.PlayAnimationLoop("Idle"))

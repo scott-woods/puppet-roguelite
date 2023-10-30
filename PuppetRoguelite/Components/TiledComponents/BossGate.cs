@@ -38,10 +38,10 @@ namespace PuppetRoguelite.Components.TiledComponents
             _closedSprite = new Sprite(bossGateTexture, 0, 0, 32, 48);
 
             _renderer = Entity.AddComponent(new SpriteRenderer());
-            _renderer.SetSprite(_openSprite);
+            _renderer.SetSprite(_closedSprite);
 
             _collider = Entity.AddComponent(new BoxCollider());
-            _collider.SetEnabled(false);
+            _collider.SetEnabled(true);
 
             _ySorter = Entity.AddComponent(new YSorter(_renderer, (int)_renderer.Bounds.Height / 2));
         }

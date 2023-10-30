@@ -107,7 +107,8 @@
             "storageType": "string",
             "type": "enum",
             "values": [
-                "Key"
+                "Key",
+                "Special"
             ],
             "valuesAsFlags": false
         },
@@ -192,6 +193,26 @@
             ]
         },
         {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 16,
+            "members": [
+            ],
+            "name": "KeyChest",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
             "color": "#ff0000ff",
             "drawFill": true,
             "id": 13,
@@ -241,6 +262,26 @@
                 "BossSpawn"
             ],
             "valuesAsFlags": false
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 17,
+            "members": [
+            ],
+            "name": "SpecialChest",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
         }
     ]
 }

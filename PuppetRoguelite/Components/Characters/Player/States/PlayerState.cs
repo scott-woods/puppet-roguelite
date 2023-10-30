@@ -2,7 +2,7 @@
 using Nez;
 using Nez.AI.FSM;
 using PuppetRoguelite.Components.Shared;
-using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.GlobalManagers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public void TryTriggerTurn()
         {
-            var gameStateManager = _context.Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+            var gameStateManager = Game1.GameStateManager;
             if (gameStateManager.GameState == GameState.Combat && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
             {
                 _machine.ChangeState<TurnState>();
@@ -62,7 +62,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public void TryCheck()
         {
-            var gameStateManager = _context.Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+            var gameStateManager = Game1.GameStateManager;
             if (gameStateManager.GameState == GameState.Exploration && _context.CheckInput.IsPressed)
             {
                 var raycastHit = Physics.Linecast(_context.Entity.Position, _context.Entity.Position + _context.VelocityComponent.Direction * _context.RaycastDistance);

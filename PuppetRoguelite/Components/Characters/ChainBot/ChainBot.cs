@@ -6,7 +6,7 @@ using Nez.Textures;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Tools;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,7 +107,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             NewHealthbar.SetLocalOffset(new Vector2(0, -25));
 
             //knockback
-            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, VelocityComponent, _hurtbox));
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, 6, 2f, VelocityComponent, _hurtbox));
         }
 
         void AddAnimations()
@@ -162,7 +162,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                 .Selector(AbortTypes.Self)
                     .ConditionalDecorator(c =>
                     {
-                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                        var gameStateManager = Game1.GameStateManager;
                         return gameStateManager.GameState != GameState.Combat;
                     })
                         .Action(c => c.Idle())
@@ -174,7 +174,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                                 .Sequence()
                                     .Conditional(c =>
                                     {
-                                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                                        var gameStateManager = Game1.GameStateManager;
                                         return gameStateManager.GameState == GameState.Combat;
                                     })
                                     .ParallelSelector()
@@ -186,7 +186,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                                 .Sequence()
                                     .Conditional(c =>
                                     {
-                                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                                        var gameStateManager = Game1.GameStateManager;
                                         return gameStateManager.GameState == GameState.Combat;
                                     })
                                     .Action(c => c.Idle())

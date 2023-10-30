@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.PhysicsShapes;
+using Nez.Sprites;
 using Nez.Systems;
+using Nez.Timers;
+using Nez.Tweens;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using System;
@@ -71,6 +74,9 @@ namespace PuppetRoguelite.Components.Shared
         {
             if (!IsInRecovery)
             {
+                var renderer = Entity.GetComponent<SpriteRenderer>();
+                renderer.Color = Color.White;
+
                 var hitboxes = Physics.BoxcastBroadphaseExcludingSelf(Collider, Collider.CollidesWithLayers);
                 foreach (IHitbox hitbox in hitboxes)
                 {
@@ -97,8 +103,11 @@ namespace PuppetRoguelite.Components.Shared
             if (_recoveryTime > 0)
             {
                 IsInRecovery = true;
+                var renderer = Entity.GetComponent<SpriteRenderer>();
+                renderer.Color = Color.White * .5f;
                 _recoveryTimer = Core.Schedule(_recoveryTime, timer =>
                 {
+                    renderer.Color = Color.White;
                     IsInRecovery = false;
                 });
             }

@@ -14,6 +14,7 @@ namespace PuppetRoguelite
         public static Point DesignResolution = new Point(480, 270);
         public static SceneManager SceneManager = new SceneManager();
         public static AudioManager AudioManager = new AudioManager();
+        public static GameStateManager GameStateManager = new GameStateManager();
 
         protected override void Initialize()
         {
@@ -30,11 +31,13 @@ namespace PuppetRoguelite
 
             RegisterGlobalManager(SceneManager);
             RegisterGlobalManager(AudioManager);
+            RegisterGlobalManager(GameStateManager);
 
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
 
-            Scene = new TestScene();
+            SceneManager.TargetEntranceId = "0";
+            Scene = new Bedroom();
         }
 
         protected override void Update(GameTime gameTime)

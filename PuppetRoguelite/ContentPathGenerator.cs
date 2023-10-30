@@ -53,6 +53,7 @@ namespace Nez
 				public const string Hh_vanish = @"Content\Audio\Sounds\hh_vanish.wav";
 				public const string Menu_select = @"Content\Audio\Sounds\menu_select.wav";
 				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
+				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.mp3";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
 			}
 
@@ -98,7 +99,6 @@ namespace Nez
 				{
 					public const string Spitter_projectile = @"Content\Textures\Characters\Spitter\spitter_projectile.png";
 					public const string Spitter_sheet = @"Content\Textures\Characters\Spitter\spitter_sheet.png";
-					public const string Spitter_source = @"Content\Textures\Characters\Spitter\spitter_source.aseprite";
 				}
 
 			}
@@ -107,11 +107,13 @@ namespace Nez
 			{
 				public const string Boss_gate = @"Content\Textures\Objects\boss_gate.png";
 				public const string Chest = @"Content\Textures\Objects\chest.png";
+				public const string Large_chest = @"Content\Textures\Objects\large_chest.png";
 				public const string Shelf = @"Content\Textures\Objects\shelf.png";
 			}
 
 			public static class Tilesets
 			{
+				public const string Blood_temple_tileset = @"Content\Textures\Tilesets\blood_temple_tileset.png";
 				public const string Dungeon_prison_props = @"Content\Textures\Tilesets\dungeon_prison_props.png";
 				public const string Dungeon_prison_tileset = @"Content\Textures\Tilesets\dungeon_prison_tileset.png";
 			}
@@ -853,10 +855,12 @@ namespace Nez
 			public static class Tilemaps
 			{
 				public const string B_1 = @"Content\Tiled\Tilemaps\B_1.tmx";
+				public const string Bedroom = @"Content\Tiled\Tilemaps\bedroom.tmx";
 				public const string BL_1 = @"Content\Tiled\Tilemaps\BL_1.tmx";
 				public const string BLR_1 = @"Content\Tiled\Tilemaps\BLR_1.tmx";
 				public const string Boss_room = @"Content\Tiled\Tilemaps\boss_room.tmx";
 				public const string BR_1 = @"Content\Tiled\Tilemaps\BR_1.tmx";
+				public const string Hub = @"Content\Tiled\Tilemaps\hub.tmx";
 				public const string Hub_room = @"Content\Tiled\Tilemaps\hub_room.tmx";
 				public const string L_1 = @"Content\Tiled\Tilemaps\L_1.tmx";
 				public const string Left_key_room = @"Content\Tiled\Tilemaps\left_key_room.tmx";
@@ -876,6 +880,7 @@ namespace Nez
 
 			public static class Tilesets
 			{
+				public const string Blood_temple_tileset = @"Content\Tiled\Tilesets\blood_temple_tileset.tsx";
 				public const string Dungeon_prison_props = @"Content\Tiled\Tilesets\dungeon_prison_props.tsx";
 				public const string Dungeon_prison_tileset = @"Content\Tiled\Tilesets\dungeon_prison_tileset.tsx";
 			}

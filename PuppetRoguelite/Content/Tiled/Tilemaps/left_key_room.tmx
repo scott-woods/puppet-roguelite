@@ -142,11 +142,6 @@
   <object id="27" type="EnemySpawnPoint" x="208" y="224">
    <point/>
   </object>
-  <object id="28" type="Chest" x="160" y="48" width="16" height="32">
-   <properties>
-    <property name="ChestSize" propertytype="chestSize" value="Small"/>
-    <property name="ChestType" propertytype="chestType" value="Key"/>
-   </properties>
-  </object>
+  <object id="28" type="KeyChest" x="160" y="48" width="16" height="32"/>
  </objectgroup>
 </map>

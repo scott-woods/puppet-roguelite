@@ -1,4 +1,6 @@
-﻿using Nez.AI.FSM;
+﻿using Nez;
+using Nez.AI.FSM;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,12 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Begin();
 
+            //allow movement through enemies
+            Flags.UnsetFlag(ref _context.Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
+
+            //disable hurtbox
+            _context.Hurtbox.SetEnabled(false);
+
             _context.ExecuteDash(OnDashCompleted);
         }
 
@@ -24,6 +32,12 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public override void End()
         {
             base.End();
+
+            //reenable collisions with enemies
+            Flags.SetFlag(ref _context.Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
+
+            //reenable hurtbox
+            _context.Hurtbox.SetEnabled(true);
 
             _context.Dash.Abort();
         }

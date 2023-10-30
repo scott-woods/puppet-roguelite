@@ -7,7 +7,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
@@ -104,7 +104,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             NewHealthbar.SetLocalOffset(new Vector2(0, -25));
 
             //knockback
-            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(200f, .25f, VelocityComponent, Hurtbox));
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(200f, .25f, 6, 2f, VelocityComponent, Hurtbox));
 
             //sprite flipper
             SpriteFlipper = Entity.AddComponent(new SpriteFlipper(Animator, VelocityComponent));
@@ -134,7 +134,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
                 .Selector(AbortTypes.Self)
                     .ConditionalDecorator(s =>
                     {
-                        var gameStateManager = Entity.Scene.GetOrCreateSceneComponent<GameStateManager>();
+                        var gameStateManager = Game1.GameStateManager;
                         return gameStateManager.GameState != GameState.Combat;
                     })
                         .Action(s =>

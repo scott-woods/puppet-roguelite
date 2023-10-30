@@ -199,15 +199,15 @@ namespace PuppetRoguelite.Components.Characters.Player
             {
                 case 1:
                     _activeFrame = 0;
-                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._32_Swoosh_sword_2, .5f);
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._32_Swoosh_sword_2, .3f);
                     break;
                 case 2:
                     _activeFrame = 0;
-                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._33_Swoosh_Sword_3, .5f);
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._33_Swoosh_Sword_3, .3f);
                     break;
                 case 3:
                     _activeFrame = 0;
-                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._31_swoosh_sword_1, .5f);
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._31_swoosh_sword_1, .3f);
                     break;
             }
         }

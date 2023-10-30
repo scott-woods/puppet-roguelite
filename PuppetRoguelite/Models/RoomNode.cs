@@ -17,6 +17,8 @@ namespace PuppetRoguelite.Models
         public bool NeedsRightDoor { get; set; }
         public RoomType RoomType { get; set; }
         public List<RoomNode> RoomNodes { get; set; }
+        public Entity MapEntity { get; set; }
+        public Map Map { get; set; }
 
         public RoomNode(Point point, bool needsTopDoor, bool needsBottomDoor, bool needsLeftDoor, bool needsRightDoor, RoomType roomType, List<RoomNode> roomNodes)
         {

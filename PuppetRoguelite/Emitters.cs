@@ -18,6 +18,7 @@ namespace PuppetRoguelite
         public static Emitter<ActionPointEvents, ActionPointComponent> ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
         public static Emitter<InteractableEvents> InteractableEmitter = new Emitter<InteractableEvents>();
         public static Emitter<CutsceneEvents> CutsceneEmitter = new Emitter<CutsceneEvents>();
+        public static Emitter<PlayerEvents> PlayerEventsEmitter = new Emitter<PlayerEvents>();
 
         public static void ResetEmitters()
         {
@@ -26,6 +27,7 @@ namespace PuppetRoguelite
             ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
             InteractableEmitter = new Emitter<InteractableEvents>();
             CutsceneEmitter = new Emitter<CutsceneEvents>();
+            PlayerEventsEmitter = new Emitter<PlayerEvents>();
         }
     }
 
@@ -63,5 +65,9 @@ namespace PuppetRoguelite
     {
         CutsceneStarted,
         CutsceneEnded,
+    }
+    public enum PlayerEvents
+    {
+        PlayerDied
     }
 }
