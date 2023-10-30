@@ -38,24 +38,31 @@ namespace PuppetRoguelite.SceneComponents
                 //emit started event
                 Emitter.Emit(TextboxEvents.TextboxOpened);
 
-                //read
-                while (_page < _dialogueLines.Count)
+                yield return _textbox.ReadLine(_dialogueLines[_page]);
+
+                while (IsActive)
                 {
-                    //read and wait until finished
-                    yield return _textbox.ReadLine(_dialogueLines[_page]);
-
-                    //wait until z key is pressed
-                    while (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
-                    {
-                        yield return null;
-                    }
-
-                    //increment page
-                    _page += 1;
+                    yield return null;
                 }
 
-                //close
-                CloseTextbox();
+                //read
+                //while (_page < _dialogueLines.Count)
+                //{
+                //    //read and wait until finished
+                //    yield return _textbox.ReadLine(_dialogueLines[_page]);
+
+                //    //wait until z key is pressed
+                //    while (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
+                //    {
+                //        yield return null;
+                //    }
+
+                //    //increment page
+                //    _page += 1;
+                //}
+
+                ////close
+                //CloseTextbox();
             }
         }
 
@@ -76,28 +83,24 @@ namespace PuppetRoguelite.SceneComponents
         {
             base.Update();
 
-            if (IsActive && !_textbox.IsFinishedReading)
+            if (IsActive && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
             {
-                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
+                if (_textbox.IsFinishedReading)
+                {
+                    _page++;
+                    if (_page < _dialogueLines.Count)
+                    {
+                        Game1.StartCoroutine(_textbox.ReadLine(_dialogueLines[_page]));
+                    }
+                    else
+                    {
+                        CloseTextbox();
+                    }
+                }
+                else
                 {
                     _textbox.SkipText();
                 }
-                //if (_textbox.IsFinishedReading && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Z))
-                //{
-                //    _page += 1;
-                //    if (_page < _dialogueLines.Count) //if there are more pages, read next page
-                //    {
-                //        _textbox.ReadLine(_dialogueLines[_page]);
-                //    }
-                //    else //otherwise, close textbox
-                //    {
-                //        CloseTextbox();
-                //    }
-                //}
-                //else if (!_textbox.IsFinishedReading && Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
-                //{
-                //    _textbox.SkipText();
-                //}
             }
         }
     }

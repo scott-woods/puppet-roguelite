@@ -106,8 +106,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             var hurtboxCollider = Entity.AddComponent(new BoxCollider(10, 20));
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
-            Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
+            Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, 887);
             Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 2f));
+            Hurtbox.SetEnabled(false);
 
             //add collision box
             Collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));

@@ -18,8 +18,8 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
     {
         //stats
         float _moveSpeed = 75f;
-        int _hp = 12;
-        int _maxHp = 12;
+        int _hp = 40;
+        int _maxHp = 40;
 
         //behavior tree
         BehaviorTree<ChainBot> _tree;
@@ -36,8 +36,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         BoxCollider _collider;
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
-        public Healthbar Healthbar;
-        public NewHealthbar NewHealthbar;
+        public NewHealthbar NewHealthbar { get; set; }
         public KnockbackComponent KnockbackComponent;
 
         //misc
@@ -68,7 +67,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
-            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, .2f, Nez.Content.Audio.Sounds.Chain_bot_damaged));
+            _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 0, Nez.Content.Audio.Sounds.Chain_bot_damaged));
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
@@ -164,9 +163,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                     {
                         var gameStateManager = Game1.GameStateManager;
                         return gameStateManager.GameState != GameState.Combat;
-                    })
+                    }, true)
                         .Action(c => c.Idle())
-                    .ConditionalDecorator(c => c.KnockbackComponent.IsStunned)
+                    .ConditionalDecorator(c => c.KnockbackComponent.IsStunned, true)
                         .Action(c => c.AbortActions())
                     .ConditionalDecorator(c => !c.KnockbackComponent.IsStunned, true)
                         .Sequence()
@@ -183,14 +182,14 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                                     .EndComposite()
                                     .Action(c => c._chainBotMelee.Execute())
                                 .EndComposite()
-                                .Sequence()
-                                    .Conditional(c =>
-                                    {
-                                        var gameStateManager = Game1.GameStateManager;
-                                        return gameStateManager.GameState == GameState.Combat;
-                                    })
-                                    .Action(c => c.Idle())
-                                .EndComposite()
+                                //.Sequence()
+                                //    .Conditional(c =>
+                                //    {
+                                //        var gameStateManager = Game1.GameStateManager;
+                                //        return gameStateManager.GameState == GameState.Combat;
+                                //    })
+                                //    .Action(c => c.Idle())
+                                //.EndComposite()
                             .EndComposite()
                         .EndComposite()
                 .EndComposite()

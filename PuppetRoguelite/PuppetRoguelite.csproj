@@ -407,17 +407,11 @@
     <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_05.png" />
     <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_06.png" />
     <None Remove="Content\Textures\UI\sliders.png" />
-    <None Remove="Icon.ico" />
-    <None Remove="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Icon.ico" />
-    <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FmodForFoxes" Version="3.0.0" />

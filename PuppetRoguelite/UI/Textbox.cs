@@ -80,21 +80,29 @@ namespace PuppetRoguelite.UI
             _currentText = text;
 
             int count = 1;
+            float characterInterval = .05f;
+            float timer = 0;
+
             while (count <= text.Length)
             {
-                _text.SetText(text.Substring(0, count));
+                timer += Time.DeltaTime;
 
-                //play sound
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Default_text);
+                if (timer >= characterInterval)
+                {
+                    _text.SetText(text.Substring(0, count));
 
-                //Set frames to wait to 2, or 30 if the last character was a comma for extra pause
-                var framesToWait = text[count - 1] == ',' ? 1250f : 275f;
+                    //play sound
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Default_text);
 
-                //yield
-                yield return Coroutine.WaitForSeconds(framesToWait * Time.DeltaTime);
+                    //set timer to 0 and increment counter
+                    timer = 0;
+                    count++;
 
-                //increment counter
-                count++;
+                    //adjust characterInterval if the last character was a comma for extra pause
+                    characterInterval = count < text.Length && text[count - 1] == ',' ? .3f : .06f;
+                }
+
+                yield return null;
             }
 
             IsFinishedReading = true;
