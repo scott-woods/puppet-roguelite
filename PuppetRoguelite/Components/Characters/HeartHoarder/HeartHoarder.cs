@@ -35,6 +35,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public NewHealthbar NewHealthbar;
         public KnockbackComponent KnockbackComponent;
         public YSorter YSorter;
+        public OriginComponent OriginComponent;
 
         //misc
         float _normalMoveSpeed = 100f;
@@ -70,6 +71,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
             Flags.SetFlagExclusive(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
 
+            OriginComponent = Entity.AddComponent(new OriginComponent(Collider));
+
             var hurtboxCollider = Entity.AddComponent(new BoxCollider(-10, 18, 18, 37));
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
@@ -78,8 +81,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _normalMoveSpeed));
 
-            PathfindingComponent = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
-            PathfindingComponent.Offset = new Vector2(0, Collider.LocalOffset.Y + (Collider.Height / 2));
+            PathfindingComponent = Entity.AddComponent(new PathfindingComponent(VelocityComponent, OriginComponent, MapEntity));
 
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
@@ -89,7 +91,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, 3, 5f, VelocityComponent, Hurtbox));
 
-            YSorter = Entity.AddComponent(new YSorter(Animator, 43));
+            YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
 
             MovingAttackHitbox = Entity.AddComponent(new BoxHitbox(2, new Rectangle(-35, 35, 71, 18)));
             Flags.SetFlagExclusive(ref MovingAttackHitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
@@ -176,7 +178,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                         .ConditionalDecorator(h => !h.KnockbackComponent.IsStunned, true) //if not stunned, select something to do
                             .Sequence() //main sequence
                                 .ParallelSelector() //move towards player for time or until within certain distance
-                                    .Conditional(h => Math.Abs(Vector2.Distance(h.PathfindingComponent.Origin, PlayerController.Instance.Entity.Position)) < 24)
+                                    .Conditional(h => Math.Abs(Vector2.Distance(h.OriginComponent.Origin, PlayerController.Instance.Entity.Position)) < 24)
                                     .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
                                     .Sequence()
                                         .Action(h => h.WaitForAnimation("StartMovingRight"))
@@ -194,7 +196,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                                     }, false)
                                         .Sequence() //stationary attack
                                             .ParallelSelector()
-                                                .Conditional(h => Math.Abs(Vector2.Distance(h.PathfindingComponent.Origin, PlayerController.Instance.Entity.Position)) < 32)
+                                                .Conditional(h => Math.Abs(Vector2.Distance(h.OriginComponent.Origin, PlayerController.Instance.Entity.Position)) < 32)
                                                 .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
                                                 .Sequence()
                                                     .Action(h => h.WaitForAnimation("StartMovingRight"))
@@ -214,8 +216,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                                             .ParallelSelector()
                                                 .Conditional(h =>
                                                 {
-                                                    var xDist = Math.Abs(h.PathfindingComponent.Origin.X - PlayerController.Instance.Entity.Position.X);
-                                                    var yDist = Math.Abs(h.PathfindingComponent.Origin.Y - PlayerController.Instance.Entity.Position.Y);
+                                                    var xDist = Math.Abs(h.OriginComponent.Origin.X - PlayerController.Instance.Entity.Position.X);
+                                                    var yDist = Math.Abs(h.OriginComponent.Origin.Y - PlayerController.Instance.Entity.Position.Y);
                                                     if (xDist <= 24 && yDist <= 24)
                                                     {
                                                         return true;
@@ -224,7 +226,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                                                 })
                                                 .Action(h =>
                                                 {
-                                                    var xDist = PlayerController.Instance.Entity.Position.X - h.PathfindingComponent.Origin.X;
+                                                    var xDist = PlayerController.Instance.Entity.Position.X - h.OriginComponent.Origin.X;
                                                     Vector2 target;
                                                     if (xDist > 0)
                                                     {

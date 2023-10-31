@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilemaps/boss_room.tmx",
+    "activeFile": "Tilemaps/hub.tmx",
     "expandedProjectPaths": [
-        ".",
         "Tilesets",
+        ".",
         "Templates",
         "Tilemaps"
     ],
@@ -110,6 +110,9 @@
             }
         },
         "Tilemaps/L_1.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
@@ -118,6 +121,9 @@
             }
         },
         "Tilemaps/R_1.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
@@ -203,6 +209,9 @@
             }
         },
         "Tilemaps/T_1.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
@@ -237,10 +246,10 @@
                 3
             ],
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 255.66666666666663,
-                "y": 246
+                "x": 364.3333333333333,
+                "y": 198.66666666666663
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -276,12 +285,16 @@
                 "y": 62.017860535816084
             }
         },
-        "Tilesets/dungeon_prison_props.tsx": {
+        "Tilesets/blood_temple_tileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "Tilesets/dungeon_prison_tileset.tsx": {
+        "Tilesets/dungeon_prison_props.tsx": {
             "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "Tilesets/dungeon_prison_tileset.tsx": {
+            "scaleInDock": 1.5,
             "scaleInEditor": 1
         }
     },
@@ -292,40 +305,34 @@
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
+        "Tilesets/blood_temple_tileset.tsx",
+        "Tilesets/dungeon_prison_props.tsx",
+        "Tilemaps/bedroom.tmx",
+        "Tilemaps/hub.tmx",
         "Tilemaps/boss_room.tmx",
         "Tilemaps/left_key_room.tmx",
-        "Tilemaps/LR_1.tmx",
         "Tilemaps/right_key_room.tmx",
-        "Tilemaps/TBR_1.tmx",
-        "Tilemaps/TL_1.tmx",
-        "Tilemaps/TLR_1.tmx",
-        "Tilemaps/TR_1.tmx",
-        "Tilemaps/pre_boss_room.tmx",
+        "Tilemaps/L_1.tmx",
+        "Tilemaps/LR_1.tmx",
         "Tilemaps/B_1.tmx",
         "Tilemaps/R_1.tmx",
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx",
-        "Tilemaps/BL_1.tmx",
-        "Tilemaps/BLR_1.tmx",
-        "Tilemaps/BR_1.tmx",
-        "Tilemaps/TB_1.tmx",
-        "Tilemaps/TBL_1.tmx",
-        "Tilemaps/TBLR_1.tmx"
+        "Tilemaps/T_1.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "chestSize",
     "recentFiles": [
-        "Tilemaps/pre_boss_room.tmx",
+        "Tilesets/blood_temple_tileset.tsx",
+        "Tilesets/dungeon_prison_props.tsx",
+        "Tilemaps/bedroom.tmx",
+        "Tilemaps/T_1.tmx",
+        "Tilemaps/R_1.tmx",
+        "Tilemaps/B_1.tmx",
+        "Tilemaps/LR_1.tmx",
+        "Tilemaps/L_1.tmx",
         "Tilemaps/right_key_room.tmx",
         "Tilemaps/left_key_room.tmx",
         "Tilemaps/boss_room.tmx",
-        "Tilemaps/LR_1.tmx",
-        "Tilemaps/TBR_1.tmx",
-        "Tilemaps/TL_1.tmx",
-        "Tilemaps/TLR_1.tmx",
-        "Tilemaps/TR_1.tmx",
-        "Tilemaps/B_1.tmx",
-        "Tilemaps/R_1.tmx",
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx"
+        "Tilemaps/hub.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

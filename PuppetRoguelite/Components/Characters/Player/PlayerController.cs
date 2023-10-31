@@ -59,6 +59,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public Dash Dash;
         public SpriteTrail _spriteTrail;
         public KnockbackComponent KnockbackComponent;
+        public OriginComponent OriginComponent;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -118,6 +119,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
             //Collider.SetEnabled(false);
 
+            //origin
+            OriginComponent = Entity.AddComponent(new OriginComponent(Collider));
+
             //Add health component
             HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
             HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
@@ -135,7 +139,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _inventory.AddItem(new CerealBox("feef"));
 
             //ySort
-            _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, 12));
+            _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, OriginComponent));
 
             //velocity component
             VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, MoveSpeed));

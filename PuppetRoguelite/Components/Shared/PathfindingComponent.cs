@@ -11,30 +11,20 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class PathfindingComponent : Component
     {
-        /// <summary>
-        /// offset from the entity's position to calculate path from
-        /// </summary>
-        public Vector2 Offset = Vector2.Zero;
-
-        /// <summary>
-        /// Returns the entity's position + the pathfinding offset
-        /// </summary>
-        public Vector2 Origin { get => Entity.Position + Offset; }
-
         int _pathDesiredDistance;
         int _targetDesiredDistance;
 
         GridGraphManager _gridGraphManager;
         VelocityComponent _velocityComponent;
+        OriginComponent _originComponent;
 
         public Entity MapEntity;
 
-        List<Entity> points = new List<Entity>();
-
-        public PathfindingComponent(VelocityComponent velocityComponent, Entity mapEntity, int pathDesiredDistance = 16, int targetDesiredDistance = 16)
+        public PathfindingComponent(VelocityComponent velocityComponent, OriginComponent originComponent, Entity mapEntity, int pathDesiredDistance = 16, int targetDesiredDistance = 16)
         {
             MapEntity = mapEntity;
             _velocityComponent = velocityComponent;
+            _originComponent = originComponent;
             _pathDesiredDistance = pathDesiredDistance;
             _targetDesiredDistance = targetDesiredDistance;
         }
@@ -54,7 +44,7 @@ namespace PuppetRoguelite.Components.Shared
         /// <returns></returns>
         public bool FollowPath(Vector2 target, bool applySmoothing = true)
         {
-            var origin = Entity.Position + Offset;
+            var origin = _originComponent.Origin;
 
             if (Math.Abs(Vector2.Distance(origin, target)) <= _targetDesiredDistance)
             {

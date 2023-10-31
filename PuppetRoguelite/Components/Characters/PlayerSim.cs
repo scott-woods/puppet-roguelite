@@ -19,6 +19,7 @@ namespace PuppetRoguelite.Components.Characters
         //components
         SpriteAnimator _spriteAnimator;
         YSorter _ySorter;
+        OriginComponent _originComponent;
 
         public PlayerSim(Vector2 direction)
         {
@@ -38,7 +39,9 @@ namespace PuppetRoguelite.Components.Characters
             _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
             _spriteAnimator.SetColor(new Color(Color.White, 128));
 
-            _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, 12));
+            _originComponent = Entity.AddComponent(new OriginComponent(new Vector2(0, 12)));
+
+            _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, _originComponent));
         }
 
         void AddAnimations()

@@ -37,6 +37,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         PrototypeSpriteRenderer _target;
         YSorter _ySorter;
         SpriteTrail _trail;
+        OriginComponent _originComponent;
 
         List<Component> _componentsList = new List<Component>();
 
@@ -60,7 +61,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _hitbox.PushForce = 0f;
             _componentsList.Add(_hitbox);
 
-            _ySorter = Entity.AddComponent(new YSorter(_animator, 12));
+            _originComponent = Entity.AddComponent(new OriginComponent(new Vector2(0, 12)));
+            _componentsList.Add(_originComponent);
+
+            _ySorter = Entity.AddComponent(new YSorter(_animator, _originComponent));
             _componentsList.Add(_ySorter);
 
             _target = new PrototypeSpriteRenderer(8, 8);

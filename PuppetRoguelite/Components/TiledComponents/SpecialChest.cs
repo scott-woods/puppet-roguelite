@@ -31,8 +31,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             _openSprite = new Sprite(chestTexture, new RectangleF(32, 0, 32, 32));
             _closedSprite = new Sprite(chestTexture, new RectangleF(0, 0, 32, 32));
             _renderer.SetSprite(_closedSprite);
-
-            _ySorter.SetOffset((int)_renderer.Bounds.Height / 2);
+            _renderer.SetRenderLayer(-(int)_renderer.Bounds.Center.Y);
 
             _collider = Entity.AddComponent(new BoxCollider(-16, 0, 32, 16));
         }

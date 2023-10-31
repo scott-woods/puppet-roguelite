@@ -18,8 +18,8 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
     {
         //stats
         float _moveSpeed = 75f;
-        int _hp = 40;
-        int _maxHp = 40;
+        int _hp = 12;
+        int _maxHp = 12;
 
         //behavior tree
         BehaviorTree<ChainBot> _tree;
@@ -38,6 +38,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public VelocityComponent VelocityComponent;
         public NewHealthbar NewHealthbar { get; set; }
         public KnockbackComponent KnockbackComponent;
+        public OriginComponent OriginComponent;
 
         //misc
         bool _isActive = true;
@@ -83,16 +84,18 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 
+            //origin
+            OriginComponent = Entity.AddComponent(new OriginComponent(_collider));
+
             //pathfinding
-            Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
-            Pathfinder.Offset = new Vector2(_collider.LocalOffset.X + (_collider.Width / 2), _collider.LocalOffset.Y + (_collider.Height / 2));
+            Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, OriginComponent, MapEntity));
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
 
             //y sorter
-            _ySorter = Entity.AddComponent(new YSorter(Animator, 12));
+            _ySorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
 
             //actions
             _chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));

@@ -22,7 +22,6 @@ namespace PuppetRoguelite.Components.TiledComponents
         SpriteRenderer _renderer;
         Collider _collider;
         ExitArea _exitArea;
-        YSorter _ySorter;
 
         public BossGate(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
@@ -37,13 +36,12 @@ namespace PuppetRoguelite.Components.TiledComponents
             _openSprite = new Sprite(bossGateTexture, 32, 0, 32, 48);
             _closedSprite = new Sprite(bossGateTexture, 0, 0, 32, 48);
 
-            _renderer = Entity.AddComponent(new SpriteRenderer());
-            _renderer.SetSprite(_closedSprite);
-
             _collider = Entity.AddComponent(new BoxCollider());
             _collider.SetEnabled(true);
 
-            _ySorter = Entity.AddComponent(new YSorter(_renderer, (int)_renderer.Bounds.Height / 2));
+            _renderer = Entity.AddComponent(new SpriteRenderer());
+            _renderer.SetSprite(_closedSprite);
+            _renderer.RenderLayer = -(int)_collider.Bounds.Center.Y;
         }
 
         public override void OnAddedToEntity()

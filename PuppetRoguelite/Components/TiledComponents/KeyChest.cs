@@ -44,15 +44,14 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             base.Initialize();
 
+            _collider = Entity.AddComponent(new BoxCollider(-8, 0, 16, 16));
+
             //load sprites
             var chestTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Chest);
             _openSprite = new Sprite(chestTexture, new RectangleF(0, 0, TmxObject.Width, TmxObject.Height));
             _closedSprite = new Sprite(chestTexture, new RectangleF(TmxObject.Width, 0, TmxObject.Width, TmxObject.Height));
             _renderer.SetSprite(_closedSprite);
-
-            _ySorter.SetOffset((int)_renderer.Bounds.Height / 2);
-
-            _collider = Entity.AddComponent(new BoxCollider(-8, 0, 16, 16));
+            _renderer.SetRenderLayer(-(int)_collider.Bounds.Center.Y);
         }
 
         public override IEnumerator HandleInteraction()

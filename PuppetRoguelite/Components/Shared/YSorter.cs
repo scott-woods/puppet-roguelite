@@ -11,25 +11,25 @@ namespace PuppetRoguelite.Components.Shared
     public class YSorter : Component, IUpdatable
     {
         IRenderable _renderable;
-        int _offset;
+        OriginComponent _originComponent;
 
-        public YSorter(IRenderable renderable, int offset)
+        public YSorter(IRenderable renderable, OriginComponent originComponent)
         {
             _renderable = renderable;
-            _offset = offset;
+            _originComponent = originComponent;
         }
 
         public void Update()
         {
             if (_renderable != null)
             {
-                _renderable.RenderLayer = -(int)(Entity.Position.Y + _offset);
+                _renderable.RenderLayer = -(int)(_originComponent.Origin.Y);
             }
         }
 
-        public void SetOffset(int offset)
+        public void SetOriginComponent(OriginComponent originComponent)
         {
-            _offset = offset;
+            _originComponent = originComponent;
         }
     }
 }

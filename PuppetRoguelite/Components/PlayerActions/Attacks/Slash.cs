@@ -36,6 +36,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         SpriteAnimator _animator;
         CircleHitbox _hitbox;
         YSorter _ySorter;
+        OriginComponent _originComponent;
 
         public override void Initialize()
         {
@@ -152,7 +153,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
 
-            _ySorter = Entity.AddComponent(new YSorter(_animator, 12));
+            _originComponent = Entity.AddComponent(new OriginComponent(new Vector2(0, 12)));
+
+            _ySorter = Entity.AddComponent(new YSorter(_animator, _originComponent));
 
             //add hitbox
             _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 10));

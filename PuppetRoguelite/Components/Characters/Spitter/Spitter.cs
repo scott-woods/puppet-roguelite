@@ -42,6 +42,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         public NewHealthbar NewHealthbar;
         public KnockbackComponent KnockbackComponent;
         public SpriteFlipper SpriteFlipper;
+        public OriginComponent OriginComponent;
 
         //actions
         public SpitAttack SpitAttack;
@@ -86,18 +87,20 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             //collider
             Collider = Entity.AddComponent(new BoxCollider(-5, 13, 9, 6));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
+            Flags.UnsetFlag(ref Collider.CollidesWithLayers, -1);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 
+            OriginComponent = Entity.AddComponent(new OriginComponent(Collider));
+
             //pathfinding
-            Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, MapEntity));
-            Pathfinder.Offset = new Vector2(Collider.LocalOffset.X + (Collider.Width / 2), Collider.LocalOffset.Y + (Collider.Height / 2));
+            Pathfinder = Entity.AddComponent(new PathfindingComponent(VelocityComponent, OriginComponent, MapEntity));
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
 
             //y sorter
-            YSorter = Entity.AddComponent(new YSorter(Animator, 12));
+            YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
 
             //new healthbar
             NewHealthbar = Entity.AddComponent(new NewHealthbar(HealthComponent));

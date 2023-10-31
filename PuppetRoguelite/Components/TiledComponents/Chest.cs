@@ -23,7 +23,6 @@ namespace PuppetRoguelite.Components.TiledComponents
         protected SpriteRenderer _renderer;
         protected Collider _collider;
         protected Interactable _interactable;
-        protected YSorter _ySorter;
 
         public Chest(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
@@ -35,8 +34,6 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _renderer = Entity.AddComponent(new SpriteRenderer());
-
-            _ySorter = Entity.AddComponent(new YSorter(_renderer, 0));
 
             _interactable = Entity.AddComponent(new Interactable(HandleInteraction));
         }
