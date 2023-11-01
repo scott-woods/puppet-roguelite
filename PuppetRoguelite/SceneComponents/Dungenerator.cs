@@ -320,7 +320,6 @@ namespace PuppetRoguelite.SceneComponents
                 if (_nodes.FirstOrDefault(n => n.Point == point) != null)
                 {
                     node = _nodes.FirstOrDefault(n => n.Point == point);
-                    continue;
                 }
                 else
                 {
@@ -331,10 +330,10 @@ namespace PuppetRoguelite.SceneComponents
                 if (i > 0)
                 {
                     Point previousPoint = finalPath[i - 1];
-                    node.NeedsLeftDoor = (previousPoint.X < node.Point.X);
-                    node.NeedsTopDoor = (previousPoint.Y < node.Point.Y);
-                    node.NeedsRightDoor = (previousPoint.X > node.Point.X);
-                    node.NeedsBottomDoor = (previousPoint.Y > node.Point.Y);
+                    node.NeedsLeftDoor |= (previousPoint.X < node.Point.X);
+                    node.NeedsTopDoor |= (previousPoint.Y < node.Point.Y);
+                    node.NeedsRightDoor |= (previousPoint.X > node.Point.X);
+                    node.NeedsBottomDoor |= (previousPoint.Y > node.Point.Y);
                 }
 
                 if (i < finalPath.Count - 1)
@@ -355,115 +354,48 @@ namespace PuppetRoguelite.SceneComponents
         /// </summary>
         public bool CreatePaths()
         {
-            if (!CreatePathAndNodes(_leftKeyPoint + new Point(1, 0), _hubPoint)) return false;
-            if (!CreatePathAndNodes(_rightKeyPoint + new Point(-1, 0), _hubPoint)) return false;
+            var leftKeyEntrancePoint = _leftKeyPoint + new Point(1, 0);
+            if (!CreatePathAndNodes(leftKeyEntrancePoint, _hubPoint)) return false;
+            var leftKeyEntranceNode = _nodes.Where(n => n.Point == leftKeyEntrancePoint).First();
+            leftKeyEntranceNode.NeedsLeftDoor = true;
 
+            var rightKeyEntrancePoint = _rightKeyPoint + new Point(-1, 0);
+            if (!CreatePathAndNodes(rightKeyEntrancePoint, _hubPoint)) return false;
+            var rightKeyEntranceNode = _nodes.Where(n => n.Point == rightKeyEntrancePoint).First();
+            rightKeyEntranceNode.NeedsRightDoor = true;
+
+            var leftPreBossEntrance = new Point(_preBossPoint.X - 1, _preBossPoint.Y);
+            var rightPreBossEntrance = new Point(_preBossPoint.X + 1, _preBossPoint.Y);
+            var bottomPreBossEntrance = new Point(_preBossPoint.X, _preBossPoint.Y + 1);
             List<Point> preBossEntrances = new List<Point>()
             {
-                new Point(_preBossPoint.X + 1, _preBossPoint.Y),
-                new Point(_preBossPoint.X, _preBossPoint.Y + 1),
-                new Point(_preBossPoint.X - 1, _preBossPoint.Y)
+                leftPreBossEntrance, rightPreBossEntrance, bottomPreBossEntrance
             };
 
             while (preBossEntrances.Count > 0)
             {
                 var point = preBossEntrances.RandomItem();
                 preBossEntrances.Remove(point);
-                if (CreatePathAndNodes(point, _hubPoint)) break;
+                if (CreatePathAndNodes(point, _hubPoint))
+                {
+                    var preBossEntranceNode = _nodes.Where(n => n.Point == point).First();
+                    if (preBossEntranceNode.Point == leftPreBossEntrance)
+                    {
+                        preBossEntranceNode.NeedsRightDoor = true;
+                    }
+                    else if (preBossEntranceNode.Point == rightPreBossEntrance)
+                    {
+                        preBossEntranceNode.NeedsLeftDoor = true;
+                    }
+                    else if (preBossEntranceNode.Point == bottomPreBossEntrance)
+                    {
+                        preBossEntranceNode.NeedsTopDoor = true;
+                    }
+
+                    break;
+                }
                 else if (preBossEntrances.Count == 0) return false;
             }
-
-            //var leftKeyEntrance = _leftKeyPoint + new Point(1, 0);
-            //var leftKeyToHub = _graph.Search(leftKeyEntrance, _hubPoint);
-            //if (leftKeyToHub == null)
-            //{
-            //    return false;
-            //}
-            //for (int i = 0; i < leftKeyToHub.Count; i++)
-            //{
-            //    var pathPoint = leftKeyToHub[i];
-
-            //    var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
-            //    if (node != null)
-            //    {
-            //        if (i == 0)
-            //        {
-            //            node.NeedsLeftDoor = true;
-            //        }
-            //        continue;
-            //    }
-            //    else
-            //    {
-            //        node = new RoomNode(pathPoint, false, false, true, false, RoomType.Normal, _nodes);
-            //        _nodes.Add(node);
-            //    }
-            //}
-
-            //var rightKeyEntrance = _rightKeyPoint + new Point(-1, 0);
-            //var rightKeyToHub = _graph.Search(rightKeyEntrance, _hubPoint);
-            //if (rightKeyToHub == null)
-            //{
-            //    return false;
-            //}
-            //for (int i = 0; i < rightKeyToHub.Count; i++)
-            //{
-            //    var pathPoint = rightKeyToHub[i];
-
-            //    var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
-            //    if (node != null)
-            //    {
-            //        if (i == 0)
-            //        {
-            //            node.NeedsRightDoor = true;
-            //        }
-            //        continue;
-            //    }
-            //    else
-            //    {
-            //        node = new RoomNode(pathPoint, false, false, false, true, RoomType.Normal, _nodes);
-            //        _nodes.Add(node);
-            //    }
-            //}
-
-            //var preBossEntrances = new List<Point>
-            //{
-            //    new Point(_preBossPoint.X + 1, _preBossPoint.Y),
-            //    new Point(_preBossPoint.X, _preBossPoint.Y + 1),
-            //    new Point(_preBossPoint.X - 1, _preBossPoint.Y)
-            //};
-            //_graph.Walls.Add(_preBossPoint);
-            //var shortestPath = new List<Point>();
-            //foreach (var point in preBossEntrances)
-            //{
-            //    var path = _graph.Search(point, _hubPoint);
-            //    if (path != null)
-            //    {
-            //        if (path.Count < shortestPath.Count || shortestPath.Count == 0)
-            //        {
-            //            shortestPath = path;
-            //        }
-            //    }
-            //}
-            //if (shortestPath.Count == 0)
-            //{
-            //    return false;
-            //}
-            //for (int i = 0; i < shortestPath.Count; i++)
-            //{
-            //    var pathPoint = shortestPath[i];
-
-            //    var node = _nodes.Where(n => n.Point == pathPoint).FirstOrDefault();
-            //    if (node != null)
-            //    {
-            //        continue;
-            //    }
-            //    else
-            //    {
-            //        node = new RoomNode(pathPoint, false, false, false, false, RoomType.Normal, _nodes);
-            //        _nodes.Add(node);
-            //    }
-            //}
-            //_graph.Walls.Remove(_preBossPoint);
 
             return true;
         }
@@ -475,30 +407,110 @@ namespace PuppetRoguelite.SceneComponents
         {
             foreach (var node in _nodes)
             {
-                switch (node.RoomType)
+                if (node.Map == null)
                 {
-                    case RoomType.Hub:
-                        //CreateMap(node, Nez.Content.Tiled.Tilemaps.Hub_room);
-                        if (!CreateMap(node)) return false;
-                        break;
-                    case RoomType.Key:
-                        var mapString = node.NeedsLeftDoor ? Content.Tiled.Tilemaps.Right_key_room : Content.Tiled.Tilemaps.Left_key_room;
-                        if (!CreateMap(node, mapString)) return false;
-                        break;
-                    case RoomType.PreBoss:
-                        if (!CreateMap(node, Content.Tiled.Tilemaps.Pre_boss_room)) return false;
-                        //if (!CreateMap(node)) return false;
-                        break;
-                    case RoomType.Boss:
-                        if (!CreateMap(node, Content.Tiled.Tilemaps.Boss_room)) return false;
-                        break;
-                    case RoomType.Normal:
-                        if (!CreateMap(node)) return false;
-                        break;
+                    var topPoint = new Point(node.Point.X, node.Point.Y - 1);
+                    if (topPoint.Y < 0) node.NeedsTopDoor = false;
+                    var topNode = _nodes.FirstOrDefault(n => n.Point ==  topPoint);
+                    if (topNode != null)
+                    {
+                        if (topNode.NeedsBottomDoor) node.NeedsTopDoor = true;
+                        else if (topNode.Map != null)
+                        {
+                            if (topNode.Map.HasBottom) node.NeedsTopDoor = true;
+                        }
+                    }
+
+                    var bottomPoint = new Point(node.Point.X, node.Point.Y + 1);
+                    if (bottomPoint.Y >= _gridSize.Y) node.NeedsBottomDoor = false;
+                    var bottomNode = _nodes.FirstOrDefault(n => n.Point == bottomPoint);
+                    if (bottomNode != null)
+                    {
+                        if (bottomNode.NeedsTopDoor) node.NeedsBottomDoor = true;
+                        else if (bottomNode.Map != null)
+                        {
+                            if (bottomNode.Map.HasTop) node.NeedsBottomDoor = true;
+                        }
+                    }
+
+                    var leftPoint = new Point(node.Point.X - 1, node.Point.Y);
+                    if (leftPoint.X < 0) node.NeedsLeftDoor = false;
+                    var leftNode = _nodes.FirstOrDefault(n => n.Point == leftPoint);
+                    if (leftNode != null)
+                    {
+                        if (leftNode.NeedsRightDoor) node.NeedsLeftDoor = true;
+                        else if (leftNode.Map != null)
+                        {
+                            if (leftNode.Map.HasRight) node.NeedsLeftDoor = true;
+                        }
+                    }
+
+                    var rightPoint = new Point(node.Point.X + 1, node.Point.Y);
+                    if (rightPoint.X >= _gridSize.X) node.NeedsRightDoor = false;
+                    var rightNode = _nodes.FirstOrDefault(n => n.Point == rightPoint);
+                    if (rightNode != null)
+                    {
+                        if (rightNode.NeedsLeftDoor) node.NeedsRightDoor = true;
+                        else if (rightNode.Map != null)
+                        {
+                            if (rightNode.Map.HasLeft) node.NeedsRightDoor = true;
+                        }
+                    }
+
+                    var possibleMaps = _maps.Where(m =>
+                    {
+                        if (node.NeedsTopDoor == m.HasTop
+                        && node.NeedsBottomDoor == m.HasBottom
+                        && node.NeedsLeftDoor == m.HasLeft
+                        && node.NeedsRightDoor == m.HasRight)
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    }).ToList();
+
+                    if (possibleMaps.Any())
+                    {
+                        node.Map = possibleMaps.RandomItem();
+                    }
+                    else return false;
                 }
+
+                var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
+                var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
+                mapEntity.SetPosition(mapPosition);
+                Scene.AddEntity(mapEntity);
+                var map = Scene.Content.LoadTiledMap(node.Map.Name);
+                var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
+                mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+                mapRenderer.RenderLayer = 10;
+                mapEntity.AddComponent(new GridGraphManager(mapRenderer));
+                mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
+                node.MapEntity = mapEntity;
+
+                //switch (node.RoomType)
+                //{
+                //    case RoomType.Hub:
+                //        //CreateMap(node, Nez.Content.Tiled.Tilemaps.Hub_room);
+                //        if (!CreateMap(node)) return false;
+                //        break;
+                //    case RoomType.Key:
+                //        var mapString = node.NeedsLeftDoor ? Content.Tiled.Tilemaps.Right_key_room : Content.Tiled.Tilemaps.Left_key_room;
+                //        if (!CreateMap(node, mapString)) return false;
+                //        break;
+                //    case RoomType.PreBoss:
+                //        if (!CreateMap(node, Content.Tiled.Tilemaps.Pre_boss_room)) return false;
+                //        //if (!CreateMap(node)) return false;
+                //        break;
+                //    case RoomType.Boss:
+                //        if (!CreateMap(node, Content.Tiled.Tilemaps.Boss_room)) return false;
+                //        break;
+                //    case RoomType.Normal:
+                //        if (!CreateMap(node)) return false;
+                //        break;
+                //}
             }
-
-
 
             return true;
         }
@@ -524,12 +536,6 @@ namespace PuppetRoguelite.SceneComponents
                     }
 
                     return false;
-                    //if (node.NeedsTopDoor && !m.HasTop) return false;
-                    //if (node.NeedsBottomDoor && !m.HasBottom) return false;
-                    //if (node.NeedsLeftDoor && !m.HasLeft) return false;
-                    //if (node.NeedsRightDoor && !m.HasRight) return false;
-
-                    //return true;
                 }).ToList();
 
                 if (possibleMaps.Any())
@@ -539,13 +545,6 @@ namespace PuppetRoguelite.SceneComponents
                 }
                 else return false;
             }
-
-            //var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
-            //var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
-            //mapEntity.SetPosition(mapPosition);
-            //Scene.AddEntity(mapEntity);
-            //mapEntity.AddComponent(new DungeonRoom(node, mapString));
-            //_roomDictionary.Add(node.Point, mapEntity);
 
             var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
             var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
@@ -602,9 +601,6 @@ namespace PuppetRoguelite.SceneComponents
                         if (dir.X > 0 && nodeToCheck.NeedsLeftDoor) return true;
                         else if (dir.X < 0 && nodeToCheck.NeedsRightDoor) return true;
                         else return false;
-                    case RoomType.Boss:
-                        if (baseNode.RoomType == RoomType.PreBoss) return true;
-                        else return false;
                     case RoomType.PreBoss:
                     case RoomType.Normal:
                     case RoomType.Hub:
@@ -641,10 +637,6 @@ namespace PuppetRoguelite.SceneComponents
 
                         nodesToProcess.Enqueue(adjacentNode);
                     }
-
-                    // Update the doors to indicate a connection
-                    //UpdateDoorConnection(node, direction, true);
-                    //UpdateDoorConnection(adjacentNode, OppositeDirection(direction), true);
                 }
             }
         }
