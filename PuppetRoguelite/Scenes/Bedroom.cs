@@ -24,6 +24,9 @@ namespace PuppetRoguelite.Scenes
         {
             base.Initialize();
 
+            //camera handler
+            var camHandler = AddSceneComponent(new CameraHandler());
+
             //map renderer
             _mapEntity = CreateEntity("map");
             var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Bedroom);
@@ -50,6 +53,9 @@ namespace PuppetRoguelite.Scenes
         public override void OnStart()
         {
             base.OnStart();
+
+            var camHandler = GetOrCreateSceneComponent<CameraHandler>();
+            camHandler.FormatCamera();
 
             if (!Game1.AudioManager.IsPlayingMusic(Music.TheBay.Path))
             {

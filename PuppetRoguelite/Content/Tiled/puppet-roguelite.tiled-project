@@ -253,6 +253,26 @@
             ]
         },
         {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 17,
+            "members": [
+            ],
+            "name": "SpecialChest",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
             "id": 2,
             "name": "triggerType",
             "storageType": "string",
@@ -266,10 +286,10 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
-            "id": 17,
+            "id": 18,
             "members": [
             ],
-            "name": "SpecialChest",
+            "name": "CameraBound",
             "type": "class",
             "useAs": [
                 "property",

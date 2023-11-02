@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using PuppetRoguelite.Components.TiledComponents;
+using PuppetRoguelite.SceneComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +21,35 @@ namespace PuppetRoguelite.Components
             Deadzone = new RectangleF(0, 0, deadzoneSize.X, deadzoneSize.Y);
         }
 
-        public override void OnAddedToEntity()
-        {
-        }
-
         public void Update()
         {
             if (_targetEntity != null)
             {
-                Transform.Position = GetTargetPosition();
+                var pos = GetTargetPosition();
+
+                var camHandler = Entity.Scene.GetOrCreateSceneComponent<CameraHandler>();
+                if (camHandler.IsFormatted)
+                {
+                    var camBounds = Entity.Scene.Camera.Bounds;
+                    if (pos.X - (camBounds.Width / 2) < camHandler.Left)
+                    {
+                        pos.X = camHandler.Left + (camBounds.Width / 2);
+                    }
+                    if (pos.X + (camBounds.Width / 2) > camHandler.Right)
+                    {
+                        pos.X = camHandler.Right - (camBounds.Width / 2);
+                    }
+                    if (pos.Y - (camBounds.Height / 2) < camHandler.Top)
+                    {
+                        pos.Y = camHandler.Top + (camBounds.Height / 2);
+                    }
+                    if (pos.Y + (camBounds.Height / 2) > camHandler.Bottom)
+                    {
+                        pos.Y = camHandler.Bottom - (camBounds.Height / 2);
+                    }
+                }
+
+                Entity.Position = pos;
             }
         }
 
