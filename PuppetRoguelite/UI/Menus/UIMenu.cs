@@ -29,7 +29,7 @@ namespace PuppetRoguelite.UI.Menus
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             //set default accept key
-            Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.Z;
+            Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.E;
 
             //load skin
             _defaultSkin = CustomSkins.CreateBasicSkin();

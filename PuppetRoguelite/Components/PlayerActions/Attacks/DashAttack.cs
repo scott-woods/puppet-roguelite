@@ -18,7 +18,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     public class DashAttack : PlayerAction
     {
         int _damage = 3;
-        int _range = 32;
+        int _range = 48;
         float _rotationSpeed = 175f;
         int _startFrame = 3;
         int[] _hitboxActiveFrames = new int[] { 3, 4, 5 };
@@ -71,8 +71,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
             _trail = Entity.AddComponent(new SpriteTrail(_animator));
             _trail.FadeDelay = 0f;
-            _trail.FadeDuration = .5f;
-            _trail.MinDistanceBetweenInstances = 8;
+            _trail.FadeDuration = .2f;
+            _trail.MinDistanceBetweenInstances = 12;
             _componentsList.Add(_trail);
         }
 
@@ -174,7 +174,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         void HandleInput()
         {
-            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Z))
+            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
             {
                 _animator.Stop();
                 _isPreparing = false;
@@ -182,33 +182,99 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 return;
             }
 
-            //rotate left or right
-            float speed = 0;
-            if (Input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left)) speed = -_rotationSpeed;
-            else if (Input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right)) speed = _rotationSpeed;
+            //calculate direction
+            _direction = Entity.Scene.Camera.MouseToWorldPoint() - InitialPosition;
+            _direction.Normalize();
 
-            speed *= Time.DeltaTime;
+            //calculate angle
+            _angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(InitialPosition, FinalPosition));
+            _angle = (_angle + 360) % 360;
 
-            //if pressing left or right, apply rotation
-            if (speed != 0)
-            {
-                //rotate target around center
-                FinalPosition = Mathf.RotateAround(FinalPosition, InitialPosition, speed);
+            var newFinalPos = InitialPosition + (_direction * _range);
+            FinalPosition = new Vector2((float)Math.Round(newFinalPos.X), (float)Math.Round(newFinalPos.Y));
 
-                //rotate entity around center
-                Entity.Position = Mathf.RotateAround(Entity.Position, InitialPosition, speed);
+            var initToEntity = Math.Min(_range, Math.Abs(Vector2.Distance(InitialPosition, Entity.Position)));
 
-                //calculate direction
-                _direction = FinalPosition - InitialPosition;
-                _direction.Normalize();
-
-                //calculate angle
-                _angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(InitialPosition, FinalPosition));
-                _angle = (_angle + 360) % 360;
-            }
+            var newPos = initToEntity == 0 ? Entity.Position : InitialPosition + (_direction * initToEntity);
+            Entity.Position = new Vector2((float)Math.Round(newPos.X), (float)Math.Round(newPos.Y));
 
             //update target
             _target.SetLocalOffset(FinalPosition - Entity.Position);
+
+            var mouse = Entity.Scene.FindComponentOfType<MouseCursor>();
+            if (mouse != null)
+            {
+                
+
+                //// Get the position of the mouse entity
+                //Vector2 mousePosition = mouse.Entity.Position;
+
+                //// Calculate the vector from InitialPosition to mousePosition
+                //Vector2 directionToMouse = mousePosition - InitialPosition;
+
+                //// Normalize the vector (to have a length of 1)
+                //directionToMouse.Normalize();
+
+                //// Calculate the angle (in radians) from InitialPosition to mousePosition
+                //_angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(InitialPosition, FinalPosition));
+                //float angleToMouse = (float)Math.Atan2(directionToMouse.Y, directionToMouse.X);
+
+                //// Optionally, you can convert the angle to degrees if needed
+                //float angleToMouseDegrees = MathHelper.ToDegrees(angleToMouse);
+                //_angle = (_angle + 360) % 360;
+
+                //// Now use this angle to update the position of your Entity and FinalPosition
+                //// You can use the angle to calculate a new position for the Entity around the InitialPosition
+                //float radius = Vector2.Distance(InitialPosition, Entity.Position);  // Assuming Entity is already positioned at some distance
+
+                //float angleToMouseRadians = MathHelper.ToRadians(_angle);
+
+                //Entity.Position = new Vector2(
+                //    (float)Math.Round(InitialPosition.X + radius * Math.Cos(angleToMouse)),
+                //    (float)Math.Round(InitialPosition.Y + radius * Math.Sin(angleToMouse))
+                //);
+
+                //// Do the same for FinalPosition if necessary
+                //FinalPosition = new Vector2(
+                //    (float)Math.Round(InitialPosition.X + _range * Math.Cos(angleToMouse)),
+                //    (float)Math.Round(InitialPosition.Y + _range * Math.Sin(angleToMouse))
+                //);
+
+                //// Update _direction, _angle, and _target as in your original code
+                //_direction = FinalPosition - InitialPosition;
+                //_direction.Normalize();
+                //_angle = angleToMouseDegrees;
+                
+                //_target.SetLocalOffset(FinalPosition - Entity.Position);
+            }
+
+            ////rotate left or right
+            //float speed = 0;
+            //if (Input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left)) speed = -_rotationSpeed;
+            //else if (Input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right)) speed = _rotationSpeed;
+
+            //speed *= Time.DeltaTime;
+
+            ////if pressing left or right, apply rotation
+            //if (speed != 0)
+            //{
+            //    //rotate target around center
+            //    FinalPosition = Mathf.RotateAround(FinalPosition, InitialPosition, speed);
+
+            //    //rotate entity around center
+            //    Entity.Position = Mathf.RotateAround(Entity.Position, InitialPosition, speed);
+
+            //    //calculate direction
+            //    _direction = FinalPosition - InitialPosition;
+            //    _direction.Normalize();
+
+            //    //calculate angle
+            //    _angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(InitialPosition, FinalPosition));
+            //    _angle = (_angle + 360) % 360;
+            //}
+
+            ////update target
+            //_target.SetLocalOffset(FinalPosition - Entity.Position);
         }
 
         string GetNextAnimation()
