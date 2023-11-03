@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.AI.FSM;
+using Nez.Persistence;
 using Nez.Sprites;
 using Nez.Systems;
 using Nez.Textures;
@@ -11,6 +12,7 @@ using PuppetRoguelite.Components.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
+using PuppetRoguelite.Interfaces;
 using PuppetRoguelite.Items;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
@@ -25,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player
 {
-    public class PlayerController : Component, IUpdatable
+    public class PlayerController : Component, IUpdatable, ITransferrable
     {
         public static PlayerController Instance { get; private set; } = new PlayerController();
 
@@ -87,11 +89,31 @@ namespace PuppetRoguelite.Components.Characters.Player
             StateMachine.AddState(new MoveState());
             StateMachine.AddState(new CutsceneState());
             StateMachine.AddState(new TurnState());
+        }
 
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            AddObservers();
+        }
+
+        public void AddObservers()
+        {
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+            Emitters.CutsceneEmitter.RemoveObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
+            Emitters.CutsceneEmitter.RemoveObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
         }
 
         void AddComponents()
@@ -180,7 +202,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         void AddAnimations()
         {
             //idle
-            var idleTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_idle);
+            var idleTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_idle);
             var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 64, 64);
             SpriteAnimator.AddAnimation("IdleDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 0, 2));
             SpriteAnimator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 3, 5));
@@ -188,7 +210,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             SpriteAnimator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 9, 11));
 
             //run
-            var runTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_run);
+            var runTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_run);
             var runSprites = Sprite.SpritesFromAtlas(runTexture, 64, 64);
             var runFps = 13;
             SpriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9), runFps);
@@ -197,19 +219,19 @@ namespace PuppetRoguelite.Components.Characters.Player
             SpriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37), runFps);
 
             //hurt
-            var hurtTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_hurt);
+            var hurtTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_hurt);
             var hurtSprites = Sprite.SpritesFromAtlas(hurtTexture, 64, 64);
             SpriteAnimator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 0, 4));
             SpriteAnimator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 5, 9));
 
             //death
-            var deathTexture = Entity.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_death);
+            var deathTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_death);
             var deathSprites = Sprite.SpritesFromAtlas(deathTexture, 64, 64);
             SpriteAnimator.AddAnimation("DeathRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 0, 9));
             SpriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
 
             //dash
-            var dashTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
+            var dashTexture = Game1.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
             var dashSprites = Sprite.SpritesFromAtlas(dashTexture, 64, 64);
             SpriteAnimator.AddAnimation("DashRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 4, 4));
             SpriteAnimator.AddAnimation("DashLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 13, 13));

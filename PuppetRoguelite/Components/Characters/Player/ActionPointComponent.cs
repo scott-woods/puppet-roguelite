@@ -2,6 +2,7 @@
 using Nez.Systems;
 using PuppetRoguelite.Components.PlayerActions;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player
 {
-    public class ActionPointComponent : Component, IUpdatable
+    public class ActionPointComponent : Component, IUpdatable, ITransferrable
     {
         const float _baseChargeRate = 1.25f;
         const float _baseDamageMultiplier = 4f;
@@ -50,18 +51,38 @@ namespace PuppetRoguelite.Components.Characters.Player
             _healthComponent = healthComponent;
         }
 
-        public override void OnAddedToEntity()
+        public void AddObservers()
         {
-            base.OnAddedToEntity();
-
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            AddObservers();
 
             if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
             {
                 meleeAttack.Emitter.AddObserver(MeleeAttackEvents.Hit, OnMeleeAttackHit);
+            }
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+
+            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
+
+            if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
+            {
+                meleeAttack.Emitter.RemoveObserver(MeleeAttackEvents.Hit, OnMeleeAttackHit);
             }
         }
 

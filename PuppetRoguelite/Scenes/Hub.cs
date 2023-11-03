@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PuppetRoguelite.Tools;
+using PuppetRoguelite.Interfaces;
 
 namespace PuppetRoguelite.Scenes
 {
@@ -33,9 +35,29 @@ namespace PuppetRoguelite.Scenes
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
             //add player
-            _playerEntity = new Entity("player");
-            AddEntity(_playerEntity);
-            _playerEntity.AddComponent(new PlayerController());
+            var transferEntity = TransferManager.Instance.GetEntityToTransfer();
+            if (transferEntity != null)
+            {
+                _playerEntity = transferEntity;
+                transferEntity.AttachToScene(this);
+                var components = transferEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
+                for (int i = 0; i < components.Count; i++)
+                {
+                    var comp = components[i] as ITransferrable;
+                    comp.AddObservers();
+                }
+                transferEntity.SetEnabled(false);
+            }
+            else
+            {
+                _playerEntity = CreateEntity("player");
+                _playerEntity.AddComponent(new PlayerController());
+            }
+
+            //add player
+            //_playerEntity = new Entity("player");
+            //AddEntity(_playerEntity);
+            //_playerEntity.AddComponent(new PlayerController());
 
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
@@ -52,6 +74,7 @@ namespace PuppetRoguelite.Scenes
 
             var spawn = FindComponentsOfType<PlayerSpawnPoint>().First(s => s.MapEntity == _mapEntity && s.Id == Game1.SceneManager.TargetEntranceId);
             _playerEntity.SetPosition(spawn.Entity.Position);
+            _playerEntity.SetEnabled(true);
 
             var exitToDungeon = FindComponentsOfType<ExitArea>().FirstOrDefault(e => e.MapEntity == _mapEntity && e.TargetSceneType == typeof(MainDungeon));
             if (exitToDungeon != null)

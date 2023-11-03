@@ -143,6 +143,16 @@
         "runtime": {
           "bin/placeholder/Nez.dll": {}
         }
+      },
+      "Nez.Persistence/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Nez.Persistence.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Nez.Persistence.dll": {}
+        }
       }
     }
   },
@@ -291,6 +301,11 @@
       "type": "project",
       "path": "../Nez/Nez.Portable/Nez.MG38.csproj",
       "msbuildProject": "../Nez/Nez.Portable/Nez.MG38.csproj"
+    },
+    "Nez.Persistence/1.0.0": {
+      "type": "project",
+      "path": "../Nez/Nez.Persistence/Nez.MG38.Persistence.csproj",
+      "msbuildProject": "../Nez/Nez.Persistence/Nez.MG38.Persistence.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -298,7 +313,8 @@
       "FmodForFoxes >= 3.0.0",
       "FmodForFoxes.Desktop >= 3.0.0",
       "MonoGame.Framework.DesktopGL >= 3.8.1.303",
-      "Nez >= 1.0.0"
+      "Nez >= 1.0.0",
+      "Nez.Persistence >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -337,6 +353,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
+            "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Persistence\\Nez.MG38.Persistence.csproj": {
+              "projectPath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Persistence\\Nez.MG38.Persistence.csproj"
+            },
             "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Portable\\Nez.MG38.csproj": {
               "projectPath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Portable\\Nez.MG38.csproj"
             }

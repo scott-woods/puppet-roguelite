@@ -4,6 +4,7 @@ using Nez.Systems;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             if (other.HasComponent<PlayerController>())
             {
                 Emitter.Emit(ExitAreaEvents.Triggered);
+                TransferManager.Instance.SetEntityToTransfer(PlayerController.Instance.Entity);
                 Game1.SceneManager.ChangeScene(TargetSceneType, _targetEntranceId);
             }
         }

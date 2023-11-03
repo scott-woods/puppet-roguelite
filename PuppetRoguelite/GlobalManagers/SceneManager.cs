@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Systems;
 using Nez.Tweens;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,25 @@ namespace PuppetRoguelite.GlobalManagers
 
         public string TargetEntranceId { get; set; }
 
+        Scene _newScene;
+
         public void ChangeScene(Type targetSceneType, string targetEntranceId = "", Color? fadeToColor = null,
             float delayBeforeFadeInDuration = .5f, float fadeInDuration = .8f, float fadeOutDuration = .8f,
             EaseType fadeEaseType = EaseType.Linear)
         {
+            var transferEntity = TransferManager.Instance.GetEntityToTransfer();
+            if (transferEntity != null)
+            {
+                transferEntity.SetEnabled(false);
+                transferEntity.DetachFromScene();
+            }
+
             //reset emitters. this is kind of a hack but whatever
             Emitters.ResetEmitters();
 
             TargetEntranceId = targetEntranceId;
 
-            var transition = new FadeTransition(() => Activator.CreateInstance(targetSceneType) as Scene);
+            var transition = new FadeTransition(() => _newScene = Activator.CreateInstance(targetSceneType) as Scene);
             transition.DelayBeforeFadeInDuration = delayBeforeFadeInDuration;
             transition.FadeToColor = fadeToColor == null ? Color.Black : fadeToColor.Value;
             transition.FadeInDuration = fadeInDuration;

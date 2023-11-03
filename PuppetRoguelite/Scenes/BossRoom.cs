@@ -9,7 +9,9 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Interfaces;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI.HUDs;
 using System;
 using System.Collections;
@@ -70,10 +72,25 @@ namespace PuppetRoguelite.Scenes
             Camera.Entity.AddComponent(new CombatUI());
 
             //add player
-            _playerEntity = new Entity("player");
-            AddEntity(_playerEntity);
-            var player = _playerEntity.AddComponent(new PlayerController());
-            _playerEntity.SetEnabled(false);
+            var transferredEntity = TransferManager.Instance.GetEntityToTransfer();
+            if (transferredEntity != null)
+            {
+                _playerEntity = transferredEntity;
+                _playerEntity.AttachToScene(this);
+                var components = _playerEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
+                for (int i = 0; i < components.Count; i++)
+                {
+                    var comp = components[i] as ITransferrable;
+                    comp.AddObservers();
+                }
+                _playerEntity.SetEnabled(false);
+            }
+            else
+            {
+                _playerEntity = new PausableEntity("player");
+                AddEntity(_playerEntity);
+                _playerEntity.AddComponent(new PlayerController());
+            }
 
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
