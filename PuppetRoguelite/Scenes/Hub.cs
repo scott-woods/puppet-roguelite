@@ -21,9 +21,15 @@ namespace PuppetRoguelite.Scenes
         Entity _playerEntity;
         Entity _mapEntity;
 
+        //scene components
+        PlayerSpawner _playerSpawner;
+
         public override void Initialize()
         {
             base.Initialize();
+
+            //scene components
+            _playerSpawner = AddSceneComponent(new PlayerSpawner());
 
             //map renderer
             _mapEntity = CreateEntity("map");
@@ -35,24 +41,42 @@ namespace PuppetRoguelite.Scenes
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
             //add player
-            var transferEntity = TransferManager.Instance.GetEntityToTransfer();
-            if (transferEntity != null)
-            {
-                _playerEntity = transferEntity;
-                transferEntity.AttachToScene(this);
-                var components = transferEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
-                for (int i = 0; i < components.Count; i++)
-                {
-                    var comp = components[i] as ITransferrable;
-                    comp.AddObservers();
-                }
-                transferEntity.SetEnabled(false);
-            }
-            else
-            {
-                _playerEntity = CreateEntity("player");
-                _playerEntity.AddComponent(new PlayerController());
-            }
+            _playerEntity = _playerSpawner.CreatePlayerEntity();
+            //var playerEntity = FindEntity("player");
+            //if (playerEntity != null)
+            //{
+            //    _playerEntity = playerEntity;
+            //    _playerEntity.AttachToScene(this);
+            //    var components = _playerEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
+            //    for (int i = 0; i < components.Count; i++)
+            //    {
+            //        var comp = components[i] as ITransferrable;
+            //        comp.AddObservers();
+            //    }
+            //}
+            //else
+            //{
+            //    _playerEntity = CreateEntity("player");
+            //    _playerEntity.AddComponent(new PlayerController());
+            //}
+            //var transferEntity = TransferManager.Instance.GetEntityToTransfer();
+            //if (transferEntity != null)
+            //{
+            //    _playerEntity = transferEntity;
+            //    transferEntity.AttachToScene(this);
+            //    var components = transferEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
+            //    for (int i = 0; i < components.Count; i++)
+            //    {
+            //        var comp = components[i] as ITransferrable;
+            //        comp.AddObservers();
+            //    }
+            //    transferEntity.SetEnabled(false);
+            //}
+            //else
+            //{
+            //    _playerEntity = CreateEntity("player");
+            //    _playerEntity.AddComponent(new PlayerController());
+            //}
 
             //add player
             //_playerEntity = new Entity("player");
@@ -72,9 +96,7 @@ namespace PuppetRoguelite.Scenes
         {
             base.OnStart();
 
-            var spawn = FindComponentsOfType<PlayerSpawnPoint>().First(s => s.MapEntity == _mapEntity && s.Id == Game1.SceneManager.TargetEntranceId);
-            _playerEntity.SetPosition(spawn.Entity.Position);
-            _playerEntity.SetEnabled(true);
+            _playerSpawner.SpawnPlayer(_playerEntity, _mapEntity);
 
             var exitToDungeon = FindComponentsOfType<ExitArea>().FirstOrDefault(e => e.MapEntity == _mapEntity && e.TargetSceneType == typeof(MainDungeon));
             if (exitToDungeon != null)

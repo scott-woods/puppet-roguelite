@@ -28,8 +28,8 @@ namespace PuppetRoguelite.Scenes
         public const string MapString = Nez.Content.Tiled.Tilemaps.Boss_room;
 
         //scene components
-        public TiledObjectHandler TiledObjectHandler;
         public CombatManager CombatManager;
+        public PlayerSpawner PlayerSpawner;
 
         //entities
         Entity _playerEntity;
@@ -52,6 +52,10 @@ namespace PuppetRoguelite.Scenes
         {
             base.Initialize();
 
+            //scene components
+            PlayerSpawner = AddSceneComponent(new PlayerSpawner());
+            CombatManager = AddSceneComponent(new CombatManager());
+
             //CREATE MAP
 
             //map renderer
@@ -72,32 +76,11 @@ namespace PuppetRoguelite.Scenes
             Camera.Entity.AddComponent(new CombatUI());
 
             //add player
-            var transferredEntity = TransferManager.Instance.GetEntityToTransfer();
-            if (transferredEntity != null)
-            {
-                _playerEntity = transferredEntity;
-                _playerEntity.AttachToScene(this);
-                var components = _playerEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
-                for (int i = 0; i < components.Count; i++)
-                {
-                    var comp = components[i] as ITransferrable;
-                    comp.AddObservers();
-                }
-                _playerEntity.SetEnabled(false);
-            }
-            else
-            {
-                _playerEntity = new PausableEntity("player");
-                AddEntity(_playerEntity);
-                _playerEntity.AddComponent(new PlayerController());
-            }
+            _playerEntity = PlayerSpawner.CreatePlayerEntity();
 
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
             Camera.Entity.SetUpdateOrder(int.MaxValue);
-
-            //add combat manager
-            CombatManager = AddSceneComponent(new CombatManager());
 
             var mouseEntity = CreateEntity("mouse");
             mouseEntity.AddComponent(new MouseCursor());
@@ -122,9 +105,7 @@ namespace PuppetRoguelite.Scenes
             base.OnStart();
 
             //spawn player
-            var spawn = FindComponentOfType<PlayerSpawnPoint>();
-            _playerEntity.SetPosition(spawn.Entity.Position.X, spawn.Entity.Position.Y);
-            _playerEntity.SetEnabled(true);
+            PlayerSpawner.SpawnPlayer(_playerEntity, _mapEntity);
 
             //spawn boss
             //var bossSpawn = FindComponentOfType<BossSpawnPoint>();

@@ -22,7 +22,9 @@ namespace PuppetRoguelite.Tools
 
         public Entity GetEntityToTransfer()
         {
-            return _entityToTransfer;
+            var entity = _entityToTransfer;
+            _entityToTransfer = null;
+            return entity;
         }
     }
 }

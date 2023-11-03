@@ -26,12 +26,9 @@ namespace PuppetRoguelite.GlobalManagers
             var transferEntity = TransferManager.Instance.GetEntityToTransfer();
             if (transferEntity != null)
             {
-                transferEntity.SetEnabled(false);
                 transferEntity.DetachFromScene();
+                transferEntity.SetEnabled(false);
             }
-
-            //reset emitters. this is kind of a hack but whatever
-            Emitters.ResetEmitters();
 
             TargetEntranceId = targetEntranceId;
 
@@ -41,11 +38,18 @@ namespace PuppetRoguelite.GlobalManagers
             transition.FadeInDuration = fadeInDuration;
             transition.FadeOutDuration = fadeOutDuration;
             transition.FadeEaseType = fadeEaseType;
+            transition.OnScreenObscured += OnScreenObscured;
             transition.OnTransitionCompleted += OnTransitionCompleted;
 
             Game1.StartSceneTransition(transition);
 
             Emitter.Emit(SceneEvents.TransitionStarted);
+        }
+
+        void OnScreenObscured()
+        {
+            //kind of a hack but oops
+            Emitters.ResetEmitters();
         }
 
         void OnTransitionCompleted()

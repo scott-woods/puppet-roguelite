@@ -40,7 +40,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         //misc
         float _normalMoveSpeed = 100f;
         float _attackingMoveSpeed = 115f;
-        int _maxHp = 40;
+        int _maxHp = 1;
 
         bool _isBehaviorTreeEnabled = false;
 
