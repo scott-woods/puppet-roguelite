@@ -56,6 +56,16 @@ namespace PuppetRoguelite.Components.Shared
             }
         }
 
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            if (Entity.TryGetComponent<HealthComponent>(out var hc))
+            {
+                hc.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            }
+        }
+
         public override void OnEnabled()
         {
             base.OnEnabled();

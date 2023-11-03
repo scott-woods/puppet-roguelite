@@ -31,17 +31,24 @@ namespace PuppetRoguelite.UI.Elements
             SetMinMax(_min, _max);
 
             SetStepSize(.1f);
-
-            AddObservers();
         }
 
-        void AddObservers()
+        public void AddObservers()
         {
             Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsChanged, OnActionPointsChanged);
             Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsTimerUpdated, OnActionPointsChargeTimerChanged);
 
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+        }
+
+        public void RemoveObservers()
+        {
+            Emitters.ActionPointEmitter.RemoveObserver(ActionPointEvents.ActionPointsChanged, OnActionPointsChanged);
+            Emitters.ActionPointEmitter.RemoveObserver(ActionPointEvents.ActionPointsTimerUpdated, OnActionPointsChargeTimerChanged);
+
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
         void UpdateStyle()
@@ -60,7 +67,7 @@ namespace PuppetRoguelite.UI.Elements
         void OnActionPointsChargeTimerChanged(ActionPointComponent actionPointComponent)
         {
             UpdateStyle();
-            SetValue(_apComponent.CurrentChargeTimer);
+            SetValue(actionPointComponent.CurrentChargeTimer);
         }
 
         void OnTurnPhaseTriggered()

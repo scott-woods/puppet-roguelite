@@ -1,7 +1,9 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Interfaces;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +16,11 @@ namespace PuppetRoguelite.SceneComponents
     {
         public Entity CreatePlayerEntity()
         {
-            var playerEntity = Scene.FindEntity("player");
+            var playerEntity = TransferManager.Instance.GetEntityToTransfer();
             if (playerEntity != null)
             {
+                TransferManager.Instance.ClearEntityToTransfer();
                 playerEntity.AttachToScene(Scene);
-                var components = playerEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
-                for (int i = 0; i < components.Count; i++)
-                {
-                    var comp = components[i] as ITransferrable;
-                    comp.AddObservers();
-                }
             }
             else
             {
@@ -36,8 +33,19 @@ namespace PuppetRoguelite.SceneComponents
 
         public void SpawnPlayer(Entity playerEntity, Entity mapEntity)
         {
+            var spawnPosition = Vector2.Zero;
             var spawn = Scene.FindComponentsOfType<PlayerSpawnPoint>().First(s => s.MapEntity == mapEntity && s.Id == Game1.SceneManager.TargetEntranceId);
-            playerEntity.SetPosition(spawn.Entity.Position);
+            if (spawn != null)
+            {
+                spawnPosition = spawn.Entity.Position;
+            }
+            playerEntity.SetPosition(spawnPosition);
+            playerEntity.SetEnabled(true);
+        }
+
+        public void SpawnPlayer(Entity playerEntity, Vector2 position)
+        {
+            playerEntity.SetPosition(position);
             playerEntity.SetEnabled(true);
         }
     }

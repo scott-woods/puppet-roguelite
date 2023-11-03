@@ -65,7 +65,6 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             Mover = Entity.AddComponent(new Mover());
 
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp, _maxHp));
-            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             Collider = Entity.AddComponent(new BoxCollider(-13, 35, 26, 16));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
@@ -269,6 +268,20 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                 .Build();
 
             _tree.UpdatePeriod = 0;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
         }
 
         #endregion

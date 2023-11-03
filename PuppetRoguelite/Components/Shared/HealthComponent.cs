@@ -77,6 +77,16 @@ namespace PuppetRoguelite.Components.Shared
             }
         }
 
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            if (_hurtbox != null)
+            {
+                _hurtbox.Emitter.RemoveObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
+            }
+        }
+
         void OnHurtboxHit(HurtboxHit hurtboxHit)
         {
             Health -= hurtboxHit.Hitbox.Damage;

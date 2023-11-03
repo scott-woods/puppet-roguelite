@@ -16,12 +16,6 @@ namespace PuppetRoguelite.GlobalManagers
 
         public GameStateManager()
         {
-            Game1.SceneManager.Emitter.AddObserver(SceneEvents.TransitionEnded, OnSceneTransitionEnded);
-            AddObservers();
-        }
-
-        void AddObservers()
-        {
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
 
@@ -43,11 +37,6 @@ namespace PuppetRoguelite.GlobalManagers
             }
 
             Game1.SceneManager.ChangeScene(typeof(Bedroom), "0");
-        }
-
-        void OnSceneTransitionEnded()
-        {
-            AddObservers();
         }
 
         void OnEncounterStarted()

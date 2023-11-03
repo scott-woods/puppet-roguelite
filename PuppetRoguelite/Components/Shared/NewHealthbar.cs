@@ -34,9 +34,22 @@ namespace PuppetRoguelite.Components.Shared
         public NewHealthbar(HealthComponent healthComponent, int width = 32)
         {
             _healthComponent = healthComponent;
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnHealthChanged);
 
             _width = width;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnHealthChanged);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            _healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthChanged, OnHealthChanged);
         }
 
         public override void Initialize()

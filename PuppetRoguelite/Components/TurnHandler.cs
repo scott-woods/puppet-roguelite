@@ -30,7 +30,7 @@ namespace PuppetRoguelite.Components
         Vector2 _initialPlayerPosition;
         Entity _finalPlayerPositionEntity;
 
-        ActionSequenceSimulator _sequenceSimulator = new ActionSequenceSimulator();
+        ActionSequenceSimulator _sequenceSimulator;
         Entity _playerSimEntity;
 
         DeadzoneFollowCamera _camera;
@@ -39,16 +39,13 @@ namespace PuppetRoguelite.Components
         {
             base.Initialize();
 
+            _sequenceSimulator = Entity.AddComponent(new ActionSequenceSimulator());
+
             //state machine
             StateMachine = new TurnHandlerStateMachine(this, new SelectingFromMenu());
 
             //setup turn menu entity
             _turnMenuEntity = Entity.Scene.CreateEntity("turn-menu");
-
-            //observe emitter
-            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnActionFinishedPreparing);
-            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedExecuting, OnActionFinishedExecuting);
-            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionPrepCanceled, OnActionPrepCanceled);
 
             //store player's position at start of turn
             _initialPlayerPosition = PlayerController.Instance.Entity.Position;
@@ -68,6 +65,16 @@ namespace PuppetRoguelite.Components
 
             //begin selection
             StartNewSelection();
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            //observe emitter
+            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnActionFinishedPreparing);
+            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedExecuting, OnActionFinishedExecuting);
+            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionPrepCanceled, OnActionPrepCanceled);
         }
 
         public override void OnRemovedFromEntity()

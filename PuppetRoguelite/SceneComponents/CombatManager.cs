@@ -34,6 +34,24 @@ namespace PuppetRoguelite.SceneComponents
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
+        public override void OnRemovedFromScene()
+        {
+            base.OnRemovedFromScene();
+
+            foreach (var enemy in Enemies)
+            {
+                if (enemy.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
+                {
+                    healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
+                }
+            }
+
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+        }
+
         public void AddEnemy(Enemy enemy)
         {
             MapEntity = enemy.MapEntity;
@@ -65,6 +83,7 @@ namespace PuppetRoguelite.SceneComponents
 
         void OnEnemyDied(HealthComponent healthComponent)
         {
+            healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
             var enemy = healthComponent.Entity.GetComponent<Enemy>();
             Enemies.Remove(enemy);
             if (CheckForCompletion())

@@ -64,8 +64,20 @@ namespace PuppetRoguelite.Components.Shared
             //determine size
             _totalSpaces = (int)Math.Ceiling((double)_healthComponent.MaxHealth / 4) + 2;
             _totalWidth = _totalSpaces * 16;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
 
             _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnHealthChanged);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            _healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthChanged, OnHealthChanged);
         }
 
         public override void Render(Batcher batcher, Camera camera)

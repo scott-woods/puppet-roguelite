@@ -65,20 +65,27 @@ namespace PuppetRoguelite.Components.Shared
             _hurtbox = hurtbox;
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-
-            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
-        }
-
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
 
+            _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
+
             if (Entity.TryGetComponent<HealthComponent>(out var hc))
             {
                 hc.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            }
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            _hurtbox.Emitter.RemoveObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
+
+            if (Entity.TryGetComponent<HealthComponent>(out var hc))
+            {
+                hc.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
             }
         }
 

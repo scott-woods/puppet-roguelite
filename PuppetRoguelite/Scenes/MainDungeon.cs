@@ -33,10 +33,13 @@ namespace PuppetRoguelite.Scenes
         //scene components
         Dungenerator _dungenerator;
         CombatManager _combatManager;
+        PlayerSpawner _playerSpawner;
 
         public override void Initialize()
         {
             base.Initialize();
+
+            _playerSpawner = AddSceneComponent(new PlayerSpawner());
 
             ClearColor = Microsoft.Xna.Framework.Color.Transparent;
 
@@ -44,9 +47,7 @@ namespace PuppetRoguelite.Scenes
             _ui = Camera.Entity.AddComponent(new CombatUI());
 
             //add player
-            _playerEntity = new Entity("player");
-            AddEntity(_playerEntity);
-            _playerEntity.AddComponent(new PlayerController());
+            _playerEntity = _playerSpawner.CreatePlayerEntity();
 
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
@@ -70,6 +71,7 @@ namespace PuppetRoguelite.Scenes
             _dungenerator.Generate();
 
             var spawn = _dungenerator.GetPlayerSpawnPoint();
+            _playerSpawner.SpawnPlayer(_playerEntity, spawn);
             _playerEntity.SetPosition(spawn);
 
             Game1.AudioManager.PlayMusic(Music.Babbulon, true);

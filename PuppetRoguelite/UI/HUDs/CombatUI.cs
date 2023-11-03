@@ -45,24 +45,62 @@ namespace PuppetRoguelite.UI.HUDs
 
             //arrange elements
             ArrangeElements();
-
-            //connect to emitters
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
         }
 
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
 
-            //player health
-            var playerHealthComponent = Entity.Scene.FindComponentsOfType<HealthComponent>().FirstOrDefault(h => h.Entity.Name == "player");
-            if (playerHealthComponent != null)
+            if (PlayerController.Instance.ActionPointComponent != null)
             {
-                OnPlayerHealthChanged(playerHealthComponent);
-                playerHealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
+                //setup ap progress bars
+                for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
+                {
+                    var bar = new ApProgressBar(PlayerController.Instance.ActionPointComponent, i, _basicSkin);
+                    _apProgressBars.Add(bar);
+                    var width = ((480 * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
+                    _apTable.Add(bar).Width(width);
+                }
             }
+
+            //connect to emitters
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+            //Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+
+            //player health
+            if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent> (out var healthComponent))
+            {
+                OnPlayerHealthChanged(healthComponent);
+                healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
+            }
+
+            foreach (var bar in _apProgressBars)
+            {
+                bar.AddObservers();
+            }
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            //connect to emitters
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+            //Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+
+            //player health
+            if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
+            {
+                healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
+            }
+
+            foreach (var bar in _apProgressBars)
+            {
+                bar.RemoveObservers();
+            }
+
+            _apProgressBars.Clear();
+            _apTable.ClearChildren();
         }
 
         void ArrangeElements()
@@ -117,23 +155,23 @@ namespace PuppetRoguelite.UI.HUDs
             _apTable.SetVisible(false);
         }
 
-        void OnDodgePhaseStarted()
-        {
-            //ap bars
-            _apProgressBars.Clear();
-            _apTable.ClearChildren();
-            if (PlayerController.Instance.ActionPointComponent != null)
-            {
-                //setup ap progress bars
-                for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
-                {
-                    var bar = new ApProgressBar(PlayerController.Instance.ActionPointComponent, i, _basicSkin);
-                    _apProgressBars.Add(bar);
-                    var width = ((480 * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
-                    _apTable.Add(bar).Width(width);
-                }
-            }
-        }
+        //void OnDodgePhaseStarted()
+        //{
+        //    //ap bars
+        //    _apProgressBars.Clear();
+        //    _apTable.ClearChildren();
+        //    if (PlayerController.Instance.ActionPointComponent != null)
+        //    {
+        //        //setup ap progress bars
+        //        for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
+        //        {
+        //            var bar = new ApProgressBar(PlayerController.Instance.ActionPointComponent, i, _basicSkin);
+        //            _apProgressBars.Add(bar);
+        //            var width = ((480 * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
+        //            _apTable.Add(bar).Width(width);
+        //        }
+        //    }
+        //}
 
         public void OnPlayerHealthChanged(HealthComponent healthComponent)
         {

@@ -72,7 +72,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //velocity
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
@@ -110,6 +109,20 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
             //knockback
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, 6, 2f, VelocityComponent, _hurtbox));
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            _healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
         }
 
         void AddAnimations()

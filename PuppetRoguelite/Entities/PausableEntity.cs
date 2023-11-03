@@ -24,6 +24,14 @@ namespace PuppetRoguelite.Entities
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
         }
 
+        public override void OnRemovedFromScene()
+        {
+            base.OnRemovedFromScene();
+
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
+        }
+
         void OnTurnPhaseTriggered()
         {
             _paused = true;

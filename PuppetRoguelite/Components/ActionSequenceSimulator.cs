@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components
 {
-    public class ActionSequenceSimulator
+    public class ActionSequenceSimulator : Component
     {
         //public Queue<PlayerAction> ActionQueue = new Queue<PlayerAction>();
         Queue<PlayerAction> _actionQueue;
@@ -20,9 +20,18 @@ namespace PuppetRoguelite.Components
         int _currentIndex = 0;
         bool _active = false;
 
-        public ActionSequenceSimulator()
+        public override void OnAddedToEntity()
         {
+            base.OnAddedToEntity();
+
             Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.SimActionFinishedExecuting, OnSimActionFinishedExecuting);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.SimActionFinishedExecuting, OnSimActionFinishedExecuting);
         }
 
         public void StartSim(Queue<PlayerAction> actionQueue, Entity playerSimEntity, Vector2 returnPosition)

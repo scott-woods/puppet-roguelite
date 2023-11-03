@@ -100,6 +100,25 @@ namespace PuppetRoguelite.Scenes
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
         }
 
+        public override void End()
+        {
+            base.End();
+
+            var trigger = FindComponentOfType<BossTrigger>();
+            if (trigger != null)
+            {
+                trigger.Emitter.RemoveObserver(TriggerEventTypes.Triggered, OnTriggered);
+            }
+
+            if (Boss != null)
+            {
+                Boss.HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnBossDied);
+            }
+
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+        }
+
         public override void OnStart()
         {
             base.OnStart();
@@ -133,6 +152,11 @@ namespace PuppetRoguelite.Scenes
 
         void OnTriggered()
         {
+            var trigger = FindComponentOfType<BossTrigger>();
+            if (trigger != null)
+            {
+                trigger.Emitter.RemoveObserver(TriggerEventTypes.Triggered, OnTriggered);
+            }
             Game1.StartCoroutine(StartBattle());
             //var cutscene = new BossCutscene(this);
             //Game1.StartCoroutine(cutscene.PlayScene());
@@ -284,6 +308,8 @@ namespace PuppetRoguelite.Scenes
 
         void OnBossDied(HealthComponent hc)
         {
+            Boss.HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnBossDied);
+
             Game1.AudioManager.StopMusic();
             foreach(var enemy in FodderEnemies)
             {

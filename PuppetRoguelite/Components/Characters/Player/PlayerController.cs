@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player
 {
-    public class PlayerController : Component, IUpdatable, ITransferrable
+    public class PlayerController : Component, IUpdatable
     {
         public static PlayerController Instance { get; private set; } = new PlayerController();
 
@@ -95,15 +95,13 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             base.OnAddedToEntity();
 
-            AddObservers();
-        }
-
-        public void AddObservers()
-        {
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
+
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
         }
 
         public override void OnRemovedFromEntity()
@@ -114,6 +112,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
             Emitters.CutsceneEmitter.RemoveObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
             Emitters.CutsceneEmitter.RemoveObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
+
+            HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
+            HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
         }
 
         void AddComponents()
@@ -146,8 +147,6 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //Add health component
             HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
-            HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
-            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //action points
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(HealthComponent));

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player
 {
-    public class ActionPointComponent : Component, IUpdatable, ITransferrable
+    public class ActionPointComponent : Component, IUpdatable
     {
         const float _baseChargeRate = 1.25f;
         const float _baseDamageMultiplier = 4f;
@@ -51,19 +51,14 @@ namespace PuppetRoguelite.Components.Characters.Player
             _healthComponent = healthComponent;
         }
 
-        public void AddObservers()
-        {
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
-
-            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
-        }
-
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
 
-            AddObservers();
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+
+            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
 
             if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
             {

@@ -105,6 +105,17 @@ namespace PuppetRoguelite.Scenes
             }
         }
 
+        public override void End()
+        {
+            base.End();
+
+            var exitToDungeon = FindComponentsOfType<ExitArea>().FirstOrDefault(e => e.MapEntity == _mapEntity && e.TargetSceneType == typeof(MainDungeon));
+            if (exitToDungeon != null)
+            {
+                exitToDungeon.Emitter.RemoveObserver(ExitAreaEvents.Triggered, OnDungeonExitAreaTriggered);
+            }
+        }
+
         void OnDungeonExitAreaTriggered()
         {
             Game1.AudioManager.StopMusic();

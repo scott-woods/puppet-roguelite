@@ -38,18 +38,11 @@ namespace PuppetRoguelite.GlobalManagers
             transition.FadeInDuration = fadeInDuration;
             transition.FadeOutDuration = fadeOutDuration;
             transition.FadeEaseType = fadeEaseType;
-            transition.OnScreenObscured += OnScreenObscured;
             transition.OnTransitionCompleted += OnTransitionCompleted;
 
             Game1.StartSceneTransition(transition);
 
             Emitter.Emit(SceneEvents.TransitionStarted);
-        }
-
-        void OnScreenObscured()
-        {
-            //kind of a hack but oops
-            Emitters.ResetEmitters();
         }
 
         void OnTransitionCompleted()

@@ -78,8 +78,6 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
             //health
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp, _maxHp));
-            //HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
-            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
 
             //velocity
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
@@ -111,7 +109,22 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
             //sprite flipper
             SpriteFlipper = Entity.AddComponent(new SpriteFlipper(Animator, VelocityComponent));
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
             SpriteFlipper.Emitter.AddObserver(SpriteFlipperEvents.Flipped, OnSpriteFlipped);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            SpriteFlipper.Emitter.RemoveObserver(SpriteFlipperEvents.Flipped, OnSpriteFlipped);
         }
 
         void AddAnimations()
