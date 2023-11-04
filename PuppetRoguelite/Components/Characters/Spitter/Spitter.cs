@@ -79,10 +79,10 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 0, Nez.Content.Audio.Sounds.Chain_bot_damaged));
 
             //health
-            HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp, _maxHp));
+            HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp));
 
             //dollah dropper
-            DollahDropper = Entity.AddComponent(new DollahDropper(4, 2));
+            DollahDropper = Entity.AddComponent(new DollahDropper(3, 1));
 
             //velocity
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));

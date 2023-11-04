@@ -19,6 +19,7 @@ namespace PuppetRoguelite
         public static Emitter<InteractableEvents> InteractableEmitter = new Emitter<InteractableEvents>();
         public static Emitter<CutsceneEvents> CutsceneEmitter = new Emitter<CutsceneEvents>();
         public static Emitter<PlayerEvents> PlayerEventsEmitter = new Emitter<PlayerEvents>();
+        public static Emitter<GameEvents> GameEventsEmitter = new Emitter<GameEvents>();
 
         public static void ResetEmitters()
         {
@@ -69,5 +70,11 @@ namespace PuppetRoguelite
     public enum PlayerEvents
     {
         PlayerDied
+    }
+
+    public enum GameEvents
+    {
+        RespawningAtHub,
+        StartingDungeonRun
     }
 }

@@ -52,10 +52,10 @@ namespace PuppetRoguelite.Components.Shared
             get => _maxHealth;
         }
 
-        public HealthComponent(int health, int maxHealth)
+        public HealthComponent(int maxHealth)
         {
-            _health = health;
             _maxHealth = maxHealth;
+            _health = maxHealth;
         }
 
         public override void Initialize()

@@ -85,10 +85,10 @@ namespace PuppetRoguelite.UI.HUDs
             //Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
 
             //player health
-            if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
-            {
-                healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
-            }
+            //if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
+            //{
+            //    healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
+            //}
 
             foreach (var bar in _apProgressBars)
             {
@@ -99,10 +99,10 @@ namespace PuppetRoguelite.UI.HUDs
             _apTable.ClearChildren();
 
             //dollahs
-            if (PlayerController.Instance.Entity.TryGetComponent<DollahInventory>(out var dollahInventory))
-            {
-                dollahInventory.Emitter.RemoveObserver(DollahInventoryEvents.DollahsChanged, OnDollahsChanged);
-            }
+            //if (PlayerController.Instance.Entity.TryGetComponent<DollahInventory>(out var dollahInventory))
+            //{
+            //    dollahInventory.Emitter.RemoveObserver(DollahInventoryEvents.DollahsChanged, OnDollahsChanged);
+            //}
         }
 
         #endregion

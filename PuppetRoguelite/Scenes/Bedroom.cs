@@ -11,11 +11,15 @@ using Microsoft.Xna.Framework;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.GlobalManagers;
+using PuppetRoguelite.Components.Characters.Player.States;
 
 namespace PuppetRoguelite.Scenes
 {
     public class Bedroom : BaseScene
     {
+        //scene components
+        public PlayerSpawner PlayerSpawner;
+
         //entities
         Entity _playerEntity;
         Entity _mapEntity;
@@ -23,6 +27,8 @@ namespace PuppetRoguelite.Scenes
         public override void Initialize()
         {
             base.Initialize();
+
+            PlayerSpawner = AddSceneComponent(new PlayerSpawner());
 
             //camera handler
             var camHandler = AddSceneComponent(new CameraHandler());
@@ -37,9 +43,7 @@ namespace PuppetRoguelite.Scenes
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
             //add player
-            _playerEntity = new Entity("player");
-            AddEntity(_playerEntity);
-            _playerEntity.AddComponent(new PlayerController());
+            _playerEntity = PlayerSpawner.CreatePlayerEntity();
 
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
@@ -62,8 +66,7 @@ namespace PuppetRoguelite.Scenes
                 Game1.AudioManager.PlayMusic(Music.TheBay, true);
             }
 
-            var spawn = FindComponentsOfType<PlayerSpawnPoint>().First(s => s.MapEntity == _mapEntity && s.Id == Game1.SceneManager.TargetEntranceId);
-            _playerEntity.SetPosition(spawn.Entity.Position);
+            PlayerSpawner.SpawnPlayer(_playerEntity, _mapEntity);
         }
     }
 }

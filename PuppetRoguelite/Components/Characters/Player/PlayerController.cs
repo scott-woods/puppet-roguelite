@@ -14,12 +14,14 @@ using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Interfaces;
 using PuppetRoguelite.Items;
+using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Runtime.Intrinsics;
 using System.Text;
@@ -63,10 +65,14 @@ namespace PuppetRoguelite.Components.Characters.Player
         public KnockbackComponent KnockbackComponent;
         public OriginComponent OriginComponent;
         public DollahInventory DollahInventory;
+        public DeathComponent DeathComponent;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
         public Vector2 LastNonZeroDirection = new Vector2(1, 0);
+
+        //data
+        public PlayerData PlayerData;
 
         #region SETUP
 
@@ -78,6 +84,8 @@ namespace PuppetRoguelite.Components.Characters.Player
         public override void Initialize()
         {
             base.Initialize();
+
+            PlayerData = LoadData();
 
             AddComponents();
             SetupInput();
@@ -102,7 +110,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
 
             HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
-            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+
+            DeathComponent.OnDeathStarted += OnDeathStarted;
         }
 
         public override void OnRemovedFromEntity()
@@ -115,7 +124,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CutsceneEmitter.RemoveObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
 
             HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
-            HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+
+            DeathComponent.OnDeathStarted -= OnDeathStarted;
         }
 
         void AddComponents()
@@ -147,7 +157,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             OriginComponent = Entity.AddComponent(new OriginComponent(Collider));
 
             //Add health component
-            HealthComponent = Entity.AddComponent(new HealthComponent(10, 10));
+            HealthComponent = Entity.AddComponent(new HealthComponent(PlayerData.MaxHp));
 
             //action points
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(HealthComponent));
@@ -161,7 +171,10 @@ namespace PuppetRoguelite.Components.Characters.Player
             _inventory.AddItem(new CerealBox("feef"));
 
             //dollahs
-            DollahInventory = Entity.AddComponent(new DollahInventory());
+            DollahInventory = Entity.AddComponent(new DollahInventory(PlayerData.Dollahs));
+
+            //death
+            DeathComponent = Entity.AddComponent(new DeathComponent(Nez.Content.Audio.Sounds._69_Die_02, SpriteAnimator, "DeathRight", "HurtRight"));
 
             //ySort
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, OriginComponent));
@@ -244,6 +257,34 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         #endregion
 
+        public void SaveData()
+        {
+            var data = new PlayerData()
+            {
+                Dollahs = DollahInventory.Dollahs,
+                MaxHp = HealthComponent.MaxHealth
+            };
+
+            var json = Json.ToJson(data);
+            File.WriteAllText("Data/playerData.json", json);
+        }
+
+        public PlayerData LoadData()
+        {
+            if (File.Exists("Data/playerData.json"))
+            {
+                var json = File.ReadAllText("Data/playerData.json");
+                var data = Json.FromJson<PlayerData>(json);
+                if (data == null)
+                {
+                    data = new PlayerData();
+                }
+
+                return data;
+            }
+            else return new PlayerData();
+        }
+
         public void Update()
         {
             StateMachine.Update(Time.DeltaTime);
@@ -298,7 +339,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
         }
 
-        void OnHealthDepleted(HealthComponent hc)
+        void OnDeathStarted(Entity entity)
         {
             StateMachine.ChangeState<DyingState>();
         }

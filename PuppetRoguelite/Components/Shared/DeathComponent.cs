@@ -21,13 +21,15 @@ namespace PuppetRoguelite.Components.Shared
         SpriteAnimator _animator;
         string _deathAnimName;
         string _hitAnimName;
+        bool _shouldDestroyEntity;
 
-        public DeathComponent(string sound, SpriteAnimator animator, string deathAnimName, string hitAnimName)
+        public DeathComponent(string sound, SpriteAnimator animator, string deathAnimName, string hitAnimName, bool shouldDestroyEntity = true)
         {
             _sound = sound;
             _animator = animator;
             _deathAnimName = deathAnimName;
             _hitAnimName = hitAnimName;
+            _shouldDestroyEntity = shouldDestroyEntity;
         }
 
         public override void OnAddedToEntity()
@@ -70,7 +72,8 @@ namespace PuppetRoguelite.Components.Shared
         {
             _animator.OnAnimationCompletedEvent -= OnDeathAnimationCompleted;
             OnDeathFinished?.Invoke(Entity);
-            Entity.Destroy();
+
+            if (_shouldDestroyEntity) Entity.Destroy();
         }
 
         void OnTurnPhaseCompleted()

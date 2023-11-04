@@ -13,6 +13,7 @@ namespace PuppetRoguelite.Components.Shared
     {
         int _baseAmount = 0;
         int _variation = 0;
+        float _multiplier = 1f;
 
         public DollahDropper(int baseAmount, int variation)
         {
@@ -43,12 +44,7 @@ namespace PuppetRoguelite.Components.Shared
         public void DropDollahs()
         {
             var amount = _baseAmount + Nez.Random.Range(-_variation, _variation + 1);
-            var comboComp = Entity.Scene.GetOrCreateSceneComponent<ComboComponent>();
-            if (comboComp != null)
-            {
-                var multiplier = comboComp.ComboCounter > 0 ? comboComp.ComboCounter : 1;
-                amount *= multiplier;
-            }
+            amount = (int)Math.Round(amount * _multiplier);
 
             for (int i = 0; i < amount; i++)
             {
@@ -57,6 +53,11 @@ namespace PuppetRoguelite.Components.Shared
                 dollah.SetPosition(Entity.Position);
                 dollahComp.Launch();
             }
+        }
+
+        public void SetMultiplier(float multiplier)
+        {
+            _multiplier = multiplier;
         }
 
         void OnDeathStarted(Entity entity)

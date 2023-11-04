@@ -2,9 +2,11 @@
 using Nez;
 using Nez.Textures;
 using Nez.Tiled;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Scenes;
+using PuppetRoguelite.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,7 +55,8 @@ namespace PuppetRoguelite.Components.TiledComponents
             yield return textboxManager.DisplayTextbox(lines);
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Space_ship_3);
-            Game1.SceneManager.ChangeScene(typeof(Bedroom), "0", Color.White, 4f, 4f, 1f);
+
+            Game1.GameStateManager.ReturnToHubAfterSuccess();
         }
     }
 }

@@ -12,7 +12,8 @@ namespace PuppetRoguelite.SceneComponents
     {
         public int ComboCounter = 0;
 
-        List<DeathComponent> _connectedDeathComponents = new List<DeathComponent>();
+        List<HealthComponent> _connectedHealthComponents = new List<HealthComponent>();
+        List<DollahDropper> _connectedDollahDroppers = new List<DollahDropper>();
 
         public ComboComponent()
         {
@@ -27,11 +28,11 @@ namespace PuppetRoguelite.SceneComponents
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
 
-            if (_connectedDeathComponents.Count > 0)
+            if (_connectedHealthComponents.Count > 0)
             {
-                foreach (var component in _connectedDeathComponents)
+                foreach (var component in _connectedHealthComponents)
                 {
-                    component.OnDeathStarted -= OnEnemyDeathStarted;
+                    component.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyHealthDepleted);
                 }
             }
         }
@@ -43,27 +44,37 @@ namespace PuppetRoguelite.SceneComponents
             var enemies = Scene.FindComponentsOfType<Enemy>();
             foreach (var enemy in enemies)
             {
-                if (enemy.Entity.TryGetComponent<DeathComponent>(out var dc))
+                if (enemy.Entity.TryGetComponent<HealthComponent>(out var hc))
                 {
-                    dc.OnDeathStarted += OnEnemyDeathStarted;
-                    _connectedDeathComponents.Add(dc);
+                    hc.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnEnemyHealthDepleted);
+                    _connectedHealthComponents.Add(hc);
                 }
             }
         }
 
         void OnTurnPhaseCompleted()
         {
-            foreach (var dc in _connectedDeathComponents)
+            foreach (var hc in _connectedHealthComponents)
             {
-                dc.OnDeathStarted -= OnEnemyDeathStarted;
+                hc.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyHealthDepleted);
             }
 
-            _connectedDeathComponents.Clear();
+            _connectedHealthComponents.Clear();
+            _connectedDollahDroppers.Clear();
         }
 
-        void OnEnemyDeathStarted(Entity entity)
+        void OnEnemyHealthDepleted(HealthComponent hc)
         {
             ComboCounter += 1;
+            if (hc.Entity.TryGetComponent<DollahDropper>(out var dollahDropper))
+            {
+                _connectedDollahDroppers.Add(dollahDropper);
+            }
+
+            foreach (var dropper in _connectedDollahDroppers)
+            {
+                dropper.SetMultiplier(ComboCounter);
+            }
         }
     }
 }

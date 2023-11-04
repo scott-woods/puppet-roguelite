@@ -19,8 +19,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
     {
         //stats
         float _moveSpeed = 75f;
-        int _hp = 1;
-        int _maxHp = 1;
+        int _maxHp = 12;
 
         //behavior tree
         BehaviorTree<ChainBot> _tree;
@@ -74,10 +73,10 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             _hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 0, Nez.Content.Audio.Sounds.Chain_bot_damaged));
 
             //health
-            _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
+            _healthComponent = Entity.AddComponent(new HealthComponent(_maxHp));
 
             //dollah dropper
-            DollahDropper = Entity.AddComponent(new DollahDropper(4, 2));
+            DollahDropper = Entity.AddComponent(new DollahDropper(3, 1));
 
             //velocity
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));

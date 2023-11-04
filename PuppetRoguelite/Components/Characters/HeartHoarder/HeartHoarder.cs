@@ -36,6 +36,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public KnockbackComponent KnockbackComponent;
         public YSorter YSorter;
         public OriginComponent OriginComponent;
+        public DollahDropper DollahDropper;
+        public DeathComponent DeathComponent;
 
         //misc
         float _normalMoveSpeed = 100f;
@@ -64,7 +66,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         {
             Mover = Entity.AddComponent(new Mover());
 
-            HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp, _maxHp));
+            HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp));
 
             Collider = Entity.AddComponent(new BoxCollider(-13, 35, 26, 16));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
@@ -91,6 +93,10 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, 3, 5f, VelocityComponent, Hurtbox));
 
             YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
+
+            DollahDropper = Entity.AddComponent(new DollahDropper(75, 0));
+
+            DeathComponent = Entity.AddComponent(new DeathComponent(Nez.Content.Audio.Sounds.Boss_death, Animator, "Die", "Hit"));
 
             MovingAttackHitbox = Entity.AddComponent(new BoxHitbox(2, new Rectangle(-35, 35, 71, 18)));
             Flags.SetFlagExclusive(ref MovingAttackHitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
@@ -275,6 +281,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             base.OnAddedToEntity();
 
             HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            DeathComponent.OnDeathFinished += OnDeathFinished;
         }
 
         public override void OnRemovedFromEntity()
@@ -282,6 +289,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             base.OnRemovedFromEntity();
 
             HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            DeathComponent.OnDeathFinished -= OnDeathFinished;
         }
 
         #endregion
@@ -478,13 +486,12 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         {
             AbortActions();
             NewHealthbar.SetEnabled(false);
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Boss_death);
             _isBehaviorTreeEnabled = false;
-            Animator.Play("Die", SpriteAnimator.LoopMode.Once);
-            Animator.OnAnimationCompletedEvent += (animationName) =>
-            {
-                Entity.Destroy();
-            };
+        }
+
+        void OnDeathFinished(Entity entity)
+        {
+            DollahDropper.DropDollahs();
         }
 
         #endregion

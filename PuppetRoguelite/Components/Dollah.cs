@@ -3,6 +3,7 @@ using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using System;
@@ -29,6 +30,8 @@ namespace PuppetRoguelite.Components
         SpriteRenderer _spriteRenderer;
         ProjectileMover _mover;
         CircleCollider _circleCollider;
+        YSorter _ySorter;
+        OriginComponent _originComponent;
 
         public override void Initialize()
         {
@@ -44,6 +47,10 @@ namespace PuppetRoguelite.Components
 
             _spriteRenderer = Entity.AddComponent(new SpriteRenderer());
 
+            _originComponent = Entity.AddComponent(new OriginComponent(_circleCollider));
+
+            _ySorter = Entity.AddComponent(new YSorter(_spriteRenderer, _originComponent));
+
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Tilesets.Dungeon_prison_props);
             var sprite = new Sprite(texture, new Rectangle(80, 240, 16, 16));
             _spriteRenderer.SetSprite(sprite);
@@ -53,15 +60,15 @@ namespace PuppetRoguelite.Components
         {
             _timeSinceLaunced = 0f;
 
-            var velocityX = 0f;
-            if (Nez.Random.Chance(.5f))
-            {
-                velocityX = Nez.Random.Range(-75f, -40f);
-            }
-            else
-            {
-                velocityX = Nez.Random.Range(40f, 75f);
-            }
+            var velocityX = Nez.Random.Range(-75f, 75f);
+            //if (Nez.Random.Chance(.5f))
+            //{
+            //    velocityX = Nez.Random.Range(-75f, -40f);
+            //}
+            //else
+            //{
+            //    velocityX = Nez.Random.Range(40f, 75f);
+            //}
             _velocity = new Vector2(velocityX, _initialVelocityY);
 
             _isLaunching = true;

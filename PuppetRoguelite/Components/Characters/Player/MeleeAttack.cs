@@ -272,6 +272,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         void EndAttack()
         {
+            _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
             _isAttacking = false;
             _continueCombo = false;
             _timeSinceLastClick = 0f;

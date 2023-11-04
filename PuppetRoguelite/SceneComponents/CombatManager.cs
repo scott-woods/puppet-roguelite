@@ -24,6 +24,7 @@ namespace PuppetRoguelite.SceneComponents
         public int Turns = 0;
         public Entity TurnHandlerEntity;
         public List<Enemy> Enemies = new List<Enemy>();
+        public List<HealthComponent> EnemyHealthComponents = new List<HealthComponent>();
         public Entity MapEntity;
         public ComboComponent ComboComponent;
 
@@ -39,12 +40,9 @@ namespace PuppetRoguelite.SceneComponents
         {
             base.OnRemovedFromScene();
 
-            foreach (var enemy in Enemies)
+            foreach (var hc in EnemyHealthComponents)
             {
-                if (enemy.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
-                {
-                    healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
-                }
+                hc.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
             }
 
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
@@ -58,6 +56,7 @@ namespace PuppetRoguelite.SceneComponents
             MapEntity = enemy.MapEntity;
             if (enemy.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
             {
+                EnemyHealthComponents.Add(healthComponent);
                 healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
             }
             Enemies.Add(enemy);

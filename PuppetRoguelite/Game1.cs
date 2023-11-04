@@ -6,6 +6,7 @@ using Nez;
 using Nez.Systems;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Scenes;
+using System.IO;
 
 namespace PuppetRoguelite
 {
@@ -24,6 +25,8 @@ namespace PuppetRoguelite
             Window.AllowUserResizing = true;
             IsFixedTimeStep = false;
             IsMouseVisible = false;
+
+            if (!Directory.Exists("Data")) Directory.CreateDirectory("Data");
 
             Physics.SpatialHashCellSize = 32;
             Physics.Gravity = new Vector2(0, 600f);

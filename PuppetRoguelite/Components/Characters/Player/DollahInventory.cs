@@ -23,6 +23,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
         }
 
+        public DollahInventory(int dollahs)
+        {
+            Dollahs = dollahs;
+        }
+
         public void AddDollahs(int amount)
         {
             Dollahs += amount;

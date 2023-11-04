@@ -16,13 +16,11 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Begin();
 
-            Emitters.PlayerEventsEmitter.Emit(PlayerEvents.PlayerDied);
+            _context.SaveData();
 
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._69_Die_02, 1.1f);
+            Game1.AudioManager.StopMusic();
 
-            var deathAnimation = _context.VelocityComponent.Direction.X >= 0 ? "DeathRight" : "DeathLeft";
-            _context.SpriteAnimator.Play(deathAnimation, SpriteAnimator.LoopMode.Once);
-            _context.SpriteAnimator.OnAnimationCompletedEvent += HandleAnimationCompleted;
+            _context.DeathComponent.OnDeathFinished += OnDeathFinished;
         }
 
         public override void Update(float deltaTime)
@@ -34,15 +32,12 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.End();
 
-            _context.SpriteAnimator.OnAnimationCompletedEvent -= HandleAnimationCompleted;
+            _context.DeathComponent.OnDeathFinished -= OnDeathFinished;
         }
 
-        void HandleAnimationCompleted(string animationName)
+        void OnDeathFinished(Entity entity)
         {
-            if (animationName == "DeathRight" || animationName == "DeathLeft")
-            {
-                _context.Entity.Destroy();
-            }
+            Game1.GameStateManager.ReturnToHubAfterDeath();
         }
     }
 }

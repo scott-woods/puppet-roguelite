@@ -42,46 +42,6 @@ namespace PuppetRoguelite.Scenes
 
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();
-            //var playerEntity = FindEntity("player");
-            //if (playerEntity != null)
-            //{
-            //    _playerEntity = playerEntity;
-            //    _playerEntity.AttachToScene(this);
-            //    var components = _playerEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
-            //    for (int i = 0; i < components.Count; i++)
-            //    {
-            //        var comp = components[i] as ITransferrable;
-            //        comp.AddObservers();
-            //    }
-            //}
-            //else
-            //{
-            //    _playerEntity = CreateEntity("player");
-            //    _playerEntity.AddComponent(new PlayerController());
-            //}
-            //var transferEntity = TransferManager.Instance.GetEntityToTransfer();
-            //if (transferEntity != null)
-            //{
-            //    _playerEntity = transferEntity;
-            //    transferEntity.AttachToScene(this);
-            //    var components = transferEntity.GetComponents<Component>().Where(c => c is ITransferrable).ToList();
-            //    for (int i = 0; i < components.Count; i++)
-            //    {
-            //        var comp = components[i] as ITransferrable;
-            //        comp.AddObservers();
-            //    }
-            //    transferEntity.SetEnabled(false);
-            //}
-            //else
-            //{
-            //    _playerEntity = CreateEntity("player");
-            //    _playerEntity.AddComponent(new PlayerController());
-            //}
-
-            //add player
-            //_playerEntity = new Entity("player");
-            //AddEntity(_playerEntity);
-            //_playerEntity.AddComponent(new PlayerController());
 
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
@@ -118,6 +78,8 @@ namespace PuppetRoguelite.Scenes
 
         void OnDungeonExitAreaTriggered()
         {
+            PlayerController.Instance.DollahInventory.Dollahs = 0;
+            PlayerController.Instance.SaveData();
             Game1.AudioManager.StopMusic();
         }
     }
