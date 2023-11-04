@@ -41,6 +41,8 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         IEnumerator HandleEncounterStart()
         {
+            var combatManager = Entity.Scene.GetOrCreateSceneComponent<CombatManager>();
+
             //lock gates
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close, .5f);
             var gates = Entity.Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
@@ -56,7 +58,6 @@ namespace PuppetRoguelite.Components.TiledComponents
             Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);
 
             //spawn enemies
-            var combatManager = Entity.Scene.GetOrCreateSceneComponent<CombatManager>();
             var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapEntity == MapEntity).ToList();
             int i = 0;
             while (i < enemySpawns.Count)

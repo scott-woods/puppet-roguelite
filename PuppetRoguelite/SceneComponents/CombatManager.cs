@@ -8,6 +8,7 @@ using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,6 @@ namespace PuppetRoguelite.SceneComponents
     public class CombatManager : SceneComponent
     {
         public CombatState CombatState = CombatState.None;
-        public int Turns = 0;
         public Entity TurnHandlerEntity;
         public List<Enemy> Enemies = new List<Enemy>();
         public List<HealthComponent> EnemyHealthComponents = new List<HealthComponent>();
@@ -31,7 +31,6 @@ namespace PuppetRoguelite.SceneComponents
         public CombatManager()
         {
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
@@ -46,7 +45,6 @@ namespace PuppetRoguelite.SceneComponents
             }
 
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
-            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
@@ -71,38 +69,21 @@ namespace PuppetRoguelite.SceneComponents
                 gate.Unlock();
             }
 
-            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterEnded);
-        }
+            CombatState = CombatState.None;
 
-        bool CheckForCompletion()
-        {
-            return !Enemies.Any();
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterEnded);
         }
 
         #region OBSERVERS
 
-        void OnEnemyDied(HealthComponent healthComponent)
-        {
-            healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
-            var enemy = healthComponent.Entity.GetComponent<Enemy>();
-            Enemies.Remove(enemy);
-            if (CheckForCompletion())
-            {
-                EndCombat();
-            }
-        }
-
         void OnEncounterStarted()
         {
-            Turns = 0;
             CombatState = CombatState.Dodge;
             Emitters.CombatEventsEmitter.Emit(CombatEvents.DodgePhaseStarted);
         }
 
         void OnTurnPhaseTriggered()
         {
-            Turns += 1;
-
             CombatState = CombatState.Turn;
 
             //create turn handler
@@ -112,7 +93,7 @@ namespace PuppetRoguelite.SceneComponents
 
         void OnTurnPhaseCompleted()
         {
-            if (CheckForCompletion())
+            if (!Enemies.Any())
             {
                 EndCombat();
             }
@@ -123,9 +104,15 @@ namespace PuppetRoguelite.SceneComponents
             }
         }
 
-        void OnEncounterEnded()
+        void OnEnemyDied(HealthComponent healthComponent)
         {
-            CombatState = CombatState.None;
+            healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
+            var enemy = healthComponent.Entity.GetComponent<Enemy>();
+            Enemies.Remove(enemy);
+            if (!Enemies.Any())
+            {
+                EndCombat();
+            }
         }
 
         #endregion
