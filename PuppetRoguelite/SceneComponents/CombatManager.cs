@@ -25,6 +25,7 @@ namespace PuppetRoguelite.SceneComponents
         public Entity TurnHandlerEntity;
         public List<Enemy> Enemies = new List<Enemy>();
         public Entity MapEntity;
+        public ComboComponent ComboComponent;
 
         public CombatManager()
         {

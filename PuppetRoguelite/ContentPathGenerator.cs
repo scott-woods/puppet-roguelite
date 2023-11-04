@@ -1,6 +1,4 @@
-﻿
-
-namespace Nez
+﻿namespace Nez
 {
     /// <summary>
     /// class that contains the names of all of the files processed by the Pipeline Tool
@@ -44,6 +42,7 @@ namespace Nez
 				public const string Cereal_slot_3 = @"Content\Audio\Sounds\cereal_slot_3.wav";
 				public const string Chain_bot_damaged = @"Content\Audio\Sounds\chain_bot_damaged.wav";
 				public const string Default_text = @"Content\Audio\Sounds\default_text.wav";
+				public const string Dollah_pickup = @"Content\Audio\Sounds\dollah_pickup.wav";
 				public const string Enemy_death_1 = @"Content\Audio\Sounds\enemy_death_1.wav";
 				public const string Enemy_spawn = @"Content\Audio\Sounds\enemy_spawn.wav";
 				public const string Gate_close = @"Content\Audio\Sounds\gate_close.wav";

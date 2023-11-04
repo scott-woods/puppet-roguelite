@@ -17,7 +17,8 @@ namespace PuppetRoguelite.Enums
         EnemyHitbox,
         EnemyHurtbox,
         Interactable,
-        Trigger
+        Trigger,
+        Pickup
     }
 
     //public enum PhysicsLayers 

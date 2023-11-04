@@ -26,6 +26,7 @@ namespace PuppetRoguelite
             IsMouseVisible = false;
 
             Physics.SpatialHashCellSize = 32;
+            Physics.Gravity = new Vector2(0, 600f);
 
             FmodManager.Init(new DesktopNativeFmodLibrary(), FmodInitMode.CoreAndStudio, "");
 
@@ -37,7 +38,7 @@ namespace PuppetRoguelite
             Screen.SetSize(1920, 1080);
 
             SceneManager.TargetEntranceId = "0";
-            Scene = new Bedroom();
+            Scene = new MainDungeon();
         }
 
         protected override void Update(GameTime gameTime)

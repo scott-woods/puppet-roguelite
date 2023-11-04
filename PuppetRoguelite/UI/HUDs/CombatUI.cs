@@ -1,16 +1,9 @@
 ﻿using Nez;
-using Nez.Sprites;
 using Nez.UI;
-using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
-using PuppetRoguelite.Enums;
 using PuppetRoguelite.UI.Elements;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.HUDs
 {
@@ -19,17 +12,17 @@ namespace PuppetRoguelite.UI.HUDs
         //elements
         Table _table;
         Label _playerHealthLabel;
-        ProgressBar _apProgressBar;
-        Label _playerApLabel;
         Table _topLeftTable;
         Table _topRightTable;
-        Table _bottomMiddleTable;
         Table _apTable;
         Label _simTipLabel;
+        Label _dollahLabel;
         List<ApProgressBar> _apProgressBars = new List<ApProgressBar>();
 
         //skins
         Skin _basicSkin;
+
+        #region LIFECYCLE
 
         public override void Initialize()
         {
@@ -51,22 +44,23 @@ namespace PuppetRoguelite.UI.HUDs
         {
             base.OnAddedToEntity();
 
+            //connect to emitters
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+
+            //ap progress bars
             if (PlayerController.Instance.ActionPointComponent != null)
             {
                 //setup ap progress bars
                 for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
                 {
                     var bar = new ApProgressBar(PlayerController.Instance.ActionPointComponent, i, _basicSkin);
+                    bar.AddObservers();
                     _apProgressBars.Add(bar);
                     var width = ((480 * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
                     _apTable.Add(bar).Width(width);
                 }
             }
-
-            //connect to emitters
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
-            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
-            //Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
 
             //player health
             if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent> (out var healthComponent))
@@ -75,9 +69,11 @@ namespace PuppetRoguelite.UI.HUDs
                 healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
             }
 
-            foreach (var bar in _apProgressBars)
+            //dollahs
+            if (PlayerController.Instance.Entity.TryGetComponent<DollahInventory>(out var dollahInventory))
             {
-                bar.AddObservers();
+                OnDollahsChanged(dollahInventory);
+                dollahInventory.Emitter.AddObserver(DollahInventoryEvents.DollahsChanged, OnDollahsChanged);
             }
         }
 
@@ -101,7 +97,15 @@ namespace PuppetRoguelite.UI.HUDs
 
             _apProgressBars.Clear();
             _apTable.ClearChildren();
+
+            //dollahs
+            if (PlayerController.Instance.Entity.TryGetComponent<DollahInventory>(out var dollahInventory))
+            {
+                dollahInventory.Emitter.RemoveObserver(DollahInventoryEvents.DollahsChanged, OnDollahsChanged);
+            }
         }
+
+        #endregion
 
         void ArrangeElements()
         {
@@ -114,7 +118,8 @@ namespace PuppetRoguelite.UI.HUDs
             //currency
             _topRightTable = new Table().Top().Right().PadTop(10).PadRight(10);
             _table.Add(_topRightTable).Grow();
-            _topRightTable.Add(new Label("$", _basicSkin));
+            _dollahLabel = new Label("$: ", _basicSkin);
+            _topRightTable.Add(_dollahLabel);
             _topRightTable.Pack();
 
             _table.Row();
@@ -136,6 +141,18 @@ namespace PuppetRoguelite.UI.HUDs
             bottomTable.Add(_simTipLabel).SetPadLeft(480 * .025f).SetPadRight(480 * .025f).Width(480 * .2f).Expand().Bottom().Right();
         }
 
+        public void SetShowSimTipLabel(bool show)
+        {
+            _simTipLabel.SetVisible(show);
+        }
+
+        #region OBSERVERS
+
+        void OnDollahsChanged(DollahInventory inv)
+        {
+            _dollahLabel.SetText($"$: {inv.Dollahs}");
+        }
+
         void OnEncounterStarted()
         {
             //get initial hp values
@@ -155,33 +172,12 @@ namespace PuppetRoguelite.UI.HUDs
             _apTable.SetVisible(false);
         }
 
-        //void OnDodgePhaseStarted()
-        //{
-        //    //ap bars
-        //    _apProgressBars.Clear();
-        //    _apTable.ClearChildren();
-        //    if (PlayerController.Instance.ActionPointComponent != null)
-        //    {
-        //        //setup ap progress bars
-        //        for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
-        //        {
-        //            var bar = new ApProgressBar(PlayerController.Instance.ActionPointComponent, i, _basicSkin);
-        //            _apProgressBars.Add(bar);
-        //            var width = ((480 * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
-        //            _apTable.Add(bar).Width(width);
-        //        }
-        //    }
-        //}
-
         public void OnPlayerHealthChanged(HealthComponent healthComponent)
         {
             _playerHealthLabel.SetText($"HP: {healthComponent.Health}/{healthComponent.MaxHealth}");
             _topLeftTable.Pack();
         }
 
-        public void SetShowSimTipLabel(bool show)
-        {
-            _simTipLabel.SetVisible(show);
-        }
+        #endregion
     }
 }

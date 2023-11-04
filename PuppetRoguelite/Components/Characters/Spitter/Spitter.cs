@@ -43,6 +43,8 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         public KnockbackComponent KnockbackComponent;
         public SpriteFlipper SpriteFlipper;
         public OriginComponent OriginComponent;
+        public DollahDropper DollahDropper;
+        public DeathComponent DeathComponent;
 
         //actions
         public SpitAttack SpitAttack;
@@ -79,6 +81,9 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             //health
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp, _maxHp));
 
+            //dollah dropper
+            DollahDropper = Entity.AddComponent(new DollahDropper(4, 2));
+
             //velocity
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
 
@@ -109,6 +114,9 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
             //sprite flipper
             SpriteFlipper = Entity.AddComponent(new SpriteFlipper(Animator, VelocityComponent));
+
+            //death
+            DeathComponent = Entity.AddComponent(new DeathComponent(Nez.Content.Audio.Sounds.Enemy_death_1, Animator, "Die", "Hit"));
         }
 
         public override void OnAddedToEntity()
@@ -268,13 +276,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         void OnHealthDepleted(HealthComponent healthComponent)
         {
             AbortActions();
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_death_1);
             _isActive = false;
-            Animator.Play("Die", SpriteAnimator.LoopMode.Once);
-            Animator.OnAnimationCompletedEvent += (animationName) =>
-            {
-                Entity.Destroy();
-            };
         }
     }
 }

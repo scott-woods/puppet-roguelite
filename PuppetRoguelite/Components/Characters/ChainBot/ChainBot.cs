@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
+using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
     {
         //stats
         float _moveSpeed = 75f;
-        int _hp = 12;
-        int _maxHp = 12;
+        int _hp = 1;
+        int _maxHp = 1;
 
         //behavior tree
         BehaviorTree<ChainBot> _tree;
@@ -36,9 +37,11 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         BoxCollider _collider;
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
+        public DollahDropper DollahDropper;
         public NewHealthbar NewHealthbar { get; set; }
         public KnockbackComponent KnockbackComponent;
         public OriginComponent OriginComponent;
+        public DeathComponent DeathComponent;
 
         //misc
         bool _isActive = true;
@@ -73,6 +76,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //health
             _healthComponent = Entity.AddComponent(new HealthComponent(_hp, _maxHp));
 
+            //dollah dropper
+            DollahDropper = Entity.AddComponent(new DollahDropper(4, 2));
+
             //velocity
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
 
@@ -92,6 +98,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
+
+            //death
+            DeathComponent = Entity.AddComponent(new DeathComponent(Nez.Content.Audio.Sounds.Enemy_death_1, Animator, "Die", "Hit"));
 
             //y sorter
             _ySorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
@@ -277,13 +286,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         void OnHealthDepleted(HealthComponent healthComponent)
         {
             AbortActions();
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_death_1);
             _isActive = false;
-            Animator.Play("Die", SpriteAnimator.LoopMode.Once);
-            Animator.OnAnimationCompletedEvent += (animationName) =>
-            {
-                Entity.Destroy();
-            };
         }
 
         #endregion

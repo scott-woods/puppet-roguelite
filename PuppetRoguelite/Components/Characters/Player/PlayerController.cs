@@ -62,6 +62,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public SpriteTrail _spriteTrail;
         public KnockbackComponent KnockbackComponent;
         public OriginComponent OriginComponent;
+        public DollahInventory DollahInventory;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -158,6 +159,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             _inventory = Entity.AddComponent(new Inventory());
             _inventory.AddItem(new CerealBox("feef"));
             _inventory.AddItem(new CerealBox("feef"));
+
+            //dollahs
+            DollahInventory = Entity.AddComponent(new DollahInventory());
 
             //ySort
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, OriginComponent));

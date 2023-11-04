@@ -34,12 +34,14 @@ namespace PuppetRoguelite.Scenes
         Dungenerator _dungenerator;
         CombatManager _combatManager;
         PlayerSpawner _playerSpawner;
+        ComboComponent _comboComponent;
 
         public override void Initialize()
         {
             base.Initialize();
 
             _playerSpawner = AddSceneComponent(new PlayerSpawner());
+            _comboComponent = AddSceneComponent(new ComboComponent());
 
             ClearColor = Microsoft.Xna.Framework.Color.Transparent;
 

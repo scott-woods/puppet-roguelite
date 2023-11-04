@@ -325,11 +325,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
+      "projectUniqueName": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
       "projectName": "PuppetRoguelite",
-      "projectPath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
+      "projectPath": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
       "packagesPath": "C:\\Users\\scott\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\obj\\",
+      "outputPath": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Users\\scott\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
@@ -353,11 +353,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Persistence\\Nez.MG38.Persistence.csproj": {
-              "projectPath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Persistence\\Nez.MG38.Persistence.csproj"
+            "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Persistence\\Nez.MG38.Persistence.csproj": {
+              "projectPath": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Persistence\\Nez.MG38.Persistence.csproj"
             },
-            "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Portable\\Nez.MG38.csproj": {
-              "projectPath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Portable\\Nez.MG38.csproj"
+            "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Portable\\Nez.MG38.csproj": {
+              "projectPath": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\Nez\\Nez.Portable\\Nez.MG38.csproj"
             }
           }
         }

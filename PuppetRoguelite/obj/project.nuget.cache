@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HiYIf12cUoIOOhXqeQsKYw3tTz1/TmlrlINoy1YCVxU9IRQksWh0GPIufv5J2t/6Kgilz+TTeO0bakZgnAYS0g==",
+  "dgSpecHash": "zYeMw9ASHE1wwAi2rk1Bi8Hm8w5CNNnSorBP2YpEX8nMEe6hbpfqcHQIkG19FBIqlgSbVxXdjfzmeAhOPni9RA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\scott\\OneDrive\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
+  "projectFilePath": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRoguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\scott\\.nuget\\packages\\fmodforfoxes\\3.0.0\\fmodforfoxes.3.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\fmodforfoxes.desktop\\3.0.0\\fmodforfoxes.desktop.3.0.0.nupkg.sha512",
