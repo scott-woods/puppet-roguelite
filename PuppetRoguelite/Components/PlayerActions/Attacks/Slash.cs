@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Slash", 1)]
+    [PlayerActionInfo("Slash", 1, PlayerActionCategory.Attack)]
     public class Slash : PlayerAction, IUpdatable
     {
         int _offset = 12;

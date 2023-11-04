@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Dash", 2)]
+    [PlayerActionInfo("Dash", 2, PlayerActionCategory.Attack)]
     public class DashAttack : PlayerAction
     {
         int _damage = 3;

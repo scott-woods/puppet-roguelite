@@ -1,23 +1,19 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Nez;
-using Nez.UI;
-using PuppetRoguelite.Components;
+﻿using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.PlayerActions;
-using PuppetRoguelite.Enums;
-using PuppetRoguelite.SceneComponents;
-using PuppetRoguelite.Tools;
+using PuppetRoguelite.Components;
 using PuppetRoguelite.UI.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Nez;
 
 namespace PuppetRoguelite.UI.Menus
 {
-    public class AttacksMenu : UIMenu
+    public class UtilityMenu : UIMenu
     {
         Vector2 _offset = new Vector2(-16, 0);
         Vector2 _basePosition;
@@ -29,7 +25,7 @@ namespace PuppetRoguelite.UI.Menus
 
         Dictionary<Button, Type> _buttonDictionary = new Dictionary<Button, Type>();
 
-        public AttacksMenu(Vector2 basePosition, TurnHandler turnHandler)
+        public UtilityMenu(Vector2 basePosition, TurnHandler turnHandler)
         {
             _basePosition = basePosition;
             _turnHandler = turnHandler;
@@ -39,15 +35,15 @@ namespace PuppetRoguelite.UI.Menus
         {
             //dialog content
             Dictionary<ListButton, Label> dialogContent = new Dictionary<ListButton, Label>();
-            var options = PlayerController.Instance.ActionsManager.AttackActions;
+            var options = PlayerController.Instance.ActionsManager.UtilityActions;
             foreach (var option in options)
             {
-                var attackType = option.ToType();
+                var utilityType = option.ToType();
 
                 //check affordability
                 var apCostColor = Color.White;
                 var disabled = false;
-                var apCost = PlayerActionUtils.GetApCost(attackType);
+                var apCost = PlayerActionUtils.GetApCost(utilityType);
                 if (apCost > PlayerController.Instance.ActionPointComponent.ActionPoints)
                 {
                     apCostColor = Color.Gray;
@@ -55,13 +51,13 @@ namespace PuppetRoguelite.UI.Menus
                 }
 
                 //create button
-                var button = new ListButton(PlayerActionUtils.GetName(attackType), _defaultSkin, "listButton");
+                var button = new ListButton(PlayerActionUtils.GetName(utilityType), _defaultSkin, "listButton");
                 button.SetDisabled(disabled);
-                button.OnClicked += button => _turnHandler.HandleActionSelected(attackType);
-                _buttonDictionary.Add(button, attackType);
+                button.OnClicked += button => _turnHandler.HandleActionSelected(utilityType);
+                _buttonDictionary.Add(button, utilityType);
 
                 //create cost label
-                var label = new Label(PlayerActionUtils.GetApCost(attackType).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, apCostColor));
+                var label = new Label(PlayerActionUtils.GetApCost(utilityType).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, apCostColor));
 
                 //add to content list
                 dialogContent.Add(button, label);
@@ -81,7 +77,7 @@ namespace PuppetRoguelite.UI.Menus
 
         public override void ValidateButtons()
         {
-            foreach(var pair in  _buttonDictionary)
+            foreach (var pair in _buttonDictionary)
             {
                 //check affordability
                 var apCostColor = Color.White;

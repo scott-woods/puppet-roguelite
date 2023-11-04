@@ -55,7 +55,6 @@ namespace PuppetRoguelite.Components.Characters.Player
         public HealthComponent HealthComponent;
         public Hurtbox Hurtbox;
         public ActionPointComponent ActionPointComponent;
-        public AttacksList AttacksList;
         Inventory _inventory;
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
@@ -66,6 +65,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public OriginComponent OriginComponent;
         public DollahInventory DollahInventory;
         public DeathComponent DeathComponent;
+        public ActionsManager ActionsManager;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -162,9 +162,6 @@ namespace PuppetRoguelite.Components.Characters.Player
             //action points
             ActionPointComponent = Entity.AddComponent(new ActionPointComponent(HealthComponent));
 
-            //attacks list
-            AttacksList = Entity.AddComponent(new AttacksList(new List<Type>() { typeof(Slash), typeof(DashAttack) }));
-
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
             _inventory.AddItem(new CerealBox("feef"));
@@ -191,6 +188,9 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //knockback
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .75f, VelocityComponent, Hurtbox));
+
+            //actions manager
+            ActionsManager = Entity.AddComponent(new ActionsManager(PlayerData.AttackActions, PlayerData.UtilityActions, PlayerData.SupportActions));
         }
 
         void SetupInput()
@@ -262,10 +262,16 @@ namespace PuppetRoguelite.Components.Characters.Player
             var data = new PlayerData()
             {
                 Dollahs = DollahInventory.Dollahs,
-                MaxHp = HealthComponent.MaxHealth
+                MaxHp = HealthComponent.MaxHealth,
+                AttackActions = ActionsManager.AttackActions,
+                UtilityActions = ActionsManager.UtilityActions,
+                SupportActions = ActionsManager.SupportActions,
             };
 
-            var json = Json.ToJson(data);
+            var settings = JsonSettings.HandlesReferences;
+            settings.TypeNameHandling = TypeNameHandling.All;
+
+            var json = Json.ToJson(data, settings);
             File.WriteAllText("Data/playerData.json", json);
         }
 

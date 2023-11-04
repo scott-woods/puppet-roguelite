@@ -23,8 +23,8 @@ namespace PuppetRoguelite.UI.Menus
         //elements
         Table _actionTable;
         ActionButton _attackButton;
-        ActionButton _toolButton;
-        ActionButton _itemButton;
+        ActionButton _utilitiesButton;
+        ActionButton _supportButton;
         ActionButton _executeButton;
 
         TurnHandler _turnHandler;
@@ -41,10 +41,10 @@ namespace PuppetRoguelite.UI.Menus
 
             var attackLabel = new Label("Attack", _defaultSkin).SetAlignment(Align.Center);
             _actionTable.Add(attackLabel).Center();
-            var toolLabel = new Label("Tools", _defaultSkin).SetAlignment(Align.Center);
-            _actionTable.Add(toolLabel).Center();
-            var itemLabel = new Label("Items", _defaultSkin).SetAlignment(Align.Center);
-            _actionTable.Add(itemLabel).Center();
+            var utilityLabel = new Label("Utility", _defaultSkin).SetAlignment(Align.Center);
+            _actionTable.Add(utilityLabel).Center();
+            var supportLabel = new Label("Support", _defaultSkin).SetAlignment(Align.Center);
+            _actionTable.Add(supportLabel).Center();
             var executeLabel = new Label("Execute", _defaultSkin).SetAlignment(Align.Center);
             _actionTable.Add(executeLabel).Center();
 
@@ -53,12 +53,12 @@ namespace PuppetRoguelite.UI.Menus
             _attackButton = new ActionButton(_defaultSkin, "attackActionButton", attackLabel);
             _attackButton.OnClicked += OnAttackButtonClicked;
             _actionTable.Add(_attackButton).Center();
-            _toolButton = new ActionButton(_defaultSkin, "toolActionButton", toolLabel);
-            _toolButton.OnClicked += OnToolButtonClicked;
-            _actionTable.Add(_toolButton).Center();
-            _itemButton = new ActionButton(_defaultSkin, "itemActionButton", itemLabel);
-            _itemButton.OnClicked += OnItemButtonClicked;
-            _actionTable.Add(_itemButton).Center();
+            _utilitiesButton = new ActionButton(_defaultSkin, "toolActionButton", utilityLabel);
+            _utilitiesButton.OnClicked += OnUtilityButtonClicked;
+            _actionTable.Add(_utilitiesButton).Center();
+            _supportButton = new ActionButton(_defaultSkin, "itemActionButton", supportLabel);
+            _supportButton.OnClicked += OnSupportButtonClicked;
+            _actionTable.Add(_supportButton).Center();
             _executeButton = new ActionButton(_defaultSkin, "executeButton", executeLabel);
             _executeButton.OnClicked += OnExecuteButtonClicked;
             _actionTable.Add(_executeButton).Center();
@@ -78,8 +78,8 @@ namespace PuppetRoguelite.UI.Menus
             _actionTable.Pack();
 
             attackLabel.SetVisible(false);
-            toolLabel.SetVisible(false);
-            itemLabel.SetVisible(false);
+            utilityLabel.SetVisible(false);
+            supportLabel.SetVisible(false);
             executeLabel.SetVisible(false);
 
             Stage.AddElement(_actionTable);
@@ -122,14 +122,14 @@ namespace PuppetRoguelite.UI.Menus
             _turnHandler.OpenMenu(new AttacksMenu(_basePosition, _turnHandler));
         }
 
-        void OnToolButtonClicked(Button obj)
+        void OnUtilityButtonClicked(Button obj)
         {
-            //throw new NotImplementedException();
+            _turnHandler.OpenMenu(new UtilityMenu(_basePosition, _turnHandler));
         }
 
-        void OnItemButtonClicked(Button obj)
+        void OnSupportButtonClicked(Button obj)
         {
-
+            _turnHandler.OpenMenu(new SupportMenu(_basePosition, _turnHandler));
         }
 
         void OnExecuteButtonClicked(Button obj)

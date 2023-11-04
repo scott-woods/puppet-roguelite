@@ -1,4 +1,9 @@
-﻿using System;
+﻿using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.PlayerActions;
+using PuppetRoguelite.Components.PlayerActions.Attacks;
+using PuppetRoguelite.Components.PlayerActions.Support;
+using PuppetRoguelite.Components.PlayerActions.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +16,8 @@ namespace PuppetRoguelite.Models
     {
         public int Dollahs = 0;
         public int MaxHp = 8;
+        public List<PlayerActionType> AttackActions = new List<PlayerActionType>() { PlayerActionType.FromType(typeof(DashAttack)) };
+        public List<PlayerActionType> UtilityActions = new List<PlayerActionType>() { PlayerActionType.FromType(typeof(Teleport)) };
+        public List<PlayerActionType> SupportActions = new List<PlayerActionType>() { PlayerActionType.FromType(typeof(HealingAura)) };
     }
 }
