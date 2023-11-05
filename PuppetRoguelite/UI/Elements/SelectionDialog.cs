@@ -57,32 +57,6 @@ namespace PuppetRoguelite.UI.Elements
                 contentTable.Add(pair.Value).SetExpandX().Right();
             }
 
-            //var options = Player.Instance.AttacksList.AvailableAttackTypes;
-            //contentTable.Add(new Label("Cost", new LabelStyle(Graphics.Instance.BitmapFont, Color.Black))).SetColspan(2).SetExpandX().Right();
-            //contentTable.Row();
-            //foreach (var attackType in options)
-            //{
-            //    //check affordability
-            //    var apCostColor = Color.White;
-            //    var disabled = false;
-            //    var apCost = PlayerActionUtils.GetApCost(attackType);
-            //    if (apCost > Player.Instance.ActionPointComponent.ActionPoints)
-            //    {
-            //        apCostColor = Color.Gray;
-            //        disabled = true;
-            //    }
-
-            //    //create button
-            //    var button = new ListButton(this, PlayerActionUtils.GetName(attackType), _skin, "listButton");
-            //    button.SetDisabled(disabled);
-            //    button.OnClicked += button => _turnHandler.HandleActionSelected(attackType);
-            //    contentTable.Add(button).SetExpandX().Left().SetSpaceRight(32);
-
-            //    //add cost label
-            //    contentTable.Add(new Label(PlayerActionUtils.GetApCost(attackType).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, apCostColor))).SetExpandX().Right();
-            //    contentTable.Row();
-            //}
-
             //dialog buttons
             if (_content.Count > _maxPerPage)
             {

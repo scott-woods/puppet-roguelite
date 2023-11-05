@@ -2,6 +2,7 @@
 using Nez;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
+using PuppetRoguelite.Entities;
 using PuppetRoguelite.Interfaces;
 using PuppetRoguelite.Tools;
 using System;
@@ -24,7 +25,7 @@ namespace PuppetRoguelite.SceneComponents
             }
             else
             {
-                playerEntity = Scene.CreateEntity("player");
+                playerEntity = Scene.AddEntity(new Entity("player"));
                 playerEntity.AddComponent(new PlayerController());
             }
 

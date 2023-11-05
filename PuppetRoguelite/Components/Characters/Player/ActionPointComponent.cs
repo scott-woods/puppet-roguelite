@@ -102,7 +102,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         /// decrement ap when an action is successfully prepared
         /// </summary>
         /// <param name="action"></param>
-        void OnPlayerActionFinishedPreparing(IPlayerAction action)
+        void OnPlayerActionFinishedPreparing(PlayerAction action)
         {
             ActionPoints -= PlayerActionUtils.GetApCost(action.GetType());
         }

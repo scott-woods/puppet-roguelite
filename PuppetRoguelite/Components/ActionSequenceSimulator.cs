@@ -1,96 +1,96 @@
-﻿using Microsoft.Xna.Framework;
-using Nez;
-using PuppetRoguelite.Components.PlayerActions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using Microsoft.Xna.Framework;
+//using Nez;
+//using PuppetRoguelite.Components.PlayerActions;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace PuppetRoguelite.Components
-{
-    public class ActionSequenceSimulator : Component
-    {
-        //public Queue<PlayerAction> ActionQueue = new Queue<PlayerAction>();
-        Queue<PlayerAction> _actionQueue;
-        Entity _playerSimEntity;
-        PlayerAction _currentAction;
-        Vector2 _returnPosition;
+//namespace PuppetRoguelite.Components
+//{
+//    public class ActionSequenceSimulator : Component
+//    {
+//        //public Queue<PlayerAction> ActionQueue = new Queue<PlayerAction>();
+//        Queue<PlayerAction> _actionQueue;
+//        Entity _playerSimEntity;
+//        PlayerAction _currentAction;
+//        Vector2 _returnPosition;
 
-        int _currentIndex = 0;
-        bool _active = false;
+//        int _currentIndex = 0;
+//        bool _active = false;
 
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
+//        public override void OnAddedToEntity()
+//        {
+//            base.OnAddedToEntity();
 
-            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.SimActionFinishedExecuting, OnSimActionFinishedExecuting);
-        }
+//            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.SimActionFinishedExecuting, OnSimActionFinishedExecuting);
+//        }
 
-        public override void OnRemovedFromEntity()
-        {
-            base.OnRemovedFromEntity();
+//        public override void OnRemovedFromEntity()
+//        {
+//            base.OnRemovedFromEntity();
 
-            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.SimActionFinishedExecuting, OnSimActionFinishedExecuting);
-        }
+//            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.SimActionFinishedExecuting, OnSimActionFinishedExecuting);
+//        }
 
-        public void StartSim(Queue<PlayerAction> actionQueue, Entity playerSimEntity, Vector2 returnPosition)
-        {
-            _actionQueue = actionQueue;
-            _playerSimEntity = playerSimEntity;
-            _returnPosition = returnPosition;
+//        public void StartSim(Queue<PlayerAction> actionQueue, Entity playerSimEntity, Vector2 returnPosition)
+//        {
+//            _actionQueue = actionQueue;
+//            _playerSimEntity = playerSimEntity;
+//            _returnPosition = returnPosition;
 
-            _active = true;
+//            _active = true;
 
-            PlayNextAction();
-        }
+//            PlayNextAction();
+//        }
 
-        public void StopSim()
-        {
-            _active = false;
+//        public void StopSim()
+//        {
+//            _active = false;
 
-            _playerSimEntity.RemoveComponent(_currentAction);
-            _playerSimEntity.SetPosition(_returnPosition);
+//            _playerSimEntity.RemoveComponent(_currentAction);
+//            _playerSimEntity.SetPosition(_returnPosition);
 
-            _currentIndex = 0;
-            _currentAction = null;
-        }
+//            _currentIndex = 0;
+//            _currentAction = null;
+//        }
 
-        void PlayNextAction()
-        {
-            _currentAction = _actionQueue.ElementAt(_currentIndex);
-            _playerSimEntity.AddComponent(_currentAction);
-            _currentAction.Execute(true);
-        }
+//        void PlayNextAction()
+//        {
+//            _currentAction = _actionQueue.ElementAt(_currentIndex);
+//            _playerSimEntity.AddComponent(_currentAction);
+//            _currentAction.Execute(true);
+//        }
 
-        void OnSimActionFinishedExecuting(IPlayerAction action)
-        {
-            if (_active)
-            {
-                if (_currentIndex < _actionQueue.Count - 1) //not at end of queue
-                {
-                    _currentIndex++;
-                }
-                else //reached end of queue
-                {
-                    _currentIndex = 0;
-                }
+//        void OnSimActionFinishedExecuting(IPlayerAction action)
+//        {
+//            if (_active)
+//            {
+//                if (_currentIndex < _actionQueue.Count - 1) //not at end of queue
+//                {
+//                    _currentIndex++;
+//                }
+//                else //reached end of queue
+//                {
+//                    _currentIndex = 0;
+//                }
 
-                var nextAction = _actionQueue.ElementAt(_currentIndex);
+//                var nextAction = _actionQueue.ElementAt(_currentIndex);
 
-                if (nextAction != _currentAction)
-                {
-                    _playerSimEntity.RemoveComponent(_currentAction);
-                    _currentAction = nextAction;
+//                if (nextAction != _currentAction)
+//                {
+//                    _playerSimEntity.RemoveComponent(_currentAction);
+//                    _currentAction = nextAction;
 
-                    _playerSimEntity.AddComponent(_currentAction);
-                    _currentAction.Execute(true);
-                }
-                else
-                {
-                    _currentAction.Execute(true);
-                }
-            }
-        }
-    }
-}
+//                    _playerSimEntity.AddComponent(_currentAction);
+//                    _currentAction.Execute(true);
+//                }
+//                else
+//                {
+//                    _currentAction.Execute(true);
+//                }
+//            }
+//        }
+//    }
+//}

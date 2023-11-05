@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,18 @@ namespace PuppetRoguelite.Components.PlayerActions.Support
     [PlayerActionInfo("Healing Aura", 2, PlayerActionCategory.Support)]
     public class HealingAura : PlayerAction
     {
+        public HealingAura(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
+        {
+        }
+
         public override void Prepare()
         {
-            base.Prepare();
+            ActionPrepFinishedHandler?.Invoke(this, Position);
         }
 
-        public override void Execute(bool isSimulation = false)
+        public override void Execute()
         {
-            base.Execute(isSimulation);
-            var type = _isSimulation ? PlayerActionEvents.SimActionFinishedExecuting : PlayerActionEvents.ActionFinishedExecuting;
-            Emitters.PlayerActionEmitter.Emit(type, this);
-        }
-
-        public override void Update()
-        {
-            if (_isPreparing)
-            {
-                if (Input.LeftMouseButtonPressed)
-                {
-                    _isPreparing = false;
-                    Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedPreparing, this);
-                    return;
-                }
-            }
+            ExecutionFinishedHandler?.Invoke(this);
         }
     }
 }

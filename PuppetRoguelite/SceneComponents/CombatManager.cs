@@ -22,16 +22,17 @@ namespace PuppetRoguelite.SceneComponents
     public class CombatManager : SceneComponent
     {
         public CombatState CombatState = CombatState.None;
-        public Entity TurnHandlerEntity;
         public List<Enemy> Enemies = new List<Enemy>();
         public List<HealthComponent> EnemyHealthComponents = new List<HealthComponent>();
         public Entity MapEntity;
-        public ComboComponent ComboComponent;
+        public ComboManager ComboManager = new ComboManager();
+        public TurnHandler TurnHandler = new TurnHandler();
 
         public CombatManager()
         {
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
         }
 
@@ -46,7 +47,10 @@ namespace PuppetRoguelite.SceneComponents
 
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+
+            ComboManager.Reset();
         }
 
         public void AddEnemy(Enemy enemy)
@@ -85,14 +89,18 @@ namespace PuppetRoguelite.SceneComponents
         void OnTurnPhaseTriggered()
         {
             CombatState = CombatState.Turn;
+            TurnHandler.BeginTurn();
+        }
 
-            //create turn handler
-            TurnHandlerEntity = Scene.CreateEntity("turn-handler");
-            TurnHandlerEntity.AddComponent(new TurnHandler());
+        void OnTurnPhaseExecuting()
+        {
+            ComboManager.StartCounting(Enemies);
         }
 
         void OnTurnPhaseCompleted()
         {
+            ComboManager.Reset();
+
             if (!Enemies.Any())
             {
                 EndCombat();

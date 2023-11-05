@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +16,21 @@ namespace PuppetRoguelite.UI.Menus
     /// <summary>
     /// Wrapper to set action key for any menus
     /// </summary>
-    public abstract class UIMenu : UICanvas, IUIMenu
+    public abstract class UIMenu : UICanvas
     {
-        protected Skin _defaultSkin;
-        protected Element _baseElement;
-        protected Vector2 _anchorPosition;
-        protected Vector2 _screenSpaceOffset = Vector2.Zero;
+        protected Element BaseElement;
+        protected Vector2 AnchorPosition;
+        protected Vector2 ScreenSpaceOffset = Vector2.Zero;
+        public Vector2 WorldSpaceOffset = Vector2.Zero;
+        protected IGamepadFocusable DefaultFocus;
+        protected IGamepadFocusable LastFocused;
+        Action _cancelHandler;
+        ICoroutine _waitCoroutine;
+
+        public UIMenu(Action cancelHandler)
+        {
+            _cancelHandler = cancelHandler;
+        }
 
         public override void Initialize()
         {
@@ -31,59 +42,101 @@ namespace PuppetRoguelite.UI.Menus
             //set default accept key
             Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.E;
 
-            //load skin
-            _defaultSkin = CustomSkins.CreateBasicSkin();
-
             //setup
-            _baseElement = ArrangeElements();
-            ValidateButtons();
-            DetermineDefaultElement();
-            DeterminePosition();
+            BaseElement = ArrangeElements();
+            DefaultFocus = GetDefaultFocus();
         }
 
         public override void Update()
         {
             base.Update();
 
+            //cancel if cancel key pressed
+            if (Input.IsKeyPressed(Keys.X))
+            {
+                if (_waitCoroutine != null)
+                {
+                    _waitCoroutine.Stop();
+                }
+
+                _cancelHandler?.Invoke();
+            }
+
             //position elements in world space
-            if (_baseElement != null)
+            if (BaseElement != null)
             {
-                var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition);
-                _baseElement.SetPosition(pos.X + _screenSpaceOffset.X, pos.Y + _screenSpaceOffset.Y);
+                var pos = ResolutionHelper.GameToUiPoint(Entity, AnchorPosition + WorldSpaceOffset);
+                BaseElement.SetPosition(pos.X + ScreenSpaceOffset.X, pos.Y + ScreenSpaceOffset.Y);
             }
         }
 
-        public override void OnEnabled()
+        public virtual void Show(Vector2 basePosition)
         {
-            base.OnEnabled();
+            AnchorPosition = basePosition;
 
-            if (_baseElement != null)
-            {
-                Stage.AddElement(_baseElement);
-            }
-            else
-            {
-                //if somehow setup hasn't been done, do it here
-                _baseElement = ArrangeElements();
-                ValidateButtons();
-                DetermineDefaultElement();
-                DeterminePosition();
-            }
+            Stage.AddElement(BaseElement);
+
+            Stage.SetGamepadFocusElement(null);
+            var focus = LastFocused != null ? LastFocused : DefaultFocus;
+            Stage.SetGamepadFocusElement(focus);
+
+            SetEnabled(true);
+
+            _waitCoroutine = Game1.StartCoroutine(WaitForActionKeyReleased());
         }
 
-        public override void OnDisabled()
+        public void Hide()
         {
-            base.OnDisabled();
+            RemoveHandlersFromButtons();
+            BaseElement.Remove();
+            Stage.UnfocusAll();
 
-            if (_baseElement != null)
+            SetEnabled(false);
+        }
+
+        IEnumerator WaitForActionKeyReleased()
+        {
+            while (Input.IsKeyDown(Keys.E) || Input.IsKeyReleased(Keys.E))
             {
-                _baseElement.Remove();
+                yield return null;
             }
+
+            AddHandlersToButtons();
+        }
+
+        //public override void OnEnabled()
+        //{
+        //    base.OnEnabled();
+
+        //    if (BaseElement != null)
+        //    {
+        //        Stage.AddElement(BaseElement);
+        //    }
+        //    else
+        //    {
+        //        //if somehow setup hasn't been done, do it here
+        //        BaseElement = ArrangeElements();
+        //    }
+        //}
+
+        //public override void OnDisabled()
+        //{
+        //    base.OnDisabled();
+
+        //    if (BaseElement != null)
+        //    {
+        //        BaseElement.Remove();
+        //    }
+        //}
+
+        protected void OnMenuButtonClicked(Button button)
+        {
+            LastFocused = button;
         }
 
         public abstract Element ArrangeElements();
-        public abstract void ValidateButtons();
-        public abstract void DetermineDefaultElement();
-        public abstract void DeterminePosition();
+        public abstract IGamepadFocusable GetDefaultFocus();
+        public abstract void AddHandlersToButtons();
+        public abstract void RemoveHandlersFromButtons();
     }
 }
