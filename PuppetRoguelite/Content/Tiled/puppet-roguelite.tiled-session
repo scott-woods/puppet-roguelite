@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilemaps/hub.tmx",
+    "activeFile": "Tilemaps/R_1.tmx",
     "expandedProjectPaths": [
-        "Tilesets",
         ".",
         "Templates",
+        "Tilesets",
         "Tilemaps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -127,8 +127,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.6201786053582,
-                "y": 192.62017860535818
+                "x": 191.16093482804487,
+                "y": 191.16093482804487
             }
         },
         "Tilemaps/TBLR_1.tmx": {
@@ -316,7 +316,17 @@
         "Tilemaps/LR_1.tmx",
         "Tilemaps/B_1.tmx",
         "Tilemaps/R_1.tmx",
-        "Tilemaps/T_1.tmx"
+        "Tilemaps/T_1.tmx",
+        "Tilemaps/TBLR_1.tmx",
+        "Tilemaps/TBL_1.tmx",
+        "Tilemaps/TBR_1.tmx",
+        "Tilemaps/TLR_1.tmx",
+        "Tilemaps/BLR_1.tmx",
+        "Tilemaps/TB_1.tmx",
+        "Tilemaps/TL_1.tmx",
+        "Tilemaps/TR_1.tmx",
+        "Tilemaps/BL_1.tmx",
+        "Tilemaps/BR_1.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "chestSize",
@@ -324,15 +334,15 @@
         "Tilesets/blood_temple_tileset.tsx",
         "Tilesets/dungeon_prison_props.tsx",
         "Tilemaps/bedroom.tmx",
-        "Tilemaps/T_1.tmx",
-        "Tilemaps/R_1.tmx",
-        "Tilemaps/B_1.tmx",
-        "Tilemaps/LR_1.tmx",
-        "Tilemaps/L_1.tmx",
-        "Tilemaps/right_key_room.tmx",
-        "Tilemaps/left_key_room.tmx",
+        "Tilemaps/hub.tmx",
         "Tilemaps/boss_room.tmx",
-        "Tilemaps/hub.tmx"
+        "Tilemaps/left_key_room.tmx",
+        "Tilemaps/right_key_room.tmx",
+        "Tilemaps/L_1.tmx",
+        "Tilemaps/LR_1.tmx",
+        "Tilemaps/B_1.tmx",
+        "Tilemaps/BR_1.tmx",
+        "Tilemaps/BL_1.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

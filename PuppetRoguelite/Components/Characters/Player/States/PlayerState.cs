@@ -86,9 +86,12 @@ namespace PuppetRoguelite.Components.Characters.Player.States
                 {
                     if (raycastHit.Collider.Entity.TryGetComponent<Interactable>(out var interactable))
                     {
-                        _machine.ChangeState<CutsceneState>();
-                        interactable.Interact(HandleInteractionFinished);
-                        return true;
+                        if (interactable.Active)
+                        {
+                            _machine.ChangeState<CutsceneState>();
+                            interactable.Interact(HandleInteractionFinished);
+                            return true;
+                        }
                     }
                 }
                 else
@@ -98,9 +101,12 @@ namespace PuppetRoguelite.Components.Characters.Player.States
                     {
                         if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))
                         {
-                            _machine.ChangeState<CutsceneState>();
-                            interactable.Interact(HandleInteractionFinished);
-                            return true;
+                            if (interactable.Active)
+                            {
+                                _machine.ChangeState<CutsceneState>();
+                                interactable.Interact(HandleInteractionFinished);
+                                return true;
+                            }
                         }
                     }
                 }

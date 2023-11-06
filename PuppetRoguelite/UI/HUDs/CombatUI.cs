@@ -2,6 +2,7 @@
 using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.UI.Elements;
 using System.Collections.Generic;
 
@@ -35,6 +36,8 @@ namespace PuppetRoguelite.UI.HUDs
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
+
+            SetRenderLayer(int.MinValue);
 
             //arrange elements
             ArrangeElements();
