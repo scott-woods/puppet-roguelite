@@ -45,7 +45,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public VirtualButton DashInput;
 
         //stats
-        public float MoveSpeed = 115f;
+        public float MoveSpeed = 130f;
         public float RaycastDistance = 10f;
 
         //components
@@ -164,8 +164,8 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
-            _inventory.AddItem(new CerealBox("feef"));
-            _inventory.AddItem(new CerealBox("feef"));
+            //_inventory.AddItem(new CerealBox("feef"));
+            //_inventory.AddItem(new CerealBox("feef"));
 
             //dollahs
             DollahInventory = Entity.AddComponent(new DollahInventory(PlayerData.Dollahs));

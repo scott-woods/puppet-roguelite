@@ -121,5 +121,21 @@ namespace PuppetRoguelite.UI.Menus
             var type = _buttonDictionary[button];
             _actionSelectedHandler?.Invoke(type);
         }
+
+        public override void ValidateButtons()
+        {
+            foreach (var button in _buttonDictionary.Keys)
+            {
+                //check affordability
+                var disabled = false;
+                var apCost = PlayerActionUtils.GetApCost(_buttonDictionary[button]);
+                if (apCost > PlayerController.Instance.ActionPointComponent.ActionPoints)
+                {
+                    disabled = true;
+                }
+
+                button.SetDisabled(disabled);
+            }
+        }
     }
 }

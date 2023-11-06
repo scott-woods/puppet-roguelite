@@ -21,8 +21,8 @@ namespace PuppetRoguelite.Components.Characters.Player
         HealthComponent _healthComponent;
 
         public float MaxCharge = 100f;
-        public float ApThreshold = 100f / 5;
-        public int MaxActionPoints = 5;
+        public float ApThreshold = 100f / 6;
+        public int MaxActionPoints = 6;
 
         int _actionPoints;
         public int ActionPoints

@@ -54,7 +54,7 @@ namespace PuppetRoguelite.SceneComponents
 
         public Vector2 GetPlayerSpawnPoint()
         {
-            var point = _preBossPoint * _roomSize * _tileSize;
+            var point = _hubPoint * _roomSize * _tileSize;
             var midPoint = point + new Point(_roomSize.X * _tileSize.X / 2, _roomSize.Y * _tileSize.Y / 2);
             return midPoint.ToVector2();
         }
@@ -68,7 +68,7 @@ namespace PuppetRoguelite.SceneComponents
         {
             var attempts = 0;
             bool success = false;
-            while (!success && attempts < _maxAttempts)
+            while (!success)
             {
                 if (!CreateGraph())
                 {
@@ -82,7 +82,7 @@ namespace PuppetRoguelite.SceneComponents
                     Reset();
                     continue;
                 }
-                if (!CreateMaps())
+                if (!CreateMaps()) //pick maps based on requirements
                 {
                     attempts++;
                     Reset();
@@ -91,7 +91,30 @@ namespace PuppetRoguelite.SceneComponents
 
                 ProcessUnconnectedDoors();
 
+                //final check
+                if (!FinalValidation())
+                {
+                    attempts++;
+                    Reset();
+                    continue;
+                }
+
                 success = true;
+            }
+
+            foreach (var node in _nodes)
+            {
+                var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
+                var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
+                mapEntity.SetPosition(mapPosition);
+                Scene.AddEntity(mapEntity);
+                var map = Scene.Content.LoadTiledMap(node.Map.Name);
+                var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
+                mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+                mapRenderer.RenderLayer = 10;
+                mapEntity.AddComponent(new GridGraphManager(mapRenderer));
+                mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
+                node.MapEntity = mapEntity;
             }
 
             //destroy spawn triggers in the hub room
@@ -104,6 +127,66 @@ namespace PuppetRoguelite.SceneComponents
                     trigger.Entity.Destroy();
                 }
             });
+        }
+
+        bool FinalValidation()
+        {
+            foreach (var node in _nodes)
+            {
+                var aboveNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X, node.Point.Y - 1));
+                if (aboveNode != null)
+                {
+                    if (aboveNode.Map.HasBottom != node.Map.HasTop)
+                    {
+                        return false;
+                    }
+                }
+                else if (node.Map.HasTop)
+                {
+                    return false;
+                }
+
+                var bottomNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X, node.Point.Y + 1));
+                if (bottomNode != null)
+                {
+                    if (bottomNode.Map.HasTop != node.Map.HasBottom)
+                    {
+                        return false;
+                    }
+                }
+                else if (node.Map.HasBottom)
+                {
+                    return false;
+                }
+
+                var leftNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X - 1, node.Point.Y));
+                if (leftNode != null)
+                {
+                    if (leftNode.Map.HasRight != node.Map.HasLeft)
+                    {
+                        return false;
+                    }
+                }
+                else if (node.Map.HasLeft)
+                {
+                    return false;
+                }
+
+                var rightNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X + 1, node.Point.Y));
+                if (rightNode != null)
+                {
+                    if (rightNode.Map.HasLeft != node.Map.HasRight)
+                    {
+                        return false;
+                    }
+                }
+                else if (node.Map.HasRight)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         void Reset()
@@ -477,17 +560,17 @@ namespace PuppetRoguelite.SceneComponents
                     else return false;
                 }
 
-                var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
-                var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
-                mapEntity.SetPosition(mapPosition);
-                Scene.AddEntity(mapEntity);
-                var map = Scene.Content.LoadTiledMap(node.Map.Name);
-                var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-                mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
-                mapRenderer.RenderLayer = 10;
-                mapEntity.AddComponent(new GridGraphManager(mapRenderer));
-                mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
-                node.MapEntity = mapEntity;
+                //var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
+                //var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
+                //mapEntity.SetPosition(mapPosition);
+                //Scene.AddEntity(mapEntity);
+                //var map = Scene.Content.LoadTiledMap(node.Map.Name);
+                //var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
+                //mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+                //mapRenderer.RenderLayer = 10;
+                //mapEntity.AddComponent(new GridGraphManager(mapRenderer));
+                //mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
+                //node.MapEntity = mapEntity;
 
                 //switch (node.RoomType)
                 //{
@@ -546,17 +629,17 @@ namespace PuppetRoguelite.SceneComponents
                 else return false;
             }
 
-            var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
-            var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
-            mapEntity.SetPosition(mapPosition);
-            Scene.AddEntity(mapEntity);
-            var map = Scene.Content.LoadTiledMap(mapString);
-            var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-            mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
-            mapRenderer.RenderLayer = 10;
-            mapEntity.AddComponent(new GridGraphManager(mapRenderer));
-            mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
-            node.MapEntity = mapEntity;
+            //var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
+            //var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
+            //mapEntity.SetPosition(mapPosition);
+            //Scene.AddEntity(mapEntity);
+            //var map = Scene.Content.LoadTiledMap(mapString);
+            //var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
+            //mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+            //mapRenderer.RenderLayer = 10;
+            //mapEntity.AddComponent(new GridGraphManager(mapRenderer));
+            //mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
+            //node.MapEntity = mapEntity;
 
             return true;
         }

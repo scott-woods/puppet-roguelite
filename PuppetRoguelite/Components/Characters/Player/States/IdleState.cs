@@ -21,10 +21,10 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Reason();
 
-            TryTriggerTurn();
-            TryCheck();
-            TryMove();
-            TryMelee();
+            if (TryTriggerTurn()) return;
+            if (TryCheck()) return;
+            if (TryMove()) return;
+            if (TryMelee()) return;
         }
     }
 }

@@ -92,16 +92,13 @@ namespace PuppetRoguelite.Components.Shared
 
         void OnHealthChanged(HealthComponent healthComponent)
         {
-            Debug.Log($"healthbar registered health change. enemy: {Entity.Name}");
             _color = Color.White;
 
             if (_hideHealthbarCoroutine != null )
             {
-                Debug.Log("stopping coroutine");
                 _hideHealthbarCoroutine.Stop();
             }
 
-            Debug.Log("starting coroutine");
             _hideHealthbarCoroutine = Game1.StartCoroutine(HideHealthbarAfterDelay());
 
             //_visibleTimer?.Stop();

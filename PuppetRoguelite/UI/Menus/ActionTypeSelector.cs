@@ -136,5 +136,10 @@ namespace PuppetRoguelite.UI.Menus
             _executeButton.OnClicked -= _selectionHandler;
             _executeButton.OnClicked -= OnMenuButtonClicked;
         }
+
+        public override void ValidateButtons()
+        {
+
+        }
     }
 }

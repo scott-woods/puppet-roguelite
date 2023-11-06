@@ -72,6 +72,8 @@ namespace PuppetRoguelite.UI.Menus
 
         public virtual void Show(Vector2 basePosition)
         {
+            ValidateButtons();
+
             AnchorPosition = basePosition;
 
             Stage.AddElement(BaseElement);
@@ -138,5 +140,6 @@ namespace PuppetRoguelite.UI.Menus
         public abstract IGamepadFocusable GetDefaultFocus();
         public abstract void AddHandlersToButtons();
         public abstract void RemoveHandlersFromButtons();
+        public abstract void ValidateButtons();
     }
 }

@@ -18,49 +18,64 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             //throw new NotImplementedException();
         }
 
-        public void TryTriggerTurn()
+        public bool TryTriggerTurn()
         {
             var gameStateManager = Game1.GameStateManager;
             if (gameStateManager.GameState == GameState.Combat && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
             {
                 _machine.ChangeState<TurnState>();
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
+                return true;
             }
+
+            return false;
         }
 
-        public void TryDash()
+        public bool TryDash()
         {
             if (!_context.Dash.IsOnCooldown && _context.DashInput.IsPressed)
             {
                 _machine.ChangeState<DashState>();
+                return true;
             }
+
+            return false;
         }
 
-        public void TryMove()
+        public bool TryMove()
         {
             if (_context.XAxisInput.Value != 0 || _context.YAxisInput.Value != 0)
             {
                 _machine.ChangeState<MoveState>();
+                return true;
             }
+
+            return false;
         }
 
-        public void TryMelee()
+        public bool TryMelee()
         {
             if (Input.LeftMouseButtonPressed)
             {
                 _machine.ChangeState<AttackState>();
+                return true;
             }
+
+            return false;
         }
 
-        public void TryIdle()
+        public bool TryIdle()
         {
             if (_context.XAxisInput.Value == 0 && _context.YAxisInput.Value == 0)
             {
                 _machine.ChangeState<IdleState>();
+                return true;
             }
+
+            return false;
         }
 
-        public void TryCheck()
+        public bool TryCheck()
         {
             var gameStateManager = Game1.GameStateManager;
             if (gameStateManager.GameState == GameState.Exploration && _context.CheckInput.IsPressed)
@@ -73,6 +88,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
                     {
                         _machine.ChangeState<CutsceneState>();
                         interactable.Interact(HandleInteractionFinished);
+                        return true;
                     }
                 }
                 else
@@ -84,10 +100,13 @@ namespace PuppetRoguelite.Components.Characters.Player.States
                         {
                             _machine.ChangeState<CutsceneState>();
                             interactable.Interact(HandleInteractionFinished);
+                            return true;
                         }
                     }
                 }
             }
+
+            return false;
         }
 
         void HandleInteractionFinished()

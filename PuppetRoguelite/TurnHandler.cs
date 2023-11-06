@@ -43,6 +43,7 @@ namespace PuppetRoguelite
         /// </summary>
         public void BeginTurn()
         {
+            Debug.Log("turn handler beginning turn");
             //create sim player
             _playerSimEntity = Game1.Scene.CreateEntity("player-sim");
             _playerSimEntity.AddComponent(new PlayerSim(Vector2.One));
@@ -53,6 +54,7 @@ namespace PuppetRoguelite
             _camera.SetFollowTarget(_playerSimEntity);
 
             //create menu entity
+            Debug.Log("creating turn menu entity");
             _turnMenuEntity = Game1.Scene.CreateEntity("turn-menu");
             _actionsSelector = _turnMenuEntity.AddComponent(new ActionTypeSelector(OnActionTypeSelected, GoBack));
             _actionsSelector.Hide();
@@ -184,6 +186,7 @@ namespace PuppetRoguelite
 
         void ActionExecutionFinishedHandler(PlayerAction action)
         {
+            Debug.Log($"Finished executing Action: ${PlayerActionUtils.GetName(action.GetType())}");
             Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedExecuting, action);
 
             //get final position
@@ -195,6 +198,7 @@ namespace PuppetRoguelite
             //try to execute next action. if false, that means none left, execution is over
             if (!ExecuteNextAction())
             {
+                Debug.Log("finished executing actions");
                 //reenable player
                 PlayerController.Instance.Entity.SetEnabled(true);
                 PlayerController.Instance.Entity.SetPosition(finalPos);
@@ -208,6 +212,7 @@ namespace PuppetRoguelite
         void StartExecution()
         {
             //destroy turn menu
+            Debug.Log("destroying turn menu entity");
             _turnMenuEntity.Destroy();
 
             //destroy player sim
@@ -222,6 +227,7 @@ namespace PuppetRoguelite
             //dequeue action
             if (!ExecuteNextAction())
             {
+                Debug.Log("finished executing actions");
                 PlayerController.Instance.Entity.SetEnabled(true);
                 _camera.SetFollowTarget(PlayerController.Instance.Entity);
 
@@ -231,12 +237,15 @@ namespace PuppetRoguelite
 
         bool ExecuteNextAction()
         {
+            Debug.Log("trying to execute next action");
+
             if (ActionQueue.Count < 1)
             {
                 return false;
             }
 
             var action = ActionQueue.Dequeue();
+            Debug.Log($"Executing Action: {PlayerActionUtils.GetName(action.GetType())}");
             action.SetEnabled(true);
             _camera.SetFollowTarget(action);
             action.Execute();
