@@ -72,9 +72,10 @@ namespace PuppetRoguelite.UI.Elements
 
         void OnTurnPhaseTriggered()
         {
-            if (_index == _apComponent.ActionPoints)
+            if (_index >= _apComponent.ActionPoints)
             {
-                UpdateStyle();
+                var style = $"progressBar_0";
+                SetStyle(_skin.Get<ProgressBarStyle>(style));
                 Value = 0;
             }
         }

@@ -72,7 +72,7 @@ namespace PuppetRoguelite
         /// </summary>
         void StartNewSelection()
         {
-            if (ActionQueue.Count < 1 && _playerSimEntity.Position == PlayerController.Instance.Entity.Position)
+            if (_playerSimEntity.Position == PlayerController.Instance.Entity.Position)
             {
                 _playerSimEntity.SetEnabled(false);
             }
@@ -152,6 +152,8 @@ namespace PuppetRoguelite
 
         void ActionPrepFinishedHandler(PlayerAction action, Vector2 finalPosition)
         {
+            Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedPreparing, action);
+
             //add action to queue and detach from scene
             ActionQueue.Enqueue(action);
             action.SetEnabled(false);
@@ -182,8 +184,10 @@ namespace PuppetRoguelite
 
         void ActionExecutionFinishedHandler(PlayerAction action)
         {
+            Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedExecuting, action);
+
             //get final position
-            var lastPosition = action.Position;
+            var finalPos = action.Position;
 
             //destroy action
             action.Destroy();
@@ -193,7 +197,8 @@ namespace PuppetRoguelite
             {
                 //reenable player
                 PlayerController.Instance.Entity.SetEnabled(true);
-                PlayerController.Instance.Entity.SetPosition(lastPosition);
+                PlayerController.Instance.Entity.SetPosition(finalPos);
+
                 _camera.SetFollowTarget(PlayerController.Instance.Entity);
 
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseCompleted);

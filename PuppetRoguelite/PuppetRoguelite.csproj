@@ -37,12 +37,14 @@
     <None Remove="Content\Audio\Sounds\enemy_death_1.wav" />
     <None Remove="Content\Audio\Sounds\enemy_spawn.wav" />
     <None Remove="Content\Audio\Sounds\gate_close.wav" />
+    <None Remove="Content\Audio\Sounds\heal.wav" />
     <None Remove="Content\Audio\Sounds\hh_appear.wav" />
     <None Remove="Content\Audio\Sounds\hh_slash.wav" />
     <None Remove="Content\Audio\Sounds\hh_stationary_attack.wav" />
     <None Remove="Content\Audio\Sounds\hh_vanish.wav" />
     <None Remove="Content\Audio\Sounds\menu_select.wav" />
     <None Remove="Content\Audio\Sounds\player_dash.wav" />
+    <None Remove="Content\Audio\Sounds\player_teleport.wav" />
     <None Remove="Content\Audio\Sounds\space_ship_3.mp3" />
     <None Remove="Content\Audio\Sounds\spitter_fire.wav" />
     <None Remove="Content\Fonts\abaddon_light.fnt" />

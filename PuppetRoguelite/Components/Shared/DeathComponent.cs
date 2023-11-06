@@ -71,6 +71,7 @@ namespace PuppetRoguelite.Components.Shared
         void OnDeathAnimationCompleted(string animationName)
         {
             _animator.OnAnimationCompletedEvent -= OnDeathAnimationCompleted;
+            _animator.SetEnabled(false);
             OnDeathFinished?.Invoke(Entity);
 
             if (_shouldDestroyEntity) Entity.Destroy();

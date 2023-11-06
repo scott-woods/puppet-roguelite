@@ -21,20 +21,12 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     {
         int _damage = 3;
         int _range = 48;
-        float _rotationSpeed = 175f;
         int _startFrame = 3;
         int[] _hitboxActiveFrames = new int[] { 3, 4, 5 };
 
         Vector2 _direction = Vector2.One;
-        SubpixelVector2 _subpixelV2 = new SubpixelVector2();
-        bool _movementStarted = false;
-        float _totalMovementTime;
-        float _movementTimeRemaining;
-        bool _isPreparing = false;
-        bool _startedAnimation = false;
 
         //components
-        Mover _mover;
         SpriteAnimator _animator;
         CircleHitbox _hitbox;
         PrototypeSpriteRenderer _target;
@@ -44,9 +36,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         public Vector2 InitialPosition, FinalPosition;
 
-        List<Component> _componentsList = new List<Component>();
-
-        ICoroutine _simulationLoop, _executionCoroutine;
+        ICoroutine _simulationLoop;
 
         public DashAttack(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
         {
@@ -54,7 +44,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         public override void Prepare()
         {
-            _isPreparing = true;
+            base.Prepare();
 
             InitialPosition = Position;
             FinalPosition = Position + (_direction * _range);
@@ -64,7 +54,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             _hitbox.PushForce = 0f;
-            _componentsList.Add(_hitbox);
 
             //target that shows where dash will go
             _target = AddComponent(new PrototypeSpriteRenderer(8, 8));
@@ -83,13 +72,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _trail.FadeDelay = 0f;
             _trail.FadeDuration = .2f;
             _trail.MinDistanceBetweenInstances = 12;
-            _componentsList.Add(_trail);
 
             _originComponent = AddComponent(new OriginComponent(new Vector2(0, 12)));
-            _componentsList.Add(_originComponent);
 
             _ySorter = AddComponent(new YSorter(_animator, _originComponent));
-            _componentsList.Add(_ySorter);
 
             var animation = GetNextAnimation();
             _animator.Play(animation);
@@ -98,6 +84,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         public override void Execute()
         {
+            base.Execute();
+
             //reattach entity to scene
             Position = InitialPosition;
 
@@ -107,29 +95,26 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
             //execute
-            _executionCoroutine = Game1.StartCoroutine(ExecuteDash());
+            Game1.StartCoroutine(ExecuteDash());
         }
 
         void OnAnimationFinished(string animationName)
         {
-            ExecutionFinishedHandler?.Invoke(this);
-            Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedExecuting, this);
+            HandleExecutionFinished();
         }
 
         public override void Update()
         {
             base.Update();
 
-            if (_isPreparing)
+            if (State == PlayerActionState.Preparing)
             {
                 //handle confirm
                 if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
                 {
                     _animator.Stop();
                     _simulationLoop.Stop();
-                    _isPreparing = false;
-                    ActionPrepFinishedHandler?.Invoke(this, FinalPosition);
-                    Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedPreparing, this);
+                    HandlePreparationFinished(FinalPosition);
                     return;
                 }
 
@@ -167,7 +152,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         IEnumerator SimulationLoop()
         {
-            while (_isPreparing)
+            while (State == PlayerActionState.Preparing)
             {
                 yield return ExecuteDash();
                 yield return Coroutine.WaitForSeconds(.25f);
@@ -186,7 +171,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             }
 
             //if not in prep mode, play sound
-            if (!_isPreparing)
+            if (State == PlayerActionState.Executing)
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._20_Slash_02, .5f);
             }

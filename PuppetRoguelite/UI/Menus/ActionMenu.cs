@@ -90,6 +90,11 @@ namespace PuppetRoguelite.UI.Menus
                 return true;
             })?.GetElement<Button>();
 
+            if (button == null)
+            {
+                button = _buttonDictionary.First().Key;
+            }
+
             return button;
         }
 

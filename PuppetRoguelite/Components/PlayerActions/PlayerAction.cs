@@ -14,28 +14,10 @@ namespace PuppetRoguelite.Components.PlayerActions
 {
     public abstract class PlayerAction : Entity
     {
-        //protected bool _isSimulation;
-        //protected bool _isPreparing = false;
-        //public Vector2 InitialPosition;
-        //public Vector2 FinalPosition;
-
-        //public virtual void Prepare()
-        //{
-        //    _isPreparing = true;
-        //    InitialPosition = Entity.Position;
-        //    FinalPosition = Entity.Position;
-        //}
-
-        //public virtual void Execute(bool isSimulation = false)
-        //{
-        //    _isSimulation = isSimulation;
-        //    var type = isSimulation ? PlayerActionEvents.SimActionExecuting : PlayerActionEvents.ActionExecuting;
-        //    Emitters.PlayerActionEmitter.Emit(type, this);
-        //}
-
         public Action<PlayerAction, Vector2> ActionPrepFinishedHandler;
         public Action<PlayerAction> ActionPrepCanceledHandler;
         public Action<PlayerAction> ExecutionFinishedHandler;
+        public PlayerActionState State = PlayerActionState.None;
 
         public PlayerAction(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler)
         {
@@ -44,8 +26,14 @@ namespace PuppetRoguelite.Components.PlayerActions
             ExecutionFinishedHandler = executionFinishedHandler;
         }
 
-        public abstract void Prepare();
-        public abstract void Execute();
+        public virtual void Prepare()
+        {
+            State = PlayerActionState.Preparing;
+        }
+        public virtual void Execute()
+        {
+            State = PlayerActionState.Executing;
+        }
 
         public override void Update()
         {
@@ -58,25 +46,17 @@ namespace PuppetRoguelite.Components.PlayerActions
             }
         }
 
-        //public virtual void Update()
-        //{
-        //    if (_isPreparing)
-        //    {
-        //        if (Input.IsKeyPressed(Keys.E))
-        //        {
-        //            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
-        //        }
-        //        if (Input.IsKeyPressed(Keys.X))
-        //        {
-        //            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
-        //            Core.Schedule(.1f, timer =>
-        //            {
-        //                _isPreparing = false;
-        //                Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionPrepCanceled, this);
-        //            });
-        //        }
-        //    }
-        //}
+        public virtual void HandlePreparationFinished(Vector2 finalPosition)
+        {
+            ActionPrepFinishedHandler?.Invoke(this, finalPosition);
+            State = PlayerActionState.None;
+        }
+
+        public virtual void HandleExecutionFinished()
+        {
+            ExecutionFinishedHandler?.Invoke(this);
+            State = PlayerActionState.None;
+        }
     }
 
     public enum PlayerActionCategory
@@ -84,6 +64,13 @@ namespace PuppetRoguelite.Components.PlayerActions
         Attack,
         Utility,
         Support
+    }
+
+    public enum PlayerActionState
+    {
+        None,
+        Preparing,
+        Executing
     }
 
     sealed class PlayerActionInfoAttribute : Attribute

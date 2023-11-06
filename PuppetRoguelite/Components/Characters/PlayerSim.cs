@@ -72,5 +72,13 @@ namespace PuppetRoguelite.Components.Characters
                 _spriteAnimator.Play(animation);
             }
         }
+
+        public override void OnRemovedFromEntity()
+        {
+            Entity.RemoveComponent(_spriteAnimator);
+            Entity.RemoveComponent(_originComponent);
+            Entity.RemoveComponent(_ySorter);
+            base.OnRemovedFromEntity();
+        }
     }
 }

@@ -111,13 +111,21 @@ namespace PuppetRoguelite.Components
 
                 _velocity.Y += Physics.Gravity.Y * Time.DeltaTime;
 
-                _speedTowardsPlayer *= _speedIncreaseFactor;
-                var dir = PlayerController.Instance.Entity.Position - Entity.Position;
-                dir.Normalize();
-                var movement = dir * _speedTowardsPlayer * Time.DeltaTime;
+                //if within certain distance to player, just stick to them
+                if (Math.Abs(Vector2.Distance(Entity.Position, PlayerController.Instance.Entity.Position)) <= 4)
+                {
+                    Entity.Position = PlayerController.Instance.Entity.Position;
+                }
+                else
+                {
+                    _speedTowardsPlayer *= _speedIncreaseFactor;
+                    var dir = PlayerController.Instance.Entity.Position - Entity.Position;
+                    dir.Normalize();
+                    var movement = dir * _speedTowardsPlayer * Time.DeltaTime;
 
-                _subPixelV2.Update(ref movement);
-                _mover.Move(movement);
+                    _subPixelV2.Update(ref movement);
+                    _mover.Move(movement);
+                }
             }
         }
     }
