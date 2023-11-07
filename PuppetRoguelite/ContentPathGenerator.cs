@@ -114,6 +114,11 @@ namespace Nez
 				public const string Shelf = @"Content\Textures\Objects\shelf.png";
 			}
 
+			public static class Shops
+			{
+				public const string Tech_shop = @"Content\Textures\Shops\tech_shop.png";
+			}
+
 			public static class Tilesets
 			{
 				public const string Blood_temple_tileset = @"Content\Textures\Tilesets\blood_temple_tileset.png";
@@ -869,6 +874,7 @@ namespace Nez
 				public const string Left_key_room = @"Content\Tiled\Tilemaps\left_key_room.tmx";
 				public const string LR_1 = @"Content\Tiled\Tilemaps\LR_1.tmx";
 				public const string Pre_boss_room = @"Content\Tiled\Tilemaps\pre_boss_room.tmx";
+				public const string Puppet_shop = @"Content\Tiled\Tilemaps\puppet_shop.tmx";
 				public const string R_1 = @"Content\Tiled\Tilemaps\R_1.tmx";
 				public const string Right_key_room = @"Content\Tiled\Tilemaps\right_key_room.tmx";
 				public const string T_1 = @"Content\Tiled\Tilemaps\T_1.tmx";

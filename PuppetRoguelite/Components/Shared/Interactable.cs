@@ -31,6 +31,7 @@ namespace PuppetRoguelite.Components.Shared
             {
                 if (_onInteracted != null)
                 {
+                    Active = false;
                     _interactionCompletedCallback = interactionCompletedCallback;
                     Game1.StartCoroutine(InteractionCoroutine());
                 }
@@ -40,6 +41,7 @@ namespace PuppetRoguelite.Components.Shared
         IEnumerator InteractionCoroutine()
         {
             yield return Game1.StartCoroutine(_onInteracted());
+            Active = true;
             _interactionCompletedCallback?.Invoke();
         }
     }

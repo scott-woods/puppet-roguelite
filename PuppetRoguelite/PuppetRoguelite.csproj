@@ -62,6 +62,7 @@
     <None Remove="Content\Textures\Characters\Player\hooded_knight_run.png" />
     <None Remove="Content\Textures\Objects\boss_gate.png" />
     <None Remove="Content\Textures\Objects\shelf.png" />
+    <None Remove="Content\Textures\Shops\tech_shop.png" />
     <None Remove="Content\Textures\UI\borders_and_hp.png" />
     <None Remove="Content\Textures\UI\glow_sliders.png" />
     <None Remove="Content\Textures\UI\healthbar.png" />
