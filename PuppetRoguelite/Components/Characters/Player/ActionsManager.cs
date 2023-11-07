@@ -14,12 +14,17 @@ namespace PuppetRoguelite.Components.Characters.Player
         public List<PlayerActionType> UtilityActions = new List<PlayerActionType>();
         public List<PlayerActionType> SupportActions = new List<PlayerActionType>();
 
+        public int MaxAttackSlots, MaxUtilitySlots, MaxSupportSlots;
+
         public ActionsManager(List<PlayerActionType> attackActions, List<PlayerActionType> utilityActions,
-            List<PlayerActionType> supportActions)
+            List<PlayerActionType> supportActions, int maxAttackSlots, int maxUtilitySlots, int maxSupportSlots)
         {
             AttackActions = attackActions;
             UtilityActions = utilityActions;
             SupportActions = supportActions;
+            MaxAttackSlots = maxAttackSlots;
+            MaxUtilitySlots = maxUtilitySlots;
+            MaxSupportSlots = maxSupportSlots;
         }
 
         public void AddAction(Type type)

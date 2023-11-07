@@ -36,7 +36,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             }
 
             //move
-            _context.VelocityComponent.Move(_context.MoveSpeed);
+            _context.VelocityComponent.Move();
         }
 
         public override void Reason()

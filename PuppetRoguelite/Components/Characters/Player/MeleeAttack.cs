@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player
 {
-    public class MeleeAttack : Component, IUpdatable
+    public class MeleeAttack : Component, IUpdatable, ITweenTarget<float>
     {
         public Emitter<MeleeAttackEvents, int> Emitter = new Emitter<MeleeAttackEvents, int>();
 
@@ -40,6 +40,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         bool _isAttacking = false;
         bool _continueCombo = false;
         int _activeFrame = -1;
+        float _speed = 0f;
 
         Action _attackCompleteCallback;
 
@@ -113,7 +114,7 @@ namespace PuppetRoguelite.Components.Characters.Player
                 _hitbox.SetEnabled(_animator.CurrentFrame == _activeFrame);
 
                 //move
-                _velocityComponent.Move();
+                _velocityComponent.Move(_speed);
 
                 //check for hit
                 var colliders = Physics.BoxcastBroadphaseExcludingSelf(_hitbox, _hitbox.CollidesWithLayers);
@@ -187,9 +188,10 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //start moving
             _velocityComponent.SetDirection(dir);
-            _velocityComponent.Speed = _comboCounter == _maxCombo ? _attackMoveSpeed * 1.25f : _attackMoveSpeed;
+            _speed = _comboCounter == _maxCombo ? _attackMoveSpeed * 1.25f : _attackMoveSpeed;
             var animationDuration = _animator.CurrentAnimation.Sprites.Count() / _animator.CurrentAnimation.FrameRate;
-            _speedTween = new FloatTween(_velocityComponent, 0, 1);
+            _speedTween = new FloatTween(this, 0, 1);
+            //_speedTween = new FloatTween(_velocityComponent, 0, 1);
             _speedTween.SetEaseType(EaseType.CubicOut);
             _speedTween.SetDuration(animationDuration);
             _speedTween.Start();
@@ -286,6 +288,21 @@ namespace PuppetRoguelite.Components.Characters.Player
             Game1.Schedule(_cooldown, timer => IsOnCooldown = false);
 
             _attackCompleteCallback?.Invoke();
+        }
+
+        public void SetTweenedValue(float value)
+        {
+            _speed = value;
+        }
+
+        public float GetTweenedValue()
+        {
+            return _speed;
+        }
+
+        public object GetTargetObject()
+        {
+            return this;
         }
     }
 

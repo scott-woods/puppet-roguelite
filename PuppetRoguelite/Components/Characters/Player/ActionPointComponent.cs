@@ -21,8 +21,21 @@ namespace PuppetRoguelite.Components.Characters.Player
         HealthComponent _healthComponent;
 
         public float MaxCharge = 100f;
-        public float ApThreshold = 100f / 6;
-        public int MaxActionPoints = 6;
+
+        public float ApThreshold
+        {
+            get
+            {
+                return 100f / _maxActionPoints;
+            }
+        }
+
+        int _maxActionPoints;
+        public int MaxActionPoints
+        {
+            get => _maxActionPoints;
+            set => _maxActionPoints = value;
+        }
 
         int _actionPoints;
         public int ActionPoints
@@ -46,8 +59,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
         }
 
-        public ActionPointComponent(HealthComponent healthComponent)
+        public ActionPointComponent(int maxAp, HealthComponent healthComponent)
         {
+            MaxActionPoints = maxAp;
             _healthComponent = healthComponent;
         }
 

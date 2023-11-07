@@ -14,7 +14,7 @@ namespace PuppetRoguelite.Components.Shared
     /// <summary>
     /// component for anything that can be knocked back by hits
     /// </summary>
-    public class KnockbackComponent : Component, IUpdatable
+    public class KnockbackComponent : Component, IUpdatable, ITweenTarget<float>
     {
         public bool IsStunned;
 
@@ -30,6 +30,7 @@ namespace PuppetRoguelite.Components.Shared
         bool _isImmune;
 
         FloatTween _tween;
+        float _speed = 0f;
 
         /// <summary>
         /// constructor with no immunity parameters
@@ -97,7 +98,7 @@ namespace PuppetRoguelite.Components.Shared
                 {
                     if (_tween.IsRunning())
                     {
-                        _velocityComponent.Move();
+                        _velocityComponent.Move(_speed);
                     }
                     else
                     {
@@ -152,16 +153,31 @@ namespace PuppetRoguelite.Components.Shared
 
                 //start moving
                 _velocityComponent.SetDirection(dir);
-                _velocityComponent.Speed = _knockbackSpeed * hurtboxHit.Hitbox.PushForce;
+                _speed = _knockbackSpeed * hurtboxHit.Hitbox.PushForce;
 
                 if (_tween != null)
                 {
                     _tween.Stop();
                 }
-                _tween = new FloatTween(_velocityComponent, 0, _knockbackDuration);
+                _tween = new FloatTween(this, 0, _knockbackDuration);
                 _tween.SetEaseType(EaseType.CubicOut);
                 _tween.Start();
             }
+        }
+
+        public void SetTweenedValue(float value)
+        {
+            _speed = value;
+        }
+
+        public float GetTweenedValue()
+        {
+            return _speed;
+        }
+
+        public object GetTargetObject()
+        {
+            return this;
         }
 
         void OnHealthDepleted(HealthComponent hc)

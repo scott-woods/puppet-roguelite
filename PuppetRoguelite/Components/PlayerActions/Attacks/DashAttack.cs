@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     [PlayerActionInfo("Dash", 2, PlayerActionCategory.Attack)]
     public class DashAttack : PlayerAction
     {
-        int _damage = 3;
+        int _damage = 6;
         int _range = 48;
         int _startFrame = 3;
         int[] _hitboxActiveFrames = new int[] { 3, 4, 5 };

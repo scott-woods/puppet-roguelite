@@ -45,7 +45,6 @@ namespace PuppetRoguelite.Components.Characters.Player
         public VirtualButton DashInput;
 
         //stats
-        public float MoveSpeed = 130f;
         public float RaycastDistance = 10f;
 
         //components
@@ -160,7 +159,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             HealthComponent = Entity.AddComponent(new HealthComponent(PlayerData.MaxHp));
 
             //action points
-            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(HealthComponent));
+            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(PlayerData.MaxAp, HealthComponent));
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
@@ -177,11 +176,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, OriginComponent));
 
             //velocity component
-            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, MoveSpeed));
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, PlayerData.MovementSpeed));
 
             MeleeAttack = Entity.AddComponent(new MeleeAttack(SpriteAnimator, VelocityComponent));
 
-            Dash = Entity.AddComponent(new Dash());
+            Dash = Entity.AddComponent(new Dash(PlayerData.MaxDashes));
 
             _spriteTrail = Entity.AddComponent(new SpriteTrail(SpriteAnimator));
             _spriteTrail.DisableSpriteTrail();
@@ -190,7 +189,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .75f, VelocityComponent, Hurtbox));
 
             //actions manager
-            ActionsManager = Entity.AddComponent(new ActionsManager(PlayerData.AttackActions, PlayerData.UtilityActions, PlayerData.SupportActions));
+            ActionsManager = Entity.AddComponent(new ActionsManager(PlayerData.AttackActions, PlayerData.UtilityActions,
+                PlayerData.SupportActions, PlayerData.MaxAttackSlots, PlayerData.MaxUtilitySlots, PlayerData.MaxSupportSlots));
 
             var shadow = Entity.AddComponent(new SpriteMime(Entity.GetComponent<SpriteRenderer>()));
             shadow.Color = new Color(10, 10, 10, 80);
@@ -271,6 +271,11 @@ namespace PuppetRoguelite.Components.Characters.Player
                 AttackActions = ActionsManager.AttackActions,
                 UtilityActions = ActionsManager.UtilityActions,
                 SupportActions = ActionsManager.SupportActions,
+                MaxAttackSlots = ActionsManager.MaxAttackSlots,
+                MaxUtilitySlots = ActionsManager.MaxUtilitySlots,
+                MaxSupportSlots = ActionsManager.MaxSupportSlots,
+                MaxAp = ActionPointComponent.MaxActionPoints,
+                MovementSpeed = VelocityComponent.Speed
             };
 
             var settings = JsonSettings.HandlesReferences;
@@ -282,18 +287,14 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         public PlayerData LoadData()
         {
+            var data = new PlayerData();
             if (File.Exists("Data/playerData.json"))
             {
                 var json = File.ReadAllText("Data/playerData.json");
-                var data = Json.FromJson<PlayerData>(json);
-                if (data == null)
-                {
-                    data = new PlayerData();
-                }
-
-                return data;
+                Json.FromJsonOverwrite(json, data);
             }
-            else return new PlayerData();
+
+            return data;
         }
 
         public void Update()

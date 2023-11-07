@@ -13,12 +13,11 @@ namespace PuppetRoguelite.Components.Characters.Player
 {
     public class Dash : Component, IUpdatable
     {
-        const float _dashSpeed = 350f;
+        const float _dashSpeed = 375f;
         const float _dashDuration = .2f;
         const float _shortDashCooldown = .025f;
-        const float _dashCooldown = .75f;
-        const float _successionLifespan = .75f;
-        const int _maxSuccession = 2;
+        const float _dashCooldown = .65f;
+        const float _successionLifespan = .65f;
 
         public bool IsOnCooldown = false;
 
@@ -27,9 +26,15 @@ namespace PuppetRoguelite.Components.Characters.Player
         SpriteAnimator _spriteAnimator;
         SpriteTrail _spriteTrail;
 
+        int _maxSuccession;
         bool _isDashing = false;
         float _dashTimer = 0f;
         int _successionCount = 0;
+
+        public Dash(int maxSuccession)
+        {
+            _maxSuccession = maxSuccession;
+        }
 
         public void ExecuteDash(Action dashCompleteCallback, SpriteAnimator animator, VelocityComponent velocityComponent,
             SpriteTrail spriteTrail)
@@ -44,7 +49,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _successionCount += 1;
             Game1.Schedule(_successionLifespan, timer => _successionCount -= 1);
 
-            _velocityComponent.Speed = _dashSpeed;
+            //_velocityComponent.Speed = _dashSpeed;
 
             //configure trail
             _spriteTrail.FadeDelay = 0;
@@ -78,7 +83,7 @@ namespace PuppetRoguelite.Components.Characters.Player
                 _dashTimer -= Time.DeltaTime;
                 if (_dashTimer > 0f)
                 {
-                    _velocityComponent.Move();
+                    _velocityComponent.Move(_dashSpeed);
                 }
                 else
                 {
