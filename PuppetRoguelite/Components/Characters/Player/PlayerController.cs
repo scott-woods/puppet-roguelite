@@ -146,7 +146,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             Hurtbox.SetEnabled(false);
 
             //add collision box
-            Collider = Entity.AddComponent(new BoxCollider(-5, 4, 10, 8));
+            Collider = Entity.AddComponent(new BoxCollider(-5, 6, 10, 8));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
             Flags.UnsetFlag(ref Collider.CollidesWithLayers, -1);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
@@ -191,6 +191,11 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //actions manager
             ActionsManager = Entity.AddComponent(new ActionsManager(PlayerData.AttackActions, PlayerData.UtilityActions, PlayerData.SupportActions));
+
+            var shadow = Entity.AddComponent(new SpriteMime(Entity.GetComponent<SpriteRenderer>()));
+            shadow.Color = new Color(10, 10, 10, 80);
+            shadow.Material = Material.StencilRead();
+            shadow.RenderLayer = int.MinValue;
         }
 
         void SetupInput()

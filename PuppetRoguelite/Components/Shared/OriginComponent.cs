@@ -16,7 +16,8 @@ namespace PuppetRoguelite.Components.Shared
             {
                 if (_collider != null)
                 {
-                    return _collider.Bounds.Center;
+                    return Entity.Position + _collider.LocalOffset;
+                    //return _collider.Bounds.Center;
                 }
                 else return Entity.Position + _offset;
             }

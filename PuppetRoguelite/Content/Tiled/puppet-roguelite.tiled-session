@@ -12,6 +12,29 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx": {
+            "scale": 1.2182870370370371,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 216.6977009310279,
+                "y": 216.6977009310279
+            }
+        },
+        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#CollisionTileset": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#Stardew-Spring-Outdoors": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#bunny_npc": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#edge_test_tileset": {
+            "scaleInDock": 1
+        },
+        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#large_sprite_test": {
+            "scaleInDock": 1
+        },
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx": {
             "scale": 1.2182870370370371,
             "selectedLayer": 0,
@@ -64,8 +87,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 227.64202926087785,
-                "y": 218.88656659699794
+                "x": 191.52574577237317,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/BL_1.tmx": {
@@ -75,8 +98,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191,
-                "y": 191
+                "x": 191.5,
+                "y": 192.5
             }
         },
         "Tilemaps/BR_1.tmx": {
@@ -86,16 +109,16 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192,
-                "y": 192
+                "x": 191,
+                "y": 191
             }
         },
         "Tilemaps/B_1.tmx": {
             "scale": 1.3705729166666665,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 190.4313129393882,
-                "y": 190.43131293938822
+                "x": 191.52574577237317,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/LR_1.tmx": {
@@ -105,8 +128,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191,
-                "y": 192
+                "x": 191.5,
+                "y": 192.5
             }
         },
         "Tilemaps/L_1.tmx": {
@@ -116,8 +139,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.16093482804487,
-                "y": 191.16093482804487
+                "x": 191.52574577237317,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/R_1.tmx": {
@@ -127,19 +150,19 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.16093482804487,
-                "y": 191.16093482804487
+                "x": 190.4313129393882,
+                "y": 190.43131293938822
             }
         },
         "Tilemaps/TBLR_1.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 2,
+            "scale": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 207.94223826714804,
-                "y": 213.77921337640132
+                "x": 213.5,
+                "y": 196.5
             }
         },
         "Tilemaps/TBL_1.tmx": {
@@ -149,8 +172,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 224.7235417062512,
-                "y": 256.8269048071443
+                "x": 191.52574577237317,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/TBR_1.tmx": {
@@ -160,8 +183,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192,
-                "y": 192
+                "x": 191.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TB_1.tmx": {
@@ -171,8 +194,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192,
-                "y": 192
+                "x": 191.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TLR_1.tmx": {
@@ -182,8 +205,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192,
-                "y": 192
+                "x": 191.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TL_1.tmx": {
@@ -193,8 +216,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192,
-                "y": 192
+                "x": 191.5,
+                "y": 192.5
             }
         },
         "Tilemaps/TR_1.tmx": {
@@ -204,8 +227,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192,
-                "y": 192
+                "x": 191.5,
+                "y": 192.5
             }
         },
         "Tilemaps/T_1.tmx": {
@@ -215,8 +238,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.16093482804487,
-                "y": 191.16093482804487
+                "x": 191.52574577237317,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/bedroom.tmx": {
@@ -226,8 +249,8 @@
             "scale": 1.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 320,
-                "y": 224
+                "x": 319.3333333333333,
+                "y": 223.33333333333331
             }
         },
         "Tilemaps/boss_room.tmx": {
@@ -237,8 +260,8 @@
             "scale": 2,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 208,
-                "y": 568
+                "x": 207.75,
+                "y": 567.75
             }
         },
         "Tilemaps/hub.tmx": {
@@ -248,8 +271,8 @@
             "scale": 1.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 342.66666666666663,
-                "y": 262.66666666666663
+                "x": 177.33333333333334,
+                "y": 170.66666666666663
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -259,8 +282,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 192.6201786053582,
-                "y": 192.62017860535818
+                "x": 191.52574577237317,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/pre_boss_room.tmx": {
@@ -268,10 +291,10 @@
                 10
             ],
             "scale": 1.3705729166666665,
-            "selectedLayer": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.52574577237323,
-                "y": 21.15903477104314
+                "x": 202.83488504655142,
+                "y": 176.5684970549117
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -281,8 +304,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.6201786053582,
-                "y": 192.62017860535818
+                "x": 191.52574577237317,
+                "y": 191.52574577237317
             }
         },
         "Tilesets/blood_temple_tileset.tsx": {
@@ -331,18 +354,18 @@
     "project": "puppet-roguelite.tiled-project",
     "property.type": "chestSize",
     "recentFiles": [
-        "Tilesets/blood_temple_tileset.tsx",
-        "Tilesets/dungeon_prison_props.tsx",
-        "Tilemaps/bedroom.tmx",
-        "Tilemaps/hub.tmx",
-        "Tilemaps/boss_room.tmx",
-        "Tilemaps/left_key_room.tmx",
-        "Tilemaps/right_key_room.tmx",
-        "Tilemaps/L_1.tmx",
-        "Tilemaps/LR_1.tmx",
-        "Tilemaps/B_1.tmx",
         "Tilemaps/BR_1.tmx",
-        "Tilemaps/BL_1.tmx"
+        "Tilemaps/BL_1.tmx",
+        "Tilemaps/TR_1.tmx",
+        "Tilemaps/TL_1.tmx",
+        "Tilemaps/TB_1.tmx",
+        "Tilemaps/BLR_1.tmx",
+        "Tilemaps/TLR_1.tmx",
+        "Tilemaps/TBR_1.tmx",
+        "Tilemaps/TBL_1.tmx",
+        "Tilemaps/TBLR_1.tmx",
+        "Tilesets/dungeon_prison_props.tsx",
+        "Tilesets/blood_temple_tileset.tsx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

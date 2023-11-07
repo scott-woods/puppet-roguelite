@@ -5,6 +5,7 @@ using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using System;
 using System.Collections.Generic;
@@ -48,15 +49,28 @@ namespace PuppetRoguelite.SceneComponents
 
         Point _hubPoint, _preBossPoint, _bossPoint, _leftKeyPoint, _rightKeyPoint;
 
-        List<RoomNode> _nodes = new List<RoomNode>();
+        public List<RoomNode> Nodes = new List<RoomNode>();
 
         int _maxAttempts = 1000;
 
         public Vector2 GetPlayerSpawnPoint()
         {
-            var point = _hubPoint * _roomSize * _tileSize;
+            var point = _preBossPoint * _roomSize * _tileSize;
             var midPoint = point + new Point(_roomSize.X * _tileSize.X / 2, _roomSize.Y * _tileSize.Y / 2);
             return midPoint.ToVector2();
+        }
+
+        /// <summary>
+        /// given a world space position, get the room node that position is in
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public RoomNode GetNodeByWorldPosition(Vector2 position)
+        {
+            var point = new Point((int)Math.Floor(position.X / (_tileSize.X * _roomSize.X)), (int)Math.Floor(position.Y / (_tileSize.Y * _roomSize.Y)));
+            var node = Nodes.FirstOrDefault(n => n.Point == point);
+            if (node != null) return node;
+            else return null;
         }
 
         public override void Update()
@@ -102,25 +116,37 @@ namespace PuppetRoguelite.SceneComponents
                 success = true;
             }
 
-            foreach (var node in _nodes)
+            foreach (var node in Nodes)
             {
+                //create map entity
                 var mapEntity = new PausableEntity($"map-room-${node.Point.X}-${node.Point.Y}");
                 var mapPosition = new Vector2(node.Point.X * _roomSize.X * _tileSize.X, node.Point.Y * _roomSize.Y * _tileSize.Y);
                 mapEntity.SetPosition(mapPosition);
                 Scene.AddEntity(mapEntity);
+                node.MapEntity = mapEntity;
+
+                //load map
                 var map = Scene.Content.LoadTiledMap(node.Map.Name);
+
+                //create main map renderer
                 var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-                mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+                mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities" });
                 mapRenderer.RenderLayer = 10;
                 mapEntity.AddComponent(new GridGraphManager(mapRenderer));
                 mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
-                node.MapEntity = mapEntity;
+
+                //create above map renderer
+                var tiledMapDetailsRenderer = mapEntity.AddComponent(new TiledMapRenderer(map));
+                tiledMapDetailsRenderer.SetLayerToRender("above-details");
+                tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
+                //tiledMapDetailsRenderer.Material = Material.StencilWrite();
+                //tiledMapDetailsRenderer.Material.Effect = Scene.Content.LoadNezEffect<SpriteAlphaTestEffect>();
             }
 
             //destroy spawn triggers in the hub room
             Game1.Schedule(.1f, timer =>
             {
-                var hubNode = _nodes.First(n => n.RoomType == RoomType.Hub);
+                var hubNode = Nodes.First(n => n.RoomType == RoomType.Hub);
                 var enemySpawnTriggers = Scene.FindComponentsOfType<EnemySpawnTrigger>().Where(s => s.MapEntity == hubNode.MapEntity).ToList();
                 foreach (var trigger in enemySpawnTriggers)
                 {
@@ -131,9 +157,9 @@ namespace PuppetRoguelite.SceneComponents
 
         bool FinalValidation()
         {
-            foreach (var node in _nodes)
+            foreach (var node in Nodes)
             {
-                var aboveNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X, node.Point.Y - 1));
+                var aboveNode = Nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X, node.Point.Y - 1));
                 if (aboveNode != null)
                 {
                     if (aboveNode.Map.HasBottom != node.Map.HasTop)
@@ -146,7 +172,7 @@ namespace PuppetRoguelite.SceneComponents
                     return false;
                 }
 
-                var bottomNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X, node.Point.Y + 1));
+                var bottomNode = Nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X, node.Point.Y + 1));
                 if (bottomNode != null)
                 {
                     if (bottomNode.Map.HasTop != node.Map.HasBottom)
@@ -159,7 +185,7 @@ namespace PuppetRoguelite.SceneComponents
                     return false;
                 }
 
-                var leftNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X - 1, node.Point.Y));
+                var leftNode = Nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X - 1, node.Point.Y));
                 if (leftNode != null)
                 {
                     if (leftNode.Map.HasRight != node.Map.HasLeft)
@@ -172,7 +198,7 @@ namespace PuppetRoguelite.SceneComponents
                     return false;
                 }
 
-                var rightNode = _nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X + 1, node.Point.Y));
+                var rightNode = Nodes.FirstOrDefault(n => n.Point == new Point(node.Point.X + 1, node.Point.Y));
                 if (rightNode != null)
                 {
                     if (rightNode.Map.HasLeft != node.Map.HasRight)
@@ -193,11 +219,11 @@ namespace PuppetRoguelite.SceneComponents
         {
             Debug.Log("resetting dungeon generation");
             _graph = null;
-            foreach(var node in _nodes)
+            foreach(var node in Nodes)
             {
                 node.MapEntity?.Destroy();
             }
-            _nodes.Clear();
+            Nodes.Clear();
         }
 
         /// <summary>
@@ -210,7 +236,7 @@ namespace PuppetRoguelite.SceneComponents
 
             //random position for starting location
             _hubPoint = new Point(Nez.Random.NextInt(_gridSize.X), Nez.Random.NextInt(_gridSize.Y));
-            _nodes.Add(new RoomNode(_hubPoint, false, false, false, false, RoomType.Hub, _nodes));
+            Nodes.Add(new RoomNode(_hubPoint, false, false, false, false, RoomType.Hub, Nodes));
 
             //pre boss room a certain distance from starting room
             bool preBossPlaced = false;
@@ -238,9 +264,9 @@ namespace PuppetRoguelite.SceneComponents
 
                 //point is valid. add to list
                 _preBossPoint = potentialPos;
-                var node = new RoomNode(_preBossPoint, false, true, true, true, RoomType.PreBoss, _nodes);
+                var node = new RoomNode(_preBossPoint, false, true, true, true, RoomType.PreBoss, Nodes);
                 node.Map = _preBossMap;
-                _nodes.Add(node);
+                Nodes.Add(node);
                 preBossPlaced = true;
             }
 
@@ -267,9 +293,9 @@ namespace PuppetRoguelite.SceneComponents
 
                 //point is valid
                 _leftKeyPoint = potentialPoint;
-                var node = new RoomNode(_leftKeyPoint, false, false, false, true, RoomType.Key, _nodes);
+                var node = new RoomNode(_leftKeyPoint, false, false, false, true, RoomType.Key, Nodes);
                 node.Map = _leftKeyMap;
-                _nodes.Add(node);
+                Nodes.Add(node);
                 //_graph.Walls.Add(_leftKeyPoint);
                 leftKeyPlaced = true;
             }
@@ -291,9 +317,9 @@ namespace PuppetRoguelite.SceneComponents
 
                 //point valid
                 _rightKeyPoint = potentialPoint;
-                var node = new RoomNode(_rightKeyPoint, false, false, true, false, RoomType.Key, _nodes);
+                var node = new RoomNode(_rightKeyPoint, false, false, true, false, RoomType.Key, Nodes);
                 node.Map = _rightKeyMap;
-                _nodes.Add(node);
+                Nodes.Add(node);
                 //_graph.Walls.Add(_rightKeyPoint);
                 rightKeyPlaced = true;
             }
@@ -303,7 +329,7 @@ namespace PuppetRoguelite.SceneComponents
 
         bool IsGridPositionValid(Point gridPosition)
         {
-            if (_nodes.Any(n => n.Point == gridPosition)) return false;
+            if (Nodes.Any(n => n.Point == gridPosition)) return false;
             if (gridPosition == _preBossPoint + new Point(0, -1)) return false;
             return true;
         }
@@ -318,7 +344,7 @@ namespace PuppetRoguelite.SceneComponents
         {
             var topPoint = gridPosition + new Point(0, -1);
             if (topPoint.Y < 0 && map.HasTop) return false;
-            var topNode = _nodes.FirstOrDefault(n => n.Point == topPoint);
+            var topNode = Nodes.FirstOrDefault(n => n.Point == topPoint);
             if (topNode != null)
             {
                 if (topNode.NeedsBottomDoor && !map.HasTop) return false;
@@ -326,7 +352,7 @@ namespace PuppetRoguelite.SceneComponents
 
             var bottomPoint = gridPosition + new Point(0, 1);
             if (bottomPoint.Y >= _gridSize.Y && map.HasBottom) return false;
-            var bottomNode = _nodes.FirstOrDefault(n => n.Point == bottomPoint);
+            var bottomNode = Nodes.FirstOrDefault(n => n.Point == bottomPoint);
             if (bottomNode != null)
             {
                 if (bottomNode.NeedsTopDoor && !map.HasBottom) return false;
@@ -334,7 +360,7 @@ namespace PuppetRoguelite.SceneComponents
 
             var leftPoint = gridPosition + new Point(-1, 0);
             if (leftPoint.X < 0 && map.HasLeft) return false;
-            var leftNode = _nodes.FirstOrDefault(n => n.Point == leftPoint);
+            var leftNode = Nodes.FirstOrDefault(n => n.Point == leftPoint);
             if (leftNode != null)
             {
                 if (leftNode.NeedsRightDoor && !map.HasLeft) return false;
@@ -342,7 +368,7 @@ namespace PuppetRoguelite.SceneComponents
 
             var rightPoint = gridPosition + new Point(1, 0);
             if (rightPoint.X >= _gridSize.X && map.HasRight) return false;
-            var rightNode = _nodes.FirstOrDefault(n => n.Point == rightPoint);
+            var rightNode = Nodes.FirstOrDefault(n => n.Point == rightPoint);
             if (rightNode != null)
             {
                 if (rightNode.NeedsLeftDoor && !map.HasRight) return false;
@@ -400,14 +426,14 @@ namespace PuppetRoguelite.SceneComponents
                 var point = finalPath[i];
 
                 RoomNode node;
-                if (_nodes.FirstOrDefault(n => n.Point == point) != null)
+                if (Nodes.FirstOrDefault(n => n.Point == point) != null)
                 {
-                    node = _nodes.FirstOrDefault(n => n.Point == point);
+                    node = Nodes.FirstOrDefault(n => n.Point == point);
                 }
                 else
                 {
-                    node = new RoomNode(point, false, false, false, false, RoomType.Normal, _nodes);
-                    _nodes.Add(node);
+                    node = new RoomNode(point, false, false, false, false, RoomType.Normal, Nodes);
+                    Nodes.Add(node);
                 }
 
                 if (i > 0)
@@ -439,12 +465,12 @@ namespace PuppetRoguelite.SceneComponents
         {
             var leftKeyEntrancePoint = _leftKeyPoint + new Point(1, 0);
             if (!CreatePathAndNodes(leftKeyEntrancePoint, _hubPoint)) return false;
-            var leftKeyEntranceNode = _nodes.Where(n => n.Point == leftKeyEntrancePoint).First();
+            var leftKeyEntranceNode = Nodes.Where(n => n.Point == leftKeyEntrancePoint).First();
             leftKeyEntranceNode.NeedsLeftDoor = true;
 
             var rightKeyEntrancePoint = _rightKeyPoint + new Point(-1, 0);
             if (!CreatePathAndNodes(rightKeyEntrancePoint, _hubPoint)) return false;
-            var rightKeyEntranceNode = _nodes.Where(n => n.Point == rightKeyEntrancePoint).First();
+            var rightKeyEntranceNode = Nodes.Where(n => n.Point == rightKeyEntrancePoint).First();
             rightKeyEntranceNode.NeedsRightDoor = true;
 
             var leftPreBossEntrance = new Point(_preBossPoint.X - 1, _preBossPoint.Y);
@@ -461,7 +487,7 @@ namespace PuppetRoguelite.SceneComponents
                 preBossEntrances.Remove(point);
                 if (CreatePathAndNodes(point, _hubPoint))
                 {
-                    var preBossEntranceNode = _nodes.Where(n => n.Point == point).First();
+                    var preBossEntranceNode = Nodes.Where(n => n.Point == point).First();
                     if (preBossEntranceNode.Point == leftPreBossEntrance)
                     {
                         preBossEntranceNode.NeedsRightDoor = true;
@@ -488,13 +514,13 @@ namespace PuppetRoguelite.SceneComponents
         /// </summary>
         public bool CreateMaps()
         {
-            foreach (var node in _nodes)
+            foreach (var node in Nodes)
             {
                 if (node.Map == null)
                 {
                     var topPoint = new Point(node.Point.X, node.Point.Y - 1);
                     if (topPoint.Y < 0) node.NeedsTopDoor = false;
-                    var topNode = _nodes.FirstOrDefault(n => n.Point ==  topPoint);
+                    var topNode = Nodes.FirstOrDefault(n => n.Point ==  topPoint);
                     if (topNode != null)
                     {
                         if (topNode.NeedsBottomDoor) node.NeedsTopDoor = true;
@@ -506,7 +532,7 @@ namespace PuppetRoguelite.SceneComponents
 
                     var bottomPoint = new Point(node.Point.X, node.Point.Y + 1);
                     if (bottomPoint.Y >= _gridSize.Y) node.NeedsBottomDoor = false;
-                    var bottomNode = _nodes.FirstOrDefault(n => n.Point == bottomPoint);
+                    var bottomNode = Nodes.FirstOrDefault(n => n.Point == bottomPoint);
                     if (bottomNode != null)
                     {
                         if (bottomNode.NeedsTopDoor) node.NeedsBottomDoor = true;
@@ -518,7 +544,7 @@ namespace PuppetRoguelite.SceneComponents
 
                     var leftPoint = new Point(node.Point.X - 1, node.Point.Y);
                     if (leftPoint.X < 0) node.NeedsLeftDoor = false;
-                    var leftNode = _nodes.FirstOrDefault(n => n.Point == leftPoint);
+                    var leftNode = Nodes.FirstOrDefault(n => n.Point == leftPoint);
                     if (leftNode != null)
                     {
                         if (leftNode.NeedsRightDoor) node.NeedsLeftDoor = true;
@@ -530,7 +556,7 @@ namespace PuppetRoguelite.SceneComponents
 
                     var rightPoint = new Point(node.Point.X + 1, node.Point.Y);
                     if (rightPoint.X >= _gridSize.X) node.NeedsRightDoor = false;
-                    var rightNode = _nodes.FirstOrDefault(n => n.Point == rightPoint);
+                    var rightNode = Nodes.FirstOrDefault(n => n.Point == rightPoint);
                     if (rightNode != null)
                     {
                         if (rightNode.NeedsLeftDoor) node.NeedsRightDoor = true;
@@ -651,19 +677,19 @@ namespace PuppetRoguelite.SceneComponents
         void CheckSurroundingNodes(ref RoomNode node)
         {
             var topPoint = new Point(node.Point.X, node.Point.Y - 1);
-            var top = _nodes.Where(n => n.Point == topPoint).FirstOrDefault();
+            var top = Nodes.Where(n => n.Point == topPoint).FirstOrDefault();
             node.NeedsTopDoor = CheckIfNeedsDoor(top, node);
 
             var bottomPoint = new Point(node.Point.X, node.Point.Y + 1);
-            var bottom = _nodes.Where(n => n.Point == bottomPoint).FirstOrDefault();
+            var bottom = Nodes.Where(n => n.Point == bottomPoint).FirstOrDefault();
             node.NeedsBottomDoor = CheckIfNeedsDoor(bottom, node);
 
             var leftPoint = new Point(node.Point.X - 1, node.Point.Y);
-            var left = _nodes.Where(n => n.Point == leftPoint).FirstOrDefault();
+            var left = Nodes.Where(n => n.Point == leftPoint).FirstOrDefault();
             node.NeedsLeftDoor = CheckIfNeedsDoor(left, node);
 
             var rightPoint = new Point(node.Point.X + 1, node.Point.Y);
-            var right = _nodes.Where(n => n.Point == rightPoint).FirstOrDefault();
+            var right = Nodes.Where(n => n.Point == rightPoint).FirstOrDefault();
             node.NeedsRightDoor = CheckIfNeedsDoor(right, node);
         }
 
@@ -701,7 +727,7 @@ namespace PuppetRoguelite.SceneComponents
         void ProcessUnconnectedDoors()
         {
             Debug.Log("starting processing unconnected doors");
-            var nodesToProcess = new Queue<RoomNode>(_nodes);
+            var nodesToProcess = new Queue<RoomNode>(Nodes);
             while (nodesToProcess.Count > 0)
             {
                 var node = nodesToProcess.Dequeue();
@@ -710,12 +736,12 @@ namespace PuppetRoguelite.SceneComponents
                 foreach (var direction in unconnectedDoors)
                 {
                     var adjacentPoint = GetAdjacentPoint(node.Point, direction);
-                    var adjacentNode = _nodes.FirstOrDefault(n => n.Point == adjacentPoint);
+                    var adjacentNode = Nodes.FirstOrDefault(n => n.Point == adjacentPoint);
                     if (adjacentNode == null)
                     {
                         // Create a new room at the adjacent point
-                        adjacentNode = new RoomNode(adjacentPoint, false, false, false, false, RoomType.Normal, _nodes);
-                        _nodes.Add(adjacentNode);
+                        adjacentNode = new RoomNode(adjacentPoint, false, false, false, false, RoomType.Normal, Nodes);
+                        Nodes.Add(adjacentNode);
                         CreateMap(adjacentNode);
 
                         nodesToProcess.Enqueue(adjacentNode);

@@ -40,6 +40,12 @@ namespace PuppetRoguelite.Scenes
             Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
+            var tiledMapDetailsRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
+            tiledMapDetailsRenderer.SetLayerToRender("above-details");
+            tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
+            tiledMapDetailsRenderer.Material = Material.StencilWrite();
+            //tiledMapDetailsRenderer.Material.Effect = Content.LoadNezEffect<SpriteAlphaTestEffect>();
+
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();
 
