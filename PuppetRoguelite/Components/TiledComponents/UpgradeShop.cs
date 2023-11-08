@@ -29,6 +29,9 @@ namespace PuppetRoguelite.Components.TiledComponents
         OriginComponent _originComponent;
         Interactable _interactable;
 
+        //misc
+        bool _isShowingMenu = false;
+
         public UpgradeShop(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
         }
@@ -80,13 +83,11 @@ namespace PuppetRoguelite.Components.TiledComponents
                 _menuEntity = Entity.Scene.CreateEntity("shop-ui");
                 _menuEntity.AddComponent(new UpgradeShopMenu(OnShopClosed));
             }
-            else
-            {
-                _menuEntity.SetEnabled(true);
-            }
+            else _menuEntity.SetEnabled(true);
 
             //while menu is showing, wait
-            while (_menuEntity.Enabled)
+            _isShowingMenu = true;
+            while (_isShowingMenu)
             {
                 yield return null;
             }
@@ -97,11 +98,13 @@ namespace PuppetRoguelite.Components.TiledComponents
                 new DialogueLine("Dash fast eat ass, kid.")
             };
             yield return textboxManager.DisplayTextbox(lines);
+            Debug.Log("finished with shop");
         }
 
         void OnShopClosed()
         {
             _menuEntity.SetEnabled(false);
+            _isShowingMenu = false;
         }
     }
 }

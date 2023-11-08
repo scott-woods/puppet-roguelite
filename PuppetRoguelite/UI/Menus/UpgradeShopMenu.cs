@@ -33,7 +33,6 @@ namespace PuppetRoguelite.UI.Menus
 
         Action _closedCallback;
 
-        ICoroutine _waitCoroutine;
         bool _canActivateButton = true;
 
         public UpgradeShopMenu(Action closedCallback)
@@ -65,37 +64,12 @@ namespace PuppetRoguelite.UI.Menus
             ArrangeElements();
         }
 
-        public override void OnAddedToEntity()
+        public override void OnEnabled()
         {
-            base.OnAddedToEntity();
+            base.OnEnabled();
 
-            if (Input.IsKeyDown(Keys.E))
-            {
-                _canActivateButton = false;
-                _waitCoroutine = Game1.StartCoroutine(WaitForRelease());
-            }
-            else _canActivateButton = true;
-
+            _canActivateButton = false;
             Stage.SetGamepadFocusElement(_addButtons.First());
-        }
-
-        public override void OnRemovedFromEntity()
-        {
-            if (_waitCoroutine != null)
-            {
-                _waitCoroutine.Stop();
-            }
-        }
-
-        IEnumerator WaitForRelease()
-        {
-            while (Input.IsKeyDown(Keys.E))
-            {
-                yield return null;
-            }
-
-            yield return null;
-            _canActivateButton = true;
         }
 
         void ArrangeElements()
@@ -157,9 +131,13 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.Update();
 
+            if (!_canActivateButton && !Input.IsKeyDown(Keys.E))
+            {
+                _canActivateButton = true;
+            }
+
             if (Input.IsKeyPressed(Keys.X))
             {
-                if (_waitCoroutine != null) _waitCoroutine.Stop();
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
                 _closedCallback?.Invoke();
             }

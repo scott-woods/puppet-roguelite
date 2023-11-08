@@ -124,7 +124,7 @@ namespace PuppetRoguelite.Scenes
             base.OnStart();
 
             //spawn player
-            PlayerSpawner.SpawnPlayer(_playerEntity, _mapEntity);
+            PlayerSpawner.SpawnPlayer(_mapEntity);
 
             //spawn boss
             //var bossSpawn = FindComponentOfType<BossSpawnPoint>();

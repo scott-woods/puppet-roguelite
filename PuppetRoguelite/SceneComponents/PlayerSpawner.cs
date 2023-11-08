@@ -15,24 +15,33 @@ namespace PuppetRoguelite.SceneComponents
 {
     public class PlayerSpawner : SceneComponent
     {
+        Entity _playerEntity;
+
+        public override void OnEnabled()
+        {
+            base.OnEnabled();
+
+            Game1.SceneManager.Emitter.AddObserver(GlobalManagers.SceneEvents.TransitionEnded, OnTransitionEnded);
+        }
+
         public Entity CreatePlayerEntity()
         {
-            var playerEntity = TransferManager.Instance.GetEntityToTransfer();
-            if (playerEntity != null)
+            _playerEntity = TransferManager.Instance.GetEntityToTransfer();
+            if (_playerEntity != null)
             {
                 TransferManager.Instance.ClearEntityToTransfer();
-                playerEntity.AttachToScene(Scene);
+                _playerEntity.AttachToScene(Scene);
             }
             else
             {
-                playerEntity = Scene.AddEntity(new Entity("player"));
-                playerEntity.AddComponent(new PlayerController());
+                _playerEntity = Scene.AddEntity(new Entity("player"));
+                _playerEntity.AddComponent(new PlayerController());
             }
 
-            return playerEntity;
+            return _playerEntity;
         }
 
-        public void SpawnPlayer(Entity playerEntity, Entity mapEntity)
+        public void SpawnPlayer(Entity mapEntity)
         {
             var spawnPosition = Vector2.Zero;
             var spawn = Scene.FindComponentsOfType<PlayerSpawnPoint>().First(s => s.MapEntity == mapEntity && s.Id == Game1.SceneManager.TargetEntranceId);
@@ -40,14 +49,38 @@ namespace PuppetRoguelite.SceneComponents
             {
                 spawnPosition = spawn.Entity.Position;
             }
-            playerEntity.SetPosition(spawnPosition);
-            playerEntity.SetEnabled(true);
+            _playerEntity.SetPosition(spawnPosition);
+            _playerEntity.SetEnabled(true);
+
+            if (Game1.SceneManager.State == GlobalManagers.SceneManagerState.Transitioning)
+            {
+                if (_playerEntity.TryGetComponent<PlayerController>(out var player))
+                {
+                    player.WaitingForSceneTransition = true;
+                }
+            }
         }
 
-        public void SpawnPlayer(Entity playerEntity, Vector2 position)
+        public void SpawnPlayer(Vector2 position)
         {
-            playerEntity.SetPosition(position);
-            playerEntity.SetEnabled(true);
+            _playerEntity.SetPosition(position);
+            _playerEntity.SetEnabled(true);
+
+            if (Game1.SceneManager.State == GlobalManagers.SceneManagerState.Transitioning)
+            {
+                if (_playerEntity.TryGetComponent<PlayerController>(out var player))
+                {
+                    player.WaitingForSceneTransition = true;
+                }
+            }
+        }
+
+        void OnTransitionEnded()
+        {
+            if (_playerEntity.TryGetComponent<PlayerController>(out var player))
+            {
+                player.WaitingForSceneTransition = false;
+            }
         }
     }
 }

@@ -67,8 +67,8 @@ namespace PuppetRoguelite.Scenes
             {
                 Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
             }
-
-            _playerSpawner.SpawnPlayer(_playerEntity, _mapEntity);
+            
+            _playerSpawner.SpawnPlayer(_mapEntity);
 
             var exitToDungeon = FindComponentsOfType<ExitArea>().FirstOrDefault(e => e.MapEntity == _mapEntity && e.TargetSceneType == typeof(MainDungeon));
             if (exitToDungeon != null)

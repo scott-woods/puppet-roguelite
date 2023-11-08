@@ -14,6 +14,7 @@ namespace PuppetRoguelite.GlobalManagers
     public class SceneManager : GlobalManager
     {
         public Emitter<SceneEvents> Emitter = new Emitter<SceneEvents>();
+        public SceneManagerState State = SceneManagerState.None;
 
         public string TargetEntranceId { get; set; }
 
@@ -42,12 +43,14 @@ namespace PuppetRoguelite.GlobalManagers
             transition.OnScreenObscured += OnScreenObscured;
 
             Game1.StartSceneTransition(transition);
+            State = SceneManagerState.Transitioning;
 
             Emitter.Emit(SceneEvents.TransitionStarted);
         }
 
         void OnTransitionCompleted()
         {
+            State = SceneManagerState.ShowingScene;
             Emitter.Emit(SceneEvents.TransitionEnded);
         }
 
@@ -62,5 +65,12 @@ namespace PuppetRoguelite.GlobalManagers
         TransitionStarted,
         ScreenObscured,
         TransitionEnded
+    }
+
+    public enum SceneManagerState
+    {
+        None,
+        Transitioning,
+        ShowingScene
     }
 }

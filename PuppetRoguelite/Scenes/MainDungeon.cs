@@ -72,7 +72,7 @@ namespace PuppetRoguelite.Scenes
             _dungenerator.Generate();
 
             var spawn = _dungenerator.GetPlayerSpawnPoint();
-            _playerSpawner.SpawnPlayer(_playerEntity, spawn);
+            _playerSpawner.SpawnPlayer(spawn);
             _playerEntity.SetPosition(spawn);
 
             Game1.AudioManager.PlayMusic(Music.Babbulon, true);

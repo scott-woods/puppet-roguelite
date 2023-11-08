@@ -40,8 +40,14 @@ namespace PuppetRoguelite.Components.Shared
 
         IEnumerator InteractionCoroutine()
         {
-            yield return Game1.StartCoroutine(_onInteracted());
-            Active = true;
+            yield return _onInteracted();
+
+            //wait a second before activating again, so we don't instantly re trigger
+            Game1.Schedule(1f, timer =>
+            {
+                Active = true;
+            });
+
             _interactionCompletedCallback?.Invoke();
         }
     }

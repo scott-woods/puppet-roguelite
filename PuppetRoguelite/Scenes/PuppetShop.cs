@@ -64,7 +64,7 @@ namespace PuppetRoguelite.Scenes
                 Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
             }
 
-            _playerSpawner.SpawnPlayer(_playerEntity, _mapEntity);
+            _playerSpawner.SpawnPlayer(_mapEntity);
         }
     }
 }

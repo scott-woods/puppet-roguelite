@@ -52,6 +52,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         //misc
         public Vector2 Direction = new Vector2(1, 0);
         public Vector2 LastNonZeroDirection = new Vector2(1, 0);
+        public bool WaitingForSceneTransition = false;
 
         //data
         //public PlayerData PlayerData;
@@ -248,7 +249,14 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         public void Update()
         {
-            StateMachine.Update(Time.DeltaTime);
+            if (WaitingForSceneTransition)
+            {
+                Idle();
+            }
+            else
+            {
+                StateMachine.Update(Time.DeltaTime);
+            }
         }
 
         public void Idle()

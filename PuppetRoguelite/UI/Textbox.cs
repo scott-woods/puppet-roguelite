@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +36,8 @@ namespace PuppetRoguelite.UI
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
             _table.SetDebug(false);
+
+            SetRenderLayer(int.MinValue);
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
