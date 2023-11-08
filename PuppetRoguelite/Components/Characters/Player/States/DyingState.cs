@@ -2,6 +2,7 @@
 using Nez.AI.FSM;
 using Nez.Sprites;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Begin();
 
-            _context.SaveData();
+            PlayerData.Instance.UpdateAndSave();
 
             Game1.AudioManager.StopMusic();
 

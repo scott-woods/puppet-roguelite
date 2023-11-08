@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
+using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,9 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class UpgradeShop : TiledComponent
     {
+        //entities
+        Entity _menuEntity;
+
         //components
         SpriteAnimator _animator;
         BoxCollider _collider;
@@ -69,6 +73,35 @@ namespace PuppetRoguelite.Components.TiledComponents
                 new DialogueLine("Baba booey"),
             };
             yield return textboxManager.DisplayTextbox(lines);
+
+            //display shop
+            if (_menuEntity == null)
+            {
+                _menuEntity = Entity.Scene.CreateEntity("shop-ui");
+                _menuEntity.AddComponent(new UpgradeShopMenu(OnShopClosed));
+            }
+            else
+            {
+                _menuEntity.SetEnabled(true);
+            }
+
+            //while menu is showing, wait
+            while (_menuEntity.Enabled)
+            {
+                yield return null;
+            }
+
+            //show more lines
+            lines = new List<DialogueLine>()
+            {
+                new DialogueLine("Dash6 fast eat ass, kid.")
+            };
+            yield return textboxManager.DisplayTextbox(lines);
+        }
+
+        void OnShopClosed()
+        {
+            _menuEntity.SetEnabled(false);
         }
     }
 }

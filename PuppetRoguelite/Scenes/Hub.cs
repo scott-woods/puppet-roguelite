@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.Interfaces;
+using PuppetRoguelite.Models;
 
 namespace PuppetRoguelite.Scenes
 {
@@ -90,7 +91,8 @@ namespace PuppetRoguelite.Scenes
         void OnDungeonExitAreaTriggered()
         {
             PlayerController.Instance.DollahInventory.Dollahs = 0;
-            PlayerController.Instance.SaveData();
+            PlayerData.Instance.UpdateAndSave();
+            PlayerUpgradeData.Instance.UpdateAndSave();
             Game1.AudioManager.StopMusic();
         }
     }

@@ -2,30 +2,14 @@
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.AI.FSM;
-using Nez.Persistence;
 using Nez.Sprites;
-using Nez.Systems;
 using Nez.Textures;
-using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player.States;
-using PuppetRoguelite.Components.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.GlobalManagers;
-using PuppetRoguelite.Interfaces;
-using PuppetRoguelite.Items;
 using PuppetRoguelite.Models;
-using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
-using PuppetRoguelite.UI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Runtime.Intrinsics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player
 {
@@ -71,7 +55,8 @@ namespace PuppetRoguelite.Components.Characters.Player
         public Vector2 LastNonZeroDirection = new Vector2(1, 0);
 
         //data
-        public PlayerData PlayerData;
+        //public PlayerData PlayerData;
+        //public PlayerUpgradeData PlayerUpgradeData;
 
         #region SETUP
 
@@ -83,8 +68,6 @@ namespace PuppetRoguelite.Components.Characters.Player
         public override void Initialize()
         {
             base.Initialize();
-
-            PlayerData = LoadData();
 
             AddComponents();
             SetupInput();
@@ -156,10 +139,10 @@ namespace PuppetRoguelite.Components.Characters.Player
             OriginComponent = Entity.AddComponent(new OriginComponent(Collider));
 
             //Add health component
-            HealthComponent = Entity.AddComponent(new HealthComponent(PlayerData.MaxHp));
+            HealthComponent = Entity.AddComponent(new HealthComponent(PlayerUpgradeData.Instance.MaxHpUpgrade.GetCurrentMaxHp()));
 
             //action points
-            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(PlayerData.MaxAp, HealthComponent));
+            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(PlayerUpgradeData.Instance.MaxApUpgrade.GetCurrentMaxAp(), HealthComponent));
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
@@ -167,7 +150,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             //_inventory.AddItem(new CerealBox("feef"));
 
             //dollahs
-            DollahInventory = Entity.AddComponent(new DollahInventory(PlayerData.Dollahs));
+            DollahInventory = Entity.AddComponent(new DollahInventory(PlayerData.Instance.Dollahs));
 
             //death
             DeathComponent = Entity.AddComponent(new DeathComponent(Nez.Content.Audio.Sounds._69_Die_02, SpriteAnimator, "DeathRight", "HurtRight"));
@@ -176,11 +159,11 @@ namespace PuppetRoguelite.Components.Characters.Player
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, OriginComponent));
 
             //velocity component
-            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, PlayerData.MovementSpeed));
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, PlayerData.Instance.MovementSpeed));
 
             MeleeAttack = Entity.AddComponent(new MeleeAttack(SpriteAnimator, VelocityComponent));
 
-            Dash = Entity.AddComponent(new Dash(PlayerData.MaxDashes));
+            Dash = Entity.AddComponent(new Dash(PlayerData.Instance.MaxDashes));
 
             _spriteTrail = Entity.AddComponent(new SpriteTrail(SpriteAnimator));
             _spriteTrail.DisableSpriteTrail();
@@ -189,8 +172,10 @@ namespace PuppetRoguelite.Components.Characters.Player
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .75f, VelocityComponent, Hurtbox));
 
             //actions manager
-            ActionsManager = Entity.AddComponent(new ActionsManager(PlayerData.AttackActions, PlayerData.UtilityActions,
-                PlayerData.SupportActions, PlayerData.MaxAttackSlots, PlayerData.MaxUtilitySlots, PlayerData.MaxSupportSlots));
+            ActionsManager = Entity.AddComponent(new ActionsManager(PlayerData.Instance.AttackActions, PlayerData.Instance.UtilityActions,
+                PlayerData.Instance.SupportActions, PlayerUpgradeData.Instance.AttackSlotsUpgrade.GetCurrentValue(),
+                PlayerUpgradeData.Instance.UtilitySlotsUpgrade.GetCurrentValue(),
+                PlayerUpgradeData.Instance.SupportSlotsUpgrade.GetCurrentValue()));
 
             var shadow = Entity.AddComponent(new SpriteMime(Entity.GetComponent<SpriteRenderer>()));
             shadow.Color = new Color(10, 10, 10, 80);
@@ -261,41 +246,6 @@ namespace PuppetRoguelite.Components.Characters.Player
         }
 
         #endregion
-
-        public void SaveData()
-        {
-            var data = new PlayerData()
-            {
-                Dollahs = DollahInventory.Dollahs,
-                MaxHp = HealthComponent.MaxHealth,
-                AttackActions = ActionsManager.AttackActions,
-                UtilityActions = ActionsManager.UtilityActions,
-                SupportActions = ActionsManager.SupportActions,
-                MaxAttackSlots = ActionsManager.MaxAttackSlots,
-                MaxUtilitySlots = ActionsManager.MaxUtilitySlots,
-                MaxSupportSlots = ActionsManager.MaxSupportSlots,
-                MaxAp = ActionPointComponent.MaxActionPoints,
-                MovementSpeed = VelocityComponent.Speed
-            };
-
-            var settings = JsonSettings.HandlesReferences;
-            settings.TypeNameHandling = TypeNameHandling.All;
-
-            var json = Json.ToJson(data, settings);
-            File.WriteAllText("Data/playerData.json", json);
-        }
-
-        public PlayerData LoadData()
-        {
-            var data = new PlayerData();
-            if (File.Exists("Data/playerData.json"))
-            {
-                var json = File.ReadAllText("Data/playerData.json");
-                Json.FromJsonOverwrite(json, data);
-            }
-
-            return data;
-        }
 
         public void Update()
         {

@@ -50,6 +50,7 @@ namespace PuppetRoguelite.Components.Shared
         public int MaxHealth
         {
             get => _maxHealth;
+            set => _maxHealth = value;
         }
 
         public HealthComponent(int maxHealth)

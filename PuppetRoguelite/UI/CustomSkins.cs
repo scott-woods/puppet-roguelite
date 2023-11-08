@@ -71,6 +71,13 @@ namespace PuppetRoguelite.UI
                 FontColor = Color.White
             });
 
+            skin.Add("plusButton", new ButtonStyle()
+            {
+                Up = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_up)),
+                Down = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
+                Over = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
+            });
+
             //progress bar
             for (int i = 0; i < 10; i++)
             {

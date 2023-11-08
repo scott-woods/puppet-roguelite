@@ -6,6 +6,7 @@ using Nez;
 using Nez.Systems;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Scenes;
+using System;
 using System.IO;
 
 namespace PuppetRoguelite
@@ -41,7 +42,7 @@ namespace PuppetRoguelite
             Screen.SetSize(1920, 1080);
 
             SceneManager.TargetEntranceId = "0";
-            Scene = new Hub();
+            Scene = new PuppetShop();
         }
 
         protected override void Update(GameTime gameTime)

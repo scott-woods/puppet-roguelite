@@ -56,6 +56,7 @@ namespace Nez
 				public const string Menu_select = @"Content\Audio\Sounds\menu_select.wav";
 				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
 				public const string Player_teleport = @"Content\Audio\Sounds\player_teleport.wav";
+				public const string Purchase = @"Content\Audio\Sounds\purchase.wav";
 				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.mp3";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
 			}
@@ -821,6 +822,8 @@ namespace Nez
 						public const string Style4Icon335 = @"Content\Textures\UI\Icons\Style4\Style 4 Icon 335.png";
 					}
 
+					public const string Plus_icon_down = @"Content\Textures\UI\Icons\plus_icon_down.png";
+					public const string Plus_icon_up = @"Content\Textures\UI\Icons\plus_icon_up.png";
 				}
 
 				public static class Menu

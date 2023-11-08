@@ -249,8 +249,8 @@
             "scale": 1.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 343.3333333333333,
-                "y": 143.33333333333334
+                "x": 342.66666666666663,
+                "y": 142.66666666666663
             }
         },
         "Tilemaps/boss_room.tmx": {
@@ -269,10 +269,10 @@
                 3
             ],
             "scale": 1.5,
-            "selectedLayer": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 503.33333333333326,
-                "y": 207.33333333333334
+                "x": 39.33333333333334,
+                "y": 197.33333333333334
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -302,10 +302,10 @@
                 3
             ],
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 240.66666666666663,
-                "y": 119.33333333333334
+                "x": 6.666666666666686,
+                "y": 222.66666666666663
             }
         },
         "Tilemaps/right_key_room.tmx": {
