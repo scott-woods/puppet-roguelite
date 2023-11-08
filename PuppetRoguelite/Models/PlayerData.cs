@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Models
         private static PlayerData _instance;
 
         public int Dollahs = 0;
-        public List<PlayerActionType> AttackActions = new List<PlayerActionType>() { PlayerActionType.FromType(typeof(DashAttack)) };
+        public List<PlayerActionType> AttackActions = new List<PlayerActionType>() { PlayerActionType.FromType(typeof(Whirlwind)) };
         public List<PlayerActionType> UtilityActions = new List<PlayerActionType>() { PlayerActionType.FromType(typeof(Teleport)) };
         public List<PlayerActionType> SupportActions = new List<PlayerActionType>() { PlayerActionType.FromType(typeof(HealingAura)) };
         public int MaxDashes = 1;

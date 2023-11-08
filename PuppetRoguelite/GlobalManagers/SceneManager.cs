@@ -21,7 +21,7 @@ namespace PuppetRoguelite.GlobalManagers
         Scene _newScene;
 
         public void ChangeScene(Type targetSceneType, string targetEntranceId = "", Color? fadeToColor = null,
-            float delayBeforeFadeInDuration = .5f, float fadeInDuration = .8f, float fadeOutDuration = .8f,
+            float delayBeforeFadeInDuration = .2f, float fadeInDuration = .1f, float fadeOutDuration = .5f,
             EaseType fadeEaseType = EaseType.Linear)
         {
             var transferEntity = TransferManager.Instance.GetEntityToTransfer();

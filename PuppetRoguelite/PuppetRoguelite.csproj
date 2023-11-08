@@ -48,6 +48,7 @@
     <None Remove="Content\Audio\Sounds\purchase.wav" />
     <None Remove="Content\Audio\Sounds\space_ship_3.mp3" />
     <None Remove="Content\Audio\Sounds\spitter_fire.wav" />
+    <None Remove="Content\Audio\Sounds\whirlwind_speen.wav" />
     <None Remove="Content\Fonts\abaddon_light.fnt" />
     <None Remove="Content\Fonts\abaddon_light_0.png" />
     <None Remove="Content\Textures\Characters\ChainBot\charge.png" />

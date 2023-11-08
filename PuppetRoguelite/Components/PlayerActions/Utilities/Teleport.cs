@@ -36,6 +36,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             _playerSim = AddComponent(new PlayerSim(Vector2.One));
 
             var animator = _playerSim.GetComponent<SpriteAnimator>();
+            animator.SetColor(new Color(Color.White, 128));
             animator.Play("IdleDown");
         }
 
@@ -50,9 +51,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
         {
             Position = _initialPosition;
 
-            yield return Coroutine.WaitForSeconds(.3f);
+            yield return Coroutine.WaitForSeconds(.1f);
 
             var animator = _playerSim.GetComponent<SpriteAnimator>();
+            animator.SetColor(Color.White);
             var tween = animator.TweenColorTo(Color.Transparent, .15f);
             tween.SetEaseType(Nez.Tweens.EaseType.QuintIn);
             tween.Start();
@@ -66,7 +68,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             tween.Start();
             yield return tween.WaitForCompletion();
 
-            yield return Coroutine.WaitForSeconds(.2f);
+            yield return Coroutine.WaitForSeconds(.1f);
 
             HandleExecutionFinished();
         }

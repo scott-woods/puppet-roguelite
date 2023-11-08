@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Sprites;
 using Nez.UI;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
@@ -39,6 +40,8 @@ namespace PuppetRoguelite
             //create sim player
             _playerSimEntity = Game1.Scene.CreateEntity("player-sim");
             _playerSimEntity.AddComponent(new PlayerSim(Vector2.One));
+            var animator = _playerSimEntity.GetComponent<SpriteAnimator>();
+            animator.SetColor(new Color(Color.White, 128));
             _playerSimEntity.SetPosition(PlayerController.Instance.Entity.Position);
 
             //set camera to follow sim

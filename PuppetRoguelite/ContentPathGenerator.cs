@@ -59,6 +59,7 @@ namespace Nez
 				public const string Purchase = @"Content\Audio\Sounds\purchase.wav";
 				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.mp3";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
+				public const string Whirlwind_speen = @"Content\Audio\Sounds\whirlwind_speen.wav";
 			}
 
 		}
