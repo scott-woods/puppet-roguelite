@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Sprites;
 using Nez.Svg;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Player;
@@ -20,7 +21,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
         //components
         PlayerSim _playerSim;
 
-        Vector2 _initialPosition;
+        Vector2 _initialPosition, _finalPosition;
 
         public Teleport(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
         {
@@ -33,44 +34,39 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             _initialPosition = Position;
 
             _playerSim = AddComponent(new PlayerSim(Vector2.One));
+
+            var animator = _playerSim.GetComponent<SpriteAnimator>();
+            animator.Play("IdleDown");
         }
 
         public override void Execute()
         {
             base.Execute();
 
-            RemoveComponent(_playerSim);
             Game1.StartCoroutine(ExecutionCoroutine());
         }
 
         IEnumerator ExecutionCoroutine()
         {
-            PlayerController.Instance.Entity.SetEnabled(true);
-            PlayerController.Instance.Entity.SetPosition(_initialPosition);
-
-            var cam = Scene.Camera.GetComponent<DeadzoneFollowCamera>();
-            cam.SetFollowTarget(PlayerController.Instance.Entity);
+            Position = _initialPosition;
 
             yield return Coroutine.WaitForSeconds(.3f);
 
-            var tween = PlayerController.Instance.SpriteAnimator.TweenColorTo(Color.Transparent, .15f);
+            var animator = _playerSim.GetComponent<SpriteAnimator>();
+            var tween = animator.TweenColorTo(Color.Transparent, .15f);
             tween.SetEaseType(Nez.Tweens.EaseType.QuintIn);
             tween.Start();
             yield return tween.WaitForCompletion();
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Player_teleport, .6f);
 
-            PlayerController.Instance.Entity.SetPosition(Position);
+            Position = _finalPosition;
 
-            tween = PlayerController.Instance.SpriteAnimator.TweenColorTo(Color.White, .1f);
+            tween = animator.TweenColorTo(Color.White, .1f);
             tween.Start();
             yield return tween.WaitForCompletion();
 
             yield return Coroutine.WaitForSeconds(.2f);
-
-            PlayerController.Instance.Entity.SetEnabled(false);
-
-            cam.SetFollowTarget(this);
 
             HandleExecutionFinished();
         }
@@ -89,6 +85,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
 
                     if (Input.LeftMouseButtonPressed)
                     {
+                        _finalPosition = Position;
                         HandlePreparationFinished(Position);
                     }
                 }

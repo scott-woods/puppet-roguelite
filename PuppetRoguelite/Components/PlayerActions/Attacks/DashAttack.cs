@@ -27,12 +27,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         Vector2 _direction = Vector2.One;
 
         //components
-        SpriteAnimator _animator;
+        PlayerSim _playerSim;
         CircleHitbox _hitbox;
         PrototypeSpriteRenderer _target;
-        YSorter _ySorter;
         SpriteTrail _trail;
-        OriginComponent _originComponent;
+        SpriteAnimator _animator;
 
         public Vector2 InitialPosition, FinalPosition;
 
@@ -49,6 +48,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             InitialPosition = Position;
             FinalPosition = Position + (_direction * _range);
 
+            //player sim
+            _playerSim = AddComponent(new PlayerSim());
+
             //hitbox
             _hitbox = AddComponent(new CircleHitbox(_damage, 16));
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
@@ -58,14 +60,15 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             //target that shows where dash will go
             _target = AddComponent(new PrototypeSpriteRenderer(8, 8));
 
-            _animator = AddComponent(new SpriteAnimator());
+            //get animator from player sim
+            _animator = _playerSim.GetComponent<SpriteAnimator>();
             _animator.SetColor(new Color(Color.White, 128));
             var dashTexture = Game1.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
             var dashSprites = Sprite.SpritesFromAtlas(dashTexture, 64, 64);
-            _animator.AddAnimation("DashRight", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 4, 4, 4, 5, 6, 7, 7, 7 }, true));
-            _animator.AddAnimation("DashLeft", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 13, 13, 13, 14, 15, 16, 16, 16 }, true));
-            _animator.AddAnimation("DashDown", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 22, 22, 22, 23, 24, 25, 25, 25 }, true));
-            _animator.AddAnimation("DashUp", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 31, 31, 31, 32, 33, 34, 34, 34 }, true));
+            _animator.AddAnimation("DashAttackRight", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 4, 4, 4, 5, 6, 7, 7, 7 }, true));
+            _animator.AddAnimation("DashAttackLeft", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 13, 13, 13, 14, 15, 16, 16, 16 }, true));
+            _animator.AddAnimation("DashAttackDown", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 22, 22, 22, 23, 24, 25, 25, 25 }, true));
+            _animator.AddAnimation("DashAttackUp", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 31, 31, 31, 32, 33, 34, 34, 34 }, true));
 
             //sprite trail
             _trail = AddComponent(new SpriteTrail(_animator));
@@ -73,12 +76,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _trail.FadeDuration = .2f;
             _trail.MinDistanceBetweenInstances = 12;
 
-            _originComponent = AddComponent(new OriginComponent(new Vector2(0, 12)));
-
-            _ySorter = AddComponent(new YSorter(_animator, _originComponent));
-
+            //start playing animation
             var animation = GetNextAnimation();
             _animator.Play(animation);
+
+            //start sim loop
             _simulationLoop = Game1.StartCoroutine(SimulationLoop());
         }
 
@@ -86,7 +88,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             base.Execute();
 
-            //reattach entity to scene
+            //move to initial position
             Position = InitialPosition;
 
             //animator adjustments
@@ -199,10 +201,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(InitialPosition, FinalPosition));
             angle = (angle + 360) % 360;
-            var animation = "DashRight";
-            if (angle >= 45 && angle < 135) animation = "DashDown";
-            else if (angle >= 135 && angle < 225) animation = "DashLeft";
-            else if (angle >= 225 && angle < 315) animation = "DashUp";
+            var animation = "DashAttackRight";
+            if (angle >= 45 && angle < 135) animation = "DashAttackDown";
+            else if (angle >= 135 && angle < 225) animation = "DashAttackLeft";
+            else if (angle >= 225 && angle < 315) animation = "DashAttackUp";
 
             return animation;
         }

@@ -18,7 +18,6 @@ namespace PuppetRoguelite.Components.Characters.Player
         public static PlayerController Instance { get; private set; } = new PlayerController();
 
         //state machine
-        //internal PlayerStateMachine StateMachine;
         public StateMachine<PlayerController> StateMachine;
 
         //input

@@ -39,10 +39,14 @@ namespace PuppetRoguelite.Components.PlayerActions
         {
             base.Update();
 
-            if (Input.IsKeyPressed(Keys.X))
+            if (State == PlayerActionState.Preparing)
             {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
-                ActionPrepCanceledHandler?.Invoke(this);
+                if (Input.IsKeyPressed(Keys.X))
+                {
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
+                    State = PlayerActionState.None;
+                    ActionPrepCanceledHandler?.Invoke(this);
+                }
             }
         }
 

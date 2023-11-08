@@ -1,23 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Nez;
-using Nez.AI.FSM;
-using Nez.Sprites;
-using Nez.Systems;
 using Nez.UI;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.PlayerActions;
-using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.UI.Elements;
-using PuppetRoguelite.UI.HUDs;
 using PuppetRoguelite.UI.Menus;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite
 {
@@ -198,14 +190,7 @@ namespace PuppetRoguelite
             //try to execute next action. if false, that means none left, execution is over
             if (!ExecuteNextAction())
             {
-                Debug.Log("finished executing actions");
-                //reenable player
-                PlayerController.Instance.Entity.SetEnabled(true);
-                PlayerController.Instance.Entity.SetPosition(finalPos);
-
-                _camera.SetFollowTarget(PlayerController.Instance.Entity);
-
-                Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseCompleted);
+                Game1.StartCoroutine(EndTurn(finalPos));
             }
         }
 
@@ -227,11 +212,7 @@ namespace PuppetRoguelite
             //dequeue action
             if (!ExecuteNextAction())
             {
-                Debug.Log("finished executing actions");
-                PlayerController.Instance.Entity.SetEnabled(true);
-                _camera.SetFollowTarget(PlayerController.Instance.Entity);
-
-                Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseCompleted);
+                Game1.StartCoroutine(EndTurn(PlayerController.Instance.Entity.Position));
             }
         }
 
@@ -251,6 +232,20 @@ namespace PuppetRoguelite
             action.Execute();
             Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionExecuting, action);
             return true;
+        }
+
+        IEnumerator EndTurn(Vector2 finalPosition)
+        {
+            Debug.Log("finished executing actions");
+
+            //wait just one frame so the sim and real player sprites don't overlap
+            yield return null;
+
+            PlayerController.Instance.Entity.SetEnabled(true);
+            PlayerController.Instance.Entity.SetPosition(finalPosition);
+            _camera.SetFollowTarget(PlayerController.Instance.Entity);
+
+            Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseCompleted);
         }
     }
 }

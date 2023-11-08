@@ -94,7 +94,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             //show more lines
             lines = new List<DialogueLine>()
             {
-                new DialogueLine("Dash6 fast eat ass, kid.")
+                new DialogueLine("Dash fast eat ass, kid.")
             };
             yield return textboxManager.DisplayTextbox(lines);
         }

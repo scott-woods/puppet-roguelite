@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Sprites;
+using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Player;
 using System;
 using System.Collections;
@@ -13,6 +15,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Support
     [PlayerActionInfo("Healing Aura", 3, PlayerActionCategory.Support)]
     public class HealingAura : PlayerAction
     {
+        //components
+        PlayerSim _playerSim;
+
         public HealingAura(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
         {
         }
@@ -20,6 +25,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Support
         public override void Prepare()
         {
             base.Prepare();
+
+            _playerSim = AddComponent(new PlayerSim());
 
             HandlePreparationFinished(Position);
         }
@@ -33,9 +40,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Support
 
         IEnumerator ExecutionCoroutine()
         {
-            //enable player
-            PlayerController.Instance.Entity.SetEnabled(true);
-            PlayerController.Instance.Entity.SetPosition(Position);
+            //get animator from player sim
+            var animator = _playerSim.GetComponent<SpriteAnimator>();
+
+            //play idle
+            animator.Play("IdleRight");
 
             yield return Coroutine.WaitForSeconds(.1f);
 
@@ -44,13 +53,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Support
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Heal);
 
             //briefly change color
-            PlayerController.Instance.SpriteAnimator.SetColor(Color.Green);
+            animator.SetColor(Color.Green);
             yield return Coroutine.WaitForSeconds(.2f);
-            PlayerController.Instance.SpriteAnimator.SetColor(Color.White);
+            animator.SetColor(Color.White);
 
             yield return Coroutine.WaitForSeconds(.1f);
-
-            PlayerController.Instance.Entity.SetEnabled(false);
 
             HandleExecutionFinished();
         }

@@ -3,12 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilemaps/R_1.tmx",
+    "activeFile": "Tilemaps/hub.tmx",
     "expandedProjectPaths": [
         ".",
-        "Templates",
         "Tilesets",
-        "Tilemaps"
+        "Tilemaps",
+        "Templates"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -269,10 +269,10 @@
                 3
             ],
             "scale": 1.5,
-            "selectedLayer": 3,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 39.33333333333334,
-                "y": 197.33333333333334
+                "x": 479.33333333333326,
+                "y": 207.33333333333334
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -339,44 +339,30 @@
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "Tilesets/blood_temple_tileset.tsx",
-        "Tilesets/dungeon_prison_props.tsx",
         "Tilemaps/bedroom.tmx",
+        "Tilemaps/puppet_shop.tmx",
         "Tilemaps/hub.tmx",
         "Tilemaps/boss_room.tmx",
         "Tilemaps/left_key_room.tmx",
         "Tilemaps/right_key_room.tmx",
-        "Tilemaps/L_1.tmx",
-        "Tilemaps/LR_1.tmx",
-        "Tilemaps/B_1.tmx",
-        "Tilemaps/R_1.tmx",
-        "Tilemaps/T_1.tmx",
-        "Tilemaps/TBLR_1.tmx",
-        "Tilemaps/TBL_1.tmx",
-        "Tilemaps/TBR_1.tmx",
-        "Tilemaps/TLR_1.tmx",
-        "Tilemaps/BLR_1.tmx",
-        "Tilemaps/TB_1.tmx",
-        "Tilemaps/TL_1.tmx",
-        "Tilemaps/TR_1.tmx",
-        "Tilemaps/BL_1.tmx",
-        "Tilemaps/BR_1.tmx"
+        "Tilemaps/pre_boss_room.tmx",
+        "Tilemaps/TBLR_1.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "Tilemaps/bedroom.tmx",
+        "Tilemaps/puppet_shop.tmx",
+        "Tilemaps/TBLR_1.tmx",
+        "Tilemaps/pre_boss_room.tmx",
+        "Tilemaps/right_key_room.tmx",
+        "Tilemaps/left_key_room.tmx",
+        "Tilemaps/boss_room.tmx",
+        "Tilemaps/hub.tmx",
         "Tilemaps/L_1.tmx",
         "Tilemaps/LR_1.tmx",
         "Tilemaps/B_1.tmx",
-        "Tilemaps/R_1.tmx",
-        "Tilemaps/BR_1.tmx",
-        "Tilemaps/BL_1.tmx",
-        "Tilemaps/TR_1.tmx",
-        "Tilemaps/TL_1.tmx",
-        "Tilemaps/TB_1.tmx",
-        "Tilemaps/BLR_1.tmx",
-        "Tilemaps/TLR_1.tmx",
-        "Tilemaps/TBR_1.tmx"
+        "Tilemaps/R_1.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",
