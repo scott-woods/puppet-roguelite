@@ -18,14 +18,14 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Chain Lightning", 1, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Chain Lightning", 3, PlayerActionCategory.Attack)]
     public class ChainLightning : PlayerAction
     {
         //data
         const int _damage = 4;
         const int _hitboxRadius = 12;
         const int _hitboxDistFromPlayer = 12;
-        const float _strikeInterval = .75f;
+        const float _strikeInterval = .2f;
         const int _chainRadius = 100;
 
         //components
@@ -35,6 +35,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         DirectionByMouse _dirByMouse;
 
         //coroutines
+        CoroutineManager _coroutineManager = new CoroutineManager();
         ICoroutine _simulationLoop;
         ICoroutine _executionCoroutine;
 
@@ -66,7 +67,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
             _dirByMouse = AddComponent(new DirectionByMouse());
 
-            _simulationLoop = Game1.StartCoroutine(SimulationLoop());
+            _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
         }
 
         IEnumerator SimulationLoop()
@@ -93,7 +94,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             base.Execute();
 
-            _executionCoroutine = Game1.StartCoroutine(ExecutionCoroutine());
+            _executionCoroutine = _coroutineManager.StartCoroutine(ExecutionCoroutine());
         }
 
         IEnumerator ExecutionCoroutine()
@@ -179,6 +180,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             base.Update();
 
+            _coroutineManager.Update();
+
             if (State == PlayerActionState.Preparing)
             {
                 //handle confirm
@@ -251,6 +254,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             _hasFinishedSwinging = false;
 
+            if (State == PlayerActionState.Executing) Debug.Log($"playing animation ChainLightning{_direction}");
             _animator.Play($"ChainLightning{_direction}", SpriteAnimator.LoopMode.Once);
             _animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
@@ -277,10 +281,13 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
                 yield return null;
             }
+
+            Debug.Log("finished attack");
         }
 
         void OnAnimationFinished(string animation)
         {
+            Debug.Log("animation finished");
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
             _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
             _hasFinishedSwinging = true;
