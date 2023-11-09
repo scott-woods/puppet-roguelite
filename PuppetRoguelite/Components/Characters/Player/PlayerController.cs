@@ -125,7 +125,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
             Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 2f));
-            Hurtbox.SetEnabled(false);
+            //Hurtbox.SetEnabled(false);
 
             //add collision box
             Collider = Entity.AddComponent(new BoxCollider(-5, 6, 10, 8));
@@ -292,11 +292,12 @@ namespace PuppetRoguelite.Components.Characters.Player
         void OnTurnPhaseTriggered()
         {
             Hurtbox.SetEnabled(false);
+            StateMachine.ChangeState<TurnState>();
         }
 
         void OnTurnPhaseCompleted()
         {
-            Game1.Schedule(.5f, timer => Hurtbox.SetEnabled(true));
+            Hurtbox.SetEnabled(true);
             StateMachine.ChangeState<IdleState>();
         }
 

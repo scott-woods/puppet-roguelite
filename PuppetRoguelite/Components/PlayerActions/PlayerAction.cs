@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Nez;
+using Nez.Systems;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters;
+using PuppetRoguelite.Components.Characters.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,24 +16,23 @@ namespace PuppetRoguelite.Components.PlayerActions
 {
     public abstract class PlayerAction : Entity
     {
-        public Action<PlayerAction, Vector2> ActionPrepFinishedHandler;
-        public Action<PlayerAction> ActionPrepCanceledHandler;
-        public Action<PlayerAction> ExecutionFinishedHandler;
+        public Emitter<PlayerActionEvent, PlayerAction> Emitter = new Emitter<PlayerActionEvent, PlayerAction>();
+        public bool ShouldDestroySelf;
         public PlayerActionState State = PlayerActionState.None;
 
-        public PlayerAction(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler)
+        public PlayerAction(bool shouldDestroySelf = false)
         {
-            ActionPrepFinishedHandler = actionPrepFinishedHandler;
-            ActionPrepCanceledHandler = actionPrepCanceledHandler;
-            ExecutionFinishedHandler = executionFinishedHandler;
+            ShouldDestroySelf = shouldDestroySelf;
         }
 
         public virtual void Prepare()
         {
+            Emitter.Emit(PlayerActionEvent.PrepStarted, this);
             State = PlayerActionState.Preparing;
         }
         public virtual void Execute()
         {
+            Emitter.Emit(PlayerActionEvent.ExecutionStarted, this);
             State = PlayerActionState.Executing;
         }
 
@@ -45,21 +46,33 @@ namespace PuppetRoguelite.Components.PlayerActions
                 {
                     Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
                     State = PlayerActionState.None;
-                    ActionPrepCanceledHandler?.Invoke(this);
+                    HandlePreparationCanceled();
                 }
             }
         }
 
         public virtual void HandlePreparationFinished(Vector2 finalPosition)
         {
-            ActionPrepFinishedHandler?.Invoke(this, finalPosition);
             State = PlayerActionState.None;
+            PlayerController.Instance.ActionPointComponent.DecrementActionPoints(PlayerActionUtils.GetApCost(GetType()));
+            Emitter.Emit(PlayerActionEvent.PrepFinished, this);
+        }
+
+        public virtual void HandlePreparationCanceled()
+        {
+            State = PlayerActionState.None;
+            Emitter.Emit(PlayerActionEvent.PrepCanceled, this);
         }
 
         public virtual void HandleExecutionFinished()
         {
-            ExecutionFinishedHandler?.Invoke(this);
             State = PlayerActionState.None;
+            Emitter.Emit(PlayerActionEvent.ExecutionFinished, this);
+        }
+
+        public virtual Vector2 GetFinalPosition()
+        {
+            return Position;
         }
     }
 
@@ -75,6 +88,15 @@ namespace PuppetRoguelite.Components.PlayerActions
         None,
         Preparing,
         Executing
+    }
+
+    public enum PlayerActionEvent
+    {
+        PrepCanceled,
+        PrepStarted,
+        PrepFinished,
+        ExecutionStarted,
+        ExecutionFinished,
     }
 
     sealed class PlayerActionInfoAttribute : Attribute

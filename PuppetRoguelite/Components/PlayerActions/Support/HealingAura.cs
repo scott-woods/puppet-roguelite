@@ -18,10 +18,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Support
         //components
         PlayerSim _playerSim;
 
-        public HealingAura(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
-        {
-        }
-
         public override void Prepare()
         {
             base.Prepare();

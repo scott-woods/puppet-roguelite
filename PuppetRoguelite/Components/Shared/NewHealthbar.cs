@@ -141,7 +141,6 @@ namespace PuppetRoguelite.Components.Shared
         IEnumerator HideHealthbarAfterDelay()
         {
             //yield return Coroutine.WaitForSeconds(2f);
-            Debug.Log("coroutine started");
             var elapsed = 0f;
             while (elapsed < 10f)
             {

@@ -130,7 +130,10 @@ namespace PuppetRoguelite
             _menuStack.Peek().Hide();
 
             //create action instance
-            var action = Activator.CreateInstance(actionType, ActionPrepFinishedHandler, ActionPrepCanceledHandler, ActionExecutionFinishedHandler) as PlayerAction;
+            var action = Activator.CreateInstance(actionType) as PlayerAction;
+            action.Emitter.AddObserver(PlayerActionEvent.PrepCanceled, OnActionPrepCanceled);
+            action.Emitter.AddObserver(PlayerActionEvent.PrepFinished, OnActionPrepFinished);
+            action.Emitter.AddObserver(PlayerActionEvent.ExecutionFinished, OnActionExecutionFinished);
             Game1.Scene.AddEntity(action);
             action.SetPosition(_playerSimEntity.Position);
 
@@ -147,16 +150,14 @@ namespace PuppetRoguelite
             action.Prepare();
         }
 
-        void ActionPrepFinishedHandler(PlayerAction action, Vector2 finalPosition)
+        void OnActionPrepFinished(PlayerAction action)
         {
-            Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedPreparing, action);
-
             //add action to queue and detach from scene
             ActionQueue.Enqueue(action);
             action.SetEnabled(false);
 
             //move sim player to new final position
-            _playerSimEntity.SetPosition(finalPosition);
+            _playerSimEntity.SetPosition(action.GetFinalPosition());
 
             //reenable sim and real player
             _playerSimEntity.SetEnabled(true);
@@ -166,7 +167,7 @@ namespace PuppetRoguelite
             StartNewSelection();
         }
 
-        void ActionPrepCanceledHandler(PlayerAction action)
+        void OnActionPrepCanceled(PlayerAction action)
         {
             //destroy action
             action.Destroy();
@@ -179,21 +180,23 @@ namespace PuppetRoguelite
             _menuStack.Peek().Show(_playerSimEntity.Position);
         }
 
-        void ActionExecutionFinishedHandler(PlayerAction action)
+        void OnActionExecutionFinished(PlayerAction action)
         {
             Debug.Log($"Finished executing Action: ${PlayerActionUtils.GetName(action.GetType())}");
-            Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionFinishedExecuting, action);
 
             //get final position
-            var finalPos = action.Position;
+            var finalPos = action.GetFinalPosition();
 
             //destroy action
-            action.Destroy();
+            if (!action.ShouldDestroySelf)
+            {
+                action.Destroy();
+            }
 
             //try to execute next action. if false, that means none left, execution is over
             if (!ExecuteNextAction())
             {
-                Game1.StartCoroutine(EndTurn(finalPos));
+                EndTurn(finalPos);
             }
         }
 
@@ -215,7 +218,7 @@ namespace PuppetRoguelite
             //dequeue action
             if (!ExecuteNextAction())
             {
-                Game1.StartCoroutine(EndTurn(PlayerController.Instance.Entity.Position));
+                EndTurn(PlayerController.Instance.Entity.Position);
             }
         }
 
@@ -233,16 +236,12 @@ namespace PuppetRoguelite
             action.SetEnabled(true);
             _camera.SetFollowTarget(action);
             action.Execute();
-            Emitters.PlayerActionEmitter.Emit(PlayerActionEvents.ActionExecuting, action);
             return true;
         }
 
-        IEnumerator EndTurn(Vector2 finalPosition)
+        void EndTurn(Vector2 finalPosition)
         {
             Debug.Log("finished executing actions");
-
-            //wait just one frame so the sim and real player sprites don't overlap
-            yield return null;
 
             PlayerController.Instance.Entity.SetEnabled(true);
             PlayerController.Instance.Entity.SetPosition(finalPosition);

@@ -23,6 +23,8 @@ namespace PuppetRoguelite.Components.Shared
         string _hitAnimName;
         bool _shouldDestroyEntity;
 
+        bool _hasStartedDying = false;
+
         public DeathComponent(string sound, SpriteAnimator animator, string deathAnimName, string hitAnimName, bool shouldDestroyEntity = true)
         {
             _sound = sound;
@@ -54,18 +56,23 @@ namespace PuppetRoguelite.Components.Shared
 
         void OnHealthDepleted(HealthComponent hc)
         {
-            var combatManager = Entity.Scene.GetSceneComponent<CombatManager>();
-            if (combatManager != null)
+            if (!_hasStartedDying)
             {
-                if (combatManager.CombatState == CombatState.Turn)
-                {
-                    _animator.Play(_hitAnimName);
-                    Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
-                    return;
-                }
-            }
+                _hasStartedDying = true;
 
-            Die();
+                var combatManager = Entity.Scene.GetSceneComponent<CombatManager>();
+                if (combatManager != null)
+                {
+                    if (combatManager.CombatState == CombatState.Turn)
+                    {
+                        _animator.Play(_hitAnimName);
+                        Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+                        return;
+                    }
+                }
+
+                Die();
+            }
         }
 
         void OnDeathAnimationCompleted(string animationName)

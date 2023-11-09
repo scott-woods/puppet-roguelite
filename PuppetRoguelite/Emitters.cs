@@ -13,7 +13,6 @@ namespace PuppetRoguelite
 {
     public static class Emitters
     {
-        public static Emitter<PlayerActionEvents, PlayerAction> PlayerActionEmitter = new Emitter<PlayerActionEvents, PlayerAction>();
         public static Emitter<CombatEvents> CombatEventsEmitter = new Emitter<CombatEvents>();
         public static Emitter<ActionPointEvents, ActionPointComponent> ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
         public static Emitter<InteractableEvents> InteractableEmitter = new Emitter<InteractableEvents>();
@@ -23,7 +22,6 @@ namespace PuppetRoguelite
 
         public static void ResetEmitters()
         {
-            PlayerActionEmitter = new Emitter<PlayerActionEvents, PlayerAction>();
             CombatEventsEmitter = new Emitter<CombatEvents>();
             ActionPointEmitter = new Emitter<ActionPointEvents, ActionPointComponent>();
             InteractableEmitter = new Emitter<InteractableEvents>();
@@ -32,15 +30,6 @@ namespace PuppetRoguelite
         }
     }
 
-    public enum PlayerActionEvents
-    {
-        ActionFinishedPreparing,
-        ActionExecuting,
-        ActionFinishedExecuting,
-        SimActionExecuting,
-        SimActionFinishedExecuting,
-        ActionPrepCanceled
-    }
     public enum CombatEvents
     {
         EncounterStarted,

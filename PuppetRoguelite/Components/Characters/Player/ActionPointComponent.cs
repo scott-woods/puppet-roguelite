@@ -72,8 +72,6 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
-            Emitters.PlayerActionEmitter.AddObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
-
             if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
             {
                 meleeAttack.Emitter.AddObserver(MeleeAttackEvents.Hit, OnMeleeAttackHit);
@@ -86,8 +84,6 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
-
-            Emitters.PlayerActionEmitter.RemoveObserver(PlayerActionEvents.ActionFinishedPreparing, OnPlayerActionFinishedPreparing);
 
             if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
             {
@@ -110,16 +106,12 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
         }
 
-        #region OBSERVERS
-
-        /// <summary>
-        /// decrement ap when an action is successfully prepared
-        /// </summary>
-        /// <param name="action"></param>
-        void OnPlayerActionFinishedPreparing(PlayerAction action)
+        public void DecrementActionPoints(int actionPoints)
         {
-            ActionPoints -= PlayerActionUtils.GetApCost(action.GetType());
+            ActionPoints -= actionPoints;
         }
+
+        #region OBSERVERS
 
         void OnDodgePhaseStarted()
         {

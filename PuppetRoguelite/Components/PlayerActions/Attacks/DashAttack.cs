@@ -37,10 +37,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         ICoroutine _simulationLoop;
 
-        public DashAttack(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
-        {
-        }
-
         public override void Prepare()
         {
             base.Prepare();
@@ -150,6 +146,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                     _animator.CurrentFrame = frame;
                 }
             }
+        }
+
+        public override Vector2 GetFinalPosition()
+        {
+            return FinalPosition;
         }
 
         IEnumerator SimulationLoop()

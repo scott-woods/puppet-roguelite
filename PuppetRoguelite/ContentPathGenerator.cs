@@ -37,6 +37,7 @@ namespace Nez
 				public const string _81_Whip_woosh_1 = @"Content\Audio\Sounds\81_Whip_woosh_1.wav";
 				public const string _86_Whip_hit_03 = @"Content\Audio\Sounds\86_Whip_hit_03.wav";
 				public const string Attack = @"Content\Audio\Sounds\attack.wav";
+				public const string Big_lightning = @"Content\Audio\Sounds\big_lightning.wav";
 				public const string Boss_death = @"Content\Audio\Sounds\boss_death.wav";
 				public const string Burp = @"Content\Audio\Sounds\burp.wav";
 				public const string Cereal_slot_1 = @"Content\Audio\Sounds\cereal_slot_1.wav";
@@ -57,6 +58,7 @@ namespace Nez
 				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
 				public const string Player_teleport = @"Content\Audio\Sounds\player_teleport.wav";
 				public const string Purchase = @"Content\Audio\Sounds\purchase.wav";
+				public const string Small_lightning = @"Content\Audio\Sounds\small_lightning.wav";
 				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.mp3";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
 				public const string Whirlwind_speen = @"Content\Audio\Sounds\whirlwind_speen.wav";
@@ -106,6 +108,12 @@ namespace Nez
 					public const string Spitter_sheet = @"Content\Textures\Characters\Spitter\spitter_sheet.png";
 				}
 
+			}
+
+			public static class Effects
+			{
+				public const string Electric_hit_1 = @"Content\Textures\Effects\electric_hit_1.png";
+				public const string Electric_hit_2 = @"Content\Textures\Effects\electric_hit_2.png";
 			}
 
 			public static class Objects

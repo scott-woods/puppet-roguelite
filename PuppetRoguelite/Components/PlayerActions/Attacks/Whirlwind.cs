@@ -26,17 +26,13 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         PlayerSim _playerSim;
         CircleHitbox _hitbox;
         SpriteAnimator _animator;
+        DirectionByMouse _dirByMouse;
 
         //misc
-        Direction _direction;
         List<int> _hitboxActiveFrames = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 };
 
         //coroutines
         ICoroutine _simulationLoop;
-
-        public Whirlwind(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
-        {
-        }
 
         public override void Prepare()
         {
@@ -72,8 +68,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 27, 28, 29, 1, 2, 19, 20, 14, 15, 27
             }, true));
 
-            //initial direction
-            _direction = Direction.Right;
+            _dirByMouse = AddComponent(new DirectionByMouse());
 
             //start sim loop
             _simulationLoop = Game1.StartCoroutine(SimulationLoop());
@@ -110,20 +105,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                     return;
                 }
 
-                //get new direction based on angle to mouse
-                var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(Position, Game1.Scene.Camera.MouseToWorldPoint()));
-                angle = (angle + 360) % 360;
-                var newDirection = Direction.Right;
-                if (angle >= 45 && angle < 135) newDirection = Direction.Down;
-                else if (angle >= 135 && angle < 225) newDirection = Direction.Left;
-                else if (angle >= 225 && angle < 315) newDirection = Direction.Up;
-
                 //handle direction change
-                if (_direction != newDirection)
+                if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
-                    //set direction to new direction
-                    _direction = newDirection;
-
                     //stop sim loop
                     if (_simulationLoop != null)
                     {
@@ -139,9 +123,14 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             }
             else //not in prep mode
             {
-                if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
+                var validAnims = new List<string> { "WhirlwindUp", "WhirlwindDown", "WhirlwindLeft", "WhirlwindRight" };
+                if (validAnims.Contains(_animator.CurrentAnimationName))
                 {
-                    _hitbox.SetEnabled(true);
+                    if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
+                    {
+                        _hitbox.SetEnabled(true);
+                    }
+                    else _hitbox.SetEnabled(false);
                 }
                 else _hitbox.SetEnabled(false);
             }
@@ -152,7 +141,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             //determine animation and starting angle of hitbox based on direction
             var animation = "";
             var angle = MathHelper.ToRadians(0f);
-            switch (_direction)
+            switch (_dirByMouse.CurrentDirection)
             {
                 case Direction.Up:
                     animation = "WhirlwindUp";
@@ -202,26 +191,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             while (State == PlayerActionState.Preparing)
             {
-                var animation = "";
-                switch (_direction)
-                {
-                    case Direction.Up:
-                        animation = "IdleUp";
-                        break;
-                    case Direction.Down:
-                        animation = "IdleDown";
-                        break;
-                    case Direction.Left:
-                        animation = "IdleLeft";
-                        break;
-                    case Direction.Right:
-                        animation = "IdleRight";
-                        break;
-                }
-
                 //idle for a moment
                 _animator.Speed = 1f;
-                _animator.Play(animation);
+                _playerSim.Idle(_dirByMouse.CurrentDirection);
                 yield return Coroutine.WaitForSeconds(.2f);
 
                 //spin

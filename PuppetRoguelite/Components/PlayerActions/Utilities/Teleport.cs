@@ -23,8 +23,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
 
         Vector2 _initialPosition, _finalPosition;
 
-        public Teleport(Action<PlayerAction, Vector2> actionPrepFinishedHandler, Action<PlayerAction> actionPrepCanceledHandler, Action<PlayerAction> executionFinishedHandler) : base(actionPrepFinishedHandler, actionPrepCanceledHandler, executionFinishedHandler)
+        public override Vector2 GetFinalPosition()
         {
+            return _finalPosition;
         }
 
         public override void Prepare()
@@ -68,7 +69,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             tween.Start();
             yield return tween.WaitForCompletion();
 
-            yield return Coroutine.WaitForSeconds(.1f);
+            yield return Coroutine.WaitForSeconds(.25f);
 
             HandleExecutionFinished();
         }

@@ -113,6 +113,38 @@ namespace PuppetRoguelite.Components.Characters
             }
         }
 
+        public void Idle(Direction direction)
+        {
+            var animation = "";
+            switch (direction)
+            {
+                case Direction.Up:
+                    animation = "IdleUp";
+                    break;
+                case Direction.Down:
+                    animation = "IdleDown";
+                    break;
+                case Direction.Left:
+                    animation = "IdleLeft";
+                    break;
+                case Direction.Right:
+                    animation = "IdleRight";
+                    break;
+            }
+
+            if (_spriteAnimator.CurrentAnimationName != animation)
+            {
+                _spriteAnimator.Play(animation);
+            }
+        }
+
+        public override void OnDisabled()
+        {
+            base.OnDisabled();
+
+            _spriteAnimator.Stop();
+        }
+
         public override void OnRemovedFromEntity()
         {
             Entity.RemoveComponent(_spriteAnimator);
