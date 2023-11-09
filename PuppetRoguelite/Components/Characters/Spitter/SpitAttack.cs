@@ -21,12 +21,11 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
         }
 
-        protected override IEnumerator StartAction()
+        protected override void StartAction()
         {
             _hasLaunchedProjectile = false;
             _enemy.Animator.Play("Attack", Nez.Sprites.SpriteAnimator.LoopMode.Once);
             _enemy.Animator.OnAnimationCompletedEvent += OnAttackAnimationCompleted;
-            yield break;
         }
 
         public void Update()

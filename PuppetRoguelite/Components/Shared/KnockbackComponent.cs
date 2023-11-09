@@ -32,6 +32,8 @@ namespace PuppetRoguelite.Components.Shared
         FloatTween _tween;
         float _speed = 0f;
 
+        Status _status = new Status(Status.StatusType.Stunned, (int)StatusPriority.Stunned);
+
         /// <summary>
         /// constructor with no immunity parameters
         /// </summary>
@@ -71,11 +73,6 @@ namespace PuppetRoguelite.Components.Shared
             base.OnAddedToEntity();
 
             _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
-
-            if (Entity.TryGetComponent<HealthComponent>(out var hc))
-            {
-                hc.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
-            }
         }
 
         public override void OnRemovedFromEntity()
@@ -83,11 +80,6 @@ namespace PuppetRoguelite.Components.Shared
             base.OnRemovedFromEntity();
 
             _hurtbox.Emitter.RemoveObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
-
-            if (Entity.TryGetComponent<HealthComponent>(out var hc))
-            {
-                hc.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
-            }
         }
 
         public void Update()
@@ -104,6 +96,10 @@ namespace PuppetRoguelite.Components.Shared
                     {
                         _tween = null;
                         IsStunned = false;
+                        if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
+                        {
+                            statusComponent.PopStatus(_status);
+                        }
                         return;
                     }
                 }
@@ -142,6 +138,10 @@ namespace PuppetRoguelite.Components.Shared
                 }
 
                 IsStunned = true;
+                if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
+                {
+                    statusComponent.PushStatus(_status);
+                }
 
                 //move in direction of Hitbox direction if it exists, otherwise just use collision normal
                 var dir = hurtboxHit.Hitbox.Direction;
@@ -178,11 +178,6 @@ namespace PuppetRoguelite.Components.Shared
         public object GetTargetObject()
         {
             return this;
-        }
-
-        void OnHealthDepleted(HealthComponent hc)
-        {
-            SetEnabled(false);
         }
     }
 }

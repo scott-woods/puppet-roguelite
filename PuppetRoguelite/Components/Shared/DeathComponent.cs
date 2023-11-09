@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.Sprites;
+using PuppetRoguelite.Components.Characters.ChainBot;
 using PuppetRoguelite.SceneComponents;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace PuppetRoguelite.Components.Shared
         string _hitAnimName;
         bool _shouldDestroyEntity;
 
-        bool _hasStartedDying = false;
+        Status _status = new Status(Status.StatusType.Death, (int)StatusPriority.Death);
 
         public DeathComponent(string sound, SpriteAnimator animator, string deathAnimName, string hitAnimName, bool shouldDestroyEntity = true)
         {
@@ -49,30 +50,36 @@ namespace PuppetRoguelite.Components.Shared
             OnDeathStarted?.Invoke(Entity);
 
             Game1.AudioManager.PlaySound(_sound);
-            
+
+            var chainBot = Entity.GetComponent<ChainBot>();
+            if (chainBot != null )
+            {
+                Debug.Log($"{chainBot.Id}: starting death animation");
+            }
             _animator.Play(_deathAnimName, SpriteAnimator.LoopMode.Once);
             _animator.OnAnimationCompletedEvent += OnDeathAnimationCompleted;
         }
 
         void OnHealthDepleted(HealthComponent hc)
         {
-            if (!_hasStartedDying)
+            //push status so nothing changes
+            if (Entity.TryGetComponent<StatusComponent>(out var sc))
             {
-                _hasStartedDying = true;
-
-                var combatManager = Entity.Scene.GetSceneComponent<CombatManager>();
-                if (combatManager != null)
-                {
-                    if (combatManager.CombatState == CombatState.Turn)
-                    {
-                        _animator.Play(_hitAnimName);
-                        Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
-                        return;
-                    }
-                }
-
-                Die();
+                sc.PushStatus(_status);
             }
+
+            var combatManager = Entity.Scene.GetSceneComponent<CombatManager>();
+            if (combatManager != null)
+            {
+                if (combatManager.CombatState == CombatState.Turn)
+                {
+                    _animator.Play(_hitAnimName);
+                    Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
+                    return;
+                }
+            }
+
+            Die();
         }
 
         void OnDeathAnimationCompleted(string animationName)

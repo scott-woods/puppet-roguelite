@@ -33,15 +33,12 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         SpriteTrail _trail;
         SpriteAnimator _animator;
 
-        public Vector2 InitialPosition, FinalPosition;
-
         ICoroutine _simulationLoop;
 
         public override void Prepare()
         {
             base.Prepare();
 
-            InitialPosition = Position;
             FinalPosition = Position + (_direction * _range);
 
             //player sim
@@ -146,11 +143,6 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                     _animator.CurrentFrame = frame;
                 }
             }
-        }
-
-        public override Vector2 GetFinalPosition()
-        {
-            return FinalPosition;
         }
 
         IEnumerator SimulationLoop()

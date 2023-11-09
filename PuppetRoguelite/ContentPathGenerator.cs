@@ -48,6 +48,7 @@ namespace Nez
 				public const string Dollah_pickup = @"Content\Audio\Sounds\dollah_pickup.wav";
 				public const string Enemy_death_1 = @"Content\Audio\Sounds\enemy_death_1.wav";
 				public const string Enemy_spawn = @"Content\Audio\Sounds\enemy_spawn.wav";
+				public const string Freeze = @"Content\Audio\Sounds\freeze.wav";
 				public const string Gate_close = @"Content\Audio\Sounds\gate_close.wav";
 				public const string Heal = @"Content\Audio\Sounds\heal.wav";
 				public const string Hh_appear = @"Content\Audio\Sounds\hh_appear.wav";
@@ -61,6 +62,7 @@ namespace Nez
 				public const string Small_lightning = @"Content\Audio\Sounds\small_lightning.wav";
 				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.mp3";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
+				public const string Unfreeze = @"Content\Audio\Sounds\unfreeze.wav";
 				public const string Whirlwind_speen = @"Content\Audio\Sounds\whirlwind_speen.wav";
 			}
 

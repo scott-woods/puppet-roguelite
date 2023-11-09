@@ -16,23 +16,14 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
     [PlayerActionInfo("Teleport", 1, PlayerActionCategory.Utility)]
     public class Teleport : PlayerAction
     {
-        const float _maxRadius = 128f;
+        const float _maxRadius = 100f;
 
         //components
         PlayerSim _playerSim;
 
-        Vector2 _initialPosition, _finalPosition;
-
-        public override Vector2 GetFinalPosition()
-        {
-            return _finalPosition;
-        }
-
         public override void Prepare()
         {
             base.Prepare();
-
-            _initialPosition = Position;
 
             _playerSim = AddComponent(new PlayerSim(Vector2.One));
 
@@ -50,7 +41,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
 
         IEnumerator ExecutionCoroutine()
         {
-            Position = _initialPosition;
+            Position = InitialPosition;
 
             yield return Coroutine.WaitForSeconds(.1f);
 
@@ -63,7 +54,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Player_teleport, .6f);
 
-            Position = _finalPosition;
+            Position = FinalPosition;
 
             tween = animator.TweenColorTo(Color.White, .1f);
             tween.Start();
@@ -81,14 +72,14 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             if (State == PlayerActionState.Preparing)
             {
                 var mousePos = Scene.Camera.MouseToWorldPoint();
-                var dist = Vector2.Distance(mousePos, _initialPosition);
+                var dist = Vector2.Distance(mousePos, InitialPosition);
                 if (dist < _maxRadius)
                 {
                     Position = mousePos;
 
                     if (Input.LeftMouseButtonPressed)
                     {
-                        _finalPosition = Position;
+                        FinalPosition = Position;
                         HandlePreparationFinished(Position);
                     }
                 }

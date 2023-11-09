@@ -23,6 +23,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     {
         //data
         const int _damage = 4;
+        const int _damageAddedPerChain = 2;
         const int _hitboxRadius = 12;
         const int _hitboxDistFromPlayer = 12;
         const float _strikeInterval = .2f;
@@ -159,7 +160,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                     var effectEntity = Scene.CreateEntity("lightning-effect");
                     effectEntity.SetPosition(entity.Position);
                     var effectComponent = effectEntity.AddComponent(new HitEffectComponent(HitEffects.Lightning2));
-                    var effectHitbox = effectEntity.AddComponent(new CircleHitbox(_damage + _currentChain, 1));
+                    var effectHitbox = effectEntity.AddComponent(new CircleHitbox(_damage + (_currentChain * _damageAddedPerChain), 1));
                     Flags.SetFlagExclusive(ref effectHitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
                     Flags.SetFlagExclusive(ref effectHitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
                     effectComponent.PlayAnimation();

@@ -19,6 +19,7 @@ namespace PuppetRoguelite.Components.PlayerActions
         public Emitter<PlayerActionEvent, PlayerAction> Emitter = new Emitter<PlayerActionEvent, PlayerAction>();
         public bool ShouldDestroySelf;
         public PlayerActionState State = PlayerActionState.None;
+        public Vector2 InitialPosition, FinalPosition;
 
         public PlayerAction(bool shouldDestroySelf = false)
         {
@@ -27,6 +28,8 @@ namespace PuppetRoguelite.Components.PlayerActions
 
         public virtual void Prepare()
         {
+            InitialPosition = Position;
+            FinalPosition = Position;
             Emitter.Emit(PlayerActionEvent.PrepStarted, this);
             State = PlayerActionState.Preparing;
         }
@@ -49,6 +52,10 @@ namespace PuppetRoguelite.Components.PlayerActions
                     HandlePreparationCanceled();
                 }
             }
+            else if (State == PlayerActionState.Executing)
+            {
+                PlayerController.Instance.Entity.SetPosition(Position);
+            }
         }
 
         public virtual void HandlePreparationFinished(Vector2 finalPosition)
@@ -68,11 +75,6 @@ namespace PuppetRoguelite.Components.PlayerActions
         {
             State = PlayerActionState.None;
             Emitter.Emit(PlayerActionEvent.ExecutionFinished, this);
-        }
-
-        public virtual Vector2 GetFinalPosition()
-        {
-            return Position;
         }
     }
 

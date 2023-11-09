@@ -31,15 +31,20 @@ namespace PuppetRoguelite.Components.Shared
                 {
                     Emitter.Emit(HealthComponentEventType.HealthGained, this);
                 }
-                
+
+                var prevHealth = _health;
+
                 //update health value
                 _health = Math.Clamp(value, 0, MaxHealth);
 
                 //emit health changed signal to update ui
-                Emitter.Emit(HealthComponentEventType.HealthChanged, this);
+                if (prevHealth != _health)
+                {
+                    Emitter.Emit(HealthComponentEventType.HealthChanged, this);
+                }
 
-                //emit health depleted if health is 0 or less
-                if (_health <= 0)
+                //emit health depleted if health is 0 or less and wasn't before
+                if (_health <= 0 && prevHealth > 0)
                 {
                     Emitter.Emit(HealthComponentEventType.HealthDepleted, this);
                 }

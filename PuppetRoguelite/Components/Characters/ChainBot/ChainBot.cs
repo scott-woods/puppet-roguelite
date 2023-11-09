@@ -4,11 +4,13 @@ using Nez.AI.BehaviorTrees;
 using Nez.Sprites;
 using Nez.Textures;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
@@ -17,6 +19,8 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 {
     public class ChainBot : Enemy, IUpdatable
     {
+        public Guid Id = Guid.NewGuid();
+
         //stats
         float _moveSpeed = 75f;
         int _maxHp = 12;
@@ -26,6 +30,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         //actions
         ChainBotMelee _chainBotMelee;
+        EnemyAction<ChainBot> _activeAction;
 
         //components
         public Mover Mover;
@@ -41,9 +46,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         public KnockbackComponent KnockbackComponent;
         public OriginComponent OriginComponent;
         public DeathComponent DeathComponent;
-
-        //misc
-        bool _isActive = true;
+        public StatusComponent StatusComponent;
 
         #region SETUP
 
@@ -107,30 +110,15 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //actions
             _chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));
 
-            //healthbar
-            //Healthbar = Entity.AddComponent(new Healthbar(_healthComponent));
-            //Healthbar.SetLocalOffset(new Vector2(0, -20));
+            //status
+            StatusComponent = Entity.AddComponent(new StatusComponent(new Status(Status.StatusType.Normal, (int)StatusPriority.Normal)));
 
             //new healthbar
             NewHealthbar = Entity.AddComponent(new NewHealthbar(_healthComponent));
             NewHealthbar.SetLocalOffset(new Vector2(0, -25));
 
             //knockback
-            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, 6, 2f, VelocityComponent, _hurtbox));
-        }
-
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
-
-            _healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
-        }
-
-        public override void OnRemovedFromEntity()
-        {
-            base.OnRemovedFromEntity();
-
-            _healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, 4, 2f, VelocityComponent, _hurtbox));
         }
 
         void AddAnimations()
@@ -183,37 +171,30 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector(AbortTypes.Self)
+                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Death, true)
+                        .Action(c => c.AbortActions())
+                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Stunned, true)
+                        .Action(c => c.AbortActions())
                     .ConditionalDecorator(c =>
                     {
                         var gameStateManager = Game1.GameStateManager;
                         return gameStateManager.GameState != GameState.Combat;
                     }, true)
-                        .Action(c => c.Idle())
-                    .ConditionalDecorator(c => c.KnockbackComponent.IsStunned, true)
-                        .Action(c => c.AbortActions())
-                    .ConditionalDecorator(c => !c.KnockbackComponent.IsStunned, true)
                         .Sequence()
-                            .Selector()
-                                .Sequence()
-                                    .Conditional(c =>
-                                    {
-                                        var gameStateManager = Game1.GameStateManager;
-                                        return gameStateManager.GameState == GameState.Combat;
-                                    })
-                                    .ParallelSelector()
-                                        .Action(c => c.Move())
-                                        .Action(c => ChasePlayer())
-                                    .EndComposite()
-                                    .Action(c => c._chainBotMelee.Execute())
+                            .Action(c => c.AbortActions())
+                            .Action(c => c.Idle())
+                        .EndComposite()
+                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal)
+                        .Sequence() //combat sequence
+                            .Selector() //move or attack selector
+                                .Sequence(AbortTypes.LowerPriority)
+                                    .Conditional(c => c.IsInAttackRange())
+                                    .Action(c => c.ExecuteAction(_chainBotMelee))
+                                    .Action(c => c.ClearAction())
                                 .EndComposite()
-                                //.Sequence()
-                                //    .Conditional(c =>
-                                //    {
-                                //        var gameStateManager = Game1.GameStateManager;
-                                //        return gameStateManager.GameState == GameState.Combat;
-                                //    })
-                                //    .Action(c => c.Idle())
-                                //.EndComposite()
+                                .Sequence(AbortTypes.LowerPriority)
+                                    .Action(c => c.MoveTowardsPlayer())
+                                .EndComposite()
                             .EndComposite()
                         .EndComposite()
                 .EndComposite()
@@ -226,17 +207,58 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         public void Update()
         {
-            if (_isActive)
+            _tree.Tick();
+        }
+
+        bool IsInAttackRange()
+        {
+            if (Vector2.Distance(Entity.Position, PlayerController.Instance.Entity.Position) <= 32)
             {
-                _tree.Tick();
+                return true;
             }
+            else return false;
         }
 
         #region TASKS
 
+        TaskStatus ExecuteAction(EnemyAction<ChainBot> action)
+        {
+            _activeAction = action;
+
+            return action.Execute();
+        }
+
+        TaskStatus ClearAction()
+        {
+            _activeAction = null;
+            return TaskStatus.Success;
+        }
+
+        TaskStatus MoveTowardsPlayer()
+        {
+            //handle animation
+            var animation = VelocityComponent.Direction.X >= 0 ? "RunRight" : "RunLeft";
+            if (!Animator.IsAnimationActive(animation))
+            {
+                Animator.Play(animation);
+            }
+
+            //follow path
+            Pathfinder.FollowPath(PlayerController.Instance.Entity.Position, true);
+            VelocityComponent.Move();
+
+            return TaskStatus.Running;
+        }
+
         TaskStatus AbortActions()
         {
-            _chainBotMelee.Abort();
+            if (_activeAction != null)
+            {
+                Debug.Log($"Aborting action for enemy with Id: {Id}. Reason: {StatusComponent.CurrentStatus.Type}");
+                _activeAction.Abort();
+                _activeAction = null;
+            }
+
             return TaskStatus.Success;
         }
 
@@ -250,42 +272,6 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             }
 
             return TaskStatus.Running;
-        }
-
-        TaskStatus Move()
-        {
-            var animation = VelocityComponent.Direction.X >= 0 ? "RunRight" : "RunLeft";
-
-            if (!Animator.IsAnimationActive(animation))
-            {
-                Animator.Play(animation);
-            }
-            
-            return TaskStatus.Running;
-        }
-
-        TaskStatus ChasePlayer()
-        {
-            var reachedTarget = Pathfinder.FollowPath(PlayerController.Instance.Entity.Position, true);
-            if (!reachedTarget)
-            {
-                VelocityComponent.Move(_moveSpeed);
-                return TaskStatus.Running;
-            }
-            else
-            {
-                return TaskStatus.Success;
-            }
-        }
-
-        #endregion
-
-        #region OBSERVERS
-
-        void OnHealthDepleted(HealthComponent healthComponent)
-        {
-            AbortActions();
-            _isActive = false;
         }
 
         #endregion

@@ -10,6 +10,8 @@ namespace PuppetRoguelite
 {
     public class ComboManager
     {
+        const int _extraPerCombo = 3;
+
         public int ComboCounter = 0;
 
         List<HealthComponent> _connectedHealthComponents = new List<HealthComponent>();
@@ -50,7 +52,7 @@ namespace PuppetRoguelite
 
             foreach (var dropper in _connectedDollahDroppers)
             {
-                dropper.SetMultiplier(ComboCounter);
+                dropper.SetBonus(ComboCounter * _extraPerCombo);
             }
         }
     }

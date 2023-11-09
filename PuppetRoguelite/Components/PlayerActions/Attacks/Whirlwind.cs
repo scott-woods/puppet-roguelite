@@ -21,6 +21,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         //data
         const int _damage = 3;
         const float _radius = 12;
+        const float _pushForce = 2.5f;
 
         //components
         PlayerSim _playerSim;
@@ -41,7 +42,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _playerSim = AddComponent(new PlayerSim());
 
             _hitbox = AddComponent(new CircleHitbox(_damage, 12));
-            _hitbox.PushForce = 1.5f;
+            _hitbox.PushForce = _pushForce;
             _hitbox.SetEnabled(false);
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);

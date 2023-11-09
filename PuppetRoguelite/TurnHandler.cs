@@ -157,7 +157,7 @@ namespace PuppetRoguelite
             action.SetEnabled(false);
 
             //move sim player to new final position
-            _playerSimEntity.SetPosition(action.GetFinalPosition());
+            _playerSimEntity.SetPosition(action.FinalPosition);
 
             //reenable sim and real player
             _playerSimEntity.SetEnabled(true);
@@ -185,7 +185,7 @@ namespace PuppetRoguelite
             Debug.Log($"Finished executing Action: ${PlayerActionUtils.GetName(action.GetType())}");
 
             //get final position
-            var finalPos = action.GetFinalPosition();
+            var finalPos = action.FinalPosition;
 
             //destroy action
             if (!action.ShouldDestroySelf)

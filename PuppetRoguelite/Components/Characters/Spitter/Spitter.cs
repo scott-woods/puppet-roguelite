@@ -10,10 +10,6 @@ using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Tools;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
 namespace PuppetRoguelite.Components.Characters.Spitter
@@ -45,12 +41,11 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         public OriginComponent OriginComponent;
         public DollahDropper DollahDropper;
         public DeathComponent DeathComponent;
+        public StatusComponent StatusComponent;
 
         //actions
         public SpitAttack SpitAttack;
-
-        //misc
-        bool _isActive = true;
+        public EnemyAction<Spitter> ActiveAction;
 
         public Spitter(Entity mapEntity) : base(mapEntity)
         {
@@ -77,6 +72,9 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
             Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 0, Nez.Content.Audio.Sounds.Chain_bot_damaged));
+
+            //status
+            StatusComponent = Entity.AddComponent(new StatusComponent(new Status(Status.StatusType.Normal, (int)StatusPriority.Normal)));
 
             //health
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp));
@@ -123,7 +121,6 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         {
             base.OnAddedToEntity();
 
-            HealthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
             SpriteFlipper.Emitter.AddObserver(SpriteFlipperEvents.Flipped, OnSpriteFlipped);
         }
 
@@ -131,7 +128,6 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         {
             base.OnRemovedFromEntity();
 
-            HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
             SpriteFlipper.Emitter.RemoveObserver(SpriteFlipperEvents.Flipped, OnSpriteFlipped);
         }
 
@@ -156,24 +152,20 @@ namespace PuppetRoguelite.Components.Characters.Spitter
         {
             _tree = BehaviorTreeBuilder<Spitter>.Begin(this)
                 .Selector(AbortTypes.Self)
+                    .ConditionalDecorator(s => s.StatusComponent.CurrentStatus.Type == Status.StatusType.Death, true)
+                        .Action(s => s.AbortActions())
+                    .ConditionalDecorator(s => s.StatusComponent.CurrentStatus.Type == Status.StatusType.Stunned, true)
+                        .Action(s => s.AbortActions())
                     .ConditionalDecorator(s =>
                     {
                         var gameStateManager = Game1.GameStateManager;
                         return gameStateManager.GameState != GameState.Combat;
                     })
-                        .Action(s =>
-                        {
-                            if (s.Animator.CurrentAnimationName != "Idle")
-                            {
-                                s.Animator.Play("Idle");
-                            }
-                            return TaskStatus.Running;
-                        })
-                    .ConditionalDecorator(s => s.KnockbackComponent.IsStunned, true) //stun handler
                         .Sequence()
                             .Action(s => s.AbortActions())
+                            .Action(s => s.Idle())
                         .EndComposite()
-                    .ConditionalDecorator(s => !s.KnockbackComponent.IsStunned, true) //main sequence
+                    .ConditionalDecorator(s => s.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal) //main sequence
                         .Sequence()
                             .ParallelSelector()
                                 .WaitAction(Nez.Random.Range(3f, 5f)) //after certain time, fire no matter where we are
@@ -250,16 +242,24 @@ namespace PuppetRoguelite.Components.Characters.Spitter
 
         public void Update()
         {
-            if (_isActive)
-            {
-                _tree.Tick();
-            }
+            _tree.Tick();
         }
 
         TaskStatus AbortActions()
         {
-            SpitAttack.Abort();
+            ActiveAction?.Abort();
+            ActiveAction = null;
             return TaskStatus.Success;
+        }
+
+        TaskStatus Idle()
+        {
+            if (!Animator.IsAnimationActive("Idle"))
+            {
+                Animator.Play("Idle");
+            }
+
+            return TaskStatus.Running;
         }
 
         void OnSpriteFlipped(bool flipped)
@@ -271,12 +271,6 @@ namespace PuppetRoguelite.Components.Characters.Spitter
             var newHurtboxOffsetX = Hurtbox.Collider.LocalOffset.X * -1;
             var newHurtboxOffset = new Vector2(newHurtboxOffsetX, Hurtbox.Collider.LocalOffset.Y);
             Hurtbox.Collider.SetLocalOffset(newHurtboxOffset);
-        }
-
-        void OnHealthDepleted(HealthComponent healthComponent)
-        {
-            AbortActions();
-            _isActive = false;
         }
     }
 }

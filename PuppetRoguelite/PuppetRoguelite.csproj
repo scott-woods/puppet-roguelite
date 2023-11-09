@@ -36,6 +36,7 @@
     <None Remove="Content\Audio\Sounds\dollah_pickup.wav" />
     <None Remove="Content\Audio\Sounds\enemy_death_1.wav" />
     <None Remove="Content\Audio\Sounds\enemy_spawn.wav" />
+    <None Remove="Content\Audio\Sounds\freeze.wav" />
     <None Remove="Content\Audio\Sounds\gate_close.wav" />
     <None Remove="Content\Audio\Sounds\heal.wav" />
     <None Remove="Content\Audio\Sounds\hh_appear.wav" />
@@ -48,6 +49,7 @@
     <None Remove="Content\Audio\Sounds\purchase.wav" />
     <None Remove="Content\Audio\Sounds\space_ship_3.mp3" />
     <None Remove="Content\Audio\Sounds\spitter_fire.wav" />
+    <None Remove="Content\Audio\Sounds\unfreeze.wav" />
     <None Remove="Content\Audio\Sounds\whirlwind_speen.wav" />
     <None Remove="Content\Fonts\abaddon_light.fnt" />
     <None Remove="Content\Fonts\abaddon_light_0.png" />

@@ -23,9 +23,6 @@ namespace PuppetRoguelite.Components.EnemyActions
 
         protected T _enemy { get; }
 
-        protected List<Component> _components = new List<Component>();
-        protected ICoroutine _executionCoroutine;
-
         public EnemyAction(T enemy)
         {
             _enemy = enemy;
@@ -37,11 +34,19 @@ namespace PuppetRoguelite.Components.EnemyActions
         /// <returns></returns>
         public TaskStatus Execute()
         {
+            if (_enemy.Entity.TryGetComponent<StatusComponent>(out var sc))
+            {
+                if (sc.CurrentStatus.Type != Status.StatusType.Normal)
+                {
+                    Abort();
+                    return TaskStatus.Failure;
+                }
+            }
             switch (_state)
             {
                 case EnemyActionState.NotStarted:
-                    _executionCoroutine = Game1.StartCoroutine(StartAction());
                     _state = EnemyActionState.Running;
+                    StartAction();
                     return TaskStatus.Running;
                 case EnemyActionState.Running:
                     return TaskStatus.Running;
@@ -56,30 +61,19 @@ namespace PuppetRoguelite.Components.EnemyActions
             }
         }
 
-        protected abstract IEnumerator StartAction();
+        protected abstract void StartAction();
+
+        protected virtual void HandleActionFinished()
+        {
+            _state = EnemyActionState.Succeeded;
+        }
 
         /// <summary>
-        /// stops the execution coroutine
+        /// stops the action
         /// </summary>
         public virtual void Abort()
         {
             _state = EnemyActionState.NotStarted;
-            _executionCoroutine?.Stop();
-        }
-
-        public override void OnDisabled()
-        {
-            base.OnDisabled();
-
-            if (_executionCoroutine != null)
-            {
-                _executionCoroutine.Stop();
-            }
-
-            foreach (var component in _components)
-            {
-                component.SetEnabled(false);
-            }
         }
     }
 }

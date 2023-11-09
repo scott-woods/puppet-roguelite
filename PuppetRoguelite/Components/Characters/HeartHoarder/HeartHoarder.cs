@@ -38,6 +38,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         public OriginComponent OriginComponent;
         public DollahDropper DollahDropper;
         public DeathComponent DeathComponent;
+        public StatusComponent StatusComponent;
 
         //misc
         float _normalMoveSpeed = 100f;
@@ -64,6 +65,8 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         void AddComponents()
         {
+            StatusComponent = Entity.AddComponent(new StatusComponent(new Status(Status.StatusType.Normal, (int)StatusPriority.Normal)));
+
             Mover = Entity.AddComponent(new Mover());
 
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp));
@@ -171,16 +174,19 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             _tree = BehaviorTreeBuilder<HeartHoarder>
                 .Begin(this)
                     .Selector(AbortTypes.Self)
+                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type == Status.StatusType.Death, true)
+                            .Action(h => h.AbortActions())
+                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type == Status.StatusType.Stunned, true)
+                            .Action(h => h.AbortActions())
                         //if not in combat, idle
                         .ConditionalDecorator(h =>
                         {
                             var gameStateManager = Game1.GameStateManager;
                             return gameStateManager.GameState != GameState.Combat;
                         }) 
-                            .Action(h => h.PlayAnimationLoop("Idle"))
-                        .ConditionalDecorator(h => h.KnockbackComponent.IsStunned, true)
                             .Action(h => h.AbortActions())
-                        .ConditionalDecorator(h => !h.KnockbackComponent.IsStunned, true) //if not stunned, select something to do
+                            .Action(h => h.PlayAnimationLoop("Idle"))
+                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal) //if not stunned, select something to do
                             .Sequence() //main sequence
                                 .ParallelSelector() //move towards player for time or until within certain distance
                                     .Conditional(h => Math.Abs(Vector2.Distance(h.OriginComponent.Origin, PlayerController.Instance.Entity.Position)) < 24)
