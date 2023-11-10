@@ -17,7 +17,7 @@ namespace PuppetRoguelite.Components.Shared
         SpriteAnimator _spriteAnimator;
         StatusComponent _statusComponent;
 
-        Status _status = new Status(Status.StatusType.Stunned, (int)StatusPriority.Stunned);
+        Status _status = new Status(Status.StatusType.Frozen, (int)StatusPriority.Frozen);
 
         public FreezeComponent(float duration)
         {
@@ -47,12 +47,15 @@ namespace PuppetRoguelite.Components.Shared
 
         void Unfreeze(ITimer timer)
         {
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Unfreeze);
+            if (Entity != null && !Entity.IsDestroyed)
+            {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Unfreeze);
 
-            _statusComponent?.PopStatus(_status);
-            _spriteAnimator?.SetColor(Color.White);
+                _statusComponent?.PopStatus(_status);
+                _spriteAnimator?.SetColor(Color.White);
 
-            Entity.RemoveComponent(this);
+                Entity.RemoveComponent(this);
+            }
         }
     }
 }

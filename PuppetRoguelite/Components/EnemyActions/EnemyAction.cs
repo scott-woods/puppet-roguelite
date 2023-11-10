@@ -28,6 +28,16 @@ namespace PuppetRoguelite.Components.EnemyActions
             _enemy = enemy;
         }
 
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            if (Entity.TryGetComponent<HealthComponent>(out var hc))
+            {
+                hc.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnHealthDepleted);
+            }
+        }
+
         /// <summary>
         /// Execute this action. Returns true if execution has completed, otherwise false
         /// </summary>
@@ -74,6 +84,11 @@ namespace PuppetRoguelite.Components.EnemyActions
         public virtual void Abort()
         {
             _state = EnemyActionState.NotStarted;
+        }
+
+        void OnHealthDepleted(HealthComponent hc)
+        {
+            Abort();
         }
     }
 }

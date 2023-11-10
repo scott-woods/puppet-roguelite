@@ -13,7 +13,9 @@ namespace PuppetRoguelite.Components.Characters.Player
 {
     public class ActionPointComponent : Component, IUpdatable
     {
-        const float _baseChargeRate = 1.25f;
+        //const float _baseChargeRate = 1.25f;
+        //const float _baseDamageMultiplier = 4f;
+        const float _baseChargeRate = 0f;
         const float _baseDamageMultiplier = 4f;
 
         bool _isCharging = false;

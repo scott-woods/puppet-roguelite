@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Sprites;
 using Nez.Svg;
+using Nez.Systems;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Player;
 using System;
@@ -21,6 +22,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
         //components
         PlayerSim _playerSim;
 
+        //coroutines
+        CoroutineManager _coroutineManager = new CoroutineManager();
+        ICoroutine _executionCoroutine;
+
         public override void Prepare()
         {
             base.Prepare();
@@ -36,7 +41,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
         {
             base.Execute();
 
-            Game1.StartCoroutine(ExecutionCoroutine());
+            _executionCoroutine = _coroutineManager.StartCoroutine(ExecutionCoroutine());
         }
 
         IEnumerator ExecutionCoroutine()
@@ -68,6 +73,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
         public override void Update()
         {
             base.Update();
+
+            _coroutineManager.Update();
 
             if (State == PlayerActionState.Preparing)
             {

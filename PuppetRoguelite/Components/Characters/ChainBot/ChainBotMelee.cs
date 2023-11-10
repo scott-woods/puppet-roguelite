@@ -171,6 +171,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             base.Abort();
 
+            Debug.Log($"{_enemy.Id}: aborting");
             Reset();
         }
     }

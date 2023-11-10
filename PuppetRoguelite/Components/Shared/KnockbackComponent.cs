@@ -20,6 +20,7 @@ namespace PuppetRoguelite.Components.Shared
 
         VelocityComponent _velocityComponent;
         Hurtbox _hurtbox;
+        StatusComponent _statusComponent;
 
         float _knockbackSpeed;
         float _knockbackDuration;
@@ -73,6 +74,8 @@ namespace PuppetRoguelite.Components.Shared
             base.OnAddedToEntity();
 
             _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
+
+            _statusComponent = Entity.GetComponent<StatusComponent>();
         }
 
         public override void OnRemovedFromEntity()
@@ -84,6 +87,13 @@ namespace PuppetRoguelite.Components.Shared
 
         public void Update()
         {
+            if (_statusComponent != null)
+            {
+                if (_statusComponent.CurrentStatus.Priority > _status.Priority)
+                {
+                    return;
+                }
+            }
             if (IsStunned)
             {
                 if (_tween != null)
@@ -119,6 +129,13 @@ namespace PuppetRoguelite.Components.Shared
 
         void OnHurtboxHit(HurtboxHit hurtboxHit)
         {
+            if (_statusComponent != null)
+            {
+                if (_statusComponent.CurrentStatus.Priority > _status.Priority)
+                {
+                    return;
+                }
+            }
             if (!_isImmune)
             {
                 //if can become immune, increment hits

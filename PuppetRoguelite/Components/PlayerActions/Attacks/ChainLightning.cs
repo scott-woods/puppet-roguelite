@@ -22,8 +22,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
     public class ChainLightning : PlayerAction
     {
         //data
-        const int _damage = 4;
-        const int _damageAddedPerChain = 2;
+        const int _damage = 3;
+        const int _damageAddedPerChain = 1;
         const int _hitboxRadius = 12;
         const int _hitboxDistFromPlayer = 12;
         const float _strikeInterval = .2f;

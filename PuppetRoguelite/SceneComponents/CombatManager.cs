@@ -23,7 +23,7 @@ namespace PuppetRoguelite.SceneComponents
     {
         public CombatState CombatState = CombatState.None;
         public List<Enemy> Enemies = new List<Enemy>();
-        public List<HealthComponent> EnemyHealthComponents = new List<HealthComponent>();
+        public List<DeathComponent> EnemyDeathComponents = new List<DeathComponent>();
         public Entity MapEntity;
         public ComboManager ComboManager = new ComboManager();
         public TurnHandler TurnHandler = new TurnHandler();
@@ -40,9 +40,9 @@ namespace PuppetRoguelite.SceneComponents
         {
             base.OnRemovedFromScene();
 
-            foreach (var hc in EnemyHealthComponents)
+            foreach (var dc in EnemyDeathComponents)
             {
-                hc.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
+                dc.OnDeathStarted -= OnEnemyDied;
             }
 
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
@@ -56,10 +56,10 @@ namespace PuppetRoguelite.SceneComponents
         public void AddEnemy(Enemy enemy)
         {
             MapEntity = enemy.MapEntity;
-            if (enemy.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
+            if (enemy.Entity.TryGetComponent<DeathComponent>(out var dc))
             {
-                EnemyHealthComponents.Add(healthComponent);
-                healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
+                EnemyDeathComponents.Add(dc);
+                dc.OnDeathStarted += OnEnemyDied;
             }
             Enemies.Add(enemy);
         }
@@ -103,6 +103,7 @@ namespace PuppetRoguelite.SceneComponents
 
             if (!Enemies.Any())
             {
+                Debug.Log("combat finishing after turn phase completed and no enemies.");
                 EndCombat();
             }
             else
@@ -112,13 +113,13 @@ namespace PuppetRoguelite.SceneComponents
             }
         }
 
-        void OnEnemyDied(HealthComponent healthComponent)
+        void OnEnemyDied(Entity enemyEntity)
         {
-            healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnEnemyDied);
-            var enemy = healthComponent.Entity.GetComponent<Enemy>();
+            var enemy = enemyEntity.GetComponent<Enemy>();
             Enemies.Remove(enemy);
             if (!Enemies.Any())
             {
+                Debug.Log("combat finishing because all enemies died");
                 EndCombat();
             }
         }

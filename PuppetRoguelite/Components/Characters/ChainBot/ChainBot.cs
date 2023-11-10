@@ -171,9 +171,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
                 .Selector(AbortTypes.Self)
-                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Death, true)
-                        .Action(c => c.AbortActions())
-                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Stunned, true)
+                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type != Status.StatusType.Normal, true)
                         .Action(c => c.AbortActions())
                     .ConditionalDecorator(c =>
                     {

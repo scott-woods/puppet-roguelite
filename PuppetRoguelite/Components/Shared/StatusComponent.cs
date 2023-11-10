@@ -45,7 +45,7 @@ namespace PuppetRoguelite.Components.Shared
 
     public class Status
     {
-        public enum StatusType { Normal, Stunned, Death }
+        public enum StatusType { Normal, Stunned, Frozen, Death }
         public StatusType Type { get; private set; }
         public int Priority { get; private set; }
 
@@ -60,6 +60,7 @@ namespace PuppetRoguelite.Components.Shared
     {
         Normal = 0,
         Stunned = 1,
-        Death = 2
+        Frozen = 2,
+        Death = 3,
     }
 }

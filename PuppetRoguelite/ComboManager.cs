@@ -10,7 +10,7 @@ namespace PuppetRoguelite
 {
     public class ComboManager
     {
-        const int _extraPerCombo = 3;
+        const int _extraPerCombo = 2;
 
         public int ComboCounter = 0;
 

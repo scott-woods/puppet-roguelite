@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Sprites;
+using Nez.Systems;
 using Nez.Textures;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Shared;
@@ -31,9 +32,11 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         //misc
         List<int> _hitboxActiveFrames = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 };
+        Direction _direction;
 
         //coroutines
-        ICoroutine _simulationLoop;
+        CoroutineManager _coroutineManager = new CoroutineManager();
+        ICoroutine _simulationLoop, _executionCoroutine;
 
         public override void Prepare()
         {
@@ -72,7 +75,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _dirByMouse = AddComponent(new DirectionByMouse());
 
             //start sim loop
-            _simulationLoop = Game1.StartCoroutine(SimulationLoop());
+            _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
         }
 
         public override void Execute()
@@ -81,19 +84,24 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
             _animator.SetColor(Color.White);
             _animator.Speed = 2.25f;
-            Game1.StartCoroutine(ExecutionCoroutine());
+            _executionCoroutine = _coroutineManager.StartCoroutine(ExecutionCoroutine());
         }
 
         IEnumerator ExecutionCoroutine()
         {
+            Debug.Log("starting Whirlwind execution coroutine");
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Whirlwind_speen);
-            yield return Spin();
+            yield return _coroutineManager.StartCoroutine(Spin());
+            //yield return Spin();
+            Debug.Log("whirlwind spin finished");
             HandleExecutionFinished();
         }
 
         public override void Update()
         {
             base.Update();
+
+            _coroutineManager.Update();
 
             if (State == PlayerActionState.Preparing)
             {
@@ -106,20 +114,19 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                     return;
                 }
 
+                _direction = _dirByMouse.CurrentDirection;
+
                 //handle direction change
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
                     //stop sim loop
-                    if (_simulationLoop != null)
-                    {
-                        _simulationLoop.Stop();
-                    }
+                    _simulationLoop?.Stop();
 
                     //stop animator
                     _animator.Stop();
 
                     //restart sim loop
-                    _simulationLoop = Game1.StartCoroutine(SimulationLoop());
+                    _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
                 }
             }
             else //not in prep mode
@@ -142,7 +149,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             //determine animation and starting angle of hitbox based on direction
             var animation = "";
             var angle = MathHelper.ToRadians(0f);
-            switch (_dirByMouse.CurrentDirection)
+            switch (_direction)
             {
                 case Direction.Up:
                     animation = "WhirlwindUp";
@@ -172,6 +179,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             //determine rotation speed based on total movement time
             var rotationSpeed = MathHelper.TwoPi / totalMovementTime;
 
+            Debug.Log("starting whirlwind movement while loop");
             while (movementTimeRemaining > 0)
             {
                 movementTimeRemaining -= Time.DeltaTime;
@@ -186,6 +194,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
                 yield return null;
             }
+
+            Debug.Log("finished whirlwind movement while loop");
+            yield break;
         }
 
         IEnumerator SimulationLoop()
