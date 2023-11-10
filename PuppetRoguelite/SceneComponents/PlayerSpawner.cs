@@ -44,11 +44,16 @@ namespace PuppetRoguelite.SceneComponents
         public void SpawnPlayer(Entity mapEntity)
         {
             var spawnPosition = Vector2.Zero;
-            var spawn = Scene.FindComponentsOfType<PlayerSpawnPoint>().First(s => s.MapEntity == mapEntity && s.Id == Game1.SceneManager.TargetEntranceId);
-            if (spawn != null)
+            var playerSpawnPoints = Scene.FindComponentsOfType<PlayerSpawnPoint>();
+            if (playerSpawnPoints != null && playerSpawnPoints.Count > 0)
             {
-                spawnPosition = spawn.Entity.Position;
+                var spawn = playerSpawnPoints.FirstOrDefault(s => s.MapEntity == mapEntity && s.Id == Game1.SceneManager.TargetEntranceId);
+                if (spawn != null)
+                {
+                    spawnPosition = spawn.Entity.Position;
+                }
             }
+            
             _playerEntity.SetPosition(spawnPosition);
             _playerEntity.SetEnabled(true);
 

@@ -43,9 +43,10 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         //misc
         float _normalMoveSpeed = 100f;
         float _attackingMoveSpeed = 115f;
+        float _vanishedMoveSpeed = 200f;
         int _maxHp = 40;
-
-        bool _isBehaviorTreeEnabled = false;
+        bool _inAttackSequence = false;
+        float _timeInAttackSequence = 0f;
 
         int _prevAnimatorFrame = 0;
 
@@ -174,106 +175,77 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             _tree = BehaviorTreeBuilder<HeartHoarder>
                 .Begin(this)
                     .Selector(AbortTypes.Self)
-                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type == Status.StatusType.Death, true)
-                            .Action(h => h.AbortActions())
-                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type == Status.StatusType.Stunned, true)
+                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type != Status.StatusType.Normal, true)
                             .Action(h => h.AbortActions())
                         //if not in combat, idle
                         .ConditionalDecorator(h =>
                         {
                             var gameStateManager = Game1.GameStateManager;
                             return gameStateManager.GameState != GameState.Combat;
-                        }) 
-                            .Action(h => h.AbortActions())
-                            .Action(h => h.PlayAnimationLoop("Idle"))
+                        }, true)
+                            .Sequence()
+                                .Action(h => h.AbortActions())
+                                .Action(h => h.Idle())
+                            .EndComposite()
                         .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal) //if not stunned, select something to do
                             .Sequence() //main sequence
-                                .ParallelSelector() //move towards player for time or until within certain distance
-                                    .Conditional(h => Math.Abs(Vector2.Distance(h.OriginComponent.Origin, PlayerController.Instance.Entity.Position)) < 24)
-                                    .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
-                                    .Sequence()
+                                .Action(h => h.StartNewAttackSequence())
+                                .Selector() //select an attack or move towards player
+                                    .Sequence(AbortTypes.LowerPriority) //try to attack
+                                        .Conditional(h => h.CanPerformAction())
+                                        .Selector()
+                                            .Sequence() //try melee attacks
+                                                .Conditional(h => h.IsInMeleeRange())
+                                                .RandomSelector()
+                                                    .Sequence()
+                                                        .ParallelSelector()
+                                                            .Action(h => h.Idle())
+                                                            .WaitAction(.5f)
+                                                        .EndComposite()
+                                                        .Action(h => h.StationaryAttack())
+                                                        .Action(h => h.WaitForAnimation("PostStationaryAttack"))
+                                                    .EndComposite()
+                                                    .Sequence()
+                                                        .Action(h => h.WaitForAnimation("MoveAttackPrepRight"))
+                                                        .ParallelSelector()
+                                                            .Action(h => h.MovingAttack())
+                                                            .WaitAction(5f)
+                                                        .EndComposite()
+                                                        .Action(h =>
+                                                        {
+                                                            h.Animator.Speed = 1f;
+                                                            return TaskStatus.Success;
+                                                        })
+                                                        .Action(h => h.WaitForAnimation("StopMovingAfterAttackRight"))
+                                                    .EndComposite()
+                                                .EndComposite()
+                                            .EndComposite()
+                                            .Sequence() //try vanish attack
+                                                .Conditional(h => h.ShouldPerformVanish())
+                                                .Action(h => h.Vanish())
+                                                .WaitAction(2f)
+                                                .ParallelSelector()
+                                                    .WaitAction(4f)
+                                                    .Action(h => h.IsInMeleeRange())
+                                                    .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _vanishedMoveSpeed))
+                                                .EndComposite()
+                                                .Action(h => h.Emerge())
+                                                .Action(h => h.StationaryAttack())
+                                                .Action(h => h.WaitForAnimation("PostStationaryAttack"))
+                                            .EndComposite()
+                                        .EndComposite()
+                                    .EndComposite()
+                                    .Sequence(AbortTypes.LowerPriority) //if neither attack possible, move towards player
                                         .Action(h => h.WaitForAnimation("StartMovingRight"))
-                                        .Action(h => h.PlayAnimationLoop("MoveRight"))
-                                    .EndComposite()
-                                    .WaitAction(2f)
-                                .EndComposite()
-                                .Selector() //select an action
-                                    .ConditionalDecorator(h =>
-                                    {
-                                        var xDist = Math.Abs(h.Entity.Position.X - PlayerController.Instance.Entity.Position.X);
-                                        var yDist = Math.Abs(h.Entity.Position.Y - PlayerController.Instance.Entity.Position.Y);
-                                        if (yDist <= 32 && xDist <= 64) return true;
-                                        else return false;
-                                    }, false)
-                                        .Sequence() //stationary attack
-                                            .ParallelSelector()
-                                                .Conditional(h => Math.Abs(Vector2.Distance(h.OriginComponent.Origin, PlayerController.Instance.Entity.Position)) < 32)
-                                                .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
-                                                .Sequence()
-                                                    .Action(h => h.WaitForAnimation("StartMovingRight"))
-                                                    .Action(h => h.PlayAnimationLoop("MoveRight"))
-                                                .EndComposite()
-                                            .EndComposite()
-                                            .ParallelSelector()
-                                                .Action(h => h.PlayAnimationLoop("Idle"))
-                                                .WaitAction(.2f)
-                                            .EndComposite()
-                                            .Action(h => h.StationaryAttack())
-                                            .Action(h => h.WaitForAnimation("PostStationaryAttack"))
-                                        .EndComposite()
-                                    .RandomSelector()
-                                        .Sequence() //vanish attack
-                                            .Action(h => h.Vanish())
-                                            .ParallelSelector()
-                                                .Conditional(h =>
-                                                {
-                                                    var xDist = Math.Abs(h.OriginComponent.Origin.X - PlayerController.Instance.Entity.Position.X);
-                                                    var yDist = Math.Abs(h.OriginComponent.Origin.Y - PlayerController.Instance.Entity.Position.Y);
-                                                    if (xDist <= 24 && yDist <= 24)
-                                                    {
-                                                        return true;
-                                                    }
-                                                    else return false;
-                                                })
-                                                .Action(h =>
-                                                {
-                                                    var xDist = PlayerController.Instance.Entity.Position.X - h.OriginComponent.Origin.X;
-                                                    Vector2 target;
-                                                    if (xDist > 0)
-                                                    {
-                                                        target = PlayerController.Instance.Entity.Position + new Vector2(32, 0);
-                                                    }
-                                                    else target = PlayerController.Instance.Entity.Position - new Vector2(32, 0);
-                                                    return h.MoveTowardsPosition(target, _attackingMoveSpeed * 1.5f);
-                                                })
-                                                .Sequence()
-                                                    .Action(h => h.WaitForAnimation("StartMovingRight"))
-                                                    .Action(h => h.PlayAnimationLoop("MoveRight"))
-                                                .EndComposite()
-                                                .WaitAction(5f)
-                                            .EndComposite()
-                                            .Action(h => h.Emerge())
-                                            .Action(h => h.StationaryAttack())
-                                            .Action(h => h.WaitForAnimation("PostStationaryAttack"))
-                                        .EndComposite()
-                                        .Sequence() //moving attack sequence
-                                            .Action(h => h.WaitForAnimation("MoveAttackPrepRight", 1f))
-                                            .ParallelSelector()
-                                                .Action(h => h.MovingAttack())
-                                                .WaitAction(6f)
-                                            .EndComposite()
-                                            .Action(h =>
-                                            {
-                                                h.Animator.Speed = 1f;
-                                                return TaskStatus.Success;
-                                            })
-                                            .Action(h => h.WaitForAnimation("StopMovingAfterAttackRight"))
+                                        .ParallelSelector()
+                                            .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
+                                            .Action(h => h.PlayAnimationLoop("MoveRight"))
                                         .EndComposite()
                                     .EndComposite()
                                 .EndComposite()
-                                .ParallelSelector() //idle after action
-                                    .Action(h => h.PlayAnimationLoop("Idle"))
-                                    .WaitAction(1f)
+                                .ParallelSelector() //idle for a moment after attack sequence
+                                    .Action(h => h.Idle())
+                                    .WaitAction(1.5f)
                                 .EndComposite()
                             .EndComposite()
                     .EndComposite()
@@ -302,9 +274,11 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         public void Update()
         {
-            if (_isBehaviorTreeEnabled)
+            _tree.Tick();
+
+            if (_inAttackSequence)
             {
-                _tree.Tick();
+                _timeInAttackSequence += Time.DeltaTime;
             }
 
             var dir = VelocityComponent.Direction;
@@ -312,13 +286,49 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             Animator.FlipX = flip;
         }
 
-        public void SetBehaviorTreeEnabled(bool enabled)
+        public TaskStatus Idle()
         {
-            _isBehaviorTreeEnabled = enabled;
+            if (!Animator.IsAnimationActive("Idle"))
+            {
+                Animator.Play("Idle");
+            }
+
+            return TaskStatus.Running;
+        }
+
+        bool CanPerformAction()
+        {
+            return IsInMeleeRange() || ShouldPerformVanish();
+        }
+
+        TaskStatus StartNewAttackSequence()
+        {
+            _inAttackSequence = true;
+            _timeInAttackSequence = 0f;
+            return TaskStatus.Success;
+        }
+
+        bool IsInMeleeRange()
+        {
+            var xDist = Math.Abs(Entity.Position.X - PlayerController.Instance.Entity.Position.X);
+            var yDist = Math.Abs(Entity.Position.Y - PlayerController.Instance.Entity.Position.Y);
+            if (yDist <= 32 && xDist <= 48) return true;
+            else return false;
+        }
+
+        bool ShouldPerformVanish()
+        {
+            if (_timeInAttackSequence > 3f)
+            {
+                return true;
+            }
+            return false;
         }
 
         public IEnumerator PlayAppearanceAnimation()
         {
+            var status = new Status(Status.StatusType.Frozen, 99);
+            StatusComponent.PushStatus(status);
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Hh_appear);
             Animator.Speed = .75f;
             Animator.Play("Appear", SpriteAnimator.LoopMode.Once);
@@ -326,6 +336,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             {
                 yield return null;
             }
+            StatusComponent.PopStatus(status);
             Animator.Speed = 1f;
         }
 
@@ -369,16 +380,22 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Hh_vanish);
                 Animator.Play("Vanish", SpriteAnimator.LoopMode.Once);
+                Animator.OnAnimationCompletedEvent += OnVanishAnimationCompleted;
                 Hurtbox.SetEnabled(false);
                 NewHealthbar.SetEnabled(false);
             }
 
             if (Animator.IsAnimationActive("Vanish") && Animator.AnimationState == SpriteAnimator.State.Completed)
             {
-                Animator.SetColor(Color.Transparent);
                 return TaskStatus.Success;
             }
             else return TaskStatus.Running;
+        }
+
+        void OnVanishAnimationCompleted(string animationName)
+        {
+            Animator.OnAnimationCompletedEvent -= OnVanishAnimationCompleted;
+            Animator.SetColor(Color.Transparent);
         }
 
         TaskStatus StationaryAttack()
@@ -450,6 +467,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         TaskStatus WaitForAnimation(string animationName, float animationSpeed = 1)
         {
+            Debug.Log($"Waiting for animation {animationName}");
             Animator.Speed = animationSpeed;
 
             if (!Animator.IsAnimationActive(animationName))
@@ -462,6 +480,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                 return TaskStatus.Running;
             }
 
+            Debug.Log("finished animation " + animationName);
             return TaskStatus.Success;
         }
 
@@ -492,7 +511,6 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         {
             AbortActions();
             NewHealthbar.SetEnabled(false);
-            _isBehaviorTreeEnabled = false;
         }
 
         void OnDeathFinished(Entity entity)

@@ -201,9 +201,6 @@ namespace PuppetRoguelite.Scenes
             //play appearance animation (should be about 1.2 seconds)
             yield return Boss.PlayAppearanceAnimation();
 
-            //turn on boss's BT
-            Boss.SetBehaviorTreeEnabled(true);
-
             //linger on boss for a second
             yield return Coroutine.WaitForSeconds(1f);
 

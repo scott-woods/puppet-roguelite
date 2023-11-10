@@ -161,8 +161,8 @@
             "scale": 2,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 204,
-                "y": 196
+                "x": 191.75,
+                "y": 191.75
             }
         },
         "Tilemaps/TBL_1.tmx": {
@@ -249,19 +249,19 @@
             "scale": 1.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 342.66666666666663,
-                "y": 142.66666666666663
+                "x": 79.33333333333334,
+                "y": 79.33333333333334
             }
         },
         "Tilemaps/boss_room.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 2,
+            "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 207.75,
-                "y": 567.75
+                "x": 206,
+                "y": 1102
             }
         },
         "Tilemaps/hub.tmx": {
@@ -271,8 +271,8 @@
             "scale": 1.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 479.33333333333326,
-                "y": 207.33333333333334
+                "x": 343.66666666666663,
+                "y": 263.6666666666667
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -282,7 +282,7 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 191.52574577237317,
+                "x": 191.5257457723732,
                 "y": 191.52574577237317
             }
         },
@@ -293,8 +293,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 202.83488504655142,
-                "y": 176.5684970549117
+                "x": 191.5257457723732,
+                "y": 191.52574577237317
             }
         },
         "Tilemaps/puppet_shop.tmx": {
@@ -304,8 +304,8 @@
             "scale": 1.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 6.666666666666686,
-                "y": 222.66666666666663
+                "x": 159.66666666666666,
+                "y": 136.33333333333331
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -315,8 +315,8 @@
             "scale": 1.3705729166666665,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 191.52574577237317
+                "x": 191.16093482804487,
+                "y": 191.16093482804487
             }
         },
         "Tilesets/blood_temple_tileset.tsx": {

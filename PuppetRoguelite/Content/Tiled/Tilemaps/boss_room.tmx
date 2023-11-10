@@ -231,6 +231,9 @@
  </layer>
  <objectgroup id="8" name="entities">
   <object id="23" type="PlayerSpawnPoint" x="208" y="1104">
+   <properties>
+    <property name="Id" value="0"/>
+   </properties>
    <point/>
   </object>
   <object id="24" type="BossTrigger" x="192" y="784" width="32" height="16"/>
