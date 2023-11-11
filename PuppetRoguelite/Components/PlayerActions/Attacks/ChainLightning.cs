@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Chain Lightning", 3, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Chain Lightning", 0, PlayerActionCategory.Attack)]
     public class ChainLightning : PlayerAction
     {
         //data
@@ -188,7 +188,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 //handle confirm
                 if (Input.LeftMouseButtonPressed)
                 {
-                    _simulationLoop?.Stop();
+                    _coroutineManager.StopAllCoroutines();
                     _animator.Stop();
                     HandlePreparationFinished(Position);
                 }
@@ -198,7 +198,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 {
                     _simulationLoop?.Stop();
                     _animator.Stop();
-                    _simulationLoop = Game1.StartCoroutine(SimulationLoop());
+                    _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
                 }
 
                 //handle hitbox offset based on direction
@@ -288,7 +288,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         void OnAnimationFinished(string animation)
         {
-            Debug.Log("animation finished");
+            Debug.Log("animation finished " + Name);
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
             _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
             _hasFinishedSwinging = true;

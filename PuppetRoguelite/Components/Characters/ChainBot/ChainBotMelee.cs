@@ -105,16 +105,16 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         IEnumerator ExecutionCoroutine()
         {
             var id = _enemy.Id;
-            Debug.Log($"{id}: transitioning to charge");
+            //Debug.Log($"{id}: transitioning to charge");
             yield return TransitionToCharge();
-            Debug.Log($"{id}: finished transition to charge");
-            Debug.Log($"{id}: starting charge");
+            //Debug.Log($"{id}: finished transition to charge");
+            //Debug.Log($"{id}: starting charge");
             ChargeAttack();
             yield return Coroutine.WaitForSeconds(.25f);
-            Debug.Log($"{id}: finished charge");
-            Debug.Log($"{id}: starting attack player");
+            //Debug.Log($"{id}: finished charge");
+            //Debug.Log($"{id}: starting attack player");
             yield return AttackPlayer();
-            Debug.Log($"{id}: finished attack player");
+            //Debug.Log($"{id}: finished attack player");
 
             Reset();
 

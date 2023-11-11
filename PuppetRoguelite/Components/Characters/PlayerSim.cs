@@ -138,20 +138,20 @@ namespace PuppetRoguelite.Components.Characters
             }
         }
 
-        public override void OnDisabled()
-        {
-            base.OnDisabled();
+        //public override void OnDisabled()
+        //{
+        //    base.OnDisabled();
 
-            _spriteAnimator.Stop();
-        }
+        //    _spriteAnimator.Stop();
+        //}
 
-        public override void OnRemovedFromEntity()
-        {
-            Entity.RemoveComponent(_spriteAnimator);
-            Entity.RemoveComponent(_originComponent);
-            Entity.RemoveComponent(_ySorter);
-            Entity.RemoveComponent(_mover);
-            base.OnRemovedFromEntity();
-        }
+        //public override void OnRemovedFromEntity()
+        //{
+        //    Entity.RemoveComponent(_spriteAnimator);
+        //    Entity.RemoveComponent(_originComponent);
+        //    Entity.RemoveComponent(_ySorter);
+        //    Entity.RemoveComponent(_mover);
+        //    base.OnRemovedFromEntity();
+        //}
     }
 }
