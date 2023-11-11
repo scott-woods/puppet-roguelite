@@ -467,7 +467,6 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
 
         TaskStatus WaitForAnimation(string animationName, float animationSpeed = 1)
         {
-            Debug.Log($"Waiting for animation {animationName}");
             Animator.Speed = animationSpeed;
 
             if (!Animator.IsAnimationActive(animationName))
@@ -480,7 +479,6 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
                 return TaskStatus.Running;
             }
 
-            Debug.Log("finished animation " + animationName);
             return TaskStatus.Success;
         }
 

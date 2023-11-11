@@ -14,11 +14,20 @@ namespace PuppetRoguelite.Components
     {
         Entity _targetEntity;
         public RectangleF Deadzone = new RectangleF(0, 0, 64, 64);
+        CameraHandler _cameraHandler;
 
         public DeadzoneFollowCamera(Entity target, Vector2 deadzoneSize)
         {
             _targetEntity = target;
             Deadzone = new RectangleF(0, 0, deadzoneSize.X, deadzoneSize.Y);
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            _cameraHandler = Entity.Scene.GetOrCreateSceneComponent<CameraHandler>();
+            _cameraHandler.FormatCamera();
         }
 
         public void Update()
@@ -27,26 +36,22 @@ namespace PuppetRoguelite.Components
             {
                 var pos = GetTargetPosition();
 
-                var camHandler = Entity.Scene.GetOrCreateSceneComponent<CameraHandler>();
-                if (camHandler.IsFormatted)
+                var camBounds = Entity.Scene.Camera.Bounds;
+                if (pos.X - (camBounds.Width / 2) < _cameraHandler.TopLeft.X)
                 {
-                    var camBounds = Entity.Scene.Camera.Bounds;
-                    if (pos.X - (camBounds.Width / 2) < camHandler.Left)
-                    {
-                        pos.X = camHandler.Left + (camBounds.Width / 2);
-                    }
-                    if (pos.X + (camBounds.Width / 2) > camHandler.Right)
-                    {
-                        pos.X = camHandler.Right - (camBounds.Width / 2);
-                    }
-                    if (pos.Y - (camBounds.Height / 2) < camHandler.Top)
-                    {
-                        pos.Y = camHandler.Top + (camBounds.Height / 2);
-                    }
-                    if (pos.Y + (camBounds.Height / 2) > camHandler.Bottom)
-                    {
-                        pos.Y = camHandler.Bottom - (camBounds.Height / 2);
-                    }
+                    pos.X = _cameraHandler.TopLeft.X + (camBounds.Width / 2);
+                }
+                if (pos.X + (camBounds.Width / 2) > _cameraHandler.BottomRight.X)
+                {
+                    pos.X = _cameraHandler.BottomRight.X - (camBounds.Width / 2);
+                }
+                if (pos.Y - (camBounds.Height / 2) < _cameraHandler.TopLeft.Y)
+                {
+                    pos.Y = _cameraHandler.TopLeft.Y + (camBounds.Height / 2);
+                }
+                if (pos.Y + (camBounds.Height / 2) > _cameraHandler.BottomRight.Y)
+                {
+                    pos.Y = _cameraHandler.BottomRight.Y - (camBounds.Height / 2);
                 }
 
                 Entity.Position = pos;

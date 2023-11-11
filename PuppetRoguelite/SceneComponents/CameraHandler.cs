@@ -11,61 +11,68 @@ namespace PuppetRoguelite.SceneComponents
 {
     public class CameraHandler : SceneComponent
     {
-        public float Top, Bottom, Left, Right;
-        public RectangleF RoomBounds;
-        public bool IsFormatted = false;
+        public Vector2 TopLeft = new Vector2(int.MinValue, int.MinValue);
+        public Vector2 BottomRight = new Vector2(int.MaxValue, int.MaxValue);
+        public Vector2 RoomSize { get => BottomRight - TopLeft; }
 
         public void FormatCamera()
         {
+            //get camera bounds
             var cameraBounds = Scene.FindComponentsOfType<CameraBound>();
             if (cameraBounds.Count > 0)
             {
-                IsFormatted = true;
-                foreach (var cameraBound in cameraBounds)
+                //get top left and bottom right bounds
+                var topLeftBound = cameraBounds.FirstOrDefault(c => c.Type == CameraBoundType.TopLeft);
+                if (topLeftBound != null) TopLeft = topLeftBound.Entity.Position;
+                var bottomRightBound = cameraBounds.FirstOrDefault(c => c.Type == CameraBoundType.BottomRight);
+                if (bottomRightBound != null) BottomRight = bottomRightBound.Entity.Position;
+
+                //if both bounds are set
+                if (topLeftBound != null && bottomRightBound != null)
                 {
-                    Top = cameraBound.Entity.Position.Y < Top ? cameraBound.Entity.Position.Y : Top;
-                    Bottom = cameraBound.Entity.Position.Y > Bottom ? cameraBound.Entity.Position.Y : Bottom;
-                    Left = cameraBound.Entity.Position.X < Left ? cameraBound.Entity.Position.X : Left;
-                    Right = cameraBound.Entity.Position.X > Right ? cameraBound.Entity.Position.X : Right;
+                    //handle y
+                    if (RoomSize.Y < Scene.Camera.Bounds.Height)
+                    {
+                        //if room size is too small for camera, center the room in the camera view
+                        var yDiff = Scene.Camera.Bounds.Height - RoomSize.Y;
+                        int halfYDiff = (int)yDiff / 2;
+                        TopLeft.Y -= halfYDiff;
+                        BottomRight.Y += halfYDiff;
+
+                        if (yDiff % 2 != 0)
+                        {
+                            BottomRight.Y += 1;
+                        }
+                    }
+
+                    //handle x
+                    if (RoomSize.X < Scene.Camera.Bounds.Width)
+                    {
+                        var xDiff = Scene.Camera.Bounds.Width - RoomSize.X;
+
+                        //if both bounds don't have a door, or both do, center the map
+                        if (topLeftBound.HasXDoorway == bottomRightBound.HasXDoorway)
+                        {
+                            int halfXDiff = (int)xDiff / 2;
+                            TopLeft.X -= halfXDiff;
+                            BottomRight.X += halfXDiff;
+
+                            if (xDiff % 2 != 0)
+                            {
+                                BottomRight.X += 1;
+                            }
+                        }
+                        else if (topLeftBound.HasXDoorway)
+                        {
+                            BottomRight.X += xDiff;
+                        }
+                        else if (bottomRightBound.HasXDoorway)
+                        {
+                            TopLeft.X -= xDiff;
+                        }
+                    }
                 }
-
-                RoomBounds = new RectangleF(Left, Top, Right - Left, Bottom - Top);
-
-                var scaleX = Scene.Camera.Bounds.Width / RoomBounds.Width;
-                var scaleY = Scene.Camera.Bounds.Height / RoomBounds.Height;
-
-                var targetZoom = Math.Min(scaleX, scaleY);
-                targetZoom = (int)Math.Floor(targetZoom);
-
-                Scene.Camera.SetMaximumZoom(targetZoom);
-                Scene.Camera.SetZoom(1);
             }
-            else IsFormatted = false;
-        }
-
-        public override void Update()
-        {
-            base.Update();
-
-            //if (IsFormatted)
-            //{
-            //    if (Scene.Camera.Bounds.Top < Top)
-            //    {
-            //        Scene.Camera.Position += new Vector2(0, Top - Scene.Camera.Bounds.Top);
-            //    }
-            //    if (Scene.Camera.Bounds.Bottom > Bottom)
-            //    {
-            //        Scene.Camera.Position += new Vector2(0, Bottom - Scene.Camera.Bounds.Bottom);
-            //    }
-            //    if (Scene.Camera.Bounds.Left < Left)
-            //    {
-            //        Scene.Camera.Position += new Vector2(Left - Scene.Camera.Bounds.Left, 0);
-            //    }
-            //    if (Scene.Camera.Bounds.Right > Right)
-            //    {
-            //        Scene.Camera.Position += new Vector2(Right - Scene.Camera.Bounds.Right, 0);
-            //    }
-            //}
         }
     }
 }

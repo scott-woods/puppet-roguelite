@@ -48,11 +48,10 @@ namespace PuppetRoguelite.UI.Elements
                 contentTable.Add(new Label(_labelHeader, new LabelStyle(Graphics.Instance.BitmapFont, Color.Black))).SetColspan(colSpan).SetExpandX().Right();
             }
 
-            contentTable.Row();
-
             //buttons
             foreach(var pair in _content)
             {
+                contentTable.Row();
                 contentTable.Add(pair.Key).SetExpandX().Left().SetSpaceRight(32);
                 contentTable.Add(pair.Value).SetExpandX().Right();
             }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="6">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="20" height="17" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="8">
  <tileset firstgid="1" source="../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="1" name="floor" width="20" height="17">
   <data encoding="csv">
@@ -86,7 +86,11 @@
 </data>
  </layer>
  <objectgroup id="3" name="entities">
-  <object id="2" type="CameraBound" x="16" y="256">
+  <object id="2" type="CameraBound" x="16" y="0">
+   <properties>
+    <property name="CameraBoundType" value="TopLeft"/>
+    <property name="HasXDoorway" value="true"/>
+   </properties>
    <point/>
   </object>
   <object id="3" type="PlayerSpawnPoint" x="32" y="224">
@@ -102,6 +106,12 @@
    </properties>
   </object>
   <object id="5" type="UpgradeShop" x="200" y="112">
+   <point/>
+  </object>
+  <object id="7" type="CameraBound" x="304" y="256">
+   <properties>
+    <property name="CameraBoundType" value="BottomRight"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>
