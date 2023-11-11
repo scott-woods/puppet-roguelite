@@ -3,15 +3,18 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilemaps/hub.tmx",
+    "activeFile": "Tilemaps/test.tmx",
     "expandedProjectPaths": [
         ".",
+        "Rules",
         "Tilesets",
-        "Tilemaps",
-        "Templates"
+        "Tilemaps"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
         "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx": {
             "scale": 1.2182870370370371,
             "selectedLayer": 5,
@@ -79,6 +82,22 @@
         },
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx#tileset": {
             "scaleInDock": 1
+        },
+        "Rules/autotile_rules.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 64.33333333333334,
+                "y": 119.33333333333334
+            }
+        },
+        "Rules/walls_rules.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 152.75,
+                "y": 129
+            }
         },
         "Tilemaps/BLR_1.tmx": {
             "expandedObjectLayers": [
@@ -161,8 +180,8 @@
             "scale": 2,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.75,
-                "y": 191.75
+                "x": 203.25,
+                "y": 195.5
             }
         },
         "Tilemaps/TBL_1.tmx": {
@@ -257,11 +276,11 @@
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 1,
+            "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 287,
-                "y": 943
+                "x": 72.16666666666666,
+                "y": 522.6666666666666
             }
         },
         "Tilemaps/hub.tmx": {
@@ -269,10 +288,10 @@
                 3
             ],
             "scale": 1,
-            "selectedLayer": 4,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 218,
-                "y": 143
+                "x": 294.5,
+                "y": 215
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -319,6 +338,14 @@
                 "y": 191.16093482804487
             }
         },
+        "Tilemaps/test.tmx": {
+            "scale": 1.5,
+            "selectedLayer": -1,
+            "viewCenter": {
+                "x": 519.6666666666666,
+                "y": -96.66666666666666
+            }
+        },
         "Tilesets/blood_temple_tileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -329,40 +356,37 @@
         },
         "Tilesets/dungeon_prison_tileset.tsx": {
             "scaleInDock": 1.5,
-            "scaleInEditor": 1
+            "scaleInEditor": 3
         }
     },
     "last.imagePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Textures/Tilesets",
     "last.objectTemplatePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Templates",
-    "map.fixedSize": false,
+    "map.fixedSize": true,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "Tilemaps/bedroom.tmx",
-        "Tilemaps/puppet_shop.tmx",
-        "Tilemaps/hub.tmx",
+        "Tilesets/dungeon_prison_tileset.tsx",
+        "Tilemaps/test.tmx",
         "Tilemaps/boss_room.tmx",
-        "Tilemaps/left_key_room.tmx",
-        "Tilemaps/right_key_room.tmx",
-        "Tilemaps/pre_boss_room.tmx",
-        "Tilemaps/TBLR_1.tmx"
+        "Tilemaps/hub.tmx",
+        "Rules/autotile_rules.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "Tilemaps/bedroom.tmx",
-        "Tilemaps/puppet_shop.tmx",
+        "Tilesets/dungeon_prison_tileset.tsx",
+        "Rules/autotile_rules.tmx",
+        "Tilemaps/hub.tmx",
+        "Tilemaps/boss_room.tmx",
+        "Tilemaps/test.tmx",
         "Tilemaps/TBLR_1.tmx",
         "Tilemaps/pre_boss_room.tmx",
         "Tilemaps/right_key_room.tmx",
+        "Tilemaps/bedroom.tmx",
+        "Tilemaps/puppet_shop.tmx",
         "Tilemaps/left_key_room.tmx",
-        "Tilemaps/boss_room.tmx",
-        "Tilemaps/hub.tmx",
-        "Tilemaps/L_1.tmx",
-        "Tilemaps/LR_1.tmx",
-        "Tilemaps/B_1.tmx",
-        "Tilemaps/R_1.tmx"
+        "Tilemaps/L_1.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

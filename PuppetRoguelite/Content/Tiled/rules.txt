@@ -1,0 +1,2 @@
+Rules\walls_rules.tmx
+Rules\autotile_rules.tmx
