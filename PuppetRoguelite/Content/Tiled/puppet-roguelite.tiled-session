@@ -258,10 +258,10 @@
                 8
             ],
             "scale": 1,
-            "selectedLayer": 3,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 206,
-                "y": 1102
+                "x": 287,
+                "y": 943
             }
         },
         "Tilemaps/hub.tmx": {
