@@ -70,8 +70,12 @@ namespace Nez
 
 		public static class Fonts
 		{
-			public const string Abaddon_light = @"Content\Fonts\abaddon_light.fnt";
-			public const string Abaddon_light_0 = @"Content\Fonts\abaddon_light_0.png";
+			public const string Abaddon_light_12 = @"Content\Fonts\abaddon_light_12.fnt";
+			public const string Abaddon_light_12_0 = @"Content\Fonts\abaddon_light_12_0.png";
+			public const string Abaddon_light_18 = @"Content\Fonts\abaddon_light_18.fnt";
+			public const string Abaddon_light_18_0 = @"Content\Fonts\abaddon_light_18_0.png";
+			public const string Abaddon_light_60 = @"Content\Fonts\abaddon_light_60.fnt";
+			public const string Abaddon_light_60_0 = @"Content\Fonts\abaddon_light_60_0.png";
 		}
 
 		public static class Textures
@@ -128,6 +132,7 @@ namespace Nez
 
 			public static class Shops
 			{
+				public const string Herb_shop = @"Content\Textures\Shops\herb_shop.png";
 				public const string Tech_shop = @"Content\Textures\Shops\tech_shop.png";
 			}
 

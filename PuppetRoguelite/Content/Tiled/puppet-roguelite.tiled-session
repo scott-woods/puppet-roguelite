@@ -3,14 +3,14 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "RuleMaps/prison_walls_rules_3.tmx",
+    "activeFile": "Tilemaps/Hub/hub_2.tmx",
     "expandedProjectPaths": [
+        "Tilemaps",
+        "Rules",
+        "Tilemaps/Hub",
         ".",
         "RuleMaps",
-        "Tilesets",
-        "Tilemaps",
-        "Tilemaps/DungeonPrison",
-        "Rules"
+        "Tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -410,8 +410,8 @@
             "scale": 1.1122916666666667,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 176.66229631017043,
-                "y": 242.74208653305863
+                "x": 175.76325154523317,
+                "y": 241.84304176812134
             }
         },
         "Tilemaps/Hub/hub_1.tmx": {
@@ -423,11 +423,11 @@
             }
         },
         "Tilemaps/Hub/hub_2.tmx": {
-            "scale": 2,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 749.25,
-                "y": 380
+                "x": 887,
+                "y": 621.3333333333333
             }
         },
         "Tilemaps/Hub/puppet_shop.tmx": {
@@ -686,7 +686,7 @@
             "scaleInEditor": 1.5
         },
         "Tilesets/dungeon_prison_tileset.tsx": {
-            "scaleInDock": 1.5,
+            "scaleInDock": 1,
             "scaleInEditor": 3
         },
         "Tilesets/hub_2.tmx": {
@@ -710,18 +710,14 @@
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "Tilemaps/DungeonPrison/DP_TR_2.tmx",
-        "Tilemaps/DungeonPrison/dp_test.tmx",
-        "RuleMaps/prison_walls_rules_3.tmx",
-        "RuleMaps/prison_walls_rules.tmx",
-        "RuleMaps/prison_floor_rules_2.tmx",
-        "RuleMaps/prison_floor_rules.tmx"
+        "Tilemaps/Hub/hub_2.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "Tilesets/dungeon_prison_props.tsx",
         "Tilemaps/Hub/bedroom.tmx",
+        "Tilemaps/Hub/hub_2.tmx",
+        "Tilesets/dungeon_prison_props.tsx",
         "Tilemaps/Hub/puppet_shop.tmx",
         "Tilemaps/Hub/hub_1.tmx",
         "Tilemaps/DungeonPrison/right_key_room.tmx",
@@ -729,7 +725,6 @@
         "Tilemaps/DungeonPrison/dp_test.tmx",
         "RuleMaps/prison_walls_rules_one_overlap.tmx",
         "RuleMaps/wooden_floor_rules.tmx",
-        "Tilemaps/Hub/hub_2.tmx",
         "RuleMaps/collision_rules.tmx",
         "Tilemaps/DungeonPrison/B_1.tmx"
     ],
