@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="9">
- <tileset firstgid="1" source="../Tilesets/dungeon_prison_tileset.tsx"/>
+ <tileset firstgid="1" source="../../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="6" name="prototype" width="32" height="24">
   <data encoding="csv">
 34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,

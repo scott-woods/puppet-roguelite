@@ -80,32 +80,36 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             var gameStateManager = Game1.GameStateManager;
             if (gameStateManager.GameState == GameState.Exploration && _context.CheckInput.IsPressed)
             {
-                var raycastHit = Physics.Linecast(_context.Entity.Position, _context.Entity.Position + _context.VelocityComponent.Direction * _context.RaycastDistance);
+                var hitArray = new RaycastHit[10];
+                var raycastHits = Physics.LinecastAll(_context.OriginComponent.Origin, _context.OriginComponent.Origin + _context.VelocityComponent.Direction * _context.RaycastDistance, hitArray);
 
-                if (raycastHit.Collider != null)
+                foreach (var raycastHit in hitArray)
                 {
-                    if (raycastHit.Collider.Entity.TryGetComponent<Interactable>(out var interactable))
+                    if (raycastHit.Collider != null)
                     {
-                        if (interactable.Active)
-                        {
-                            _machine.ChangeState<CutsceneState>();
-                            interactable.Interact(HandleInteractionFinished);
-                            return true;
-                        }
-                    }
-                }
-                else
-                {
-                    var overlap = Physics.OverlapRectangle(new RectangleF(_context.Entity.Position, new Vector2(16, 16)));
-                    if (overlap != null)
-                    {
-                        if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))
+                        if (raycastHit.Collider.Entity.TryGetComponent<Interactable>(out var interactable))
                         {
                             if (interactable.Active)
                             {
                                 _machine.ChangeState<CutsceneState>();
                                 interactable.Interact(HandleInteractionFinished);
                                 return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var overlap = Physics.OverlapRectangle(new RectangleF(_context.Entity.Position, new Vector2(16, 16)));
+                        if (overlap != null)
+                        {
+                            if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))
+                            {
+                                if (interactable.Active)
+                                {
+                                    _machine.ChangeState<CutsceneState>();
+                                    interactable.Interact(HandleInteractionFinished);
+                                    return true;
+                                }
                             }
                         }
                     }

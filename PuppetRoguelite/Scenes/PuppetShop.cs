@@ -30,7 +30,7 @@ namespace PuppetRoguelite.Scenes
 
             //map renderer
             _mapEntity = CreateEntity("map");
-            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Puppet_shop);
+            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Hub.Puppet_shop);
             var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
             mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "props" });
             mapRenderer.RenderLayer = 10;

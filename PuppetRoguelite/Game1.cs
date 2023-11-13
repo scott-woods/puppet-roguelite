@@ -28,6 +28,7 @@ namespace PuppetRoguelite
             IsMouseVisible = false;
 
             if (!Directory.Exists("Data")) Directory.CreateDirectory("Data");
+            Inspectables.Initialize();
 
             Physics.SpatialHashCellSize = 32;
             Physics.Gravity = new Vector2(0, 600f);

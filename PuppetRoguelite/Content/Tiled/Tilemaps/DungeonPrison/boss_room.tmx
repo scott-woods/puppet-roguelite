@@ -3,7 +3,7 @@
  <properties>
   <property name="type" value=""/>
  </properties>
- <tileset firstgid="1" source="../Tilesets/dungeon_prison_tileset.tsx"/>
+ <tileset firstgid="1" source="../../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="3" name="floor" width="26" height="71">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

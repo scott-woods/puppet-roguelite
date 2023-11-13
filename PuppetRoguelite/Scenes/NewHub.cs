@@ -32,18 +32,28 @@ namespace PuppetRoguelite.Scenes
 
             //map renderer
             _mapEntity = CreateEntity("map");
-            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Hub_2);
+            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Hub.Hub_2);
             var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-            mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "props" });
+            mapRenderer.SetLayersToRender(new[] { "floor", "details", "furniture", "entities" });
             mapRenderer.RenderLayer = 10;
             Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
             var tiledMapDetailsRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
-            tiledMapDetailsRenderer.SetLayerToRender("above-details");
+            tiledMapDetailsRenderer.SetLayersToRender("above-details");
             tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
             tiledMapDetailsRenderer.Material = Material.StencilWrite();
             //tiledMapDetailsRenderer.Material.Effect = Content.LoadNezEffect<SpriteAlphaTestEffect>();
+
+            var tiledMapAboveFurnitureRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
+            tiledMapAboveFurnitureRenderer.SetLayersToRender("above-furniture");
+            tiledMapAboveFurnitureRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
+            tiledMapAboveFurnitureRenderer.Material = Material.StencilWrite();
+
+            var tiledMapPropsRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
+            tiledMapPropsRenderer.SetLayersToRender("props");
+            tiledMapPropsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
+            tiledMapPropsRenderer.Material = Material.StencilWrite();
 
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();

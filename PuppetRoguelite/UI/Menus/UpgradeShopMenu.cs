@@ -47,7 +47,6 @@ namespace PuppetRoguelite.UI.Menus
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
-            _table.DebugAll();
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();

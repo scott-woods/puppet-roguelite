@@ -24,26 +24,26 @@ namespace PuppetRoguelite.SceneComponents
 
         List<Map> _maps = new List<Map>()
         {
-            new Map(Content.Tiled.Tilemaps.TBLR_1, true, true, true, true),
-            new Map(Content.Tiled.Tilemaps.TBL_1, true, true, true, false),
-            new Map(Content.Tiled.Tilemaps.TBR_1, true, true, false, true),
-            new Map(Content.Tiled.Tilemaps.TLR_1, true, false, true, true),
-            new Map(Content.Tiled.Tilemaps.BLR_1, false, true, true, true),
-            new Map(Content.Tiled.Tilemaps.TB_1, true, true, false, false),
-            new Map(Content.Tiled.Tilemaps.TL_1, true, false, true, false),
-            new Map(Content.Tiled.Tilemaps.TR_1, true, false, false, true),
-            new Map(Content.Tiled.Tilemaps.BL_1, false, true, true, false),
-            new Map(Content.Tiled.Tilemaps.BR_1, false, true, false, true),
-            new Map(Content.Tiled.Tilemaps.LR_1, false, false, true, true),
-            new Map(Content.Tiled.Tilemaps.T_1, true, false, false, false),
-            new Map(Content.Tiled.Tilemaps.B_1, false, true, false, false),
-            new Map(Content.Tiled.Tilemaps.L_1, false, false, true, false),
-            new Map(Content.Tiled.Tilemaps.R_1, false, false, false, true)
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.TBLR_1, true, true, true, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.TBL_1, true, true, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.TBR_1, true, true, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.TLR_1, true, false, true, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.BLR_1, false, true, true, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.TB_1, true, true, false, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.TL_1, true, false, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.TR_1, true, false, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.BL_1, false, true, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.BR_1, false, true, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.LR_1, false, false, true, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.T_1, true, false, false, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.B_1, false, true, false, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.L_1, false, false, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.R_1, false, false, false, true)
         };
 
-        Map _leftKeyMap = new Map(Content.Tiled.Tilemaps.Left_key_room, false, false, false, true);
-        Map _rightKeyMap = new Map(Content.Tiled.Tilemaps.Right_key_room, false, false, true, false);
-        Map _preBossMap = new Map(Content.Tiled.Tilemaps.Pre_boss_room, false, true, true, true);
+        Map _leftKeyMap = new Map(Content.Tiled.Tilemaps.DungeonPrison.Left_key_room, false, false, false, true);
+        Map _rightKeyMap = new Map(Content.Tiled.Tilemaps.DungeonPrison.Right_key_room, false, false, true, false);
+        Map _preBossMap = new Map(Content.Tiled.Tilemaps.DungeonPrison.Pre_boss_room, false, true, true, true);
 
         AstarGridGraph _graph;
 

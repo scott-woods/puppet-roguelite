@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Tiled;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
 using System;
@@ -37,29 +38,30 @@ namespace PuppetRoguelite.Components.Shared
                         var renderers = node.MapEntity.GetComponents<TiledMapRenderer>();
                         foreach (var renderer in renderers)
                         {
+                            //translate entity's bounds to be compatible with the renderer
+                            var rect = _renderable.Bounds;
+                            rect.X -= (node.Point.X * 16 * 24);
+                            rect.Y -= (node.Point.Y * 16 * 24);
+
+                            //translate origin component
+                            var origin = _originComponent.Origin;
+                            origin.X -= (node.Point.X * 16 * 24);
+                            origin.Y -= (node.Point.Y * 16 * 24);
+
                             //try to get the renderer's above-details layer
                             if (renderer.TiledMap.TileLayers.TryGetValue("above-details", out var layer))
                             {
-                                //translate entity's bounds to be compatible with the renderer
-                                var rect = _renderable.Bounds;
-                                rect.X -= (node.Point.X * 16 * 24);
-                                rect.Y -= (node.Point.Y * 16 * 24);
-
-                                //translate origin component
-                                var origin = _originComponent.Origin;
-                                origin.X -= (node.Point.X * 16 * 24);
-                                origin.Y -= (node.Point.Y * 16 * 24);
-
-                                //get tiles from this layer intersecting the renderable
-                                var tiles = layer.GetTilesIntersectingBounds(rect);
-                                foreach (var tile in tiles)
+                                if (HandleLayer(layer, rect, origin))
                                 {
-                                    //an above tile is below the origin. render below above details
-                                    if ((tile.Y * 16) + 16 > origin.Y)
-                                    {
-                                        _renderable.RenderLayer = -(int)(_originComponent.Origin.Y);
-                                        return;
-                                    }
+                                    return;
+                                }
+                            }
+
+                            if (renderer.TiledMap.TileLayers.TryGetValue("above-furniture", out var aboveFurnitureLayer))
+                            {
+                                if (HandleLayer(aboveFurnitureLayer, rect, origin))
+                                {
+                                    return;
                                 }
                             }
                         }
@@ -70,18 +72,22 @@ namespace PuppetRoguelite.Components.Shared
                     var tiledMapRenderers = Entity.Scene.FindComponentsOfType<TiledMapRenderer>();
                     foreach (var renderer in tiledMapRenderers)
                     {
+                        var rect = _renderable.Bounds;
+                        var origin = _originComponent.Origin;
+
                         if (renderer.TiledMap.TileLayers.TryGetValue("above-details", out var layer))
                         {
-                            //get tiles from this layer intersecting the renderable
-                            var tiles = layer.GetTilesIntersectingBounds(_renderable.Bounds);
-                            foreach (var tile in tiles)
+                            if (HandleLayer(layer, rect, origin))
                             {
-                                //an above tile is below the origin. render below above details
-                                if ((tile.Y * 16) + 16 > _originComponent.Origin.Y)
-                                {
-                                    _renderable.RenderLayer = -(int)(_originComponent.Origin.Y);
-                                    return;
-                                }
+                                return;
+                            }
+                        }
+
+                        if (renderer.TiledMap.TileLayers.TryGetValue("above-furniture", out var aboveFurnitureLayer))
+                        {
+                            if (HandleLayer(aboveFurnitureLayer, rect, origin))
+                            {
+                                return;
                             }
                         }
                     }
@@ -89,6 +95,23 @@ namespace PuppetRoguelite.Components.Shared
 
                 _renderable.RenderLayer = (int)RenderLayers.AboveDetails - (int)_originComponent.Origin.Y;
             }
+        }
+
+        bool HandleLayer(TmxLayer layer, Rectangle rect, Vector2 origin)
+        {
+            //get tiles from this layer intersecting the renderable
+            var tiles = layer.GetTilesIntersectingBounds(rect);
+            foreach (var tile in tiles)
+            {
+                //an above tile is below the origin. render below above details
+                if ((tile.Y * 16) + 16 > origin.Y)
+                {
+                    _renderable.RenderLayer = -(int)(_originComponent.Origin.Y);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void SetOriginComponent(OriginComponent originComponent)

@@ -15,6 +15,7 @@ namespace PuppetRoguelite.Components.Shared
         /// bool to determine if this can be interacted with currently
         /// </summary>
         public bool Active { get; set; }
+        public int InteractionCount = 0;
 
         Func<IEnumerator> _onInteracted;
         Action _interactionCompletedCallback;
@@ -47,6 +48,8 @@ namespace PuppetRoguelite.Components.Shared
             {
                 Active = true;
             });
+
+            InteractionCount++;
 
             _interactionCompletedCallback?.Invoke();
         }

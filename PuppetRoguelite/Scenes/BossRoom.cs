@@ -25,7 +25,7 @@ namespace PuppetRoguelite.Scenes
 {
     public class BossRoom : BaseScene
     {
-        public const string MapString = Nez.Content.Tiled.Tilemaps.Boss_room;
+        public const string MapString = Nez.Content.Tiled.Tilemaps.DungeonPrison.Boss_room;
 
         //scene components
         public CombatManager CombatManager;
@@ -60,7 +60,7 @@ namespace PuppetRoguelite.Scenes
 
             //map renderer
             _mapEntity = CreateEntity("map");
-            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Boss_room);
+            var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.DungeonPrison.Boss_room);
             var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
             mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
             mapRenderer.RenderLayer = 10;
