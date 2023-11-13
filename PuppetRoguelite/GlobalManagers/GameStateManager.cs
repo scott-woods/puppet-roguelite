@@ -26,13 +26,13 @@ namespace PuppetRoguelite.GlobalManagers
 
         public void ReturnToHubAfterSuccess()
         {
-            Game1.SceneManager.ChangeScene(typeof(Bedroom), "0", Color.White, 4f, 4f, 1f);
+            Game1.SceneManager.ChangeScene(typeof(NewHub), "0", Color.White, 4f, 4f, 1f);
             Game1.SceneManager.Emitter.AddObserver(SceneEvents.ScreenObscured, OnScreenObscured);
         }
 
         public void ReturnToHubAfterDeath()
         {
-            Game1.SceneManager.ChangeScene(typeof(Bedroom), "0");
+            Game1.SceneManager.ChangeScene(typeof(NewHub), "0");
             Game1.SceneManager.Emitter.AddObserver(SceneEvents.ScreenObscured, OnScreenObscured);
         }
 
@@ -50,7 +50,7 @@ namespace PuppetRoguelite.GlobalManagers
                 yield return null;
             }
 
-            Game1.SceneManager.ChangeScene(typeof(Bedroom), "0");
+            Game1.SceneManager.ChangeScene(typeof(NewHub), "0");
         }
 
         void OnEncounterStarted()

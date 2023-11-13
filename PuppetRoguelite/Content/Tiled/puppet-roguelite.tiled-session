@@ -3,12 +3,14 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilemaps/test.tmx",
+    "activeFile": "RuleMaps/prison_walls_rules_3.tmx",
     "expandedProjectPaths": [
         ".",
-        "Rules",
+        "RuleMaps",
         "Tilesets",
-        "Tilemaps"
+        "Tilemaps",
+        "Tilemaps/DungeonPrison",
+        "Rules"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -83,20 +85,108 @@
         "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx#tileset": {
             "scaleInDock": 1
         },
-        "Rules/autotile_rules.tmx": {
-            "scale": 1.5,
+        "RuleMaps/autotile_rules.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 159.25,
+                "y": 136.5
+            }
+        },
+        "RuleMaps/collision_rules.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 142.75,
+                "y": 83.5
+            }
+        },
+        "RuleMaps/prison_floor_rules.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 123.25,
+                "y": 137.5
+            }
+        },
+        "RuleMaps/prison_floor_rules_2.tmx": {
+            "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 64.33333333333334,
-                "y": 119.33333333333334
+                "x": 121.75,
+                "y": 110
+            }
+        },
+        "RuleMaps/prison_floor_rules_two_overlap.tmx": {
+            "scale": 1.4705208333333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 240.39101792165474,
+                "y": 160.48735567046822
+            }
+        },
+        "RuleMaps/prison_walls_rules.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 184.75,
+                "y": 134
+            }
+        },
+        "RuleMaps/prison_walls_rules_2.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 168.66666666666669,
+                "y": 284
+            }
+        },
+        "RuleMaps/prison_walls_rules_3.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 167,
+                "y": 164
+            }
+        },
+        "RuleMaps/prison_walls_rules_one_overlap.tmx": {
+            "scale": 0.8890202702702703,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 272.772183165495,
+                "y": 296.9561086832604
+            }
+        },
+        "RuleMaps/prison_walls_rules_two_overlap.tmx": {
+            "scale": 0.8890202702702703,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 272.772183165495,
+                "y": 296.9561086832604
+            }
+        },
+        "RuleMaps/walls_rules.tmx": {
+            "scale": 1.4705208333333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 240.39101792165474,
+                "y": 160.48735567046822
+            }
+        },
+        "Rules/autotile_rules.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 70.25,
+                "y": 97
             }
         },
         "Rules/walls_rules.tmx": {
             "scale": 2,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 152.75,
-                "y": 129
+                "x": 151.75,
+                "y": 131
             }
         },
         "Tilemaps/BLR_1.tmx": {
@@ -114,11 +204,11 @@
             "expandedObjectLayers": [
                 4
             ],
-            "scale": 1,
-            "selectedLayer": 3,
+            "scale": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 191.5,
-                "y": 192.5
+                "x": 192,
+                "y": 191.75
             }
         },
         "Tilemaps/BR_1.tmx": {
@@ -138,6 +228,22 @@
             "viewCenter": {
                 "x": 191.52574577237317,
                 "y": 191.52574577237317
+            }
+        },
+        "Tilemaps/DungeonPrison/DP_TR_2.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 217,
+                "y": 158.66666666666663
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_test.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 379,
+                "y": 312.66666666666663
             }
         },
         "Tilemaps/LR_1.tmx": {
@@ -244,10 +350,10 @@
                 7
             ],
             "scale": 1,
-            "selectedLayer": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 191.5,
-                "y": 192.5
+                "x": 189.5,
+                "y": 189
             }
         },
         "Tilemaps/T_1.tmx": {
@@ -279,8 +385,8 @@
             "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 72.16666666666666,
-                "y": 522.6666666666666
+                "x": 71.83333333333333,
+                "y": 522.3333333333333
             }
         },
         "Tilemaps/hub.tmx": {
@@ -288,10 +394,21 @@
                 3
             ],
             "scale": 1,
-            "selectedLayer": 2,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 294.5,
-                "y": 215
+                "x": 255.5,
+                "y": 39
+            }
+        },
+        "Tilemaps/hub_2.tmx": {
+            "expandedObjectLayers": [
+                14
+            ],
+            "scale": 2,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 581.25,
+                "y": 379
             }
         },
         "Tilemaps/left_key_room.tmx": {
@@ -316,15 +433,23 @@
                 "y": 23.347900437013095
             }
         },
+        "Tilemaps/prototype_test_map.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 110.5,
+                "y": -37
+            }
+        },
         "Tilemaps/puppet_shop.tmx": {
             "expandedObjectLayers": [
                 3
             ],
             "scale": 1.5,
-            "selectedLayer": 4,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 303.3333333333333,
-                "y": 255.33333333333331
+                "x": 199.66666666666666,
+                "y": 110
             }
         },
         "Tilemaps/right_key_room.tmx": {
@@ -340,10 +465,10 @@
         },
         "Tilemaps/test.tmx": {
             "scale": 1.5,
-            "selectedLayer": -1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 519.6666666666666,
-                "y": -96.66666666666666
+                "x": 518.3333333333333,
+                "y": -98
             }
         },
         "Tilesets/blood_temple_tileset.tsx": {
@@ -357,36 +482,49 @@
         "Tilesets/dungeon_prison_tileset.tsx": {
             "scaleInDock": 1.5,
             "scaleInEditor": 3
+        },
+        "Tilesets/hub_2.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 29.75,
+                "y": 73
+            }
+        },
+        "Tilesets/prototype_tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
-    "last.imagePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Textures/Tilesets",
+    "last.imagePath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Textures/Tilesets",
     "last.objectTemplatePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Templates",
-    "map.fixedSize": true,
+    "map.fixedSize": false,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
-        "Tilesets/dungeon_prison_tileset.tsx",
-        "Tilemaps/test.tmx",
-        "Tilemaps/boss_room.tmx",
-        "Tilemaps/hub.tmx",
-        "Rules/autotile_rules.tmx"
+        "Tilemaps/DungeonPrison/DP_TR_2.tmx",
+        "Tilemaps/DungeonPrison/dp_test.tmx",
+        "RuleMaps/prison_walls_rules_3.tmx",
+        "RuleMaps/prison_walls_rules.tmx",
+        "RuleMaps/prison_floor_rules_2.tmx",
+        "RuleMaps/prison_floor_rules.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "Tilesets/dungeon_prison_tileset.tsx",
-        "Rules/autotile_rules.tmx",
-        "Tilemaps/hub.tmx",
-        "Tilemaps/boss_room.tmx",
-        "Tilemaps/test.tmx",
-        "Tilemaps/TBLR_1.tmx",
-        "Tilemaps/pre_boss_room.tmx",
-        "Tilemaps/right_key_room.tmx",
-        "Tilemaps/bedroom.tmx",
-        "Tilemaps/puppet_shop.tmx",
-        "Tilemaps/left_key_room.tmx",
-        "Tilemaps/L_1.tmx"
+        "RuleMaps/prison_walls_rules_two_overlap.tmx",
+        "RuleMaps/prison_floor_rules_two_overlap.tmx",
+        "Tilemaps/DungeonPrison/DP_TR_2.tmx",
+        "Tilemaps/DungeonPrison/dp_test.tmx",
+        "RuleMaps/prison_floor_rules.tmx",
+        "RuleMaps/prison_floor_rules_2.tmx",
+        "RuleMaps/prison_walls_rules.tmx",
+        "RuleMaps/prison_walls_rules_3.tmx",
+        "RuleMaps/prison_walls_rules_2.tmx",
+        "RuleMaps/walls_rules.tmx",
+        "RuleMaps/collision_rules.tmx",
+        "Tilemaps/hub_2.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

@@ -1,0 +1,3 @@
+..\..\RuleMaps\collision_rules.tmx
+..\..\RuleMaps\prison_floor_rules_one_overlap.tmx
+..\..\RuleMaps\prison_walls_rules_one_overlap.tmx

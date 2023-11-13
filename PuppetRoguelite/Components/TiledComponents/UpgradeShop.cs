@@ -19,15 +19,13 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class UpgradeShop : TiledComponent
     {
-        //entities
-        Entity _menuEntity;
-
         //components
         SpriteAnimator _animator;
         BoxCollider _collider;
         YSorter _ySorter;
         OriginComponent _originComponent;
         Interactable _interactable;
+        UpgradeShopMenu _menu;
 
         //misc
         bool _isShowingMenu = false;
@@ -77,20 +75,32 @@ namespace PuppetRoguelite.Components.TiledComponents
             };
             yield return textboxManager.DisplayTextbox(lines);
 
-            //display shop
-            if (_menuEntity == null)
+            if (_menu == null)
             {
-                _menuEntity = Entity.Scene.CreateEntity("shop-ui");
-                _menuEntity.AddComponent(new UpgradeShopMenu(OnShopClosed));
+                _menu = Entity.Scene.Camera.AddComponent(new UpgradeShopMenu(OnShopClosed));
             }
-            else _menuEntity.SetEnabled(true);
+            else _menu.SetEnabled(true);
 
-            //while menu is showing, wait
             _isShowingMenu = true;
             while (_isShowingMenu)
             {
                 yield return null;
             }
+
+            ////display shop
+            //if (_menuEntity == null)
+            //{
+            //    _menuEntity = Entity.Scene.CreateEntity("shop-ui");
+            //    _menuEntity.AddComponent(new UpgradeShopMenu(OnShopClosed));
+            //}
+            //else _menuEntity.SetEnabled(true);
+
+            ////while menu is showing, wait
+            //_isShowingMenu = true;
+            //while (_isShowingMenu)
+            //{
+            //    yield return null;
+            //}
 
             //show more lines
             lines = new List<DialogueLine>()
@@ -103,7 +113,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         void OnShopClosed()
         {
-            _menuEntity.SetEnabled(false);
+            _menu.SetEnabled(false);
             _isShowingMenu = false;
         }
     }

@@ -868,6 +868,12 @@ namespace Nez
 
 		public static class Tiled
 		{
+			public static class RuleMaps
+			{
+				public const string Autotile_rules = @"Content\Tiled\RuleMaps\autotile_rules.tmx";
+				public const string Walls_rules = @"Content\Tiled\RuleMaps\walls_rules.tmx";
+			}
+
 			public static class Templates
 			{
 				public const string Enemyspawntrigger = @"Content\Tiled\Templates\enemy-spawn-trigger.tx";
@@ -883,6 +889,7 @@ namespace Nez
 				public const string Boss_room = @"Content\Tiled\Tilemaps\boss_room.tmx";
 				public const string BR_1 = @"Content\Tiled\Tilemaps\BR_1.tmx";
 				public const string Hub = @"Content\Tiled\Tilemaps\hub.tmx";
+				public const string Hub_2 = @"Content\Tiled\Tilemaps\hub_2.tmx";
 				public const string Hub_room = @"Content\Tiled\Tilemaps\hub_room.tmx";
 				public const string L_1 = @"Content\Tiled\Tilemaps\L_1.tmx";
 				public const string Left_key_room = @"Content\Tiled\Tilemaps\left_key_room.tmx";
@@ -896,6 +903,7 @@ namespace Nez
 				public const string TBL_1 = @"Content\Tiled\Tilemaps\TBL_1.tmx";
 				public const string TBLR_1 = @"Content\Tiled\Tilemaps\TBLR_1.tmx";
 				public const string TBR_1 = @"Content\Tiled\Tilemaps\TBR_1.tmx";
+				public const string Test = @"Content\Tiled\Tilemaps\test.tmx";
 				public const string TL_1 = @"Content\Tiled\Tilemaps\TL_1.tmx";
 				public const string TLR_1 = @"Content\Tiled\Tilemaps\TLR_1.tmx";
 				public const string TR_1 = @"Content\Tiled\Tilemaps\TR_1.tmx";
@@ -909,6 +917,7 @@ namespace Nez
 			}
 
 			public const string Puppetroguelite = @"Content\Tiled\puppet-roguelite.tiled-project";
+			public const string Rules = @"Content\Tiled\rules.txt";
 		}
 
 
