@@ -35,7 +35,7 @@ namespace PuppetRoguelite.Scenes
             var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Hub.Hub_2);
             var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
             mapRenderer.SetLayersToRender(new[] { "floor", "details", "furniture", "entities" });
-            mapRenderer.RenderLayer = 10;
+            mapRenderer.RenderLayer = 1;
             Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
