@@ -45,7 +45,8 @@ namespace PuppetRoguelite.Scenes
             ClearColor = Microsoft.Xna.Framework.Color.Transparent;
 
             //ui
-            _ui = Camera.Entity.AddComponent(new CombatUI());
+            //_ui = Camera.Entity.AddComponent(new CombatUI());
+            _ui = CreateEntity("ui").AddComponent(new CombatUI());
 
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();

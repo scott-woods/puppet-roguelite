@@ -83,6 +83,22 @@ namespace PuppetRoguelite.UI
                 Over = new PrimitiveDrawable(Color.Black),
                 DisabledFontColor = Color.Gray
             });
+            skin.Add("listButton36", new TextButtonStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_36"),
+                Up = new PrimitiveDrawable(Color.Transparent),
+                Down = new PrimitiveDrawable(Color.Yellow),
+                Over = new PrimitiveDrawable(Color.Black),
+                DisabledFontColor = Color.Gray
+            });
+            skin.Add("listButton60", new TextButtonStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_60"),
+                Up = new PrimitiveDrawable(Color.Transparent),
+                Down = new PrimitiveDrawable(Color.Yellow),
+                Over = new PrimitiveDrawable(Color.Black),
+                DisabledFontColor = Color.Gray
+            });
 
             //dialog
             skin.Add("actionDialog", new WindowStyle()
