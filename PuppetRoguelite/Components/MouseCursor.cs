@@ -21,13 +21,14 @@ namespace PuppetRoguelite.Components
         {
             base.Initialize();
 
-            SpriteRenderer = Entity.AddComponent(new PrototypeSpriteRenderer(8, 8));
-            SpriteRenderer.SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
+            SpriteRenderer = Entity.AddComponent(new PrototypeSpriteRenderer(2, 2));
+            SpriteRenderer.SetRenderLayer(int.MinValue);
         }
 
         public void Update()
         {
-            Entity.Position = Input.MousePosition * ResolutionHelper.ScaleFactor;
+            Entity.Position = Entity.Scene.Camera.MouseToWorldPoint();
+            //Entity.Position = Input.MousePosition * ResolutionHelper.ScaleFactor;
             //Entity.Position = Entity.Scene.Camera.ScreenToWorldPoint(Input.MousePosition);
             //Entity.Position = PlayerController.Instance.Entity.Position;
         }

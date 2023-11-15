@@ -74,6 +74,10 @@ namespace Nez
 			public const string Abaddon_light_12_0 = @"Content\Fonts\abaddon_light_12_0.png";
 			public const string Abaddon_light_18 = @"Content\Fonts\abaddon_light_18.fnt";
 			public const string Abaddon_light_18_0 = @"Content\Fonts\abaddon_light_18_0.png";
+			public const string Abaddon_light_24 = @"Content\Fonts\abaddon_light_24.fnt";
+			public const string Abaddon_light_24_0 = @"Content\Fonts\abaddon_light_24_0.png";
+			public const string Abaddon_light_36 = @"Content\Fonts\abaddon_light_36.fnt";
+			public const string Abaddon_light_36_0 = @"Content\Fonts\abaddon_light_36_0.png";
 			public const string Abaddon_light_60 = @"Content\Fonts\abaddon_light_60.fnt";
 			public const string Abaddon_light_60_0 = @"Content\Fonts\abaddon_light_60_0.png";
 		}

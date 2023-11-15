@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class UpgradeButton : Button
+    public class UpgradeButton : ImageButton
     {
         public Upgrade Upgrade;
         public int RowIndex;
@@ -19,6 +19,7 @@ namespace PuppetRoguelite.UI.Elements
         {
             Upgrade = upgrade;
             RowIndex = rowIndex;
+            GetImage().SetScale(Game1.ResolutionScale);
         }
 
         protected override void OnFocused()

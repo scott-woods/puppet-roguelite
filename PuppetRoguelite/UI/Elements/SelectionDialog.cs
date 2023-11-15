@@ -45,7 +45,7 @@ namespace PuppetRoguelite.UI.Elements
             }
             if (!String.IsNullOrWhiteSpace(_labelHeader))
             {
-                contentTable.Add(new Label(_labelHeader, new LabelStyle(Graphics.Instance.BitmapFont, Color.Black))).SetColspan(colSpan).SetExpandX().Right();
+                contentTable.Add(new Label(_labelHeader, _skin, "abaddon_24")).SetColspan(colSpan).SetExpandX().Right();
             }
 
             //buttons

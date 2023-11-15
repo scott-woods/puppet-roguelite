@@ -63,7 +63,7 @@ namespace PuppetRoguelite.UI.Menus
                 _buttonDictionary.Add(button, type);
 
                 //create cost label
-                var label = new Label(PlayerActionUtils.GetApCost(type).ToString(), new LabelStyle(Graphics.Instance.BitmapFont, apCostColor));
+                var label = new Label(PlayerActionUtils.GetApCost(type).ToString(), skin, "abaddon_24");
 
                 //add to content list
                 dialogContent.Add(button, label);

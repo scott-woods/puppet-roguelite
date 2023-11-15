@@ -18,7 +18,7 @@ namespace PuppetRoguelite.UI.HUDs
         Table _apTable;
         Label _simTipLabel;
         Label _dollahLabel;
-        List<ApProgressBar> _apProgressBars = new List<ApProgressBar>();
+        List<BasicApProgressBar> _apProgressBars = new List<BasicApProgressBar>();
 
         //skins
         Skin _basicSkin;
@@ -29,6 +29,8 @@ namespace PuppetRoguelite.UI.HUDs
         {
             base.Initialize();
 
+            Stage.IsFullScreen = true;
+
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
@@ -37,7 +39,7 @@ namespace PuppetRoguelite.UI.HUDs
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
 
-            SetRenderLayer(int.MinValue);
+            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             //arrange elements
             ArrangeElements();
@@ -57,10 +59,10 @@ namespace PuppetRoguelite.UI.HUDs
                 //setup ap progress bars
                 for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
                 {
-                    var bar = new ApProgressBar(PlayerController.Instance.ActionPointComponent, i, _basicSkin);
+                    var bar = new BasicApProgressBar(i, _basicSkin);
                     bar.AddObservers();
                     _apProgressBars.Add(bar);
-                    var width = ((480 * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
+                    var width = ((Game1.DesignResolution.X * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
                     _apTable.Add(bar).Width(width);
                 }
             }
@@ -115,13 +117,13 @@ namespace PuppetRoguelite.UI.HUDs
             //hp
             _topLeftTable = new Table().Top().Left().PadTop(10).PadLeft(10);
             _table.Add(_topLeftTable).Grow();
-            _playerHealthLabel = new Label("HP: ", _basicSkin);
+            _playerHealthLabel = new Label("HP: ", _basicSkin, "abaddon_60");
             _topLeftTable.Add(_playerHealthLabel);
 
             //currency
             _topRightTable = new Table().Top().Right().PadTop(10).PadRight(10);
             _table.Add(_topRightTable).Grow();
-            _dollahLabel = new Label("$: ", _basicSkin);
+            _dollahLabel = new Label("$: ", _basicSkin, "abaddon_60");
             _topRightTable.Add(_dollahLabel);
             _topRightTable.Pack();
 
@@ -131,17 +133,17 @@ namespace PuppetRoguelite.UI.HUDs
             _table.Add(bottomTable).SetColspan(2).Grow().SetPadBottom(20);
 
             var bottomLeftTable = new Table();
-            bottomTable.Add(bottomLeftTable).Width(480 * .75f).Expand().Bottom().Left();
+            bottomTable.Add(bottomLeftTable).Width(Game1.DesignResolution.X * .75f).Expand().Bottom();
 
             _apTable = new Table();
-            _apTable.Defaults().SetSpaceRight(8);
+            _apTable.Defaults().SetSpaceRight(50);
             _apTable.SetVisible(false);
-            bottomLeftTable.Add(_apTable).Width(480 * .5f).Expand().Right();
+            bottomLeftTable.Add(_apTable).Expand();
 
-            _simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
-            _simTipLabel.SetWrap(true);
-            _simTipLabel.SetVisible(false);
-            bottomTable.Add(_simTipLabel).SetPadLeft(480 * .025f).SetPadRight(480 * .025f).Width(480 * .2f).Expand().Bottom().Right();
+            //_simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
+            //_simTipLabel.SetWrap(true);
+            //_simTipLabel.SetVisible(false);
+            //bottomTable.Add(_simTipLabel).SetPadLeft(Game1.DesignResolution.X * .025f).SetPadRight(Game1.DesignResolution.X * .025f).Width(Game1.DesignResolution.X * .2f).Expand().Bottom().Right();
         }
 
         public void SetShowSimTipLabel(bool show)

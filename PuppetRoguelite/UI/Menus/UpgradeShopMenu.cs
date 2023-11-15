@@ -44,6 +44,8 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.Initialize();
 
+            Stage.IsFullScreen = true;
+
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
@@ -58,7 +60,7 @@ namespace PuppetRoguelite.UI.Menus
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Tilesets.Dungeon_prison_props);
             _dollahSprite = new Sprite(texture, new Rectangle(80, 240, 16, 16));
 
-            SetRenderLayer(int.MinValue);
+            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             //arrange elements
             ArrangeElements();
@@ -88,9 +90,11 @@ namespace PuppetRoguelite.UI.Menus
             //total dollahs
             var topRightTable = new Table();
             contentTable.Add(topRightTable).SetColspan(3).SetExpandX().Right();
-            _totalDollahsLabel = new Label(PlayerData.Instance.Dollahs.ToString(), _basicSkin);
+            _totalDollahsLabel = new Label(PlayerData.Instance.Dollahs.ToString(), _basicSkin, "abaddon_60");
             topRightTable.Add(_totalDollahsLabel).SetPadTop(4);
-            topRightTable.Add(new Image(_dollahSprite));
+            var dollahImage = new Image(_dollahSprite);
+            dollahImage.SetScale(2);
+            topRightTable.Add(dollahImage);
 
             //add row for each upgrade
             AddRow(contentTable, PlayerUpgradeData.Instance.MaxHpUpgrade);
@@ -105,10 +109,10 @@ namespace PuppetRoguelite.UI.Menus
             contentTable.Row();
 
             //upgrade label
-            var cell = contentTable.Add(new Label(upgrade.Name, _basicSkin)).SetExpandX().Left().SetPadTop(4);
+            var cell = contentTable.Add(new Label(upgrade.Name, _basicSkin, "abaddon_60")).SetExpandX().Left().SetPadTop(4);
 
             //upgrade value
-            var valueLabel = new Label(upgrade.GetValueString(), _basicSkin);
+            var valueLabel = new Label(upgrade.GetValueString(), _basicSkin, "abaddon_60");
             _upgradeValueLabels.Add(cell.GetRow(), valueLabel);
             contentTable.Add(valueLabel).SetExpandX().Left().SetPadTop(4);
 
@@ -121,10 +125,12 @@ namespace PuppetRoguelite.UI.Menus
             button.OnClicked += OnPlusButtonClicked;
             _addButtons.Add(button);
             purchaseTable.Add(button).SetSpaceRight(4);
-            var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin);
+            var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin, "abaddon_60");
             _upgradeCostLabels.Add(cell.GetRow(), costLabel);
             purchaseTable.Add(costLabel).SetPadTop(4);
-            purchaseTable.Add(new Image(_dollahSprite));
+            var dollahImage = new Image(_dollahSprite);
+            dollahImage.SetScale(2f);
+            purchaseTable.Add(dollahImage);
         }
 
         public override void Update()

@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.UI;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using System;
 using System.Collections;
@@ -15,13 +16,22 @@ namespace PuppetRoguelite.UI
     {
         float _horizontalPad = 8;
         float _spacing = 2;
+        float _innerBoxPad = 20f;
+        float _innerBoxSpacing = 10f;
 
         public bool IsFinishedReading = false;
 
         Table _table;
         Table _box;
+        Table _innerTable;
         Label _text;
         Label _asterisk;
+
+        float _boxWidth { get => Game1.DesignResolution.X * .8f; }
+        float _boxHeight { get => Game1.DesignResolution.Y * .38f; }
+        float _textMaxWidth { get => _innerBoxWidth - _innerTable.GetCell(_asterisk).GetPrefWidth() - _innerBoxSpacing; }
+        
+        float _innerBoxWidth { get => _boxWidth - (_innerBoxPad * 2); }
 
         Skin _basicSkin;
 
@@ -32,12 +42,13 @@ namespace PuppetRoguelite.UI
         {
             base.Initialize();
 
+            Stage.IsFullScreen = true;
+
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
-            _table.SetDebug(false);
 
-            SetRenderLayer(int.MinValue);
+            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
@@ -47,33 +58,27 @@ namespace PuppetRoguelite.UI
 
         void ArrangeElements()
         {
-            //var stack = new Stack();
-            //var width = (float)(Math.Round((480 * .8f) / 48) * 48);
-            //var height = (float)(Math.Round((270 * .38f) / 48) * 48);
-            //_table.Add(stack).Expand().Width(width).Height(height).Bottom();
-            //_table.SetDebug(true);
-
-            //create textbox
+            //textbox table
             _box = new Table();
-            _box.Top().Left();
-            _box.Defaults().SetPadTop(4).SetPadBottom(4).SetSpaceRight(_spacing);
             _box.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
-            var width = 480 * .8f;
-            var height = (float)Math.Round(270 * .38f);
-            _table.Add(_box).Expand().Width(width).Height(height).Bottom();
+            var vPad = Game1.DesignResolution.Y * .05f;
+            _table.Add(_box).Expand().Bottom().SetPadBottom(vPad).Width(_boxWidth).Height(_boxHeight);
+
+            //inner table
+            _innerTable = new Table();
+            _box.Add(_innerTable).Grow().Pad(_innerBoxPad);
 
             //asterisk
-            _asterisk = new Label("*", _basicSkin);
-            _box.Add(_asterisk).SetExpandY().Top().Left().SetPadLeft(_horizontalPad);
+            _asterisk = new Label("*", _basicSkin, "abaddon_60");
+            _innerTable.Add(_asterisk).SetExpandY().Top().Left();
 
-            _text = new Label("", _basicSkin).SetAlignment(Align.TopLeft);
-            _box.Add(_text).Grow().Top().Left().SetPadRight(_horizontalPad);
+            _text = new Label("", _basicSkin, "abaddon_60").SetAlignment(Align.TopLeft);
+            _innerTable.Add(_text).Grow().Top().Left().SetSpaceLeft(_innerBoxSpacing);
         }
 
         public IEnumerator ReadLine(DialogueLine line)
         {
-            var maxWidth = _table.GetCell(_box).GetPrefWidth() - _box.GetCell(_asterisk).GetPrefWidth() - 32 - (_horizontalPad * 2) - _spacing;
-            _readTextCoroutine = Game1.StartCoroutine(ReadText(GetWrappedText(line.Text, maxWidth)));
+            _readTextCoroutine = Game1.StartCoroutine(ReadText(GetWrappedText(line.Text, _textMaxWidth)));
             yield return _readTextCoroutine;
         }
 

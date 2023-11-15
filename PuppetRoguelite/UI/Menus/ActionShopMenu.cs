@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PuppetRoguelite.Components.PlayerActions;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Tools;
 
 namespace PuppetRoguelite.UI.Menus
 {
@@ -40,13 +41,11 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.Initialize();
 
-            IsFullScreen = true;
+            Stage.IsFullScreen = true;
 
             //base table
             _table = Stage.AddElement(new Table());
-            _table.SetSize(960, 540);
-            _table.DebugAll();
-            Stage.SetDebugAll(true);
+            _table.SetFillParent(true);
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
@@ -71,7 +70,7 @@ namespace PuppetRoguelite.UI.Menus
         {
             //create dialog
             _dialog = new Dialog("", _basicSkin);
-            _table.Add(_dialog).Width(Entity.Scene.SceneRenderTargetSize.X * .6f).Height(Entity.Scene.SceneRenderTargetSize.Y * .75f);
+            _table.Add(_dialog).Expand();
 
             //get internal table of dialog
             var contentTable = _dialog.GetContentTable();
@@ -111,9 +110,10 @@ namespace PuppetRoguelite.UI.Menus
             var contentTable = _dialog.GetContentTable();
 
             var columnTable = new Table().Top();
-            columnTable.DebugAll();
             contentTable.Add(columnTable).Fill();
-            columnTable.Add(new Image(icon));
+            var iconImage = new Image(icon);
+            iconImage.ScaleBy(Game1.ResolutionScale);
+            columnTable.Add(iconImage);
 
             columnTable.Row();
 
@@ -130,7 +130,7 @@ namespace PuppetRoguelite.UI.Menus
                     var action = actions[i];
                     label = PlayerActionUtils.GetName(action.ToType());
                 }
-                var button = new ListButton($"* {label}", _basicSkin, "listButtonSmall");
+                var button = new ListButton($"* {label}", _basicSkin);
                 lowerTable.Add(button).Expand().Left();
                 lowerTable.Row();
                 buttonList.Add(button);

@@ -1,6 +1,5 @@
 ﻿using Nez;
 using Nez.UI;
-using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class ActionButton : ImageButton
+    public class ActionImageButton : ImageButton
     {
         Label _label;
         public ActionButtonType Type;
 
-        public ActionButton(Skin skin, ActionButtonType type, string styleName = null, Label label = null) : base(skin, styleName)
+        public ActionImageButton(Skin skin, ActionButtonType type, string styleName = null, Label label = null) : base(skin, styleName)
         {
             _label = label;
             Type = type;
-            GetImage().SetScale(2);
         }
 
         protected override void OnFocused()
@@ -52,13 +50,5 @@ namespace PuppetRoguelite.UI.Elements
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
         }
-    }
-
-    public enum ActionButtonType
-    {
-        Attack,
-        Utility,
-        Support,
-        Execute
     }
 }

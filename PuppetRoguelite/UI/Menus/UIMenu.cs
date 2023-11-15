@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.UI;
+using PuppetRoguelite.Components;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using System;
@@ -37,7 +39,8 @@ namespace PuppetRoguelite.UI.Menus
             base.Initialize();
 
             //render layer
-            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
+            //SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
+            SetRenderLayer(int.MinValue);
 
             //set default accept key
             Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.E;
@@ -65,13 +68,20 @@ namespace PuppetRoguelite.UI.Menus
             //position elements in world space
             if (BaseElement != null)
             {
-                var pos = ResolutionHelper.GameToUiPoint(Entity, AnchorPosition + WorldSpaceOffset);
-                BaseElement.SetPosition(pos.X + ScreenSpaceOffset.X, pos.Y + ScreenSpaceOffset.Y);
+                //var pos = ResolutionHelper.GameToUiPoint(Entity, AnchorPosition + WorldSpaceOffset);
+                
+                //BaseElement.SetPosition(pos.X, pos.Y);
+                var pos = AnchorPosition + WorldSpaceOffset;
+                Entity.SetPosition(pos.X, pos.Y);
+                var elementPos = Entity.Scene.Camera.WorldToScreenPoint(pos);
+                BaseElement.SetPosition(elementPos.X + ScreenSpaceOffset.X, elementPos.Y + ScreenSpaceOffset.Y);
             }
         }
 
         public virtual void Show(Vector2 basePosition)
         {
+            //var cam = Entity.Scene.Camera.GetComponent<DeadzoneFollowCamera>();
+            //cam.SetFollowTarget(Entity);
             ValidateButtons();
 
             AnchorPosition = basePosition;

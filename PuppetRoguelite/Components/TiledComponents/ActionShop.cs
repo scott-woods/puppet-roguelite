@@ -71,14 +71,14 @@ namespace PuppetRoguelite.Components.TiledComponents
             var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
             var lines = new List<DialogueLine>()
             {
-                new DialogueLine("Baba booey"),
+                new DialogueLine("Very long line that should hopefully trigger the textbox wrap feature properly please god"),
             };
             yield return textboxManager.DisplayTextbox(lines);
 
             if (_menu == null)
             {
-                _menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
-                //_menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
+                //_menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
+                _menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
             }
             else _menu.SetEnabled(true);
 

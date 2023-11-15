@@ -53,11 +53,11 @@ namespace PuppetRoguelite
             _turnMenuEntity = Game1.Scene.CreateEntity("turn-menu");
             _actionsSelector = _turnMenuEntity.AddComponent(new ActionTypeSelector(OnActionTypeSelected, GoBack));
             _actionsSelector.Hide();
-            _attackMenu = _turnMenuEntity.AddComponent(new ActionMenu(PlayerController.Instance.ActionsManager.AttackActions, "Attacks", OnActionSelected, GoBack));
+            _attackMenu = _turnMenuEntity.AddComponent(new ActionMenu(PlayerController.Instance.ActionsManager.AttackActions, "", OnActionSelected, GoBack));
             _attackMenu.Hide();
-            _utilityMenu = _turnMenuEntity.AddComponent(new ActionMenu(PlayerController.Instance.ActionsManager.UtilityActions, "Utilities", OnActionSelected, GoBack));
+            _utilityMenu = _turnMenuEntity.AddComponent(new ActionMenu(PlayerController.Instance.ActionsManager.UtilityActions, "", OnActionSelected, GoBack));
             _utilityMenu.Hide();
-            _supportMenu = _turnMenuEntity.AddComponent(new ActionMenu(PlayerController.Instance.ActionsManager.SupportActions, "Support", OnActionSelected, GoBack));
+            _supportMenu = _turnMenuEntity.AddComponent(new ActionMenu(PlayerController.Instance.ActionsManager.SupportActions, "", OnActionSelected, GoBack));
             _supportMenu.Hide();
 
             //start selection

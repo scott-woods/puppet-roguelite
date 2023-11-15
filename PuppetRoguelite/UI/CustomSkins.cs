@@ -21,8 +21,10 @@ namespace PuppetRoguelite.UI
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style3/Atlas/icons_style_3.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style4/Atlas/icons_style_4.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Menu/Style3/Atlas/menu_style_3.atlas"));
-            skin.Add("font_abaddon_light", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_18));
             skin.Add("font_abaddon_light_12", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_12));
+            skin.Add("font_abaddon_light_18", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_18));
+            skin.Add("font_abaddon_light_24", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_24));
+            skin.Add("font_abaddon_light_36", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_36));
             skin.Add("font_abaddon_light_60", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_60));
 
             var subTexture = skin.GetSprite("Inventory_01");
@@ -30,14 +32,39 @@ namespace PuppetRoguelite.UI
             skin.Add("np_inventory_01", ninePatch);
 
             //action buttons
-            skin.Add("attackActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 005"),
-                skin.GetDrawable("Style 3 Icon 005"), skin.GetDrawable("Style 3 Icon 005")));
-            skin.Add("toolActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 289"),
-                skin.GetDrawable("Style 3 Icon 289"), skin.GetDrawable("Style 3 Icon 289")));
-            skin.Add("itemActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 155"),
-                skin.GetDrawable("Style 3 Icon 155"), skin.GetDrawable("Style 3 Icon 155")));
-            skin.Add("executeButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 324"),
-                skin.GetDrawable("Style 3 Icon 324"), skin.GetDrawable("Style 3 Icon 324")));
+            //skin.Add("attackActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 005"),
+            //    skin.GetDrawable("Style 3 Icon 005"), skin.GetDrawable("Style 3 Icon 005")));
+            //skin.Add("toolActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 289"),
+            //    skin.GetDrawable("Style 3 Icon 289"), skin.GetDrawable("Style 3 Icon 289")));
+            //skin.Add("itemActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 155"),
+            //    skin.GetDrawable("Style 3 Icon 155"), skin.GetDrawable("Style 3 Icon 155")));
+            //skin.Add("executeButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 324"),
+            //    skin.GetDrawable("Style 3 Icon 324"), skin.GetDrawable("Style 3 Icon 324")));
+
+            skin.Add("attackActionButton", new ImageButtonStyle()
+            {
+                ImageUp = skin.GetDrawable("Style 4 Icon 005"),
+                ImageDown = skin.GetDrawable("Style 3 Icon 005"),
+                ImageOver = skin.GetDrawable("Style 3 Icon 005"),
+            });
+            skin.Add("toolActionButton", new ImageButtonStyle()
+            {
+                ImageUp = skin.GetDrawable("Style 4 Icon 289"),
+                ImageDown = skin.GetDrawable("Style 3 Icon 289"),
+                ImageOver = skin.GetDrawable("Style 3 Icon 289"),
+            });
+            skin.Add("itemActionButton", new ImageButtonStyle()
+            {
+                ImageUp = skin.GetDrawable("Style 4 Icon 155"),
+                ImageDown = skin.GetDrawable("Style 3 Icon 155"),
+                ImageOver = skin.GetDrawable("Style 3 Icon 155"),
+            });
+            skin.Add("executeButton", new ImageButtonStyle()
+            {
+                ImageUp = skin.GetDrawable("Style 4 Icon 324"),
+                ImageDown = skin.GetDrawable("Style 3 Icon 324"),
+                ImageOver = skin.GetDrawable("Style 3 Icon 324"),
+            });
 
             //progress bar sprites
             var progressBarTextures = Game1.Content.LoadTexture(Nez.Content.Textures.UI.Sliders);
@@ -50,15 +77,7 @@ namespace PuppetRoguelite.UI
             //text buttons
             skin.Add("listButton", new TextButtonStyle()
             {
-                Font = skin.GetFont("font_abaddon_light"),
-                Up = new PrimitiveDrawable(Color.Transparent),
-                Down = new PrimitiveDrawable(Color.Yellow),
-                Over = new PrimitiveDrawable(Color.Black),
-                DisabledFontColor = Color.Gray
-            });
-            skin.Add("listButtonSmall", new TextButtonStyle()
-            {
-                Font = skin.GetFont("font_abaddon_light"),
+                Font = skin.GetFont("font_abaddon_light_24"),
                 Up = new PrimitiveDrawable(Color.Transparent),
                 Down = new PrimitiveDrawable(Color.Yellow),
                 Over = new PrimitiveDrawable(Color.Black),
@@ -75,32 +94,58 @@ namespace PuppetRoguelite.UI
             });
 
             //label
-            skin.Add("defaultLabel", new LabelStyle()
+            skin.Add("abaddon_12", new LabelStyle()
             {
-                Font = skin.GetFont("font_abaddon_light"),
+                Font = skin.GetFont("font_abaddon_light_12"),
+                FontColor = Color.White
+            });
+            skin.Add("abaddon_18", new LabelStyle
+            {
+                Font = skin.GetFont("font_abaddon_light_18"),
+                FontColor = Color.White
+            });
+            skin.Add("abaddon_24", new LabelStyle
+            {
+                Font = skin.GetFont("font_abaddon_light_24"),
+                FontColor = Color.White
+            });
+            skin.Add("abaddon_36", new LabelStyle
+            {
+                Font = skin.GetFont("font_abaddon_light_36"),
+                FontColor = Color.White
+            });
+            skin.Add("abaddon_60", new LabelStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_60"),
                 FontColor = Color.White
             });
 
-            skin.Add("plusButton", new ButtonStyle()
+            skin.Add("plusButton", new ImageButtonStyle()
             {
-                Up = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_up)),
-                Down = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
-                Over = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
+                ImageUp = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_up)),
+                ImageDown = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
+                ImageOver = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
+            });
+
+            skin.Add("progressBar", new ProgressBarStyle()
+            {
+                Background = new PrimitiveDrawable(0, 30, Color.LightGray),
+                KnobBefore = new PrimitiveDrawable(0, 30, Color.Green)
             });
 
             //progress bar
-            for (int i = 0; i < 10; i++)
-            {
-                var progressBarStyle = new ProgressBarStyle
-                {
-                    Background = skin.GetSpriteDrawable($"progressBarBackground_{i}")
-                    //KnobBefore = skin.GetSpriteDrawable("progressBarKnobBefore"),
-                    //KnobAfter = skin.GetSpriteDrawable("progressBarKnobAfter"),
-                    //Background = new PrimitiveDrawable(0, 5, Color.LightGray),
-                    //KnobBefore = new PrimitiveDrawable(0, 5, Color.Green)
-                };
-                skin.Add($"progressBar_{i}", progressBarStyle);
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    var progressBarStyle = new ProgressBarStyle
+            //    {
+            //        Background = skin.GetSpriteDrawable($"progressBarBackground_{i}")
+            //        //KnobBefore = skin.GetSpriteDrawable("progressBarKnobBefore"),
+            //        //KnobAfter = skin.GetSpriteDrawable("progressBarKnobAfter"),
+            //        //Background = new PrimitiveDrawable(0, 5, Color.LightGray),
+            //        //KnobBefore = new PrimitiveDrawable(0, 5, Color.Green)
+            //    };
+            //    skin.Add($"progressBar_{i}", progressBarStyle);
+            //}
 
             return skin;
         }

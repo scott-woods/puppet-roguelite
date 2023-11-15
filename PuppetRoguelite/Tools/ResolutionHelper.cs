@@ -23,13 +23,14 @@ namespace PuppetRoguelite.Tools
         public static Vector2 GameToUiPoint(Entity entity, Vector2 gamePoint)
         {
             var screenPos = entity.Scene.Camera.WorldToScreenPoint(gamePoint);
-            return screenPos * ScaleFactor;
+            return screenPos;
+            //return screenPos * Game1.ResolutionScale;
         }
 
         public static Vector2 UiToGamePoint(Entity entity, Vector2 uiPoint)
         {
             var worldPos = entity.Scene.Camera.ScreenToWorldPoint(uiPoint);
-            return worldPos / ScaleFactor;
+            return worldPos / Game1.ResolutionScale;
         }
     }
 }
