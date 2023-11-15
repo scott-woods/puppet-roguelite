@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.ChainBot;
+using PuppetRoguelite.Components.Characters.Ghoul;
 using PuppetRoguelite.Components.Characters.Spitter;
 using PuppetRoguelite.SceneComponents;
 using System;
@@ -14,7 +15,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnTrigger : Trigger
     {
-        List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot), typeof(ChainBot) };
+        List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot), typeof(Spitter), typeof(Ghoul) };
 
         public EnemySpawnTrigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {

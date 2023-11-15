@@ -21,7 +21,7 @@ namespace PuppetRoguelite.Components
         {
             base.Initialize();
 
-            SpriteRenderer = Entity.AddComponent(new PrototypeSpriteRenderer(2, 2));
+            SpriteRenderer = Entity.AddComponent(new PrototypeSpriteRenderer(4, 4));
             SpriteRenderer.SetRenderLayer(int.MinValue);
         }
 

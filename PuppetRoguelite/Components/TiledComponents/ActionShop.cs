@@ -71,30 +71,31 @@ namespace PuppetRoguelite.Components.TiledComponents
             var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
             var lines = new List<DialogueLine>()
             {
-                new DialogueLine("Very long line that should hopefully trigger the textbox wrap feature properly please god"),
+                new DialogueLine("The shop is closed for renovations, dearie."),
+                new DialogueLine("!$#& off, now :)")
             };
             yield return textboxManager.DisplayTextbox(lines);
 
-            if (_menu == null)
-            {
-                //_menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
-                _menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
-            }
-            else _menu.SetEnabled(true);
+            //if (_menu == null)
+            //{
+            //    //_menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
+            //    _menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
+            //}
+            //else _menu.SetEnabled(true);
 
-            _isShowingMenu = true;
-            while (_isShowingMenu)
-            {
-                yield return null;
-            }
+            //_isShowingMenu = true;
+            //while (_isShowingMenu)
+            //{
+            //    yield return null;
+            //}
 
-            //show more lines
-            lines = new List<DialogueLine>()
-            {
-                new DialogueLine("Dash fast eat ass, kid.")
-            };
-            yield return textboxManager.DisplayTextbox(lines);
-            Debug.Log("finished with shop");
+            ////show more lines
+            //lines = new List<DialogueLine>()
+            //{
+            //    new DialogueLine("Dash fast eat ass, kid.")
+            //};
+            //yield return textboxManager.DisplayTextbox(lines);
+            //Debug.Log("finished with shop");
         }
 
         void OnShopClosed()

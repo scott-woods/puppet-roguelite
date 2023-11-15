@@ -50,6 +50,7 @@ namespace Nez
 				public const string Enemy_spawn = @"Content\Audio\Sounds\enemy_spawn.wav";
 				public const string Freeze = @"Content\Audio\Sounds\freeze.wav";
 				public const string Gate_close = @"Content\Audio\Sounds\gate_close.wav";
+				public const string Ghoul_claw = @"Content\Audio\Sounds\ghoul_claw.wav";
 				public const string Heal = @"Content\Audio\Sounds\heal.wav";
 				public const string Hh_appear = @"Content\Audio\Sounds\hh_appear.wav";
 				public const string Hh_slash = @"Content\Audio\Sounds\hh_slash.wav";
@@ -95,6 +96,11 @@ namespace Nez
 					public const string Idle = @"Content\Textures\Characters\ChainBot\idle.png";
 					public const string Run = @"Content\Textures\Characters\ChainBot\run.png";
 					public const string Transitiontocharge = @"Content\Textures\Characters\ChainBot\transition to charge.png";
+				}
+
+				public static class Ghoul
+				{
+					public const string Ghoul_sprites = @"Content\Textures\Characters\Ghoul\ghoul_sprites.png";
 				}
 
 				public static class HeartHoarder

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Chain Lightning", 0, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Chain Lightning", 3, PlayerActionCategory.Attack)]
     public class ChainLightning : PlayerAction
     {
         //data
