@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.Systems;
+using PuppetRoguelite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             set
             {
                 _dollahs = value;
+                PlayerData.Instance.Dollahs = value;
+                PlayerData.Instance.UpdateAndSave();
                 Emitter.Emit(DollahInventoryEvents.DollahsChanged, this);
             }
         }

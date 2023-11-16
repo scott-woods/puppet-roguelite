@@ -4,6 +4,7 @@ using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using Nez.UI;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.Models.Upgrades;
@@ -171,7 +172,8 @@ namespace PuppetRoguelite.UI.Menus
 
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Purchase);
 
-                PlayerData.Instance.Dollahs -= upgradeButton.Upgrade.GetCurrentCost();
+                PlayerController.Instance.DollahInventory.Dollahs -= upgradeButton.Upgrade.GetCurrentCost();
+                //PlayerData.Instance.Dollahs -= upgradeButton.Upgrade.GetCurrentCost();
                 _totalDollahsLabel.SetText(PlayerData.Instance.Dollahs.ToString());
 
                 upgradeButton.Upgrade.ApplyUpgrade();
