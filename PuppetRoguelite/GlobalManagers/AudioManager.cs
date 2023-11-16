@@ -134,6 +134,7 @@ namespace PuppetRoguelite.GlobalManagers
                 if (!_currentMusicChannel.IsPlaying)
                 {
                     _currentMusicChannel = _currentMusic.Play();
+                    _currentMusicChannel.Volume = _defaultMusicVolume;
                     _currentMusicChannel.TrackPosition = _loopPoint;
                 }
             }

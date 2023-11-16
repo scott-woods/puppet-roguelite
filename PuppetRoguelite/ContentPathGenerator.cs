@@ -136,6 +136,8 @@ namespace Nez
 			{
 				public const string Boss_gate = @"Content\Textures\Objects\boss_gate.png";
 				public const string Chest = @"Content\Textures\Objects\chest.png";
+				public const string Dungeon_prison_gate_horizontal = @"Content\Textures\Objects\dungeon_prison_gate_horizontal.png";
+				public const string Dungeon_prison_gate_vertical = @"Content\Textures\Objects\dungeon_prison_gate_vertical.png";
 				public const string Large_chest = @"Content\Textures\Objects\large_chest.png";
 				public const string Shelf = @"Content\Textures\Objects\shelf.png";
 			}
@@ -919,6 +921,7 @@ namespace Nez
 					public const string Right_key_room = @"Content\Tiled\Tilemaps\DungeonPrison\right_key_room.tmx";
 					public const string Rules = @"Content\Tiled\Tilemaps\DungeonPrison\rules.txt";
 					public const string T_1 = @"Content\Tiled\Tilemaps\DungeonPrison\T_1.tmx";
+					public const string T_2 = @"Content\Tiled\Tilemaps\DungeonPrison\T_2.tmx";
 					public const string TB_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TB_1.tmx";
 					public const string TBL_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TBL_1.tmx";
 					public const string TBLR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TBLR_1.tmx";

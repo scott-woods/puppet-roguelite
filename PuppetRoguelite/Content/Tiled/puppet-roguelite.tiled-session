@@ -239,35 +239,44 @@
             }
         },
         "Tilemaps/DungeonPrison/BLR_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1.5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 186.33333333333331,
+                "y": 273.3333333333333
             }
         },
         "Tilemaps/DungeonPrison/BL_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 191.5,
+                "y": 358
             }
         },
         "Tilemaps/DungeonPrison/BR_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 226.75,
+                "y": 320
             }
         },
         "Tilemaps/DungeonPrison/B_1.tmx": {
             "scale": 0.6951822916666667,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 189.15901854279826,
+                "y": 385.5103952050946
             }
         },
         "Tilemaps/DungeonPrison/DP_TR_2.tmx": {
@@ -279,99 +288,131 @@
             }
         },
         "Tilemaps/DungeonPrison/LR_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1.5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 189.66666666666669,
+                "y": 246
             }
         },
         "Tilemaps/DungeonPrison/L_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 71.25,
+                "y": 267.5
             }
         },
         "Tilemaps/DungeonPrison/R_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "scale": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 250.5,
+                "y": 151
             }
         },
         "Tilemaps/DungeonPrison/TBLR_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 1,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 227.5,
+                "y": 345
             }
         },
         "Tilemaps/DungeonPrison/TBL_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 215.75,
+                "y": 323
             }
         },
         "Tilemaps/DungeonPrison/TBR_1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
             "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 212.17456452519198,
+                "y": 453.1185615283761
             }
         },
         "Tilemaps/DungeonPrison/TB_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 210.75,
+                "y": 285.5
             }
         },
         "Tilemaps/DungeonPrison/TLR_1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
             "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 190.59749016669787,
+                "y": 385.5103952050946
             }
         },
         "Tilemaps/DungeonPrison/TL_1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
             "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 190.59749016669787,
+                "y": 385.5103952050946
             }
         },
         "Tilemaps/DungeonPrison/TR_1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
             "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 190.59749016669787,
+                "y": 385.5103952050946
             }
         },
         "Tilemaps/DungeonPrison/T_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 224.99999999999997,
+                "y": 142.66666666666663
+            }
+        },
+        "Tilemaps/DungeonPrison/T_2.tmx": {
+            "expandedObjectLayers": [
+                10
+            ],
+            "scale": 2,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 161.25,
+                "y": 170.5
             }
         },
         "Tilemaps/DungeonPrison/boss_room.tmx": {
-            "scale": 0.23499119718309858,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 210.64618842479854,
-                "y": 1148.979209589811
+                "x": 225.66666666666669,
+                "y": 463.33333333333326
             }
         },
         "Tilemaps/DungeonPrison/dp_test.tmx": {
@@ -383,27 +424,30 @@
             }
         },
         "Tilemaps/DungeonPrison/left_key_room.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                9
+            ],
+            "scale": 2,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 166.25,
+                "y": 145
             }
         },
         "Tilemaps/DungeonPrison/pre_boss_room.tmx": {
             "scale": 0.6951822916666667,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 388.3873384528938
+                "x": 279.78273084847353,
+                "y": 333.7254167447088
             }
         },
         "Tilemaps/DungeonPrison/right_key_room.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
+            "scale": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 192.0359617905974,
-                "y": 386.94886682899426
+                "x": 185.5,
+                "y": 229
             }
         },
         "Tilemaps/Hub/bedroom.tmx": {
@@ -426,8 +470,8 @@
             "scale": 1.5,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 887,
-                "y": 621.3333333333333
+                "x": 886.3333333333333,
+                "y": 620
             }
         },
         "Tilemaps/Hub/puppet_shop.tmx": {
@@ -687,7 +731,7 @@
         },
         "Tilesets/dungeon_prison_tileset.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 3
+            "scaleInEditor": 1.5
         },
         "Tilesets/hub_2.tmx": {
             "scale": 2,
@@ -705,28 +749,30 @@
     "last.externalTilesetPath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Tilesets",
     "last.imagePath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Textures/Tilesets",
     "last.objectTemplatePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Templates",
-    "map.fixedSize": false,
+    "map.fixedSize": true,
+    "map.height": 24,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
+    "map.width": 24,
     "openFiles": [
         "Tilemaps/Hub/hub_2.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "Tilemaps/Hub/bedroom.tmx",
         "Tilemaps/Hub/hub_2.tmx",
+        "Tilemaps/DungeonPrison/pre_boss_room.tmx",
+        "Tilemaps/DungeonPrison/T_2.tmx",
+        "Tilemaps/DungeonPrison/LR_1.tmx",
+        "Tilesets/dungeon_prison_tileset.tsx",
+        "Tilemaps/DungeonPrison/B_1.tmx",
+        "Tilemaps/Hub/bedroom.tmx",
         "Tilesets/dungeon_prison_props.tsx",
         "Tilemaps/Hub/puppet_shop.tmx",
         "Tilemaps/Hub/hub_1.tmx",
         "Tilemaps/DungeonPrison/right_key_room.tmx",
-        "Tilemaps/DungeonPrison/DP_TR_2.tmx",
-        "Tilemaps/DungeonPrison/dp_test.tmx",
-        "RuleMaps/prison_walls_rules_one_overlap.tmx",
-        "RuleMaps/wooden_floor_rules.tmx",
-        "RuleMaps/collision_rules.tmx",
-        "Tilemaps/DungeonPrison/B_1.tmx"
+        "Tilemaps/DungeonPrison/DP_TR_2.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",
