@@ -26,12 +26,14 @@ namespace PuppetRoguelite.Components.Shared
             SetUpdateOrder(int.MinValue);
         }
 
-        public void PushStatus(Status status)
+        public bool PushStatus(Status status)
         {
             if (_stateStack.Count == 0 || status.Priority > CurrentStatus.Priority)
             {
                 _stateStack.Push(status);
+                return true;
             }
+            return false;
         }
 
         public void PopStatus(Status status)

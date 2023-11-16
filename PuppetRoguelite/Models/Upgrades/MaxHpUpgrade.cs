@@ -47,6 +47,7 @@ namespace PuppetRoguelite.Models.Upgrades
             if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var hc))
             {
                 hc.MaxHealth = GetCurrentMaxHp();
+                hc.Health = GetCurrentMaxHp();
             }
         }
 

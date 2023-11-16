@@ -29,7 +29,13 @@ namespace PuppetRoguelite.Components.Shared
             base.OnAddedToEntity();
 
             _statusComponent = Entity.GetComponent<StatusComponent>();
-            _statusComponent?.PushStatus(_status);
+            if (_statusComponent != null)
+            {
+                if (!_statusComponent.PushStatus(_status))
+                {
+                    return;
+                }
+            }
 
             _spriteAnimator = Entity.GetComponent<SpriteAnimator>();
             if (_spriteAnimator != null)
