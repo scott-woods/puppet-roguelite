@@ -27,6 +27,7 @@ namespace PuppetRoguelite
             InteractableEmitter = new Emitter<InteractableEvents>();
             CutsceneEmitter = new Emitter<CutsceneEvents>();
             PlayerEventsEmitter = new Emitter<PlayerEvents>();
+            GameEventsEmitter = new Emitter<GameEvents>();
         }
     }
 

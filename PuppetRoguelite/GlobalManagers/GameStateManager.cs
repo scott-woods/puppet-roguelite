@@ -71,6 +71,7 @@ namespace PuppetRoguelite.GlobalManagers
         void OnScreenObscured()
         {
             Game1.SceneManager.Emitter.RemoveObserver(SceneEvents.ScreenObscured, OnScreenObscured);
+            GameState = GameState.Exploration;
             PlayerController.Instance.HealthComponent.Health = PlayerController.Instance.HealthComponent.MaxHealth;
         }
     }

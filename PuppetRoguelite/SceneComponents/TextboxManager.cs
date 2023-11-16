@@ -33,7 +33,7 @@ namespace PuppetRoguelite.SceneComponents
                 _dialogueLines = lines;
 
                 //create textbox
-                _textbox = Scene.Camera.Entity.AddComponent(new Textbox());
+                _textbox = Scene.CreateEntity("textbox-ui").AddComponent(new Textbox());
 
                 //emit started event
                 Emitter.Emit(TextboxEvents.TextboxOpened);
