@@ -32,7 +32,9 @@ namespace PuppetRoguelite.Models
         };
         public List<PlayerActionType> SupportActions = new List<PlayerActionType>()
         {
-            PlayerActionType.FromType(typeof(HealingAura))
+            PlayerActionType.FromType(typeof(HealingAura)),
+            PlayerActionType.FromType(typeof(MoveSpeedBoost)),
+            PlayerActionType.FromType(typeof(AttackSpeedBoost))
         };
         public int MaxDashes = 1;
         public float MovementSpeed = 150f;

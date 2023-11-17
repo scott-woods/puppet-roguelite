@@ -37,6 +37,8 @@ namespace Nez
 				public const string _81_Whip_woosh_1 = @"Content\Audio\Sounds\81_Whip_woosh_1.wav";
 				public const string _86_Whip_hit_03 = @"Content\Audio\Sounds\86_Whip_hit_03.wav";
 				public const string Attack = @"Content\Audio\Sounds\attack.wav";
+				public const string Attack_speed_boost = @"Content\Audio\Sounds\attack_speed_boost.wav";
+				public const string Attack_speed_boost_end = @"Content\Audio\Sounds\attack_speed_boost_end.wav";
 				public const string Big_lightning = @"Content\Audio\Sounds\big_lightning.wav";
 				public const string Boss_death = @"Content\Audio\Sounds\boss_death.wav";
 				public const string Burp = @"Content\Audio\Sounds\burp.wav";
@@ -51,6 +53,8 @@ namespace Nez
 				public const string Freeze = @"Content\Audio\Sounds\freeze.wav";
 				public const string Gate_close = @"Content\Audio\Sounds\gate_close.wav";
 				public const string Ghoul_claw = @"Content\Audio\Sounds\ghoul_claw.wav";
+				public const string Haste = @"Content\Audio\Sounds\haste.wav";
+				public const string Haste_end = @"Content\Audio\Sounds\haste_end.wav";
 				public const string Heal = @"Content\Audio\Sounds\heal.wav";
 				public const string Hh_appear = @"Content\Audio\Sounds\hh_appear.wav";
 				public const string Hh_slash = @"Content\Audio\Sounds\hh_slash.wav";

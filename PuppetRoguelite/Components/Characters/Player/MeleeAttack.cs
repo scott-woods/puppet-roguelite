@@ -23,6 +23,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public Emitter<MeleeAttackEvents, int> Emitter = new Emitter<MeleeAttackEvents, int>();
 
         public bool IsOnCooldown = false;
+        public float Speed = 1f;
 
         //const float _comboThreshold = .8f;
         const float _maxCombo = 3;
@@ -104,7 +105,9 @@ namespace PuppetRoguelite.Components.Characters.Player
                 _timeSinceAttackStarted += Time.DeltaTime;
 
                 //spam clicking for combo
-                if (Input.LeftMouseButtonPressed && _timeSinceAttackStarted >= _minComboThreshold)
+                var boostedThreshold = _minComboThreshold * Speed;
+                var threshold = _minComboThreshold + (_minComboThreshold - boostedThreshold);
+                if (Input.LeftMouseButtonPressed && _timeSinceAttackStarted >= threshold)
                 {
                     _timeSinceLastClick = 0f;
                     _continueCombo = true;
@@ -183,6 +186,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             else if (angle >= 225 && angle < 315) animation = $"MeleeUp_{_comboCounter}";
 
             //play animation
+            _animator.Speed = Speed;
             _animator.Play(animation, SpriteAnimator.LoopMode.Once);
             _animator.OnAnimationCompletedEvent += OnAttackAnimationCompleted;
 
@@ -216,6 +220,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         void OnAttackAnimationCompleted(string animationName)
         {
+            _animator.Speed = 1;
             _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
 
             _activeFrame = -1;
@@ -230,7 +235,9 @@ namespace PuppetRoguelite.Components.Characters.Player
                 if (_comboCounter == _maxCombo - 1)
                 {
                     _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
-                    _delayBeforeFinisherTimer = Game1.Schedule(_delayBeforeFinisher, timer => PerformAttack());
+                    var boostedDelay = _delayBeforeFinisher * Speed;
+                    var delay = _delayBeforeFinisher + (_delayBeforeFinisher - boostedDelay);
+                    _delayBeforeFinisherTimer = Game1.Schedule(delay, timer => PerformAttack());
                 }
                 else
                 {
@@ -270,6 +277,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _delayBeforeFinisherTimer?.Stop();
             _delayBeforeEndTimer?.Stop();
             _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
+            _animator.Speed = 1;
         }
 
         void EndAttack()
@@ -283,6 +291,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _activeFrame = -1;
             _hitbox.PushForce = 1f;
             _hitbox.SetEnabled(false);
+            _animator.Speed = 1;
 
             IsOnCooldown = true;
             Game1.Schedule(_cooldown, timer => IsOnCooldown = false);

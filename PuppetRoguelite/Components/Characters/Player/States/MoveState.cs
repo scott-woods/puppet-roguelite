@@ -3,6 +3,7 @@ using Nez;
 using Nez.AI.FSM;
 using Nez.Sprites;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             }
 
             //move
-            _context.VelocityComponent.Move();
+            _context.VelocityComponent.Move(_context.MoveSpeed);
         }
 
         public override void Reason()

@@ -26,6 +26,8 @@ namespace PuppetRoguelite.Models
             new Unlock { Action = PlayerActionType.FromType(typeof(Teleport)), IsUnlocked = true },
             new Unlock { Action = PlayerActionType.FromType(typeof(StasisField)), IsUnlocked = false },
             new Unlock { Action = PlayerActionType.FromType(typeof(HealingAura)), IsUnlocked = true },
+            new Unlock { Action = PlayerActionType.FromType(typeof(MoveSpeedBoost)), IsUnlocked = true },
+            new Unlock { Action = PlayerActionType.FromType(typeof(AttackSpeedBoost)), IsUnlocked = true },
             //new Unlock(PlayerActionType.FromType(typeof(ChainLightning)), false),
             //new Unlock(PlayerActionType.FromType(typeof(Whirlwind)), false),
             //new Unlock(PlayerActionType.FromType(typeof(Teleport)), true),
