@@ -33,8 +33,13 @@ namespace PuppetRoguelite.Components.TiledComponents
                 switch (orientation)
                 {
                     case "vertical":
-                        var vTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_vertical);
-                        _renderer = Entity.AddComponent(new SpriteRenderer(vTexture));
+                        var vTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_vertical_nine_slice);
+                        var sprite = new NinePatchSprite(vTexture, 16, 16, 0, 0);
+                        var nineSliceRenderer = new NineSliceSpriteRenderer(sprite);
+                        _renderer = Entity.AddComponent(nineSliceRenderer);
+                        nineSliceRenderer.Width = TmxObject.Width;
+                        nineSliceRenderer.Height = vTexture.Height;
+                        nineSliceRenderer.SetLocalOffset(new Vector2(-TmxObject.Width / 2, -TmxObject.Height / 2));
                         _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, 16));
                         _collider.SetLocalOffset(new Vector2(0, (TmxObject.Height / 2) - 8));
                         _origin = Entity.AddComponent(new OriginComponent(_collider));

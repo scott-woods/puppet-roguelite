@@ -138,6 +138,7 @@ namespace Nez
 				public const string Chest = @"Content\Textures\Objects\chest.png";
 				public const string Dungeon_prison_gate_horizontal = @"Content\Textures\Objects\dungeon_prison_gate_horizontal.png";
 				public const string Dungeon_prison_gate_vertical = @"Content\Textures\Objects\dungeon_prison_gate_vertical.png";
+				public const string Dungeon_prison_gate_vertical_nine_slice = @"Content\Textures\Objects\dungeon_prison_gate_vertical_nine_slice.png";
 				public const string Large_chest = @"Content\Textures\Objects\large_chest.png";
 				public const string Shelf = @"Content\Textures\Objects\shelf.png";
 			}

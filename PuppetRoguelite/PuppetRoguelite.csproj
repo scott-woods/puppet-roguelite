@@ -68,6 +68,7 @@
     <None Remove="Content\Textures\Objects\boss_gate.png" />
     <None Remove="Content\Textures\Objects\dungeon_prison_gate_horizontal.png" />
     <None Remove="Content\Textures\Objects\dungeon_prison_gate_vertical.png" />
+    <None Remove="Content\Textures\Objects\dungeon_prison_gate_vertical_nine_slice.png" />
     <None Remove="Content\Textures\Objects\shelf.png" />
     <None Remove="Content\Textures\Shops\herb_shop.png" />
     <None Remove="Content\Textures\Shops\tech_shop.png" />
