@@ -310,10 +310,16 @@ namespace PuppetRoguelite.Scenes
             Game1.AudioManager.StopMusic();
             foreach(var enemy in FodderEnemies)
             {
-                enemy.Entity.Destroy();
+                if (enemy.Entity.TryGetComponent<HealthComponent>(out var enemyHc))
+                {
+                    enemyHc.Health = 0;
+                }
+                else enemy.Entity.Destroy();
             }
 
             FodderEnemies.Clear();
+
+            _isEnemySpawnTimerActive = false;
 
             CombatManager.EndCombat();
 
