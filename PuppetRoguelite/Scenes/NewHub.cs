@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PuppetRoguelite.UI.HUDs;
 
 namespace PuppetRoguelite.Scenes
 {
@@ -26,6 +27,8 @@ namespace PuppetRoguelite.Scenes
         public override void Initialize()
         {
             base.Initialize();
+
+            CreateEntity("ui").AddComponent(new CombatUI());
 
             //scene components
             _playerSpawner = AddSceneComponent(new PlayerSpawner());

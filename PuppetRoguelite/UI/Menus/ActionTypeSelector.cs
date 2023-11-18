@@ -45,13 +45,13 @@ namespace PuppetRoguelite.UI.Menus
             _actionTable = new Table();
             _actionTable.Defaults().Space(5);
 
-            var attackLabel = new Label("Attack", skin, "abaddon_24").SetAlignment(Align.Center);
+            var attackLabel = new Label("Attack", skin, "default_lg").SetAlignment(Align.Center);
             _actionTable.Add(attackLabel).Center();
-            var utilityLabel = new Label("Utility", skin, "abaddon_24").SetAlignment(Align.Center);
+            var utilityLabel = new Label("Utility", skin, "default_lg").SetAlignment(Align.Center);
             _actionTable.Add(utilityLabel).Center();
-            var supportLabel = new Label("Support", skin, "abaddon_24").SetAlignment(Align.Center);
+            var supportLabel = new Label("Support", skin, "default_lg").SetAlignment(Align.Center);
             _actionTable.Add(supportLabel).Center();
-            var executeLabel = new Label("Execute", skin, "abaddon_24").SetAlignment(Align.Center);
+            var executeLabel = new Label("Execute", skin, "default_lg").SetAlignment(Align.Center);
             _actionTable.Add(executeLabel).Center();
 
             _actionTable.Row();

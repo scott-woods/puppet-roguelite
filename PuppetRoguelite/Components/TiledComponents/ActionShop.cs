@@ -77,8 +77,8 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             if (_menu == null)
             {
-                _menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
-                //_menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
+                //_menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
+                _menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
             }
             else _menu.SetEnabled(true);
 

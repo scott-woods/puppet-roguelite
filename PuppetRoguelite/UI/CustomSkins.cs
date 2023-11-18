@@ -21,11 +21,14 @@ namespace PuppetRoguelite.UI
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style3/Atlas/icons_style_3.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style4/Atlas/icons_style_4.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Menu/Style3/Atlas/menu_style_3.atlas"));
+            skin.Add("font_m57_12", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.M57_12));
             skin.Add("font_abaddon_light_12", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_12));
             skin.Add("font_abaddon_light_18", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_18));
             skin.Add("font_abaddon_light_24", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_24));
             skin.Add("font_abaddon_light_36", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_36));
+            skin.Add("font_abaddon_light_48", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Font_abaddon_light_48));
             skin.Add("font_abaddon_light_60", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_60));
+            skin.Add("font_abaddon_light_72", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_72));
 
             var subTexture = skin.GetSprite("Inventory_01");
             var ninePatch = new NinePatchDrawable(subTexture, 16, 16, 16, 16);
@@ -75,7 +78,23 @@ namespace PuppetRoguelite.UI
             }
 
             //text buttons
-            skin.Add("listButton", new TextButtonStyle()
+            skin.Add("listButton_xs", new TextButtonStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_12"),
+                Up = new PrimitiveDrawable(Color.Transparent),
+                Down = new PrimitiveDrawable(Color.Yellow),
+                Over = new PrimitiveDrawable(Color.Black),
+                DisabledFontColor = Color.Gray
+            });
+            skin.Add("listButton_s", new TextButtonStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_18"),
+                Up = new PrimitiveDrawable(Color.Transparent),
+                Down = new PrimitiveDrawable(Color.Yellow),
+                Over = new PrimitiveDrawable(Color.Black),
+                DisabledFontColor = Color.Gray
+            });
+            skin.Add("listButton_md", new TextButtonStyle()
             {
                 Font = skin.GetFont("font_abaddon_light_24"),
                 Up = new PrimitiveDrawable(Color.Transparent),
@@ -83,7 +102,7 @@ namespace PuppetRoguelite.UI
                 Over = new PrimitiveDrawable(Color.Black),
                 DisabledFontColor = Color.Gray
             });
-            skin.Add("listButton36", new TextButtonStyle()
+            skin.Add("listButton_lg", new TextButtonStyle()
             {
                 Font = skin.GetFont("font_abaddon_light_36"),
                 Up = new PrimitiveDrawable(Color.Transparent),
@@ -91,9 +110,25 @@ namespace PuppetRoguelite.UI
                 Over = new PrimitiveDrawable(Color.Black),
                 DisabledFontColor = Color.Gray
             });
-            skin.Add("listButton60", new TextButtonStyle()
+            skin.Add("listButton_xl", new TextButtonStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_48"),
+                Up = new PrimitiveDrawable(Color.Transparent),
+                Down = new PrimitiveDrawable(Color.Yellow),
+                Over = new PrimitiveDrawable(Color.Black),
+                DisabledFontColor = Color.Gray
+            });
+            skin.Add("listButton_xxl", new TextButtonStyle()
             {
                 Font = skin.GetFont("font_abaddon_light_60"),
+                Up = new PrimitiveDrawable(Color.Transparent),
+                Down = new PrimitiveDrawable(Color.Yellow),
+                Over = new PrimitiveDrawable(Color.Black),
+                DisabledFontColor = Color.Gray
+            });
+            skin.Add("listButton_xxxl", new TextButtonStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_72"),
                 Up = new PrimitiveDrawable(Color.Transparent),
                 Down = new PrimitiveDrawable(Color.Yellow),
                 Over = new PrimitiveDrawable(Color.Black),
@@ -104,35 +139,48 @@ namespace PuppetRoguelite.UI
             skin.Add("actionDialog", new WindowStyle()
             {
                 Background = skin.GetNinePatchDrawable("np_inventory_01"),
-                TitleFontColor = Color.White,
-                TitleFontScaleX = 1.25f,
-                TitleFontScaleY = 1.25f
+                TitleFontColor = Color.White
             });
 
             //label
-            skin.Add("abaddon_12", new LabelStyle()
+            skin.Add("m57_12", new LabelStyle()
+            {
+                Font = skin.GetFont("font_m57_12"),
+                FontColor = Color.White
+            });
+            skin.Add("default_xs", new LabelStyle()
             {
                 Font = skin.GetFont("font_abaddon_light_12"),
                 FontColor = Color.White
             });
-            skin.Add("abaddon_18", new LabelStyle
+            skin.Add("default_s", new LabelStyle
             {
                 Font = skin.GetFont("font_abaddon_light_18"),
                 FontColor = Color.White
             });
-            skin.Add("abaddon_24", new LabelStyle
+            skin.Add("default_md", new LabelStyle
             {
                 Font = skin.GetFont("font_abaddon_light_24"),
                 FontColor = Color.White
             });
-            skin.Add("abaddon_36", new LabelStyle
+            skin.Add("default_lg", new LabelStyle
             {
                 Font = skin.GetFont("font_abaddon_light_36"),
                 FontColor = Color.White
             });
-            skin.Add("abaddon_60", new LabelStyle()
+            skin.Add("default_xl", new LabelStyle
+            {
+                Font = skin.GetFont("font_abaddon_light_48"),
+                FontColor = Color.White
+            });
+            skin.Add("default_xxl", new LabelStyle()
             {
                 Font = skin.GetFont("font_abaddon_light_60"),
+                FontColor = Color.White
+            });
+            skin.Add("default_xxxl", new LabelStyle()
+            {
+                Font = skin.GetFont("font_abaddon_light_72"),
                 FontColor = Color.White
             });
 

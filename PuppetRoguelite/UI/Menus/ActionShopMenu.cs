@@ -88,10 +88,9 @@ namespace PuppetRoguelite.UI.Menus
 
             //create dialog
             _mainDialog = new Dialog("", _basicSkin);
-            var hPad = Screen.Width * .2f;
-            var vPad = Screen.Height * .25f;
+            var hPad = Game1.UIResolution.X * .4f;
+            var vPad = Game1.UIResolution.Y * .4f;
             _mainTable.Add(_mainDialog).Grow().SetPadLeft(hPad / 2).SetPadRight(hPad / 2).SetPadTop(vPad / 2).SetPadBottom(vPad / 2);
-            //_table.Add(_dialog);
 
             //get internal table of dialog
             var contentTable = _mainDialog.GetContentTable();
@@ -144,7 +143,7 @@ namespace PuppetRoguelite.UI.Menus
             var unlocks = ActionUnlockData.Instance.Unlocks.Where(u => PlayerActionUtils.GetCategory(u.Action.ToType()) == actionCategory);
             foreach (var unlock in unlocks)
             {
-                var button = new ListButton($"* {PlayerActionUtils.GetName(unlock.Action.ToType())}", _basicSkin, "listButton60");
+                var button = new ListButton($"* {PlayerActionUtils.GetName(unlock.Action.ToType())}", _basicSkin, "listButton_xl");
                 button.SetDisabled(!unlock.IsUnlocked);
                 button.OnClicked += button =>
                 {
@@ -226,8 +225,7 @@ namespace PuppetRoguelite.UI.Menus
             var upperTable = new Table();
             columnTable.Add(upperTable).Grow();
             var iconImage = new Image(icon);
-            //iconImage.ScaleBy(Game1.ResolutionScale);
-            upperTable.Add(iconImage).Grow().Center();
+            upperTable.Add(iconImage).Grow().Pad(50).Center();
 
             columnTable.Row();
 
@@ -246,7 +244,7 @@ namespace PuppetRoguelite.UI.Menus
                     actionType = actions[i];
                     label = PlayerActionUtils.GetName(actionType.ToType());
                 }
-                var button = new ListButton($"* {label}", _basicSkin, "listButton60");
+                var button = new ListButton($"* {label}", _basicSkin, "listButton_xl");
                 button.OnClicked += button =>
                 {
                     _previouslyFocusedButton = button;

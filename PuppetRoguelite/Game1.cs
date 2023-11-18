@@ -14,8 +14,10 @@ namespace PuppetRoguelite
     public class Game1 : Core
     {
         public static Point LowerResolution = new Point(480, 270);
-        public static Point DesignResolution = new Point(1440, 810);
-        public static float ResolutionScale { get => DesignResolution.X / LowerResolution.X; }
+        public static Point DesignResolution = new Point(480, 270);
+        public static Point UIResolution { get => Screen.Size.ToPoint(); }
+        //public static Point UIResolution = new Point(480, 270);
+        public static Vector2 ResolutionScale { get => UIResolution.ToVector2() / DesignResolution.ToVector2(); }
         public static SceneManager SceneManager = new SceneManager();
         public static AudioManager AudioManager = new AudioManager();
         public static GameStateManager GameStateManager = new GameStateManager();

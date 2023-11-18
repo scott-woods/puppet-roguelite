@@ -79,7 +79,7 @@ namespace PuppetRoguelite.UI.Menus
         {
             //create dialog
             _dialog = new Dialog("", _basicSkin);
-            _table.Add(_dialog).Width(Entity.Scene.SceneRenderTargetSize.X * .6f).Height(Entity.Scene.SceneRenderTargetSize.Y * .75f);
+            _table.Add(_dialog).Width(Game1.UIResolution.X * .6f).Height(Game1.UIResolution.Y * .75f);
 
             //get internal table of dialog
             var contentTable = _dialog.GetContentTable();
@@ -91,7 +91,7 @@ namespace PuppetRoguelite.UI.Menus
             //total dollahs
             var topRightTable = new Table();
             contentTable.Add(topRightTable).SetColspan(3).SetExpandX().Right();
-            _totalDollahsLabel = new Label(PlayerData.Instance.Dollahs.ToString(), _basicSkin, "abaddon_60");
+            _totalDollahsLabel = new Label(PlayerData.Instance.Dollahs.ToString(), _basicSkin, "default_xxxl");
             topRightTable.Add(_totalDollahsLabel).SetPadTop(4);
             var dollahImage = new Image(_dollahSprite);
             dollahImage.SetScale(2);
@@ -110,10 +110,10 @@ namespace PuppetRoguelite.UI.Menus
             contentTable.Row();
 
             //upgrade label
-            var cell = contentTable.Add(new Label(upgrade.Name, _basicSkin, "abaddon_60")).SetExpandX().Left().SetPadTop(4);
+            var cell = contentTable.Add(new Label(upgrade.Name, _basicSkin, "default_xxl")).SetExpandX().Left().SetPadTop(4);
 
             //upgrade value
-            var valueLabel = new Label(upgrade.GetValueString(), _basicSkin, "abaddon_60");
+            var valueLabel = new Label(upgrade.GetValueString(), _basicSkin, "default_xxl");
             _upgradeValueLabels.Add(cell.GetRow(), valueLabel);
             contentTable.Add(valueLabel).SetExpandX().Left().SetPadTop(4);
 
@@ -126,7 +126,7 @@ namespace PuppetRoguelite.UI.Menus
             button.OnClicked += OnPlusButtonClicked;
             _addButtons.Add(button);
             purchaseTable.Add(button).SetSpaceRight(4);
-            var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin, "abaddon_60");
+            var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin, "default_xxl");
             _upgradeCostLabels.Add(cell.GetRow(), costLabel);
             purchaseTable.Add(costLabel).SetPadTop(4);
             var dollahImage = new Image(_dollahSprite);

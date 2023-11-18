@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.UI;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using System;
@@ -16,7 +17,7 @@ namespace PuppetRoguelite.UI
     {
         float _horizontalPad = 8;
         float _spacing = 2;
-        float _innerBoxPad = 20f;
+        float _innerBoxPad = 40f;
         float _innerBoxSpacing = 10f;
 
         public bool IsFinishedReading = false;
@@ -27,8 +28,8 @@ namespace PuppetRoguelite.UI
         Label _text;
         Label _asterisk;
 
-        float _boxWidth { get => Game1.DesignResolution.X * .8f; }
-        float _boxHeight { get => Game1.DesignResolution.Y * .38f; }
+        float _boxWidth { get => Game1.UIResolution.X * .7f; }
+        float _boxHeight { get => Game1.UIResolution.Y * .3f; }
         float _textMaxWidth { get => _innerBoxWidth - _innerTable.GetCell(_asterisk).GetPrefWidth() - _innerBoxSpacing; }
         
         float _innerBoxWidth { get => _boxWidth - (_innerBoxPad * 2); }
@@ -61,7 +62,7 @@ namespace PuppetRoguelite.UI
             //textbox table
             _box = new Table();
             _box.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
-            var vPad = Game1.DesignResolution.Y * .05f;
+            var vPad = Game1.UIResolution.Y * .05f;
             _table.Add(_box).Expand().Bottom().SetPadBottom(vPad).Width(_boxWidth).Height(_boxHeight);
 
             //inner table
@@ -69,10 +70,10 @@ namespace PuppetRoguelite.UI
             _box.Add(_innerTable).Grow().Pad(_innerBoxPad);
 
             //asterisk
-            _asterisk = new Label("*", _basicSkin, "abaddon_60");
+            _asterisk = new Label("*", _basicSkin, "default_xxxl");
             _innerTable.Add(_asterisk).SetExpandY().Top().Left();
 
-            _text = new Label("", _basicSkin, "abaddon_60").SetAlignment(Align.TopLeft);
+            _text = new Label("", _basicSkin, "default_xxxl").SetAlignment(Align.TopLeft);
             _innerTable.Add(_text).Grow().Top().Left().SetSpaceLeft(_innerBoxSpacing);
         }
 

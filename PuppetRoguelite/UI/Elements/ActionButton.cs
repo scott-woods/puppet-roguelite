@@ -18,7 +18,8 @@ namespace PuppetRoguelite.UI.Elements
         {
             _label = label;
             Type = type;
-            GetImage().SetScale(2);
+            GetImage().SetScaleX(Game1.ResolutionScale.X / 2);
+            GetImage().SetScaleY(Game1.ResolutionScale.Y / 2);
         }
 
         protected override void OnFocused()

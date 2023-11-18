@@ -23,10 +23,10 @@ namespace PuppetRoguelite.Scenes
 
             ClearColor = Color.Black;
 
-            var diff = Game1.ResolutionScale - 1;
-            Camera.SetMinimumZoom(1f);
-            Camera.SetMaximumZoom(Game1.ResolutionScale + diff);
-            Camera.Zoom = 0.5f;
+            //var diff = Game1.ResolutionScale - 1;
+            //Camera.SetMinimumZoom(1f);
+            //Camera.SetMaximumZoom(Game1.ResolutionScale + diff);
+            //Camera.Zoom = 0.5f;
 
             _screenSpaceRenderer = new ScreenSpaceRenderer(100, (int)RenderLayers.ScreenSpaceRenderLayer);
 

@@ -117,13 +117,13 @@ namespace PuppetRoguelite.UI.HUDs
             //hp
             _topLeftTable = new Table().Top().Left().PadTop(10).PadLeft(10);
             _table.Add(_topLeftTable).Grow();
-            _playerHealthLabel = new Label("HP: ", _basicSkin, "abaddon_60");
+            _playerHealthLabel = new Label("HP: ", _basicSkin, "default_xxl");
             _topLeftTable.Add(_playerHealthLabel);
 
             //currency
             _topRightTable = new Table().Top().Right().PadTop(10).PadRight(10);
             _table.Add(_topRightTable).Grow();
-            _dollahLabel = new Label("$: ", _basicSkin, "abaddon_60");
+            _dollahLabel = new Label("$: ", _basicSkin, "default_xxl");
             _topRightTable.Add(_dollahLabel);
             _topRightTable.Pack();
 

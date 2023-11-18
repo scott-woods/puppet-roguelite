@@ -85,6 +85,13 @@ namespace Nez
 			public const string Abaddon_light_36_0 = @"Content\Fonts\abaddon_light_36_0.png";
 			public const string Abaddon_light_60 = @"Content\Fonts\abaddon_light_60.fnt";
 			public const string Abaddon_light_60_0 = @"Content\Fonts\abaddon_light_60_0.png";
+			public const string Abaddon_light_72 = @"Content\Fonts\abaddon_light_72.fnt";
+			public const string Abaddon_light_72_0 = @"Content\Fonts\abaddon_light_72_0.png";
+			public const string Abaddon_light_72_1 = @"Content\Fonts\abaddon_light_72_1.png";
+			public const string Font_abaddon_light_48 = @"Content\Fonts\font_abaddon_light_48.fnt";
+			public const string Font_abaddon_light_48_0 = @"Content\Fonts\font_abaddon_light_48_0.png";
+			public const string M57_12 = @"Content\Fonts\m57_12.fnt";
+			public const string M57_12_0 = @"Content\Fonts\m57_12_0.png";
 		}
 
 		public static class Textures

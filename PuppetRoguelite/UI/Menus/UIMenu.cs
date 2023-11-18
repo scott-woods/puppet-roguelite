@@ -38,9 +38,11 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.Initialize();
 
+            Stage.IsFullScreen = true;
+
             //render layer
-            //SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
-            SetRenderLayer(int.MinValue);
+            SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
+            //SetRenderLayer(int.MinValue);
 
             //set default accept key
             Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.E;
@@ -68,13 +70,15 @@ namespace PuppetRoguelite.UI.Menus
             //position elements in world space
             if (BaseElement != null)
             {
-                //var pos = ResolutionHelper.GameToUiPoint(Entity, AnchorPosition + WorldSpaceOffset);
+                //var pos = Entity.Scene.Camera.WorldToScreenPoint(AnchorPosition);
+                var pos = ResolutionHelper.GameToUiPoint(AnchorPosition + WorldSpaceOffset);
+                BaseElement.SetPosition(pos.X + ScreenSpaceOffset.X, pos.Y + ScreenSpaceOffset.Y);
                 
                 //BaseElement.SetPosition(pos.X, pos.Y);
-                var pos = AnchorPosition + WorldSpaceOffset;
-                Entity.SetPosition(pos.X, pos.Y);
-                var elementPos = Entity.Scene.Camera.WorldToScreenPoint(pos);
-                BaseElement.SetPosition(elementPos.X + ScreenSpaceOffset.X, elementPos.Y + ScreenSpaceOffset.Y);
+                //var pos = AnchorPosition + WorldSpaceOffset;
+                //Entity.SetPosition(pos.X, pos.Y);
+                //var elementPos = Entity.Scene.Camera.WorldToScreenPoint(pos);
+                //BaseElement.SetPosition(elementPos.X + ScreenSpaceOffset.X, elementPos.Y + ScreenSpaceOffset.Y);
             }
         }
 

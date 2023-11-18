@@ -58,6 +58,8 @@
     <None Remove="Content\Audio\Sounds\whirlwind_speen.wav" />
     <None Remove="Content\Fonts\abaddon_light.fnt" />
     <None Remove="Content\Fonts\abaddon_light_0.png" />
+    <None Remove="Content\Fonts\font_abaddon_light_48.fnt" />
+    <None Remove="Content\Fonts\font_abaddon_light_48_0.png" />
     <None Remove="Content\Textures\Characters\ChainBot\charge.png" />
     <None Remove="Content\Textures\Characters\ChainBot\death.png" />
     <None Remove="Content\Textures\Characters\ChainBot\hit.png" />

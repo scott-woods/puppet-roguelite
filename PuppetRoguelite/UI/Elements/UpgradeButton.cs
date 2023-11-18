@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.UI;
 using PuppetRoguelite.Models.Upgrades;
 using System;
@@ -19,7 +20,8 @@ namespace PuppetRoguelite.UI.Elements
         {
             Upgrade = upgrade;
             RowIndex = rowIndex;
-            GetImage().SetScale(Game1.ResolutionScale);
+            GetImage().SetScaleX(Game1.ResolutionScale.X / 2);
+            GetImage().SetScaleY(Game1.ResolutionScale.Y / 2);
         }
 
         protected override void OnFocused()

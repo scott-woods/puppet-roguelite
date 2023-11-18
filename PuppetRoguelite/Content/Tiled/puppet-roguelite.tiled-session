@@ -254,10 +254,10 @@
                 4
             ],
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 122.99999999999999,
-                "y": 304
+                "x": 175.66666666666669,
+                "y": 351.33333333333326
             }
         },
         "Tilemaps/DungeonPrison/BR_1.tmx": {
@@ -394,7 +394,7 @@
             "selectedLayer": 3,
             "viewCenter": {
                 "x": 190.59749016669787,
-                "y": 385.5103952050946
+                "y": 384.07192358119505
             }
         },
         "Tilemaps/DungeonPrison/T_1.tmx": {
@@ -464,8 +464,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 268.5,
-                "y": 280
+                "x": 78.5,
+                "y": 90
             }
         },
         "Tilemaps/Hub/bedroom.tmx": {
@@ -779,8 +779,9 @@
     "project": "puppet-roguelite.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "Tilemaps/DungeonPrison/BR_1.tmx",
         "Tilemaps/DungeonPrison/BL_1.tmx",
+        "Tilemaps/DungeonPrison/right_key_room.tmx",
+        "Tilemaps/DungeonPrison/BR_1.tmx",
         "Tilemaps/Hub/hub_2.tmx",
         "Tilemaps/DungeonPrison/pre_boss_room.tmx",
         "Tilemaps/DungeonPrison/T_2.tmx",
@@ -789,8 +790,7 @@
         "Tilemaps/DungeonPrison/B_1.tmx",
         "Tilemaps/Hub/bedroom.tmx",
         "Tilesets/dungeon_prison_props.tsx",
-        "Tilemaps/Hub/puppet_shop.tmx",
-        "Tilemaps/Hub/hub_1.tmx"
+        "Tilemaps/Hub/puppet_shop.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

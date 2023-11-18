@@ -58,12 +58,12 @@ namespace PuppetRoguelite.UI.Menus
                 }
 
                 //create button
-                var button = new ListButton(PlayerActionUtils.GetName(type), skin, "listButton");
+                var button = new ListButton(PlayerActionUtils.GetName(type), skin, "listButton_lg");
                 button.SetDisabled(disabled);
                 _buttonDictionary.Add(button, type);
 
                 //create cost label
-                var label = new Label(PlayerActionUtils.GetApCost(type).ToString(), skin, "abaddon_24");
+                var label = new Label(PlayerActionUtils.GetApCost(type).ToString(), skin, "default_lg");
 
                 //add to content list
                 dialogContent.Add(button, label);
