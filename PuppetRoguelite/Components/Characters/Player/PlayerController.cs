@@ -136,7 +136,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             Flags.UnsetFlag(ref Collider.CollidesWithLayers, -1);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
-            Collider.SetEnabled(false);
+            //Collider.SetEnabled(false);
 
             //origin
             OriginComponent = Entity.AddComponent(new OriginComponent(Collider));

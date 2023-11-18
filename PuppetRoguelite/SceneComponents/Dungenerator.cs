@@ -55,7 +55,7 @@ namespace PuppetRoguelite.SceneComponents
 
         public Vector2 GetPlayerSpawnPoint()
         {
-            var point = _preBossPoint * _roomSize * _tileSize;
+            var point = _hubPoint * _roomSize * _tileSize;
             var midPoint = point + new Point(_roomSize.X * _tileSize.X / 2, _roomSize.Y * _tileSize.Y / 2);
             return midPoint.ToVector2();
         }

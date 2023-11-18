@@ -5,6 +5,7 @@ using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
 using System;
@@ -117,8 +118,27 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 _direction = Game1.Scene.Camera.MouseToWorldPoint() - InitialPosition;
                 _direction.Normalize();
 
-                //get new final position rounded to ints
-                var newFinalPos = InitialPosition + (_direction * _range);
+                //get first valid position
+                var newFinalPos = InitialPosition;
+                var range = _range;
+                while (range > 0)
+                {
+                    var testPos = InitialPosition + (_direction * range);
+                    if (CombatArea.IsPointInCombatArea(testPos))
+                    {
+                        newFinalPos = testPos;
+                        break;
+                    }
+                    range--;
+                }
+
+                //position player at their origin instead of by entity
+                if (TryGetComponent<OriginComponent>(out var originComponent))
+                {
+                    var diff = Position - originComponent.Origin;
+                    newFinalPos += diff;
+                }
+
                 FinalPosition = new Vector2((float)Math.Round(newFinalPos.X), (float)Math.Round(newFinalPos.Y));
 
                 //update target

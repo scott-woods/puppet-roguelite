@@ -3,6 +3,8 @@ using Nez;
 using Nez.Systems;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Components.TiledComponents;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,7 +78,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
                 var mousePos = Scene.Camera.MouseToWorldPoint();
                 if (Vector2.Distance(mousePos, InitialPosition) <= _targetRadius)
                 {
-                    _targetEntity.Position = mousePos;
+                    if (CombatArea.IsPointInCombatArea(mousePos))
+                    {
+                        _targetEntity.Position = mousePos;
+                    }
 
                     if (Input.LeftMouseButtonPressed)
                     {

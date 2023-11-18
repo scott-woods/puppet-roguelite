@@ -37,7 +37,6 @@ namespace PuppetRoguelite.Components
                 switch (obj.ObjectType)
                 {
                     case TmxObjectType.Basic:
-                    case TmxObjectType.Polygon:
                     case TmxObjectType.Ellipse:
                     case TmxObjectType.Tile:
                         position = Entity.Position + new Vector2(obj.X + obj.Width / 2, obj.Y + obj.Height / 2);

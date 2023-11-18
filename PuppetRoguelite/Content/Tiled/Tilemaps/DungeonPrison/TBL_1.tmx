@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="32">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="33">
  <tileset firstgid="1" source="../../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="3" name="floor" width="24" height="24">
   <data encoding="csv">
@@ -128,6 +128,9 @@
    <properties>
     <property name="Orientation" value="vertical"/>
    </properties>
+  </object>
+  <object id="32" type="CombatArea" x="160" y="128">
+   <polygon points="0,0 176,0 176,16 192,16 192,192 176,192 176,208 160,208 160,224 80,224 80,208 -16,208 -16,224 -80,224 -80,208 -96,208 -96,192 -112,192 -112,64 -64,64 -64,80 -16,80 -16,64 0,64"/>
   </object>
  </objectgroup>
 </map>
