@@ -5,12 +5,12 @@
     },
     "activeFile": "Tilemaps/Hub/hub_2.tmx",
     "expandedProjectPaths": [
+        "Tilemaps/Hub",
         "Tilemaps",
         "Rules",
-        "Tilemaps/Hub",
-        ".",
+        "Tilesets",
         "RuleMaps",
-        "Tilesets"
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -256,8 +256,8 @@
             "scale": 1.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 175.66666666666669,
-                "y": 351.33333333333326
+                "x": 188,
+                "y": 188
             }
         },
         "Tilemaps/DungeonPrison/BR_1.tmx": {
@@ -485,11 +485,11 @@
             }
         },
         "Tilemaps/Hub/hub_2.tmx": {
-            "scale": 1.5,
+            "scale": 0.75,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 886.3333333333333,
-                "y": 620
+                "x": 752.6666666666666,
+                "y": 510.66666666666663
             }
         },
         "Tilemaps/Hub/puppet_shop.tmx": {
@@ -748,7 +748,7 @@
             "scaleInEditor": 1.5
         },
         "Tilesets/dungeon_prison_tileset.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 1.5,
             "scaleInEditor": 1.5
         },
         "Tilesets/hub_2.tmx": {
@@ -774,23 +774,45 @@
     "map.tileWidth": 16,
     "map.width": 24,
     "openFiles": [
+        "Tilemaps/DungeonPrison/BLR_1.tmx",
+        "Tilemaps/DungeonPrison/L_1.tmx",
+        "Tilemaps/DungeonPrison/left_key_room.tmx",
+        "Tilemaps/DungeonPrison/LR_1.tmx",
+        "Tilemaps/DungeonPrison/R_1.tmx",
+        "Tilemaps/DungeonPrison/right_key_room.tmx",
+        "Tilemaps/DungeonPrison/TB_1.tmx",
+        "Tilemaps/DungeonPrison/TBL_1.tmx",
+        "Tilemaps/DungeonPrison/TBLR_1.tmx",
+        "Tilemaps/DungeonPrison/TBR_1.tmx",
+        "Tilemaps/DungeonPrison/TL_1.tmx",
+        "Tilemaps/DungeonPrison/TLR_1.tmx",
+        "Tilemaps/DungeonPrison/TR_1.tmx",
+        "Tilemaps/DungeonPrison/B_1.tmx",
+        "Tilemaps/DungeonPrison/T_1.tmx",
+        "Tilemaps/DungeonPrison/boss_room.tmx",
+        "Tilesets/dungeon_prison_tileset.tsx",
+        "Tilesets/prototype_tileset.tsx",
+        "Tilemaps/DungeonPrison/BL_1.tmx",
+        "Tilemaps/DungeonPrison/BR_1.tmx",
+        "Tilemaps/DungeonPrison/pre_boss_room.tmx",
+        "Tilemaps/DungeonPrison/T_2.tmx",
         "Tilemaps/Hub/hub_2.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "Tilemaps/DungeonPrison/BL_1.tmx",
-        "Tilemaps/DungeonPrison/right_key_room.tmx",
-        "Tilemaps/DungeonPrison/BR_1.tmx",
-        "Tilemaps/Hub/hub_2.tmx",
-        "Tilemaps/DungeonPrison/pre_boss_room.tmx",
-        "Tilemaps/DungeonPrison/T_2.tmx",
+        "Tilemaps/DungeonPrison/BLR_1.tmx",
+        "Tilemaps/DungeonPrison/L_1.tmx",
+        "Tilemaps/DungeonPrison/left_key_room.tmx",
         "Tilemaps/DungeonPrison/LR_1.tmx",
-        "Tilesets/dungeon_prison_tileset.tsx",
-        "Tilemaps/DungeonPrison/B_1.tmx",
-        "Tilemaps/Hub/bedroom.tmx",
-        "Tilesets/dungeon_prison_props.tsx",
-        "Tilemaps/Hub/puppet_shop.tmx"
+        "Tilemaps/DungeonPrison/R_1.tmx",
+        "Tilemaps/DungeonPrison/right_key_room.tmx",
+        "Tilemaps/DungeonPrison/TB_1.tmx",
+        "Tilemaps/DungeonPrison/TBL_1.tmx",
+        "Tilemaps/DungeonPrison/TBLR_1.tmx",
+        "Tilemaps/DungeonPrison/TBR_1.tmx",
+        "Tilemaps/DungeonPrison/TL_1.tmx",
+        "Tilemaps/DungeonPrison/TLR_1.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFormat": "tsx",

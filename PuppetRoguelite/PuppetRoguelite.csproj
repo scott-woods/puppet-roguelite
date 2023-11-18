@@ -81,6 +81,11 @@
     <None Remove="Content\Textures\UI\borders_and_hp.png" />
     <None Remove="Content\Textures\UI\glow_sliders.png" />
     <None Remove="Content\Textures\UI\healthbar.png" />
+    <None Remove="Content\Textures\UI\heart-health-sprite-3.png" />
+    <None Remove="Content\Textures\UI\heart-health-sprite-4.png" />
+    <None Remove="Content\Textures\UI\heart-sprite-full-health.png" />
+    <None Remove="Content\Textures\UI\heart-sprite-health-1.png" />
+    <None Remove="Content\Textures\UI\heart-sprite-health-2.png" />
     <None Remove="Content\Textures\UI\Icons\plus_icon.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 000.png" />
     <None Remove="Content\Textures\UI\Icons\Style4\Style 4 Icon 001.png" />

@@ -55,7 +55,11 @@ namespace PuppetRoguelite.Components.Shared
         public int MaxHealth
         {
             get => _maxHealth;
-            set => _maxHealth = value;
+            set
+            {
+                _maxHealth = value;
+                Emitter.Emit(HealthComponentEventType.MaxHealthChanged, this);
+            }
         }
 
         public HealthComponent(int maxHealth)
@@ -117,6 +121,7 @@ namespace PuppetRoguelite.Components.Shared
     public enum HealthComponentEventType
     {
         HealthChanged,
+        MaxHealthChanged,
         HealthDepleted,
         DamageTaken,
         HealthGained

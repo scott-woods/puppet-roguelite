@@ -1,9 +1,14 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Nez;
+using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Models;
 using PuppetRoguelite.UI.Elements;
+using System;
 using System.Collections.Generic;
 
 namespace PuppetRoguelite.UI.HUDs
@@ -12,16 +17,20 @@ namespace PuppetRoguelite.UI.HUDs
     {
         //elements
         Table _table;
-        Label _playerHealthLabel;
-        Table _topLeftTable;
         Table _topRightTable;
         Table _apTable;
         Label _simTipLabel;
         Label _dollahLabel;
         List<BasicApProgressBar> _apProgressBars = new List<BasicApProgressBar>();
+        Table _heartsTable;
+        List<HeartElement> _hearts = new List<HeartElement>();
 
         //skins
         Skin _basicSkin;
+
+        //textures
+        List<SpriteDrawable> _heartSprites;
+        Sprite _dollahSprite;
 
         #region LIFECYCLE
 
@@ -33,13 +42,28 @@ namespace PuppetRoguelite.UI.HUDs
 
             //base table
             _table = Stage.AddElement(new Table());
-            _table.SetFillParent(true);
+            _table.SetFillParent(true).Pad(Game1.UIResolution.Y * .04f);
             _table.SetDebug(false);
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
 
+            //render layer
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
+
+            //load textures
+            _heartSprites = new List<SpriteDrawable>()
+            {
+                new SpriteDrawable(Entity.Scene.Content.LoadTexture(Nez.Content.Textures.UI.Hearthealthsprite4)),
+                new SpriteDrawable(Entity.Scene.Content.LoadTexture(Nez.Content.Textures.UI.Hearthealthsprite3)),
+                new SpriteDrawable(Entity.Scene.Content.LoadTexture(Nez.Content.Textures.UI.Heartspritehealth2)),
+                new SpriteDrawable(Entity.Scene.Content.LoadTexture(Nez.Content.Textures.UI.Heartspritehealth1)),
+                new SpriteDrawable(Entity.Scene.Content.LoadTexture(Nez.Content.Textures.UI.Heartspritefullhealth)),
+            };
+
+            //dollah
+            var dollahTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Tilesets.Dungeon_prison_props);
+            _dollahSprite = new Sprite(dollahTexture, new Rectangle(80, 240, 16, 16));
 
             //arrange elements
             ArrangeElements();
@@ -68,10 +92,13 @@ namespace PuppetRoguelite.UI.HUDs
             }
 
             //player health
-            if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent> (out var healthComponent))
+            if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var hc))
             {
-                OnPlayerHealthChanged(healthComponent);
-                healthComponent.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
+                OnPlayerMaxHealthChanged(hc);
+                hc.Emitter.AddObserver(HealthComponentEventType.MaxHealthChanged, OnPlayerMaxHealthChanged);
+
+                OnPlayerHealthChanged(hc);
+                hc.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
             }
 
             //dollahs
@@ -87,13 +114,6 @@ namespace PuppetRoguelite.UI.HUDs
             //connect to emitters
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
-            //Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
-
-            //player health
-            //if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var healthComponent))
-            //{
-            //    healthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
-            //}
 
             foreach (var bar in _apProgressBars)
             {
@@ -102,30 +122,29 @@ namespace PuppetRoguelite.UI.HUDs
 
             _apProgressBars.Clear();
             _apTable.ClearChildren();
-
-            //dollahs
-            //if (PlayerController.Instance.Entity.TryGetComponent<DollahInventory>(out var dollahInventory))
-            //{
-            //    dollahInventory.Emitter.RemoveObserver(DollahInventoryEvents.DollahsChanged, OnDollahsChanged);
-            //}
         }
 
         #endregion
 
         void ArrangeElements()
         {
-            //hp
-            _topLeftTable = new Table().Top().Left().PadTop(10).PadLeft(10);
-            _table.Add(_topLeftTable).Grow();
-            _playerHealthLabel = new Label("HP: ", _basicSkin, "default_xxl");
-            _topLeftTable.Add(_playerHealthLabel);
+            //player hearts
+            _heartsTable = new Table();
+            _heartsTable.Defaults().SetSpaceRight(Game1.UIResolution.X * .01f);
+            _table.Add(_heartsTable)
+                .Top().Left();
 
-            //currency
-            _topRightTable = new Table().Top().Right().PadTop(10).PadRight(10);
-            _table.Add(_topRightTable).Grow();
-            _dollahLabel = new Label("$: ", _basicSkin, "default_xxl");
-            _topRightTable.Add(_dollahLabel);
-            _topRightTable.Pack();
+            _table.Row();
+
+            var dollahsTable = new Table();
+            _table.Add(dollahsTable).Top().Left().SetSpaceTop(Game1.UIResolution.Y * .01f);
+            var dollahImage = new Image(_dollahSprite);
+            dollahImage.SetScaleX(Game1.ResolutionScale.X * 1.25f);
+            dollahImage.SetScaleY(Game1.ResolutionScale.Y * 1.25f);
+            dollahsTable.Add(dollahImage);
+            _dollahLabel = new Label("", _basicSkin, "default_xxl");
+            dollahsTable.Add(_dollahLabel).SetPadTop(5);
+            //dollahsTable.Add(new Label("feef", _basicSkin, "default_xxl"));
 
             _table.Row();
 
@@ -155,7 +174,7 @@ namespace PuppetRoguelite.UI.HUDs
 
         void OnDollahsChanged(DollahInventory inv)
         {
-            _dollahLabel.SetText($"$: {inv.Dollahs}");
+            _dollahLabel.SetText($"{inv.Dollahs}");
         }
 
         void OnEncounterStarted()
@@ -179,8 +198,28 @@ namespace PuppetRoguelite.UI.HUDs
 
         public void OnPlayerHealthChanged(HealthComponent healthComponent)
         {
-            _playerHealthLabel.SetText($"HP: {healthComponent.Health}/{healthComponent.MaxHealth}");
-            _topLeftTable.Pack();
+            var hp = healthComponent.Health;
+            foreach (var heart in _hearts)
+            {
+                var fillLevel = Math.Min(hp, 4);
+                heart.SetFillLevel(fillLevel);
+                hp -= 4;
+            }
+        }
+
+        void OnPlayerMaxHealthChanged(HealthComponent hc)
+        {
+            _heartsTable.Clear();
+
+            int hp = hc.Health;
+            for (int i = 0; i < Math.Ceiling((decimal)hc.MaxHealth / 4); i++)
+            {
+                var fillLevel = Math.Min(hp, 4);
+                var heart = new HeartElement(_heartSprites, fillLevel);
+                _heartsTable.Add(heart);
+                _hearts.Add(heart);
+                hp -= 4;
+            }
         }
 
         #endregion
