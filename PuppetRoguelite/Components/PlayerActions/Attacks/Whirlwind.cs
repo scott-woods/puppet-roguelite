@@ -36,7 +36,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         //coroutines
         CoroutineManager _coroutineManager = new CoroutineManager();
-        ICoroutine _simulationLoop, _executionCoroutine;
+        ICoroutine _simulationLoop, _executionCoroutine, _spin;
 
         public override void Prepare()
         {
@@ -91,7 +91,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             Debug.Log("starting Whirlwind execution coroutine");
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Whirlwind_speen);
-            yield return _coroutineManager.StartCoroutine(Spin());
+            _spin = _coroutineManager.StartCoroutine(Spin());
+            yield return _spin;
             //yield return Spin();
             Debug.Log("whirlwind spin finished");
             HandleExecutionFinished();
@@ -109,7 +110,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
                 {
                     _animator.Stop();
-                    _simulationLoop.Stop();
+                    _coroutineManager.StopAllCoroutines();
                     HandlePreparationFinished(Position);
                     return;
                 }
@@ -119,8 +120,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 //handle direction change
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
-                    //stop sim loop
-                    _simulationLoop?.Stop();
+                    _coroutineManager.StopAllCoroutines();
 
                     //stop animator
                     _animator.Stop();
@@ -210,7 +210,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
                 //spin
                 _animator.Speed = 2f;
-                yield return Spin();
+                _spin = _coroutineManager.StartCoroutine(Spin());
+                yield return _spin;
             }
         }
     }

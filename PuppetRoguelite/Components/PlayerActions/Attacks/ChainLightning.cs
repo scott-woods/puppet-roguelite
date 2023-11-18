@@ -39,6 +39,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         CoroutineManager _coroutineManager = new CoroutineManager();
         ICoroutine _simulationLoop;
         ICoroutine _executionCoroutine;
+        ICoroutine _attackCoroutine;
 
         //misc
         List<int> _hitboxActiveFrames = new List<int>() { 0, 1 };
@@ -82,7 +83,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
                 //attack
                 _animator.Speed = 1f;
-                yield return Attack();
+                _attackCoroutine = _coroutineManager.StartCoroutine(Attack());
+                yield return _attackCoroutine;
 
                 //idle again
                 _animator.Speed = 1f;
@@ -104,7 +106,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _animator.Speed = 1.3f;
 
             Debug.Log("starting attack");
-            yield return Attack();
+            _attackCoroutine = _coroutineManager.StartCoroutine(Attack());
+            yield return _attackCoroutine;
+
             _hitbox.SetEnabled(false);
 
             var count = _hitEntities.Count;
@@ -197,6 +201,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
                     _simulationLoop?.Stop();
+                    _attackCoroutine?.Stop();
                     _animator.Stop();
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
                 }

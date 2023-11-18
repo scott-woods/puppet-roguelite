@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Sprites;
+using Nez.Systems;
 using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters;
@@ -34,7 +35,10 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         SpriteTrail _trail;
         SpriteAnimator _animator;
 
+        //coroutines
+        CoroutineManager _coroutineManager = new CoroutineManager();
         ICoroutine _simulationLoop;
+        ICoroutine _execution;
 
         public override void Prepare()
         {
@@ -75,7 +79,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _animator.Play(animation);
 
             //start sim loop
-            _simulationLoop = Game1.StartCoroutine(SimulationLoop());
+            _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
         }
 
         public override void Execute()
@@ -91,7 +95,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             _animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
             //execute
-            Game1.StartCoroutine(ExecuteDash());
+            _execution = _coroutineManager.StartCoroutine(ExecuteDash());
         }
 
         void OnAnimationFinished(string animationName)
@@ -109,7 +113,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
                 {
                     _animator.Stop();
-                    _simulationLoop.Stop();
+                    _coroutineManager.StopAllCoroutines();
                     HandlePreparationFinished(FinalPosition);
                     return;
                 }
@@ -169,7 +173,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
         {
             while (State == PlayerActionState.Preparing)
             {
-                yield return ExecuteDash();
+                _execution = _coroutineManager.StartCoroutine(ExecuteDash());
+                yield return _execution;
                 yield return Coroutine.WaitForSeconds(.25f);
                 Position = InitialPosition;
             }

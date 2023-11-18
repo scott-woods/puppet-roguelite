@@ -29,6 +29,8 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         //coroutines
         CoroutineManager _coroutineManager = new CoroutineManager();
         ICoroutine _executionCoroutine;
+        ICoroutine _transitionToCharge;
+        ICoroutine _attackPlayer;
 
         //misc
         int _soundCounter = 0;
@@ -106,14 +108,16 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         {
             var id = _enemy.Id;
             //Debug.Log($"{id}: transitioning to charge");
-            yield return TransitionToCharge();
+            _transitionToCharge = _coroutineManager.StartCoroutine(TransitionToCharge());
+            yield return _transitionToCharge;
             //Debug.Log($"{id}: finished transition to charge");
             //Debug.Log($"{id}: starting charge");
             ChargeAttack();
-            yield return Coroutine.WaitForSeconds(.25f);
+            yield return Coroutine.WaitForSeconds(.2f);
             //Debug.Log($"{id}: finished charge");
             //Debug.Log($"{id}: starting attack player");
-            yield return AttackPlayer();
+            _attackPlayer = _coroutineManager.StartCoroutine(AttackPlayer());
+            yield return _attackPlayer;
             //Debug.Log($"{id}: finished attack player");
 
             Reset();
@@ -160,7 +164,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
 
         void Reset()
         {
-            _executionCoroutine?.Stop();
+            _coroutineManager.StopAllCoroutines();
             _leftHitbox.SetEnabled(false);
             _rightHitbox.SetEnabled(false);
             _soundCounter = 0;
