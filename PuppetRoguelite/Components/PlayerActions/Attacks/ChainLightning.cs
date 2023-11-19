@@ -193,16 +193,23 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 if (Input.LeftMouseButtonPressed)
                 {
                     _coroutineManager.StopAllCoroutines();
+                    _simulationLoop = null;
+                    _executionCoroutine = null;
+                    _attackCoroutine = null;
                     _animator.Stop();
+                    _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
                     HandlePreparationFinished(Position);
                 }
 
                 //restart loop if changed direction
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
-                    _simulationLoop?.Stop();
-                    _attackCoroutine?.Stop();
+                    _coroutineManager.StopAllCoroutines();
+                    _simulationLoop = null;
+                    _executionCoroutine = null;
+                    _attackCoroutine = null;
                     _animator.Stop();
+                    _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
                 }
 

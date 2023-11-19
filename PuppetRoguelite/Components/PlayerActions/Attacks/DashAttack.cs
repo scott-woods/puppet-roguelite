@@ -100,12 +100,16 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
         void OnAnimationFinished(string animationName)
         {
+            _execution = null;
+            _simulationLoop = null;
             HandleExecutionFinished();
         }
 
         public override void Update()
         {
             base.Update();
+
+            _coroutineManager.Update();
 
             if (State == PlayerActionState.Preparing)
             {
@@ -114,6 +118,8 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 {
                     _animator.Stop();
                     _coroutineManager.StopAllCoroutines();
+                    _execution = null;
+                    _simulationLoop = null;
                     HandlePreparationFinished(FinalPosition);
                     return;
                 }

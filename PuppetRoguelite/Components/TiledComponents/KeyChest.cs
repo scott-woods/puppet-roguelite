@@ -35,6 +35,8 @@ namespace PuppetRoguelite.Components.TiledComponents
         Sprite _openSprite;
         Sprite _closedSprite;
 
+        bool _isOpened = false;
+
         public KeyChest(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
 
@@ -56,26 +58,30 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         public override IEnumerator HandleInteraction()
         {
-            _renderer.SetSprite(_openSprite);
-            _interactable.Active = false;
-
-            //add item to player inventory
-            var cerealName = _cerealNames.ElementAt(Nez.Random.NextInt(_cerealNames.Count));
-            var cerealBox = new CerealBox(cerealName.Key);
-            if (PlayerController.Instance.Entity.TryGetComponent<Inventory>(out var inventory))
+            if (!_isOpened)
             {
-                inventory.AddItem(cerealBox);
-            }
+                _isOpened = true;
+                _renderer.SetSprite(_openSprite);
+                _interactable.Active = false;
 
-            //display text
-            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            var lines = new List<DialogueLine>()
+                //add item to player inventory
+                var cerealName = _cerealNames.ElementAt(Nez.Random.NextInt(_cerealNames.Count));
+                var cerealBox = new CerealBox(cerealName.Key);
+                if (PlayerController.Instance.Entity.TryGetComponent<Inventory>(out var inventory))
+                {
+                    inventory.AddItem(cerealBox);
+                }
+
+                //display text
+                var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
+                var lines = new List<DialogueLine>()
             {
                 new DialogueLine("You found a key!"),
                 new DialogueLine($"...what's this? Looks like there's something else in there..."),
                 new DialogueLine(cerealName.Value)
             };
-            yield return textboxManager.DisplayTextbox(lines);
+                yield return textboxManager.DisplayTextbox(lines);
+            }
         }
     }
 }

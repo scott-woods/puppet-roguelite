@@ -25,7 +25,12 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             base.Initialize();
 
+
             _collider = Entity.AddComponent(new PolygonCollider(TmxObject.Points));
+            if (_collider.LocalOffset == Vector2.Zero)
+            {
+                _collider.SetLocalOffset(new Vector2(TmxObject.Width / 2, TmxObject.Height / 2));
+            }
             _collider.IsTrigger = true;
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.CombatArea);
         }

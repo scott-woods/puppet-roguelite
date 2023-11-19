@@ -3,6 +3,7 @@ using Nez;
 using Nez.Sprites;
 using Nez.Svg;
 using Nez.Systems;
+using Nez.Tweens;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
@@ -29,6 +30,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
         //coroutines
         CoroutineManager _coroutineManager = new CoroutineManager();
         ICoroutine _executionCoroutine;
+        ICoroutine _tweenCoroutine;
 
         public override void Prepare()
         {
@@ -59,7 +61,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             var tween = animator.TweenColorTo(Color.Transparent, .15f);
             tween.SetEaseType(Nez.Tweens.EaseType.QuintIn);
             tween.Start();
-            yield return tween.WaitForCompletion();
+            _tweenCoroutine = _coroutineManager.StartCoroutine(tween.WaitForCompletion());
+            yield return _tweenCoroutine;
+            //yield return tween.WaitForCompletion();
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Player_teleport, .6f);
 
@@ -67,7 +71,9 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
 
             tween = animator.TweenColorTo(Color.White, .1f);
             tween.Start();
-            yield return tween.WaitForCompletion();
+            _tweenCoroutine = _coroutineManager.StartCoroutine(tween.WaitForCompletion());
+            yield return _tweenCoroutine;
+            //yield return tween.WaitForCompletion();
 
             yield return Coroutine.WaitForSeconds(.25f);
 

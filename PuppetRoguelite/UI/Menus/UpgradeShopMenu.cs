@@ -83,7 +83,6 @@ namespace PuppetRoguelite.UI.Menus
 
             //get internal table of dialog
             var contentTable = _dialog.GetContentTable();
-            contentTable.DebugAll();
 
             //set padding of dialog
             contentTable.PadTop(50).PadBottom(50).PadLeft(30).PadRight(30);

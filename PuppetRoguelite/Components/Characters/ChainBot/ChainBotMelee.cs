@@ -110,6 +110,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //Debug.Log($"{id}: transitioning to charge");
             _transitionToCharge = _coroutineManager.StartCoroutine(TransitionToCharge());
             yield return _transitionToCharge;
+            _transitionToCharge = null;
             //Debug.Log($"{id}: finished transition to charge");
             //Debug.Log($"{id}: starting charge");
             ChargeAttack();
@@ -118,6 +119,7 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
             //Debug.Log($"{id}: starting attack player");
             _attackPlayer = _coroutineManager.StartCoroutine(AttackPlayer());
             yield return _attackPlayer;
+            _attackPlayer = null;
             //Debug.Log($"{id}: finished attack player");
 
             Reset();
@@ -165,6 +167,9 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
         void Reset()
         {
             _coroutineManager.StopAllCoroutines();
+            _executionCoroutine = null;
+            _transitionToCharge = null;
+            _attackPlayer = null;
             _leftHitbox.SetEnabled(false);
             _rightHitbox.SetEnabled(false);
             _soundCounter = 0;
