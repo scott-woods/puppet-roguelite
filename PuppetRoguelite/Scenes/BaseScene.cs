@@ -16,6 +16,7 @@ namespace PuppetRoguelite.Scenes
     public class BaseScene : Scene, IFinalRenderDelegate
     {
         ScreenSpaceRenderer _screenSpaceRenderer;
+        ScreenSpaceRenderer _cursorRenderer;
 
         public override void Initialize()
         {
@@ -29,8 +30,9 @@ namespace PuppetRoguelite.Scenes
             //Camera.Zoom = 0.5f;
 
             _screenSpaceRenderer = new ScreenSpaceRenderer(100, (int)RenderLayers.ScreenSpaceRenderLayer);
+            _cursorRenderer = new ScreenSpaceRenderer(1, (int)RenderLayers.Cursor);
 
-            AddRenderer(new RenderLayerExcludeRenderer(0, (int)RenderLayers.ScreenSpaceRenderLayer));
+            AddRenderer(new RenderLayerExcludeRenderer(0, (int)RenderLayers.ScreenSpaceRenderLayer, (int)RenderLayers.Cursor));
 
             FinalRenderDelegate = this;
         }
@@ -39,7 +41,11 @@ namespace PuppetRoguelite.Scenes
 
         public void OnAddedToScene(Scene scene) => _scene = scene;
 
-        public void OnSceneBackBufferSizeChanged(int newWidth, int newHeight) => _screenSpaceRenderer.OnSceneBackBufferSizeChanged(newWidth, newHeight);
+        public void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
+        {
+            _screenSpaceRenderer.OnSceneBackBufferSizeChanged(newWidth, newHeight);
+            _cursorRenderer.OnSceneBackBufferSizeChanged(newWidth, newHeight);
+        }
 
         public void HandleFinalRender(RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source,
                                       Rectangle finalRenderDestinationRect, SamplerState samplerState)
@@ -51,6 +57,7 @@ namespace PuppetRoguelite.Scenes
             Graphics.Instance.Batcher.End();
 
             _screenSpaceRenderer.Render(_scene);
+            _cursorRenderer.Render(_scene);
         }
     }
     //public class BaseScene : Scene, IFinalRenderDelegate

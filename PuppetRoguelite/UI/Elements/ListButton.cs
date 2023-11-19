@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class ListButton : TextButton
+    public class ListButton : TextButton, IInputListener
     {
         public ListButton(string text, Skin skin, string styleName = null) : base(text, skin, styleName)
         {
@@ -23,6 +23,17 @@ namespace PuppetRoguelite.UI.Elements
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02, 1.2f);
             }
+        }
+
+        void IInputListener.OnMouseEnter()
+        {
+            OnFocused();
+        }
+
+        bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
+        {
+            OnActionButtonPressed();
+            return true;
         }
 
         protected override void OnActionButtonPressed()

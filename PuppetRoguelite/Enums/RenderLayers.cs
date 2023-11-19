@@ -9,6 +9,7 @@ namespace PuppetRoguelite.Enums
     public enum RenderLayers
     {
         ScreenSpaceRenderLayer = -999999,
-        AboveDetails = -10000
+        AboveDetails = -10000,
+        Cursor = -999999999
     }
 }

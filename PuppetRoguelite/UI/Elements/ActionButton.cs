@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class ActionButton : ImageButton
+    public class ActionButton : ImageButton, IInputListener
     {
         Label _label;
         public ActionButtonType Type;
@@ -52,6 +52,22 @@ namespace PuppetRoguelite.UI.Elements
             base.OnActionButtonPressed();
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
+        }
+
+        void IInputListener.OnMouseEnter()
+        {
+            OnFocused();
+        }
+
+        void IInputListener.OnMouseExit()
+        {
+            OnUnfocused();
+        }
+
+        bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
+        {
+            OnActionButtonPressed();
+            return true;
         }
     }
 

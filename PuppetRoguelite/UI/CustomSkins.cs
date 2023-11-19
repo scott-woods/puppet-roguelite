@@ -193,8 +193,8 @@ namespace PuppetRoguelite.UI
 
             skin.Add("progressBar", new ProgressBarStyle()
             {
-                Background = new PrimitiveDrawable(0, 30, Color.LightGray),
-                KnobBefore = new PrimitiveDrawable(0, 30, Color.Green)
+                Background = new PrimitiveDrawable(1, 16, Color.LightGray),
+                KnobBefore = new PrimitiveDrawable(1, 16, Color.Green)
             });
 
             //progress bar

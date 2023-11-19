@@ -889,6 +889,7 @@ namespace Nez
 				}
 
 				public const string Borders_and_hp = @"Content\Textures\UI\borders_and_hp.png";
+				public const string Crosshair038 = @"Content\Textures\UI\crosshair038.png";
 				public const string Glow_sliders = @"Content\Textures\UI\glow_sliders.png";
 				public const string Healthbar = @"Content\Textures\UI\healthbar.png";
 				public const string Hearthealthsprite3 = @"Content\Textures\UI\heart-health-sprite-3.png";

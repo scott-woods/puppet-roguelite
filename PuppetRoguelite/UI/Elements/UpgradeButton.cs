@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class UpgradeButton : ImageButton
+    public class UpgradeButton : ImageButton, IInputListener
     {
         public Upgrade Upgrade;
         public int RowIndex;
@@ -20,8 +20,8 @@ namespace PuppetRoguelite.UI.Elements
         {
             Upgrade = upgrade;
             RowIndex = rowIndex;
-            GetImage().SetScaleX(Game1.ResolutionScale.X / 2);
-            GetImage().SetScaleY(Game1.ResolutionScale.Y / 2);
+            GetImage().SetScaleX(Game1.ResolutionScale.X);
+            GetImage().SetScaleY(Game1.ResolutionScale.Y);
         }
 
         protected override void OnFocused()
@@ -32,6 +32,17 @@ namespace PuppetRoguelite.UI.Elements
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02, 1.2f);
             }
+        }
+
+        void IInputListener.OnMouseEnter()
+        {
+            OnFocused();
+        }
+
+        bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
+        {
+            OnActionButtonPressed();
+            return true;
         }
     }
 }

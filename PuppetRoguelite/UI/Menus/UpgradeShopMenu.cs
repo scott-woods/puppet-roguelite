@@ -72,7 +72,7 @@ namespace PuppetRoguelite.UI.Menus
             base.OnEnabled();
 
             _canActivateButton = false;
-            Stage.SetGamepadFocusElement(_addButtons.First());
+            //Stage.SetGamepadFocusElement(_addButtons.First());
         }
 
         void ArrangeElements()
@@ -83,55 +83,78 @@ namespace PuppetRoguelite.UI.Menus
 
             //get internal table of dialog
             var contentTable = _dialog.GetContentTable();
+            contentTable.DebugAll();
 
             //set padding of dialog
-            contentTable.PadTop(10).PadBottom(10).PadLeft(20).PadRight(20).Top();
+            contentTable.PadTop(50).PadBottom(50).PadLeft(30).PadRight(30);
             contentTable.Defaults().SetSpaceBottom(0).SetSpaceTop(0);
 
             //total dollahs
             var topRightTable = new Table();
-            contentTable.Add(topRightTable).SetColspan(3).SetExpandX().Right();
+            contentTable.Add(topRightTable).Expand().Right().Top();
             _totalDollahsLabel = new Label(PlayerData.Instance.Dollahs.ToString(), _basicSkin, "default_xxxl");
             topRightTable.Add(_totalDollahsLabel).SetPadTop(4);
             var dollahImage = new Image(_dollahSprite);
-            dollahImage.SetScale(2);
+            dollahImage.SetScaleX(Game1.ResolutionScale.X);
+            dollahImage.SetScaleY(Game1.ResolutionScale.Y);
             topRightTable.Add(dollahImage);
 
-            //add row for each upgrade
-            AddRow(contentTable, PlayerUpgradeData.Instance.MaxHpUpgrade);
-            AddRow(contentTable, PlayerUpgradeData.Instance.MaxApUpgrade);
-            AddRow(contentTable, PlayerUpgradeData.Instance.AttackSlotsUpgrade);
-            AddRow(contentTable, PlayerUpgradeData.Instance.UtilitySlotsUpgrade);
-            AddRow(contentTable, PlayerUpgradeData.Instance.SupportSlotsUpgrade);
-        }
-
-        void AddRow(Table contentTable, Upgrade upgrade)
-        {
             contentTable.Row();
 
+            var upgradeTable = new Table();
+            upgradeTable.Defaults().SetSpaceBottom(10);
+            contentTable.Add(upgradeTable).Grow();
+
+            //add row for each upgrade
+            AddRow(upgradeTable, PlayerUpgradeData.Instance.MaxHpUpgrade);
+            AddRow(upgradeTable, PlayerUpgradeData.Instance.MaxApUpgrade);
+            AddRow(upgradeTable, PlayerUpgradeData.Instance.AttackSlotsUpgrade);
+            AddRow(upgradeTable, PlayerUpgradeData.Instance.UtilitySlotsUpgrade);
+            AddRow(upgradeTable, PlayerUpgradeData.Instance.SupportSlotsUpgrade);
+        }
+
+        void AddRow(Table table, Upgrade upgrade)
+        {
             //upgrade label
-            var cell = contentTable.Add(new Label(upgrade.Name, _basicSkin, "default_xxl")).SetExpandX().Left().SetPadTop(4);
+            var cell = table.Add(new Label(upgrade.Name, _basicSkin, "default_xxxl")).SetExpandX().Left().SetPadTop(4);
 
             //upgrade value
-            var valueLabel = new Label(upgrade.GetValueString(), _basicSkin, "default_xxl");
+            var valueLabel = new Label(upgrade.GetValueString(), _basicSkin, "default_xxxl");
             _upgradeValueLabels.Add(cell.GetRow(), valueLabel);
-            contentTable.Add(valueLabel).SetExpandX().Left().SetPadTop(4);
+            table.Add(valueLabel).SetExpandX().Left().SetPadTop(4);
 
-            //upgrade cost and purchase button
-            var purchaseTable = new Table();
-            contentTable.Add(purchaseTable).SetExpandX().Right();
             var button = new UpgradeButton(upgrade, cell.GetRow(), _basicSkin, "plusButton");
             var canAfford = PlayerData.Instance.Dollahs >= upgrade.GetCurrentCost();
             button.SetDisabled(!canAfford);
             button.OnClicked += OnPlusButtonClicked;
             _addButtons.Add(button);
-            purchaseTable.Add(button).SetSpaceRight(4);
+            table.Add(button).SetExpandX().Right().SetSpaceRight(10);
+
             var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin, "default_xxl");
             _upgradeCostLabels.Add(cell.GetRow(), costLabel);
-            purchaseTable.Add(costLabel).SetPadTop(4);
+            table.Add(costLabel).SetPadTop(4).Right();
             var dollahImage = new Image(_dollahSprite);
-            dollahImage.SetScale(2f);
-            purchaseTable.Add(dollahImage);
+            dollahImage.SetScaleX(Game1.ResolutionScale.X);
+            dollahImage.SetScaleY(Game1.ResolutionScale.Y);
+            table.Add(dollahImage);
+
+            //upgrade cost and purchase button
+            //var purchaseTable = new Table();
+            //table.Add(purchaseTable).Grow().Right();
+            //var button = new UpgradeButton(upgrade, cell.GetRow(), _basicSkin, "plusButton");
+            //var canAfford = PlayerData.Instance.Dollahs >= upgrade.GetCurrentCost();
+            //button.SetDisabled(!canAfford);
+            //button.OnClicked += OnPlusButtonClicked;
+            //_addButtons.Add(button);
+            //purchaseTable.Add(button).SetSpaceRight(4).Expand();
+            //var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin, "default_xxl");
+            //_upgradeCostLabels.Add(cell.GetRow(), costLabel);
+            //purchaseTable.Add(costLabel).SetPadTop(4);
+            //var dollahImage = new Image(_dollahSprite);
+            //dollahImage.SetScale(2f);
+            //purchaseTable.Add(dollahImage);
+
+            table.Row();
         }
 
         public override void Update()

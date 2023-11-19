@@ -415,8 +415,8 @@
             "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 192,
-                "y": 191.75
+                "x": 184.75,
+                "y": 229
             }
         },
         "Tilemaps/DungeonPrison/boss_room.tmx": {
@@ -488,8 +488,8 @@
             "scale": 0.75,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 720,
-                "y": 407.33333333333337
+                "x": 484.66666666666663,
+                "y": 308
             }
         },
         "Tilemaps/Hub/puppet_shop.tmx": {

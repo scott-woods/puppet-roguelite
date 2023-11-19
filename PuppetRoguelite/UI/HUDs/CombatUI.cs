@@ -86,8 +86,7 @@ namespace PuppetRoguelite.UI.HUDs
                     var bar = new BasicApProgressBar(i, _basicSkin);
                     bar.AddObservers();
                     _apProgressBars.Add(bar);
-                    var width = ((Game1.DesignResolution.X * .5f) / PlayerController.Instance.ActionPointComponent.MaxActionPoints) - ((8 * (PlayerController.Instance.ActionPointComponent.MaxActionPoints - 1) / PlayerController.Instance.ActionPointComponent.MaxActionPoints));
-                    _apTable.Add(bar).Width(width);
+                    _apTable.Add(bar).GrowX();
                 }
             }
 
@@ -136,6 +135,7 @@ namespace PuppetRoguelite.UI.HUDs
 
             _table.Row();
 
+            //dollahs table
             var dollahsTable = new Table();
             _table.Add(dollahsTable).Top().Left().SetSpaceTop(Game1.UIResolution.Y * .01f);
             var dollahImage = new Image(_dollahSprite);
@@ -144,20 +144,25 @@ namespace PuppetRoguelite.UI.HUDs
             dollahsTable.Add(dollahImage);
             _dollahLabel = new Label("", _basicSkin, "default_xxl");
             dollahsTable.Add(_dollahLabel).SetPadTop(5);
-            //dollahsTable.Add(new Label("feef", _basicSkin, "default_xxl"));
 
             _table.Row();
 
             var bottomTable = new Table();
-            _table.Add(bottomTable).SetColspan(2).Grow().SetPadBottom(20);
+            _table.Add(bottomTable).Grow();
 
-            var bottomLeftTable = new Table();
-            bottomTable.Add(bottomLeftTable).Width(Game1.DesignResolution.X * .75f).Expand().Bottom();
+            //var bottomLeftTable = new Table();
+            //bottomTable.Add(bottomLeftTable).Width(Game1.UIResolution.X * .75f).Expand().Bottom();
 
             _apTable = new Table();
-            _apTable.Defaults().SetSpaceRight(50);
+            _apTable.Defaults().Space(50);
             _apTable.SetVisible(false);
-            bottomLeftTable.Add(_apTable).Expand();
+            bottomTable.Add(_apTable)
+                .Bottom()
+                .Expand()
+                .SetFillX()
+                .SetPadLeft(Game1.UIResolution.X * .1f)
+                .SetPadRight(Game1.UIResolution.X * .1f)
+                .SetPadBottom(Game1.UIResolution.Y * .05f);
 
             //_simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
             //_simTipLabel.SetWrap(true);

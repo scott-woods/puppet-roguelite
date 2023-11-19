@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.Systems;
+using Nez.UI;
 using PuppetRoguelite.Models;
 using System;
 using System.Collections.Generic;
@@ -55,11 +56,6 @@ namespace PuppetRoguelite.Components.Shared
         public int MaxHealth
         {
             get => _maxHealth;
-            set
-            {
-                _maxHealth = value;
-                Emitter.Emit(HealthComponentEventType.MaxHealthChanged, this);
-            }
         }
 
         public HealthComponent(int maxHealth)
@@ -95,6 +91,16 @@ namespace PuppetRoguelite.Components.Shared
             {
                 _hurtbox.Emitter.RemoveObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
             }
+        }
+
+        public void SetMaxHealth(int maxHealth, bool restoreHealth = false)
+        {
+            _maxHealth = maxHealth;
+            if (restoreHealth)
+            {
+                Health = _maxHealth;
+            }
+            Emitter.Emit(HealthComponentEventType.MaxHealthChanged, this);
         }
 
         void OnHurtboxHit(HurtboxHit hurtboxHit)

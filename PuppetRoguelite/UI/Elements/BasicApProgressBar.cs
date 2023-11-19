@@ -24,7 +24,7 @@ namespace PuppetRoguelite.UI.Elements
             _max = PlayerController.Instance.ActionPointComponent.ApThreshold * (_index + 1);
             SetMinMax(_min, _max);
 
-            SetStepSize(.1f);
+            SetStepSize(.0001f);
         }
 
         public void AddObservers()

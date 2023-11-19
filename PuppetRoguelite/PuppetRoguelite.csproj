@@ -79,6 +79,7 @@
     <None Remove="Content\Textures\Shops\herb_shop.png" />
     <None Remove="Content\Textures\Shops\tech_shop.png" />
     <None Remove="Content\Textures\UI\borders_and_hp.png" />
+    <None Remove="Content\Textures\UI\crosshair038.png" />
     <None Remove="Content\Textures\UI\glow_sliders.png" />
     <None Remove="Content\Textures\UI\healthbar.png" />
     <None Remove="Content\Textures\UI\heart-health-sprite-3.png" />
