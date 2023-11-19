@@ -45,7 +45,8 @@ namespace PuppetRoguelite
         ActionPointsChanged,
         MaxActionPointsChanged,
         ActionPointsTimerStarted,
-        ActionPointsTimerUpdated
+        ActionPointsTimerUpdated,
+        ActionPointsProgressChanged
     }
     public enum InteractableEvents
     {

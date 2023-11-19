@@ -17,20 +17,26 @@ namespace PuppetRoguelite.Components.Characters.Player
         //const float _baseDamageMultiplier = 4f;
         const float _baseChargeRate = 0f;
         const float _baseDamageMultiplier = 4f;
+        const int _damageRequiredPerPoint = 9;
+
+        public int DamageRequiredPerPoint { get => _damageRequiredPerPoint; }
+
+        int _damageAccumulated = 0;
+        public int DamageAccumulated { get => _damageAccumulated; }
 
         bool _isCharging = false;
 
         HealthComponent _healthComponent;
 
-        public float MaxCharge = 100f;
+        //public float MaxCharge = 100f;
 
-        public float ApThreshold
-        {
-            get
-            {
-                return 100f / _maxActionPoints;
-            }
-        }
+        //public float ApThreshold
+        //{
+        //    get
+        //    {
+        //        return 100f / _maxActionPoints;
+        //    }
+        //}
 
         int _maxActionPoints;
         public int MaxActionPoints
@@ -50,16 +56,16 @@ namespace PuppetRoguelite.Components.Characters.Player
             }
         }
 
-        float _currentChargeTimer;
-        public float CurrentChargeTimer
-        {
-            get => _currentChargeTimer;
-            set
-            {
-                _currentChargeTimer = Math.Max(0, Math.Min(value, MaxCharge));
-                Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsTimerUpdated, this);
-            }
-        }
+        //float _currentChargeTimer;
+        //public float CurrentChargeTimer
+        //{
+        //    get => _currentChargeTimer;
+        //    set
+        //    {
+        //        _currentChargeTimer = Math.Max(0, Math.Min(value, MaxCharge));
+        //        Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsTimerUpdated, this);
+        //    }
+        //}
 
         public ActionPointComponent(int maxAp, HealthComponent healthComponent)
         {
@@ -95,44 +101,61 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         public void Update()
         {
-            if (_isCharging && (ActionPoints < MaxActionPoints))
-            {
-                float healthMultiplier = 2 - (_healthComponent.Health / _healthComponent.MaxHealth);
-                CurrentChargeTimer += Time.DeltaTime * (_baseChargeRate * healthMultiplier);
+            //if (_isCharging && (ActionPoints < MaxActionPoints))
+            //{
+            //    float healthMultiplier = 2 - (_healthComponent.Health / _healthComponent.MaxHealth);
+            //    CurrentChargeTimer += Time.DeltaTime * (_baseChargeRate * healthMultiplier);
 
-                //if timer has finished
-                if (CurrentChargeTimer >= ApThreshold * (ActionPoints + 1))
-                {
-                    ActionPoints++;
-                }
-            }
+            //    //if timer has finished
+            //    if (CurrentChargeTimer >= ApThreshold * (ActionPoints + 1))
+            //    {
+            //        ActionPoints++;
+            //    }
+            //}
         }
 
         public void DecrementActionPoints(int actionPoints)
         {
             ActionPoints -= actionPoints;
+            Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsProgressChanged, this);
         }
 
         #region OBSERVERS
 
+        void OnTurnPhaseTriggered()
+        {
+            _damageAccumulated = 0;
+            Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsProgressChanged, this);
+        }
+
         void OnDodgePhaseStarted()
         {
             ActionPoints = 0;
-            _isCharging = true;
-            CurrentChargeTimer = 0;
-        }
-
-        void OnTurnPhaseTriggered()
-        {
-            _isCharging = false;
+            _damageAccumulated = 0;
+            Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsProgressChanged, this);
         }
 
         void OnMeleeAttackHit(int damageAmount)
         {
-            if (ActionPoints < MaxActionPoints)
+            //randomly add more to accumulator
+            if (Nez.Random.Chance(.1f))
             {
-                CurrentChargeTimer += (_baseDamageMultiplier * damageAmount);
+                damageAmount += 2;
             }
+            else if (Nez.Random.Chance(.25f))
+            {
+                damageAmount += 1;
+            }
+
+            _damageAccumulated += damageAmount;
+
+            if (_damageAccumulated >= _damageRequiredPerPoint && ActionPoints < MaxActionPoints)
+            {
+                ActionPoints += 1;
+                _damageAccumulated -= _damageRequiredPerPoint;
+            }
+
+            Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsProgressChanged, this);
         }
 
         #endregion

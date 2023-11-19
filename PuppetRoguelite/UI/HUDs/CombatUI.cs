@@ -76,6 +76,7 @@ namespace PuppetRoguelite.UI.HUDs
             //connect to emitters
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+            Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
             //ap progress bars
             if (PlayerController.Instance.ActionPointComponent != null)
@@ -83,11 +84,12 @@ namespace PuppetRoguelite.UI.HUDs
                 //setup ap progress bars
                 for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
                 {
-                    var bar = new BasicApProgressBar(i, _basicSkin);
-                    bar.AddObservers();
+                    var bar = new BasicApProgressBar(_basicSkin);
                     _apProgressBars.Add(bar);
                     _apTable.Add(bar).GrowX();
                 }
+
+                Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsProgressChanged, OnActionPointsProgressChanged);
             }
 
             //player health
@@ -113,11 +115,7 @@ namespace PuppetRoguelite.UI.HUDs
             //connect to emitters
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
-
-            foreach (var bar in _apProgressBars)
-            {
-                bar.RemoveObservers();
-            }
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
             _apProgressBars.Clear();
             _apTable.ClearChildren();
@@ -199,6 +197,34 @@ namespace PuppetRoguelite.UI.HUDs
         {
             //hide elements
             _apTable.SetVisible(false);
+        }
+
+        void OnTurnPhaseTriggered()
+        {
+            var apComp = PlayerController.Instance.ActionPointComponent;
+            _apProgressBars[apComp.ActionPoints].SetValue(0);
+        }
+
+        void OnActionPointsProgressChanged(ActionPointComponent apComp)
+        {
+            int fullBars = apComp.ActionPoints;
+            float partialProgress = (float)apComp.DamageAccumulated / apComp.DamageRequiredPerPoint;
+
+            for (int i = 0; i < _apProgressBars.Count; i++)
+            {
+                if (i < fullBars)
+                {
+                    _apProgressBars[i].SetValue(1f);
+                }
+                else if (i == fullBars)
+                {
+                    _apProgressBars[i].SetValue(partialProgress);
+                }
+                else
+                {
+                    _apProgressBars[i].SetValue(0);
+                }
+            }
         }
 
         public void OnPlayerHealthChanged(HealthComponent healthComponent)
