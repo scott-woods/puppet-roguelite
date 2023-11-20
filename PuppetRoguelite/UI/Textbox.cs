@@ -46,8 +46,10 @@ namespace PuppetRoguelite.UI
             Stage.IsFullScreen = true;
 
             //base table
-            _table = Stage.AddElement(new Table());
-            _table.SetFillParent(true);
+            _table = Stage.AddElement(new Table()).Bottom();
+            _table.SetFillParent(false);
+            _table.SetWidth(Game1.UIResolution.X);
+            _table.SetHeight(Game1.UIResolution.Y);
 
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 

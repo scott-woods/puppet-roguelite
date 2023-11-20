@@ -33,14 +33,21 @@ namespace PuppetRoguelite.UI.Elements
         bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
         {
             OnActionButtonPressed();
-            return true;
+            return !_isDisabled;
         }
 
         protected override void OnActionButtonPressed()
         {
             base.OnActionButtonPressed();
 
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
+            if (!_isDisabled)
+            {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
+            }
+            else
+            {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
+            }
         }
     }
 }

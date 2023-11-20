@@ -15,8 +15,9 @@ namespace PuppetRoguelite
     {
         public static Point LowerResolution = new Point(480, 270);
         public static Point DesignResolution = new Point(480, 270);
-        public static Point UIResolution { get => Screen.Size.ToPoint(); }
+        //public static Point UIResolution { get => Screen.Size.ToPoint(); }
         //public static Point UIResolution = new Point(480, 270);
+        public static Point UIResolution = new Point(1920, 1080);
         public static Vector2 ResolutionScale { get => UIResolution.ToVector2() / DesignResolution.ToVector2(); }
         public static SceneManager SceneManager = new SceneManager();
         public static AudioManager AudioManager = new AudioManager();

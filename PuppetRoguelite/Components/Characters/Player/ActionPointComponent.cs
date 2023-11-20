@@ -17,7 +17,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         //const float _baseDamageMultiplier = 4f;
         const float _baseChargeRate = 0f;
         const float _baseDamageMultiplier = 4f;
-        const int _damageRequiredPerPoint = 9;
+        const int _damageRequiredPerPoint = 6;
 
         public int DamageRequiredPerPoint { get => _damageRequiredPerPoint; }
 
@@ -137,16 +137,6 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         void OnMeleeAttackHit(int damageAmount)
         {
-            //randomly add more to accumulator
-            if (Nez.Random.Chance(.1f))
-            {
-                damageAmount += 2;
-            }
-            else if (Nez.Random.Chance(.25f))
-            {
-                damageAmount += 1;
-            }
-
             _damageAccumulated += damageAmount;
 
             if (_damageAccumulated >= _damageRequiredPerPoint && ActionPoints < MaxActionPoints)

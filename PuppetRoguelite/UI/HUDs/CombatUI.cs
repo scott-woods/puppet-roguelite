@@ -40,11 +40,6 @@ namespace PuppetRoguelite.UI.HUDs
 
             Stage.IsFullScreen = true;
 
-            //base table
-            _table = Stage.AddElement(new Table());
-            _table.SetFillParent(true).Pad(Game1.UIResolution.Y * .04f);
-            _table.SetDebug(false);
-
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
 
@@ -64,9 +59,6 @@ namespace PuppetRoguelite.UI.HUDs
             //dollah
             var dollahTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Tilesets.Dungeon_prison_props);
             _dollahSprite = new Sprite(dollahTexture, new Rectangle(80, 240, 16, 16));
-
-            //arrange elements
-            ArrangeElements();
         }
 
         public override void OnAddedToEntity()
@@ -78,6 +70,63 @@ namespace PuppetRoguelite.UI.HUDs
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
+            Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+
+            //ap progress bars
+            if (PlayerController.Instance.ActionPointComponent != null)
+            {
+                Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsProgressChanged, OnActionPointsProgressChanged);
+            }
+
+            //player health
+            if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var hc))
+            {
+                hc.Emitter.AddObserver(HealthComponentEventType.MaxHealthChanged, OnPlayerMaxHealthChanged);
+                hc.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
+            }
+
+            //dollahs
+            if (PlayerController.Instance.Entity.TryGetComponent<DollahInventory>(out var dollahInventory))
+            {
+                dollahInventory.Emitter.AddObserver(DollahInventoryEvents.DollahsChanged, OnDollahsChanged);
+            }
+
+            CreateUI();
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            //connect to emitters
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
+            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
+
+            Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+
+            _apProgressBars.Clear();
+            _apTable.ClearChildren();
+
+            ClearUI();
+        }
+
+        #endregion
+
+        void OnGraphicsDeviceReset()
+        {
+            ClearUI();
+            CreateUI();
+        }
+
+        void CreateUI()
+        {
+            //base table
+            _table = Stage.AddElement(new Table());
+            _table.SetWidth(Game1.UIResolution.X);
+            _table.SetHeight(Game1.UIResolution.Y);
+            _table.SetFillParent(false).Pad(Game1.UIResolution.Y * .04f);
+
+            ArrangeElements();
+
             //ap progress bars
             if (PlayerController.Instance.ActionPointComponent != null)
             {
@@ -88,40 +137,30 @@ namespace PuppetRoguelite.UI.HUDs
                     _apProgressBars.Add(bar);
                     _apTable.Add(bar).GrowX();
                 }
-
-                Emitters.ActionPointEmitter.AddObserver(ActionPointEvents.ActionPointsProgressChanged, OnActionPointsProgressChanged);
             }
 
             //player health
             if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var hc))
             {
                 OnPlayerMaxHealthChanged(hc);
-                hc.Emitter.AddObserver(HealthComponentEventType.MaxHealthChanged, OnPlayerMaxHealthChanged);
-
                 OnPlayerHealthChanged(hc);
-                hc.Emitter.AddObserver(HealthComponentEventType.HealthChanged, OnPlayerHealthChanged);
             }
 
             //dollahs
             if (PlayerController.Instance.Entity.TryGetComponent<DollahInventory>(out var dollahInventory))
             {
                 OnDollahsChanged(dollahInventory);
-                dollahInventory.Emitter.AddObserver(DollahInventoryEvents.DollahsChanged, OnDollahsChanged);
             }
         }
 
-        public override void OnRemovedFromEntity()
+        void ClearUI()
         {
-            //connect to emitters
-            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterStarted, OnEncounterStarted);
-            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
-            Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
-
-            _apProgressBars.Clear();
-            _apTable.ClearChildren();
+            _table?.Clear();
+            _table.Remove();
+            _table = null;
+            _apProgressBars?.Clear();
+            _hearts?.Clear();
         }
-
-        #endregion
 
         void ArrangeElements()
         {
@@ -201,8 +240,12 @@ namespace PuppetRoguelite.UI.HUDs
 
         void OnTurnPhaseTriggered()
         {
-            var apComp = PlayerController.Instance.ActionPointComponent;
-            _apProgressBars[apComp.ActionPoints].SetValue(0);
+            //var apComp = PlayerController.Instance.ActionPointComponent;
+
+            //if (apComp.ActionPoints < apComp.MaxActionPoints)
+            //{
+            //    _apProgressBars[apComp.ActionPoints].SetValue(0);
+            //}
         }
 
         void OnActionPointsProgressChanged(ActionPointComponent apComp)

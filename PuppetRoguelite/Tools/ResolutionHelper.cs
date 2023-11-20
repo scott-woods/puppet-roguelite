@@ -24,6 +24,7 @@ namespace PuppetRoguelite.Tools
         {
             var screenPos = Game1.Scene.Camera.WorldToScreenPoint(gamePoint) * Game1.ResolutionScale;
             return screenPos;
+            
             //return screenPos * Game1.ResolutionScale;
         }
 

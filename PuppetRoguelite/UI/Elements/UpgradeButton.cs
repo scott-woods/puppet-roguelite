@@ -42,7 +42,7 @@ namespace PuppetRoguelite.UI.Elements
         bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
         {
             OnActionButtonPressed();
-            return true;
+            return !_isDisabled;
         }
     }
 }

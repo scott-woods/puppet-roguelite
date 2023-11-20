@@ -53,8 +53,8 @@ namespace PuppetRoguelite.UI.Menus
             Stage.IsFullScreen = true;
 
             //base table
-            _mainTable = Stage.AddElement(new Table());
-            _mainTable.SetFillParent(true);
+            //_mainTable = Stage.AddElement(new Table());
+            //_mainTable.SetFillParent(true);
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
@@ -83,8 +83,9 @@ namespace PuppetRoguelite.UI.Menus
 
         void CreateMainDialog()
         {
-            _mainTable = new Table();
-            _mainTable.SetFillParent(true);
+            _mainTable = Stage.AddElement(new Table());
+            _mainTable.SetWidth(Game1.UIResolution.X);
+            _mainTable.SetHeight(Game1.UIResolution.Y);
 
             //create dialog
             _mainDialog = new Dialog("", _basicSkin);

@@ -15,24 +15,44 @@ namespace PuppetRoguelite.Scenes
 {
     public class BaseScene : Scene, IFinalRenderDelegate
     {
-        ScreenSpaceRenderer _screenSpaceRenderer;
+        ScreenSpaceRenderer _uiRenderer;
         ScreenSpaceRenderer _cursorRenderer;
+        RenderLayerExcludeRenderer _gameRenderer;
 
         public override void Initialize()
         {
             base.Initialize();
 
-            ClearColor = Color.Black;
+            ClearColor = Color.Blue;
 
             //var diff = Game1.ResolutionScale - 1;
             //Camera.SetMinimumZoom(1f);
             //Camera.SetMaximumZoom(Game1.ResolutionScale + diff);
             //Camera.Zoom = 0.5f;
 
-            _screenSpaceRenderer = new ScreenSpaceRenderer(100, (int)RenderLayers.ScreenSpaceRenderLayer);
-            _cursorRenderer = new ScreenSpaceRenderer(1, (int)RenderLayers.Cursor);
+            _gameRenderer = new RenderLayerExcludeRenderer(0, (int)RenderLayers.ScreenSpaceRenderLayer, (int)RenderLayers.Cursor);
+            var mainRenderTarget = new RenderTexture(Game1.DesignResolution.X, Game1.DesignResolution.Y);
+            _gameRenderer.RenderTexture = mainRenderTarget;
+            AddRenderer(_gameRenderer);
 
-            AddRenderer(new RenderLayerExcludeRenderer(0, (int)RenderLayers.ScreenSpaceRenderLayer, (int)RenderLayers.Cursor));
+            _uiRenderer = new ScreenSpaceRenderer(1, (int)RenderLayers.ScreenSpaceRenderLayer);
+            var uiRenderTarget = new RenderTexture(Game1.UIResolution.X, Game1.UIResolution.Y);
+            uiRenderTarget.ResizeBehavior = RenderTexture.RenderTextureResizeBehavior.None;
+            _uiRenderer.RenderTexture = uiRenderTarget;
+            AddRenderer(_uiRenderer);
+
+            _cursorRenderer = new ScreenSpaceRenderer(2, (int)RenderLayers.Cursor);
+            //var cursorRenderTarget = new RenderTexture(Game1.DesignResolution.X, Game1.DesignResolution.Y);
+            var cursorRenderTarget = new RenderTexture(Game1.UIResolution.X, Game1.UIResolution.Y);
+            cursorRenderTarget.ResizeBehavior = RenderTexture.RenderTextureResizeBehavior.None;
+            _cursorRenderer.RenderTexture = cursorRenderTarget;
+            AddRenderer(_cursorRenderer);
+
+            //_uiRenderer = new ScreenSpaceRenderer(100, (int)RenderLayers.ScreenSpaceRenderLayer);
+            //_cursorRenderer = new RenderLayerRenderer(100, (int)RenderLayers.Cursor);
+            //AddRenderer(_cursorRenderer);
+
+            //AddRenderer(new RenderLayerExcludeRenderer(0, (int)RenderLayers.ScreenSpaceRenderLayer, (int)RenderLayers.Cursor));
 
             FinalRenderDelegate = this;
         }
@@ -43,8 +63,10 @@ namespace PuppetRoguelite.Scenes
 
         public void OnSceneBackBufferSizeChanged(int newWidth, int newHeight)
         {
-            _screenSpaceRenderer.OnSceneBackBufferSizeChanged(newWidth, newHeight);
+            _gameRenderer.OnSceneBackBufferSizeChanged(newWidth, newHeight);
+            _uiRenderer.OnSceneBackBufferSizeChanged(newWidth, newHeight);
             _cursorRenderer.OnSceneBackBufferSizeChanged(newWidth, newHeight);
+            _cursorRenderer.RenderTexture.Resize(Screen.Width, Screen.Height);
         }
 
         public void HandleFinalRender(RenderTarget2D finalRenderTarget, Color letterboxColor, RenderTarget2D source,
@@ -52,12 +74,25 @@ namespace PuppetRoguelite.Scenes
         {
             Core.GraphicsDevice.SetRenderTarget(null);
             Core.GraphicsDevice.Clear(letterboxColor);
+
             Graphics.Instance.Batcher.Begin(BlendState.AlphaBlend, samplerState, DepthStencilState.None, RasterizerState.CullNone, null);
+
             Graphics.Instance.Batcher.Draw(source, finalRenderDestinationRect, Color.White);
+
+            //draw game
+            Graphics.Instance.Batcher.Draw(_gameRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
+
+            //render ui
+            Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
+            //Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, new Rectangle(0, 0, Screen.Width, Screen.Height), Color.White);
+
+            //render cursor
+            Graphics.Instance.Batcher.Draw(_cursorRenderer.RenderTexture, new Rectangle(0, 0, Screen.Width, Screen.Height), Color.White);
+
             Graphics.Instance.Batcher.End();
 
-            _screenSpaceRenderer.Render(_scene);
-            _cursorRenderer.Render(_scene);
+            //_uiRenderer.Render(_scene);
+            //_cursorRenderer.Render(_scene);
         }
     }
     //public class BaseScene : Scene, IFinalRenderDelegate

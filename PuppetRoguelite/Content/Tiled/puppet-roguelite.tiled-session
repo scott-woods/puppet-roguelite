@@ -5,12 +5,13 @@
     },
     "activeFile": "Tilemaps/Hub/hub_2.tmx",
     "expandedProjectPaths": [
-        "Tilemaps/Hub",
-        "Tilemaps",
-        "Rules",
+        ".",
+        "Tilemaps/DungeonPrison",
         "Tilesets",
         "RuleMaps",
-        "."
+        "Tilemaps",
+        "Rules",
+        "Tilemaps/Hub"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -485,6 +486,9 @@
             }
         },
         "Tilemaps/Hub/hub_2.tmx": {
+            "expandedObjectLayers": [
+                14
+            ],
             "scale": 0.75,
             "selectedLayer": 8,
             "viewCenter": {

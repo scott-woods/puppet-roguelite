@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using PuppetRoguelite.Tools;
 using Nez.UI;
 using PuppetRoguelite.Enums;
+using Microsoft.Xna.Framework;
 
 namespace PuppetRoguelite.Components
 {
@@ -31,11 +32,7 @@ namespace PuppetRoguelite.Components
 
         public void Update()
         {
-            var mousePos = Entity.Scene.Camera.MouseToWorldPoint();
-            Entity.Position = ResolutionHelper.GameToUiPoint(mousePos);
-            //Entity.Position = Input.MousePosition * ResolutionHelper.ScaleFactor;
-            //Entity.Position = Entity.Scene.Camera.ScreenToWorldPoint(Input.MousePosition);
-            //Entity.Position = PlayerController.Instance.Entity.Position;
+            Entity.Position = Input.RawMousePosition.ToVector2();
         }
 
         //public void Update()

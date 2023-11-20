@@ -50,6 +50,7 @@ namespace PuppetRoguelite.UI.Menus
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
+            _table.DebugAll();
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
@@ -65,6 +66,24 @@ namespace PuppetRoguelite.UI.Menus
 
             //arrange elements
             ArrangeElements();
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+        }
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+        }
+
+        void OnGraphicsDeviceReset()
+        {
+            _table.GetCell(_dialog).Width(Game1.UIResolution.X * .6f).Height(Game1.UIResolution.Y * .75f);
         }
 
         public override void OnEnabled()
