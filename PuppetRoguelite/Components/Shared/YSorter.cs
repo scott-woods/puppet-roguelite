@@ -15,11 +15,19 @@ namespace PuppetRoguelite.Components.Shared
     {
         IRenderable _renderable;
         OriginComponent _originComponent;
+        List<RenderableComponent> _allRenderables;
 
         public YSorter(IRenderable renderable, OriginComponent originComponent)
         {
             _renderable = renderable;
             _originComponent = originComponent;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            _allRenderables = Entity.GetComponents<RenderableComponent>();
         }
 
         public void Update()
@@ -93,7 +101,10 @@ namespace PuppetRoguelite.Components.Shared
                     }
                 }
 
-                _renderable.RenderLayer = (int)RenderLayers.AboveDetails - (int)_originComponent.Origin.Y;
+                foreach (var renderable in _allRenderables)
+                {
+                    renderable.RenderLayer = (int)RenderLayers.AboveDetails - (int)_originComponent.Origin.Y;
+                }
             }
         }
 
@@ -106,7 +117,11 @@ namespace PuppetRoguelite.Components.Shared
                 //an above tile is below the origin. render below above details
                 if ((tile.Y * 16) + 16 > origin.Y)
                 {
-                    _renderable.RenderLayer = -(int)(_originComponent.Origin.Y);
+                    foreach (var renderable in _allRenderables)
+                    {
+                        renderable.RenderLayer = -(int)(_originComponent.Origin.Y);
+                    }
+
                     return true;
                 }
             }
