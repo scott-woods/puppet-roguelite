@@ -308,8 +308,10 @@ namespace PuppetRoguelite.Scenes
             Boss.HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnBossDied);
 
             Game1.AudioManager.StopMusic();
-            foreach(var enemy in FodderEnemies)
+            var queue = new Queue<Enemy>(FodderEnemies);
+            while (queue.Count > 0)
             {
+                var enemy = queue.Dequeue();
                 if (enemy.Entity.TryGetComponent<HealthComponent>(out var enemyHc))
                 {
                     enemyHc.Health = 0;

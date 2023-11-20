@@ -44,7 +44,7 @@ namespace PuppetRoguelite.Components.Characters.HeartHoarder
         float _normalMoveSpeed = 100f;
         float _attackingMoveSpeed = 115f;
         float _vanishedMoveSpeed = 200f;
-        int _maxHp = 40;
+        int _maxHp = 1;
         bool _inAttackSequence = false;
         float _timeInAttackSequence = 0f;
 

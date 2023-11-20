@@ -52,6 +52,15 @@ namespace PuppetRoguelite.Models
             }
         }
 
+        public void UnlockAction(PlayerActionType action)
+        {
+            var unlock = Unlocks.FirstOrDefault(u => u.Action == action);
+            if (unlock != null)
+            {
+                unlock.IsUnlocked = true;
+            }
+        }
+
         public void UpdateAndSave()
         {
             SaveData();

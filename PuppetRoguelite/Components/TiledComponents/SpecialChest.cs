@@ -3,6 +3,8 @@ using Nez;
 using Nez.Textures;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.PlayerActions;
+using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Scenes;
@@ -45,14 +47,46 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //display text
             var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
+            //var lines = new List<DialogueLine>()
+            //{
+            //    new DialogueLine("You look inside the box.."),
+            //    new DialogueLine($"Huh, you wanted an item?"),
+            //    new DialogueLine($"SUCK"),
+            //    new DialogueLine($"ME")
+            //};
             var lines = new List<DialogueLine>()
             {
-                new DialogueLine("You look inside the box.."),
-                new DialogueLine($"Huh, you wanted an item?"),
-                new DialogueLine($"SUCK"),
-                new DialogueLine($"ME")
+                new DialogueLine("You look inside the box..."),
             };
             yield return textboxManager.DisplayTextbox(lines);
+
+            //if any unlocks left to get, get a new unlock
+            var unlocks = ActionUnlockData.Instance.Unlocks.Where(u => !u.IsUnlocked).ToList();
+            if (unlocks.Any())
+            {
+                var unlock = unlocks.RandomItem();
+                ActionUnlockData.Instance.UnlockAction(unlock.Action);
+
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Loot_get);
+                var unlockLines = new List<DialogueLine>()
+                {
+                    new DialogueLine($"You found the schematics for {PlayerActionUtils.GetName(unlock.Action.ToType())}!")
+                };
+                yield return textboxManager.DisplayTextbox(unlockLines);
+            }
+            else
+            {
+                //no new unlocks, just drop money i guess
+                var dropper = Entity.AddComponent(new DollahDropper(75, 0));
+                dropper.DropDollahs();
+
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Loot_get);
+                var dollahLines = new List<DialogueLine>()
+                {
+                    new DialogueLine("You found a bunch of dollahs!")
+                };
+                yield return textboxManager.DisplayTextbox(dollahLines);
+            }
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Space_ship_3);
 

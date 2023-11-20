@@ -60,6 +60,7 @@ namespace Nez
 				public const string Hh_slash = @"Content\Audio\Sounds\hh_slash.wav";
 				public const string Hh_stationary_attack = @"Content\Audio\Sounds\hh_stationary_attack.wav";
 				public const string Hh_vanish = @"Content\Audio\Sounds\hh_vanish.wav";
+				public const string Loot_get = @"Content\Audio\Sounds\loot_get.wav";
 				public const string Menu_select = @"Content\Audio\Sounds\menu_select.wav";
 				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
 				public const string Player_teleport = @"Content\Audio\Sounds\player_teleport.wav";
