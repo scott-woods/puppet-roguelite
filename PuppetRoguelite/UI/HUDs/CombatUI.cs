@@ -127,7 +127,6 @@ namespace PuppetRoguelite.UI.HUDs
             _table.SetWidth(Game1.UIResolution.X);
             _table.SetHeight(Game1.UIResolution.Y);
             _table.SetFillParent(false).Pad(Game1.UIResolution.Y * .04f);
-            _table.DebugAll();
 
             ArrangeElements();
 

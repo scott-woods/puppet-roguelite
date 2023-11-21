@@ -34,7 +34,7 @@ namespace PuppetRoguelite.SceneComponents
             }
             else
             {
-                _playerEntity = Scene.AddEntity(new Entity("player"));
+                _playerEntity = Scene.AddEntity(new PausableEntity("player"));
                 _playerEntity.AddComponent(new PlayerController());
             }
 

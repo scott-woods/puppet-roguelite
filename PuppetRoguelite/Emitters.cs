@@ -66,6 +66,8 @@ namespace PuppetRoguelite
     public enum GameEvents
     {
         RespawningAtHub,
-        StartingDungeonRun
+        StartingDungeonRun,
+        Paused,
+        Unpaused
     }
 }

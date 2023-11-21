@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.Systems;
 using Nez.Textures;
+using PuppetRoguelite.Entities;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.UI;
 using System;
@@ -33,7 +34,7 @@ namespace PuppetRoguelite.SceneComponents
                 _dialogueLines = lines;
 
                 //create textbox
-                _textbox = Scene.CreateEntity("textbox-ui").AddComponent(new Textbox());
+                _textbox = Scene.AddEntity(new PausableEntity("textbox-ui")).AddComponent(new Textbox());
                 //_textbox = Scene.Camera.AddComponent(new Textbox());
 
                 //emit started event

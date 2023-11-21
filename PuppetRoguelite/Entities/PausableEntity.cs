@@ -9,7 +9,8 @@ namespace PuppetRoguelite.Entities
 {
     public class PausableEntity : Entity
     {
-        bool _paused = false;
+        bool _pausedForTurn = false;
+        bool _gamePaused = false;
 
         public PausableEntity(string name) : base(name)
         {
@@ -22,6 +23,8 @@ namespace PuppetRoguelite.Entities
 
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
+            Emitters.GameEventsEmitter.AddObserver(GameEvents.Paused, OnPaused);
+            Emitters.GameEventsEmitter.AddObserver(GameEvents.Unpaused, OnUnpaused);
         }
 
         public override void OnRemovedFromScene()
@@ -30,24 +33,36 @@ namespace PuppetRoguelite.Entities
 
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseExecuting, OnTurnPhaseExecuting);
+            Emitters.GameEventsEmitter.RemoveObserver(GameEvents.Paused, OnPaused);
+            Emitters.GameEventsEmitter.RemoveObserver(GameEvents.Unpaused, OnUnpaused);
         }
 
         void OnTurnPhaseTriggered()
         {
-            _paused = true;
+            _pausedForTurn = true;
         }
 
         void OnTurnPhaseExecuting()
         {
-            _paused = false;
+            _pausedForTurn = false;
         }
 
         public override void Update()
         {
-            if (!_paused)
+            if (!_pausedForTurn && !_gamePaused)
             {
                 base.Update();
             }
+        }
+
+        void OnPaused()
+        {
+            _gamePaused = true;
+        }
+
+        void OnUnpaused()
+        {
+            _gamePaused = false;
         }
     }
 }
