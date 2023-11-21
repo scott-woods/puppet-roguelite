@@ -168,7 +168,7 @@ namespace PuppetRoguelite.UI.HUDs
             _heartsTable = new Table();
             _heartsTable.Defaults().SetSpaceRight(Game1.UIResolution.X * .01f);
             _table.Add(_heartsTable)
-                .Top().Right();
+                .Top().Left();
 
             _table.Row();
 
