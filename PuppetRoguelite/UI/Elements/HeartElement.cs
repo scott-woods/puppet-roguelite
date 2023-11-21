@@ -11,7 +11,7 @@ namespace PuppetRoguelite.UI.Elements
     {
         List<SpriteDrawable> _sprites;
 
-        public HeartElement(List<SpriteDrawable> sprites, int fillLevel) : base(sprites[fillLevel])
+        public HeartElement(List<SpriteDrawable> sprites, int fillLevel) : base(sprites[Math.Clamp(fillLevel, 0, sprites.Count - 1)])
         {
             _sprites = sprites;
 

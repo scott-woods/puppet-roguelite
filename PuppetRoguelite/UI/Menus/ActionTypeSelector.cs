@@ -36,6 +36,8 @@ namespace PuppetRoguelite.UI.Menus
             base.Initialize();
 
             WorldSpaceOffset = new Vector2(0, -16);
+
+            Stage.IsFullScreen = true;
         }
 
         public override Element ArrangeElements()

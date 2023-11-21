@@ -34,6 +34,7 @@ namespace PuppetRoguelite
             Window.AllowUserResizing = false;
             IsFixedTimeStep = false;
             IsMouseVisible = false;
+            PauseOnFocusLost = true;
 
             if (!Directory.Exists("Data")) Directory.CreateDirectory("Data");
             Inspectables.Initialize();

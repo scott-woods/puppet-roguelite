@@ -32,6 +32,9 @@ namespace PuppetRoguelite.UI.HUDs
         List<SpriteDrawable> _heartSprites;
         Sprite _dollahSprite;
 
+        //misc
+        bool _shouldApTableBeVisible = false;
+
         #region LIFECYCLE
 
         public override void Initialize()
@@ -124,6 +127,7 @@ namespace PuppetRoguelite.UI.HUDs
             _table.SetWidth(Game1.UIResolution.X);
             _table.SetHeight(Game1.UIResolution.Y);
             _table.SetFillParent(false).Pad(Game1.UIResolution.Y * .04f);
+            _table.DebugAll();
 
             ArrangeElements();
 
@@ -192,7 +196,7 @@ namespace PuppetRoguelite.UI.HUDs
 
             _apTable = new Table();
             _apTable.Defaults().Space(50);
-            _apTable.SetVisible(false);
+            _apTable.SetVisible(_shouldApTableBeVisible);
             bottomTable.Add(_apTable)
                 .Bottom()
                 .Expand()
@@ -229,12 +233,14 @@ namespace PuppetRoguelite.UI.HUDs
             }
 
             //show relevant elements
+            _shouldApTableBeVisible = true;
             _apTable.SetVisible(true);
         }
 
         void OnEncounterEnded()
         {
             //hide elements
+            _shouldApTableBeVisible = false;
             _apTable.SetVisible(false);
         }
 

@@ -27,12 +27,34 @@ namespace PuppetRoguelite.Components
 
             SpriteRenderer.SetRenderLayer((int)RenderLayers.Cursor);
 
-            Entity.SetScale(Game1.ResolutionScale / 2);
+            //Entity.SetScale(Game1.ResolutionScale / 2);
+            var scale = Screen.Size / Game1.UIResolution.ToVector2();
+            Entity.SetScale(scale);
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+        }
+
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
         }
 
         public void Update()
         {
             Entity.Position = Input.RawMousePosition.ToVector2();
+        }
+
+        void OnGraphicsDeviceReset()
+        {
+            var scale = Screen.Size / Game1.UIResolution.ToVector2();
+            Entity.SetScale(scale);
         }
 
         //public void Update()
