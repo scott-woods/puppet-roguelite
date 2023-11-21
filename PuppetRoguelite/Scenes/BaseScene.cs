@@ -83,11 +83,12 @@ namespace PuppetRoguelite.Scenes
             Graphics.Instance.Batcher.Draw(_gameRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
 
             //render ui
-            Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
-            //Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, new Rectangle(0, 0, Screen.Width, Screen.Height), Color.White);
+            //Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
+            var uiRect = new Rectangle(0, 0, finalRenderDestinationRect.Width, finalRenderDestinationRect.Height);
+            Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, uiRect, Color.White);
 
             //render cursor
-            Graphics.Instance.Batcher.Draw(_cursorRenderer.RenderTexture, new Rectangle(0, 0, Screen.Width, Screen.Height), Color.White);
+            Graphics.Instance.Batcher.Draw(_cursorRenderer.RenderTexture, uiRect, Color.White);
 
             Graphics.Instance.Batcher.End();
 

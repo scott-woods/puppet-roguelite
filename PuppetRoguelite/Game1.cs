@@ -19,16 +19,19 @@ namespace PuppetRoguelite
         //public static Point UIResolution = new Point(480, 270);
         public static Point UIResolution = new Point(1920, 1080);
         public static Vector2 ResolutionScale { get => UIResolution.ToVector2() / DesignResolution.ToVector2(); }
+
+        //global managers
         public static SceneManager SceneManager = new SceneManager();
         public static AudioManager AudioManager = new AudioManager();
         public static GameStateManager GameStateManager = new GameStateManager();
+        public static ResolutionManager ResolutionManager = new ResolutionManager();
 
         protected override void Initialize()
         {
             base.Initialize();
 
             DebugRenderEnabled = false;
-            Window.AllowUserResizing = true;
+            Window.AllowUserResizing = false;
             IsFixedTimeStep = false;
             IsMouseVisible = false;
 
@@ -43,8 +46,9 @@ namespace PuppetRoguelite
             RegisterGlobalManager(SceneManager);
             RegisterGlobalManager(AudioManager);
             RegisterGlobalManager(GameStateManager);
+            RegisterGlobalManager(ResolutionManager);
 
-            Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
+            Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.NoBorder);
             Screen.SetSize(1920, 1080);
 
             SceneManager.TargetEntranceId = "0";
