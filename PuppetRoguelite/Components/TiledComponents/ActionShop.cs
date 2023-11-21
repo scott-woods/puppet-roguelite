@@ -75,12 +75,8 @@ namespace PuppetRoguelite.Components.TiledComponents
             };
             yield return textboxManager.DisplayTextbox(lines);
 
-            if (_menu == null)
-            {
-                //_menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
-                _menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
-            }
-            else _menu.SetEnabled(true);
+            _menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
+            //_menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
 
             _isShowingMenu = true;
             while (_isShowingMenu)
@@ -99,7 +95,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         void OnShopClosed()
         {
-            _menu.SetEnabled(false);
+            _menu.Entity.Destroy();
             _isShowingMenu = false;
         }
     }

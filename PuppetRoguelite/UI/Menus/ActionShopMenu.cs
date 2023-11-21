@@ -16,20 +16,20 @@ using PuppetRoguelite.Tools;
 
 namespace PuppetRoguelite.UI.Menus
 {
-    public class ActionShopMenu : UICanvas
+    public class ActionShopMenu : CustomCanvas
     {
         Stack<Table> _tableStack = new Stack<Table>();
 
+        Table _table;
+
         //main dialog
         Table _mainTable;
-        Dialog _mainDialog;
         List<ListButton> _attackButtons = new List<ListButton>();
         List<ListButton> _utilityButtons = new List<ListButton>();
         List<ListButton> _supportButtons = new List<ListButton>();
 
         //action selection dialog
         Table _actionTable;
-        Dialog _actionDialog;
         List<ListButton> _newActionButtons = new List<ListButton>();
 
         //misc
@@ -53,8 +53,10 @@ namespace PuppetRoguelite.UI.Menus
             Stage.IsFullScreen = true;
 
             //base table
-            //_mainTable = Stage.AddElement(new Table());
-            //_mainTable.SetFillParent(true);
+            _table = Stage.AddElement(new Table());
+            _table.SetFillParent(false);
+            _table.SetWidth(Game1.UIResolution.X);
+            _table.SetHeight(Game1.UIResolution.Y);
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
@@ -73,7 +75,7 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.OnEnabled();
 
-            Stage.AddElement(_mainTable);
+            _table.Add(_mainTable);
             
             _canActivateButton = false;
 
@@ -83,30 +85,18 @@ namespace PuppetRoguelite.UI.Menus
 
         void CreateMainDialog()
         {
-            _mainTable = Stage.AddElement(new Table());
-            _mainTable.SetWidth(Game1.UIResolution.X);
-            _mainTable.SetHeight(Game1.UIResolution.Y);
-
             //create dialog
-            _mainDialog = new Dialog("", _basicSkin);
-            var hPad = Game1.UIResolution.X * .4f;
-            var vPad = Game1.UIResolution.Y * .4f;
-            //_mainTable.Add(_mainDialog).Grow().SetPadLeft(hPad / 2).SetPadRight(hPad / 2).SetPadTop(vPad / 2).SetPadBottom(vPad / 2);
-            _mainTable.Add(_mainDialog).Expand();
-
-            //get internal table of dialog
-            var contentTable = _mainDialog.GetContentTable();
-
-            //set padding of dialog
-            contentTable.Pad(Game1.UIResolution.X * .04f);
+            _mainTable = new Table();
+            _mainTable.Pad(50);
+            _mainTable.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            //_table.Add(_mainTable).Expand();
 
             UpdateMainDialog();
         }
 
         void UpdateMainDialog()
         {
-            var contentTable = _mainDialog.GetContentTable();
-            contentTable.Clear();
+            _mainTable.Clear();
             _attackButtons.Clear();
             _utilityButtons.Clear();
             _supportButtons.Clear();
@@ -124,22 +114,18 @@ namespace PuppetRoguelite.UI.Menus
 
         void CreateActionDialog()
         {
+            //create dialog
             _actionTable = new Table();
-            _actionTable.SetFillParent(true);
-
-            _actionDialog = new Dialog("", _basicSkin);
-            _actionTable.Add(_actionDialog);
-
-            var contentTable = _actionDialog.GetContentTable();
-            contentTable.Pad(Game1.UIResolution.X * .05f);
+            _actionTable.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            //_table.Add(_actionTable).Expand();
+            _actionTable.Pad(Game1.UIResolution.X * .05f);
         }
 
         void UpdateActionDialog(PlayerActionCategory actionCategory, PlayerActionType actionType)
         {
             _newActionButtons.Clear();
 
-            var contentTable = _actionDialog.GetContentTable();
-            contentTable.Clear();
+            _actionTable.Clear();
 
             var unlocks = ActionUnlockData.Instance.Unlocks.Where(u => PlayerActionUtils.GetCategory(u.Action.ToType()) == actionCategory);
             foreach (var unlock in unlocks)
@@ -177,12 +163,12 @@ namespace PuppetRoguelite.UI.Menus
                     }
                     _actionTable.Remove();
                     UpdateMainDialog();
-                    Stage.AddElement(_mainTable);
+                    _table.Add(_mainTable);
                     var focus = _previouslyFocusedButton != null ? _previouslyFocusedButton : _attackButtons.First();
                     Stage.SetGamepadFocusElement(focus);
                 };
-                contentTable.Add(button).Left();
-                contentTable.Row();
+                _actionTable.Add(button).Left();
+                _actionTable.Row();
                 _newActionButtons.Add(button);
             }
         }
@@ -209,7 +195,7 @@ namespace PuppetRoguelite.UI.Menus
                 else
                 {
                     _actionTable.Remove();
-                    Stage.AddElement(_mainTable);
+                    _table.AddElement(_mainTable);
                     var focus = _previouslyFocusedButton != null ? _previouslyFocusedButton : _attackButtons.First();
                     Stage.SetGamepadFocusElement(focus);
                 }
@@ -219,10 +205,8 @@ namespace PuppetRoguelite.UI.Menus
         void AddActionCategoryColumn(IDrawable icon, List<PlayerActionType> actions, int maxSlots,
             List<ListButton> buttonList, PlayerActionCategory category)
         {
-            var contentTable = _mainDialog.GetContentTable();
-
             var columnTable = new Table();
-            contentTable.Add(columnTable).Grow().Uniform().Space(Game1.UIResolution.X * .03f);
+            _mainTable.Add(columnTable).Grow().Uniform().Space(Game1.UIResolution.X * .03f);
             var upperTable = new Table();
             columnTable.Add(upperTable).Grow();
             var iconImage = new Image(icon);
@@ -265,7 +249,7 @@ namespace PuppetRoguelite.UI.Menus
                 Stage.SetGamepadFocusElement(null);
                 _mainTable.Remove();
                 UpdateActionDialog(category, actionType);
-                Stage.AddElement(_actionTable);
+                _table.Add(_actionTable);
                 if (_newActionButtons.Count > 0)
                 {
                     Stage.SetGamepadFocusElement(_newActionButtons.First());

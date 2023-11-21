@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI
 {
-    public class Textbox : UICanvas
+    public class Textbox : CustomCanvas
     {
         float _horizontalPad = 8;
         float _spacing = 2;
@@ -50,6 +50,7 @@ namespace PuppetRoguelite.UI
             _table.SetFillParent(false);
             _table.SetWidth(Game1.UIResolution.X);
             _table.SetHeight(Game1.UIResolution.Y);
+            _table.DebugAll();
 
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace PuppetRoguelite.UI.HUDs
 {
-    public class CombatUI : UICanvas
+    public class CombatUI : CustomCanvas
     {
         //elements
         Table _table;
@@ -73,8 +73,6 @@ namespace PuppetRoguelite.UI.HUDs
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
-            Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
-
             //ap progress bars
             if (PlayerController.Instance.ActionPointComponent != null)
             {
@@ -104,8 +102,6 @@ namespace PuppetRoguelite.UI.HUDs
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.EncounterEnded, OnEncounterEnded);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
-            Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
-
             _apProgressBars.Clear();
             _apTable.ClearChildren();
 
@@ -113,12 +109,6 @@ namespace PuppetRoguelite.UI.HUDs
         }
 
         #endregion
-
-        void OnGraphicsDeviceReset()
-        {
-            ClearUI();
-            CreateUI();
-        }
 
         void CreateUI()
         {

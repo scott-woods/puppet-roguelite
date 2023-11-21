@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class SelectionDialog : Dialog
+    public class SelectionDialog : Table
     {
         const int _maxPerPage = 4;
 
@@ -19,8 +19,8 @@ namespace PuppetRoguelite.UI.Elements
         string _buttonHeader, _labelHeader;
         Skin _skin;
 
-        public SelectionDialog(Dictionary<ListButton, Label> content, string title, Skin skin, string styleName = null,
-            string buttonHeader = null, string labelHeader = null) : base(title, skin, styleName)
+        public SelectionDialog(Dictionary<ListButton, Label> content, Skin skin,
+            string buttonHeader = null, string labelHeader = null)
         {
             _content = content;
             _buttonHeader = buttonHeader;
@@ -32,39 +32,39 @@ namespace PuppetRoguelite.UI.Elements
 
         void Setup()
         {
-            //content table settings
-            var contentTable = GetContentTable();
-            contentTable.Pad(10).Top();
-            contentTable.Defaults().Space(8);
+            //table settings
+            SetBackground(_skin.GetNinePatchDrawable("np_inventory_01"));
+            Pad(40).Top();
+            Defaults().Space(20);
 
             //headers
             var colSpan = String.IsNullOrWhiteSpace(_buttonHeader) || String.IsNullOrWhiteSpace(_labelHeader) ? 2 : 1;
             if (!String.IsNullOrWhiteSpace(_buttonHeader))
             {
-                contentTable.Add(new Label(_buttonHeader, new LabelStyle(Graphics.Instance.BitmapFont, Color.Black))).SetColspan(colSpan).SetExpandX().Left();
+                Add(new Label(_buttonHeader, new LabelStyle(Graphics.Instance.BitmapFont, Color.Black))).SetColspan(colSpan).SetExpandX().Left();
             }
             if (!String.IsNullOrWhiteSpace(_labelHeader))
             {
-                contentTable.Add(new Label(_labelHeader, _skin, "default_md")).SetColspan(colSpan).SetExpandX().Right();
+                Add(new Label(_labelHeader, _skin, "default_md")).SetColspan(colSpan).SetExpandX().Right();
             }
 
             //buttons
             foreach(var pair in _content)
             {
-                contentTable.Row();
-                contentTable.Add(pair.Key).SetExpandX().Left().SetSpaceRight(32);
-                contentTable.Add(pair.Value).SetExpandX().Right();
+                Row();
+                Add(pair.Key).SetExpandX().Left().SetSpaceRight(32);
+                Add(pair.Value).SetExpandX().Right();
             }
 
             //dialog buttons
-            if (_content.Count > _maxPerPage)
-            {
-                var buttonTable = GetButtonTable();
-                GetCell(buttonTable).SetExpandX().SetFillX();
-                buttonTable.Pad(10);
-                buttonTable.Add(new TextButton("Back", _skin)).SetExpandX().Left();
-                buttonTable.Add(new TextButton("Next", _skin)).SetExpandX().Right();
-            }
+            //if (_content.Count > _maxPerPage)
+            //{
+            //    var buttonTable = GetButtonTable();
+            //    GetCell(buttonTable).SetExpandX().SetFillX();
+            //    buttonTable.Pad(10);
+            //    buttonTable.Add(new TextButton("Back", _skin)).SetExpandX().Left();
+            //    buttonTable.Add(new TextButton("Next", _skin)).SetExpandX().Right();
+            //}
 
             //size to fit children
             Pack();

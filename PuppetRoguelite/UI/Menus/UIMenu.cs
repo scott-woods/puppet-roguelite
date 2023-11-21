@@ -18,7 +18,7 @@ namespace PuppetRoguelite.UI.Menus
     /// <summary>
     /// Wrapper to set action key for any menus
     /// </summary>
-    public abstract class UIMenu : UICanvas
+    public abstract class UIMenu : CustomCanvas
     {
         protected Element BaseElement;
         protected Vector2 AnchorPosition;
@@ -73,8 +73,7 @@ namespace PuppetRoguelite.UI.Menus
                 //var pos = Entity.Scene.Camera.WorldToScreenPoint(AnchorPosition);
                 var pos = ResolutionHelper.GameToUiPoint(AnchorPosition + WorldSpaceOffset);
                 BaseElement.SetPosition(pos.X + ScreenSpaceOffset.X, pos.Y + ScreenSpaceOffset.Y);
-                
-                //BaseElement.SetPosition(pos.X, pos.Y);
+
                 //var pos = AnchorPosition + WorldSpaceOffset;
                 //Entity.SetPosition(pos.X, pos.Y);
                 //var elementPos = Entity.Scene.Camera.WorldToScreenPoint(pos);

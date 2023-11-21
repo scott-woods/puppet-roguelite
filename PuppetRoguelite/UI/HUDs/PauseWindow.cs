@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Enums;
@@ -11,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.HUDs
 {
-    public class PauseWindow : UICanvas
+    public class PauseWindow : CustomCanvas
     {
         //elements
         Table _table;
-        Dialog _dialog;
+        Table _pauseWindow;
 
         Skin _basicSkin;
 
@@ -38,6 +39,8 @@ namespace PuppetRoguelite.UI.HUDs
         {
             base.OnAddedToEntity();
 
+            Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+
             Emitters.GameEventsEmitter.AddObserver(GameEvents.Unpaused, OnUnpaused);
         }
 
@@ -45,31 +48,37 @@ namespace PuppetRoguelite.UI.HUDs
         {
             base.OnRemovedFromEntity();
 
+            Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+
             Emitters.GameEventsEmitter.RemoveObserver(GameEvents.Unpaused, OnUnpaused);
         }
 
-        void CreateUI()
+        public void CreateUI()
         {
-            _table = new Table();
+            _table?.Clear();
+            _table = null;
+
+            //base table
+            _table = Stage.AddElement(new Table()).Center();
+            _table.SetFillParent(false);
             _table.SetWidth(Game1.UIResolution.X);
             _table.SetHeight(Game1.UIResolution.Y);
-            Stage.AddElement(_table);
 
-            _dialog = new Dialog("", _basicSkin);
-            _table.Add(_dialog);
+            _pauseWindow = new Table();
+            _pauseWindow.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            _table.Add(_pauseWindow).Expand();
 
-            var contentTable = _dialog.GetContentTable();
-            contentTable.Pad(Game1.UIResolution.X * .03f);
+            _pauseWindow.Pad(Game1.UIResolution.X * .03f);
 
             var resumeButton = new ListButton("Resume", _basicSkin, "listButton_xxl");
             resumeButton.OnClicked += OnResumeClicked;
-            contentTable.Add(resumeButton);
+            _pauseWindow.Add(resumeButton);
 
-            contentTable.Row();
+            _pauseWindow.Row();
 
             var quitButton = new ListButton("Quit to Desktop", _basicSkin, "listButton_xxl");
             quitButton.OnClicked += OnQuitClicked;
-            contentTable.Add(quitButton);
+            _pauseWindow.Add(quitButton);
         }
 
         void OnResumeClicked(Button button)
@@ -85,6 +94,11 @@ namespace PuppetRoguelite.UI.HUDs
         void OnUnpaused()
         {
             Entity.Destroy();
+        }
+        
+        void OnGraphicsDeviceReset()
+        {
+            CreateUI();
         }
     }
 }

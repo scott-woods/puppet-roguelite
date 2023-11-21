@@ -18,13 +18,13 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Menus
 {
-    public class UpgradeShopMenu : UICanvas
+    public class UpgradeShopMenu : CustomCanvas
     {
         //elements
         Table _table;
-        Dialog _dialog;
         List<Button> _addButtons = new List<Button>();
         Label _totalDollahsLabel;
+        Table _box;
 
         //misc
         Skin _basicSkin;
@@ -49,7 +49,9 @@ namespace PuppetRoguelite.UI.Menus
 
             //base table
             _table = Stage.AddElement(new Table());
-            _table.SetFillParent(true);
+            _table.SetFillParent(false);
+            _table.SetWidth(Game1.UIResolution.X);
+            _table.SetHeight(Game1.UIResolution.Y);
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
@@ -67,23 +69,23 @@ namespace PuppetRoguelite.UI.Menus
             ArrangeElements();
         }
 
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
+        //public override void OnAddedToEntity()
+        //{
+        //    base.OnAddedToEntity();
 
-            Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
-        }
-        public override void OnRemovedFromEntity()
-        {
-            base.OnRemovedFromEntity();
+        //    Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+        //}
+        //public override void OnRemovedFromEntity()
+        //{
+        //    base.OnRemovedFromEntity();
 
-            Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
-        }
+        //    Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+        //}
 
-        void OnGraphicsDeviceReset()
-        {
-            _table.GetCell(_dialog).Width(Game1.UIResolution.X * .6f).Height(Game1.UIResolution.Y * .75f);
-        }
+        //void OnGraphicsDeviceReset()
+        //{
+        //    //_table.GetCell(_dialog).Width(Game1.UIResolution.X * .6f).Height(Game1.UIResolution.Y * .75f);
+        //}
 
         public override void OnEnabled()
         {
@@ -95,20 +97,17 @@ namespace PuppetRoguelite.UI.Menus
 
         void ArrangeElements()
         {
-            //create dialog
-            _dialog = new Dialog("", _basicSkin);
-            _table.Add(_dialog).Width(Game1.UIResolution.X * .6f).Height(Game1.UIResolution.Y * .75f);
-
-            //get internal table of dialog
-            var contentTable = _dialog.GetContentTable();
+            //textbox table
+            _box = new Table();
+            _box.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            _table.Add(_box).Expand().Width(Game1.UIResolution.X * .75f).Height(Game1.UIResolution.Y * .75f);
 
             //set padding of dialog
-            contentTable.PadTop(50).PadBottom(50).PadLeft(30).PadRight(30);
-            contentTable.Defaults().SetSpaceBottom(0).SetSpaceTop(0);
+            _box.PadTop(50).PadBottom(50).PadLeft(30).PadRight(30);
 
             //total dollahs
             var topRightTable = new Table();
-            contentTable.Add(topRightTable).Expand().Right().Top();
+            _box.Add(topRightTable).Expand().Right();
             _totalDollahsLabel = new Label(PlayerData.Instance.Dollahs.ToString(), _basicSkin, "default_xxxl");
             topRightTable.Add(_totalDollahsLabel).SetPadTop(4);
             var dollahImage = new Image(_dollahSprite);
@@ -116,11 +115,11 @@ namespace PuppetRoguelite.UI.Menus
             dollahImage.SetScaleY(Game1.ResolutionScale.Y);
             topRightTable.Add(dollahImage);
 
-            contentTable.Row();
+            _box.Row();
 
             var upgradeTable = new Table();
             upgradeTable.Defaults().SetSpaceBottom(10);
-            contentTable.Add(upgradeTable).Grow();
+            _box.Add(upgradeTable).SetSpaceTop(50).Grow();
 
             //add row for each upgrade
             AddRow(upgradeTable, PlayerUpgradeData.Instance.MaxHpUpgrade);

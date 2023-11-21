@@ -50,11 +50,11 @@ namespace PuppetRoguelite
             RegisterGlobalManager(GameStateManager);
             RegisterGlobalManager(ResolutionManager);
 
-            Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.NoBorder);
+            Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
 
             SceneManager.TargetEntranceId = "0";
-            Scene = new NewHub();
+            Scene = new MainDungeon();
         }
 
         protected override void Update(GameTime gameTime)

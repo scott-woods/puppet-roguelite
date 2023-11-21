@@ -70,7 +70,7 @@ namespace PuppetRoguelite.UI.Menus
             }
 
             //create dialog box
-            _dialog = new SelectionDialog(dialogContent, _dialogTitle, skin, labelHeader: "AP Cost");
+            _dialog = new SelectionDialog(dialogContent, skin, labelHeader: "AP Cost");
 
             ScreenSpaceOffset = new Vector2(-_dialog.PreferredWidth, -_dialog.PreferredHeight);
 
@@ -79,8 +79,7 @@ namespace PuppetRoguelite.UI.Menus
 
         public override IGamepadFocusable GetDefaultFocus()
         {
-            var contentTable = _dialog.GetContentTable();
-            var button = contentTable.GetCells().FirstOrDefault((c) =>
+            var button = _dialog.GetCells().FirstOrDefault((c) =>
             {
                 var button = c.GetElement<Button>();
                 if (button == null || button.GetDisabled())

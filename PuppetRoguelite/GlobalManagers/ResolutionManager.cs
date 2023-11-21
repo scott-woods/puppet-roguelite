@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using PuppetRoguelite.UI.HUDs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,30 +26,35 @@ namespace PuppetRoguelite.GlobalManagers
         {
             base.Update();
 
-            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F1))
+            if (Game1.GameStateManager.GameState != GameState.Paused)
             {
-                var current = ScreenSizes.FindIndex(s => s == Screen.Size);
-                if (current > 0)
+                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F1) && !Screen.IsFullscreen)
                 {
-                    var newSize = ScreenSizes[current - 1];
-                    Screen.SetSize((int)newSize.X, (int)newSize.Y);
-                }
+                    var current = ScreenSizes.FindIndex(s => s == Screen.Size);
+                    if (current > 0)
+                    {
+                        var newSize = ScreenSizes[current - 1];
+                        Screen.SetSize((int)newSize.X, (int)newSize.Y);
+                    }
 
-                Screen.ApplyChanges();
-            }
-            else if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F2))
-            {
-                var current = ScreenSizes.FindIndex(s => s == Screen.Size);
-                if (current != -1 && current < ScreenSizes.Count - 1)
-                {
-                    var newSize = ScreenSizes[current + 1];
-                    Screen.SetSize((int)newSize.X, (int)newSize.Y);
+                    Screen.ApplyChanges();
                 }
-            }
-            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F4))
-            {
-                Screen.IsFullscreen = !Screen.IsFullscreen;
-                Screen.ApplyChanges();
+                else if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F2) && !Screen.IsFullscreen)
+                {
+                    var current = ScreenSizes.FindIndex(s => s == Screen.Size);
+                    if (current != -1 && current < ScreenSizes.Count - 1)
+                    {
+                        var newSize = ScreenSizes[current + 1];
+                        Screen.SetSize((int)newSize.X, (int)newSize.Y);
+                    }
+
+                    Screen.ApplyChanges();
+                }
+                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F4))
+                {
+                    Screen.IsFullscreen = !Screen.IsFullscreen;
+                    Screen.ApplyChanges();
+                }
             }
         }
     }

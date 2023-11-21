@@ -75,11 +75,9 @@ namespace PuppetRoguelite.Components.TiledComponents
             };
             yield return textboxManager.DisplayTextbox(lines);
 
-            if (_menu == null)
-            {
-                _menu = Entity.Scene.Camera.AddComponent(new UpgradeShopMenu(OnShopClosed));
-            }
-            else _menu.SetEnabled(true);
+            //_menu = Entity.Scene.Camera.AddComponent(new UpgradeShopMenu(OnShopClosed));
+            _menu = Entity.Scene.CreateEntity("upgrade-shop-ui")
+                .AddComponent(new UpgradeShopMenu(OnShopClosed));
 
             _isShowingMenu = true;
             while (_isShowingMenu)
@@ -113,7 +111,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         void OnShopClosed()
         {
-            _menu.SetEnabled(false);
+            _menu.Entity.Destroy();
             _isShowingMenu = false;
         }
     }
