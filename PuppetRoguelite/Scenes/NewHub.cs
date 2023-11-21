@@ -101,7 +101,6 @@ namespace PuppetRoguelite.Scenes
 
         void OnDungeonExitAreaTriggered()
         {
-            PlayerController.Instance.DollahInventory.Dollahs = 0;
             PlayerData.Instance.UpdateAndSave();
             PlayerUpgradeData.Instance.UpdateAndSave();
             Game1.AudioManager.StopMusic();
