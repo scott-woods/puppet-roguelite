@@ -91,14 +91,14 @@ namespace PuppetRoguelite.UI.Menus
             _mainDialog = new Dialog("", _basicSkin);
             var hPad = Game1.UIResolution.X * .4f;
             var vPad = Game1.UIResolution.Y * .4f;
-            _mainTable.Add(_mainDialog).Grow().SetPadLeft(hPad / 2).SetPadRight(hPad / 2).SetPadTop(vPad / 2).SetPadBottom(vPad / 2);
+            //_mainTable.Add(_mainDialog).Grow().SetPadLeft(hPad / 2).SetPadRight(hPad / 2).SetPadTop(vPad / 2).SetPadBottom(vPad / 2);
+            _mainTable.Add(_mainDialog).Expand();
 
             //get internal table of dialog
             var contentTable = _mainDialog.GetContentTable();
 
             //set padding of dialog
-            contentTable.PadTop(10).PadBottom(10).PadLeft(20).PadRight(20);
-            contentTable.Defaults().SetSpaceBottom(0).SetSpaceTop(0);
+            contentTable.Pad(Game1.UIResolution.X * .04f);
 
             UpdateMainDialog();
         }
@@ -131,7 +131,7 @@ namespace PuppetRoguelite.UI.Menus
             _actionTable.Add(_actionDialog);
 
             var contentTable = _actionDialog.GetContentTable();
-            contentTable.Pad(50);
+            contentTable.Pad(Game1.UIResolution.X * .05f);
         }
 
         void UpdateActionDialog(PlayerActionCategory actionCategory, PlayerActionType actionType)
@@ -222,16 +222,17 @@ namespace PuppetRoguelite.UI.Menus
             var contentTable = _mainDialog.GetContentTable();
 
             var columnTable = new Table();
-            contentTable.Add(columnTable).Grow();
+            contentTable.Add(columnTable).Grow().Uniform().Space(Game1.UIResolution.X * .03f);
             var upperTable = new Table();
             columnTable.Add(upperTable).Grow();
             var iconImage = new Image(icon);
-            upperTable.Add(iconImage).Grow().Pad(50).Center();
+            iconImage.SetScale(Game1.ResolutionScale.X);
+            upperTable.Add(iconImage).Center();
 
             columnTable.Row();
 
             var lowerTable = new Table();
-            columnTable.Add(lowerTable).Grow();
+            columnTable.Add(lowerTable).Grow().SetSpaceTop(Game1.UIResolution.Y * .03f);
             var listTable = new Table();
             lowerTable.Add(listTable).GrowY().Top();
             //listTable.Defaults().SetSpaceBottom(5);

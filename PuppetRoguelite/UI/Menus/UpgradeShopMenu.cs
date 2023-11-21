@@ -50,7 +50,6 @@ namespace PuppetRoguelite.UI.Menus
             //base table
             _table = Stage.AddElement(new Table());
             _table.SetFillParent(true);
-            _table.DebugAll();
 
             //load skin
             _basicSkin = CustomSkins.CreateBasicSkin();
@@ -143,7 +142,7 @@ namespace PuppetRoguelite.UI.Menus
 
             var button = new UpgradeButton(upgrade, cell.GetRow(), _basicSkin, "plusButton");
             var canAfford = PlayerData.Instance.Dollahs >= upgrade.GetCurrentCost();
-            button.SetDisabled(!canAfford);
+            //button.SetDisabled(!canAfford);
             button.OnClicked += OnPlusButtonClicked;
             _addButtons.Add(button);
             table.Add(button).SetExpandX().Right().SetSpaceRight(10);
