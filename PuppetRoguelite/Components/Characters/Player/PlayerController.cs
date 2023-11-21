@@ -8,6 +8,7 @@ using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player.States;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Items;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI;
@@ -94,6 +95,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
 
+            Game1.SceneManager.Emitter.AddObserver(GlobalManagers.SceneEvents.TransitionStarted, OnSceneTransitionStarted);
+            Game1.SceneManager.Emitter.AddObserver(GlobalManagers.SceneEvents.TransitionEnded, OnSceneTransitionEnded);
+
             HealthComponent.Emitter.AddObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
 
             DeathComponent.OnDeathStarted += OnDeathStarted;
@@ -107,6 +111,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
             Emitters.CutsceneEmitter.RemoveObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
             Emitters.CutsceneEmitter.RemoveObserver(CutsceneEvents.CutsceneEnded, OnCutsceneEnded);
+
+            Game1.SceneManager.Emitter.RemoveObserver(GlobalManagers.SceneEvents.TransitionStarted, OnSceneTransitionStarted);
+            Game1.SceneManager.Emitter.RemoveObserver(GlobalManagers.SceneEvents.TransitionEnded, OnSceneTransitionEnded);
 
             HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.DamageTaken, OnDamageTaken);
 
@@ -323,6 +330,16 @@ namespace PuppetRoguelite.Components.Characters.Player
         }
 
         void OnCutsceneEnded()
+        {
+            StateMachine.ChangeState<IdleState>();
+        }
+
+        void OnSceneTransitionStarted()
+        {
+            StateMachine.ChangeState<CutsceneState>();
+        }
+
+        void OnSceneTransitionEnded()
         {
             StateMachine.ChangeState<IdleState>();
         }
