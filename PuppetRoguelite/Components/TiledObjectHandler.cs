@@ -41,6 +41,9 @@ namespace PuppetRoguelite.Components
                     case TmxObjectType.Tile:
                         position = Entity.Position + new Vector2(obj.X + obj.Width / 2, obj.Y + obj.Height / 2);
                         break;
+                    case TmxObjectType.Polygon:
+                        position = Entity.Position + new Vector2(obj.X, obj.Y);
+                        break;
                     default:
                         position = Entity.Position + new Vector2(obj.X, obj.Y);
                         break;

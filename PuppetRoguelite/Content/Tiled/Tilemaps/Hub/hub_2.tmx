@@ -444,7 +444,7 @@
 </data>
  </layer>
  <objectgroup id="14" name="entities">
-  <object id="1" type="PlayerSpawnPoint" x="336" y="400">
+  <object id="1" type="PlayerSpawnPoint" x="800" y="656">
    <properties>
     <property name="Id" value="0"/>
    </properties>
