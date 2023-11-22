@@ -103,7 +103,7 @@ namespace PuppetRoguelite.Components
                 if (colliders.Count > 0)
                 {
                     _isMovingToPlayer = false;
-                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Dollah_pickup, .4f);
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Dollah_pickup);
                     PlayerController.Instance.DollahInventory.AddDollahs(1);
                     Entity.Destroy();
                     return;

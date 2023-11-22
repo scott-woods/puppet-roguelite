@@ -18,20 +18,31 @@ namespace PuppetRoguelite.GlobalManagers
         const float _defaultMusicVolume = .2f;
         const float _defaultPitch = 0f;
         const float _defaultPan = 0;
-        const float _defaultSoundVolume = 1f;
+        const float _defaultSoundVolume = .25f;
 
         uint _loopPoint;
 
         Sound _currentMusic;
         Channel _currentMusicChannel;
         public string CurrentSongName;
+        Dictionary<string, Channel> _soundChannels = new Dictionary<string, Channel>();
 
         public void PlaySound(string soundName, float volume = 0f)
         {
             volume = volume > 0f ? volume : _defaultSoundVolume;
             var sound = CoreSystem.LoadSound(soundName);
+            if (_soundChannels.Count > 0)
+            {
+                if (_soundChannels.TryGetValue(soundName, out Channel existingChannel))
+                {
+                    existingChannel.Stop();
+                    _soundChannels.Remove(soundName);
+                }
+            }
+
             var channel = sound.Play();
             channel.Volume = volume;
+            _soundChannels.Add(soundName, channel);
         }
 
         public IEnumerator PlaySoundCoroutine(string soundName)
@@ -136,6 +147,19 @@ namespace PuppetRoguelite.GlobalManagers
                     _currentMusicChannel = _currentMusic.Play();
                     _currentMusicChannel.Volume = _defaultMusicVolume;
                     _currentMusicChannel.TrackPosition = _loopPoint;
+                }
+            }
+
+            if (_soundChannels.Count > 0)
+            {
+                var queue = new Queue<KeyValuePair<string, Channel>>(_soundChannels.ToList());
+                for (int i = 0; i < queue.Count; i++)
+                {
+                    var pair = queue.Dequeue();
+                    if (!pair.Value.IsPlaying)
+                    {
+                        _soundChannels.Remove(pair.Key);
+                    }
                 }
             }
         }

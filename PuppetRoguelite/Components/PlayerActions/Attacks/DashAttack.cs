@@ -199,7 +199,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             //if not in prep mode, play sound
             if (State == PlayerActionState.Executing)
             {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._20_Slash_02, .5f);
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._20_Slash_02);
             }
 
             //determine total amount of time needed to move to target 

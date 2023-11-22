@@ -40,7 +40,7 @@ namespace PuppetRoguelite.Components.Characters.Spitter
                     if (_enemy.Animator.CurrentAnimationName == "Attack" && _enemy.Animator.CurrentFrame == 3)
                     {
                         //play sound
-                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Spitter_fire, 1.4f);
+                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Spitter_fire);
                         
                         //get direction to player
                         var dir = PlayerController.Instance.Entity.Position - _enemy.Entity.Position;

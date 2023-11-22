@@ -85,12 +85,12 @@ namespace PuppetRoguelite.Components.Characters.ChainBot
                     if (_animator.CurrentFrame == _hitboxActiveFrames[0] && _soundCounter == 0)
                     {
                         _soundCounter += 1;
-                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._81_Whip_woosh_1, .5f);
+                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._81_Whip_woosh_1);
                     }
                     else if (_animator.CurrentFrame == _hitboxActiveFrames[1] && _soundCounter == 1)
                     {
                         _soundCounter += 1;
-                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._81_Whip_woosh_1, .5f);
+                        Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._81_Whip_woosh_1);
                     }
 
                     _activeHitbox?.SetEnabled(true);

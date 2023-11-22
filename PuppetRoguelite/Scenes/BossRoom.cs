@@ -171,7 +171,7 @@ namespace PuppetRoguelite.Scenes
             ui.SetEnabled(false);
 
             //lock gates
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close, .5f);
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
             var gates = FindComponentsOfType<Gate>().Where(g => g.MapEntity == _mapEntity).ToList();
             foreach (var gate in gates)
             {

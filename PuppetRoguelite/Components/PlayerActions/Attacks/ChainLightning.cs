@@ -159,7 +159,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                 //strike next entities
                 foreach(var entity in nextEntities)
                 {
-                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Small_lightning, 1f);
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Small_lightning);
 
                     var effectEntity = Scene.CreateEntity("lightning-effect");
                     effectEntity.SetPosition(entity.Position);
@@ -281,7 +281,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
                         if (_animator.CurrentAnimationName == $"ChainLightning{_direction}" && _hitboxActiveFrames.Contains(_animator.CurrentFrame))
                         {
                             hasPlayedSound = true;
-                            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Big_lightning, .5f);
+                            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Big_lightning);
                             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._31_swoosh_sword_1);
 
                             var effectEntity = Scene.CreateEntity("lightning-effect");

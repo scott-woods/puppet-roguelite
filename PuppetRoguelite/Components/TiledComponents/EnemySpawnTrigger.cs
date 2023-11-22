@@ -45,7 +45,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             var combatManager = Entity.Scene.GetOrCreateSceneComponent<CombatManager>();
 
             //lock gates
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close, .5f);
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
             var gates = Entity.Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
             foreach (var gate in gates)
             {

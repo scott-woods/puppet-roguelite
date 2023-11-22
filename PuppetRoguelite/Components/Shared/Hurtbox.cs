@@ -106,7 +106,7 @@ namespace PuppetRoguelite.Components.Shared
         {
             if (!String.IsNullOrWhiteSpace(_damageSound))
             {
-                Game1.AudioManager.PlaySound(_damageSound, .5f);
+                Game1.AudioManager.PlaySound(_damageSound);
             }
 
             //start recovery timer if necessary

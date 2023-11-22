@@ -28,7 +28,7 @@ namespace PuppetRoguelite.UI.Elements
 
             if (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
             {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02, 1.2f);
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02);
             }
 
             if (_label != null)
@@ -53,7 +53,7 @@ namespace PuppetRoguelite.UI.Elements
 
             if (!_isDisabled)
             {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select, .3f);
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select);
             }
             else
             {

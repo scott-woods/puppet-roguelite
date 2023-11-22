@@ -65,7 +65,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             yield return _tweenCoroutine;
             //yield return tween.WaitForCompletion();
 
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Player_teleport, .6f);
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Player_teleport);
 
             Position = FinalPosition;
 
