@@ -84,7 +84,10 @@
       },
       "Nez.Persistence/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.7.1",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "FNA": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Nez.Persistence.dll": {}
         },
