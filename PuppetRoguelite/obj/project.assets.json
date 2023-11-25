@@ -70,9 +70,9 @@
       },
       "Nez/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETFramework,Version=v4.7.1",
         "dependencies": {
-          "FNA": "1.0.0",
+          "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRogueliteFNA\\puppet-roguelite\\FNA\\FNA.csproj": "1.0.0",
           "System.Drawing.Common": "4.6.0"
         },
         "compile": {
@@ -84,7 +84,7 @@
       },
       "Nez.Persistence/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETFramework,Version=v4.7.1",
         "compile": {
           "bin/placeholder/Nez.Persistence.dll": {}
         },
@@ -279,5 +279,16 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "Unable to find project information for 'C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRogueliteFNA\\puppet-roguelite\\FNA\\FNA.csproj'. If you are using Visual Studio, this may be because the project is unloaded or not part of the current solution so run a restore from the command-line. Otherwise, the project file may be invalid or missing targets required for restore.",
+      "libraryId": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRogueliteFNA\\puppet-roguelite\\FNA\\FNA.csproj",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }

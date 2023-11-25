@@ -1,12 +1,22 @@
 {
   "version": 2,
-  "dgSpecHash": "eHsXtwg0zO2lv8EV7JLyai/g7s/mIe+pn6EKHByglyxK8qg7+DlSHWVEaP8voUzp7Um9U8sNqOyYjb3lewJpBw==",
-  "success": true,
+  "dgSpecHash": "QuUZNPnkmb7uKUXTc0hRQ3rmk6Pjq7/EmLV2LeHKIXr9mMNsU7aV8leYTldPj8OaymKMYUZQlfG/8Oyz5xaKMQ==",
+  "success": false,
   "projectFilePath": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRogueliteFNA\\puppet-roguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.netcore.platforms\\3.0.0\\microsoft.netcore.platforms.3.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.win32.systemevents\\4.6.0\\microsoft.win32.systemevents.4.6.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\system.drawing.common\\4.6.0\\system.drawing.common.4.6.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "Unable to find project information for 'C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRogueliteFNA\\puppet-roguelite\\FNA\\FNA.csproj'. If you are using Visual Studio, this may be because the project is unloaded or not part of the current solution so run a restore from the command-line. Otherwise, the project file may be invalid or missing targets required for restore.",
+      "libraryId": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRogueliteFNA\\puppet-roguelite\\FNA\\FNA.csproj",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }
