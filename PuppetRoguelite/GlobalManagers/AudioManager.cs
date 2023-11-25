@@ -1,15 +1,18 @@
-﻿using FmodForFoxes;
+﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using Nez;
 using Nez.Tweens;
 using PuppetRoguelite.Models;
+using SDL2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Song = PuppetRoguelite.Models.Song;
 
 namespace PuppetRoguelite.GlobalManagers
 {
@@ -20,119 +23,108 @@ namespace PuppetRoguelite.GlobalManagers
         const float _defaultPan = 0;
         const float _defaultSoundVolume = .25f;
 
+        nint _handler;
+        nint _masteringVoice;
+        IntPtr _musicFileHandle;
+        IntPtr _musicVoiceHandle;
+
         uint _loopPoint;
 
-        Sound _currentMusic;
-        Channel _currentMusicChannel;
         public string CurrentSongName;
-        Dictionary<string, Channel> _soundChannels = new Dictionary<string, Channel>();
+        public Song CurrentSong;
 
-        public void PlaySound(string soundName, float volume = 0f)
+        protected object StateLock = new object();
+
+        internal AudioManager()
         {
-            volume = volume > 0f ? volume : _defaultSoundVolume;
-            var sound = CoreSystem.LoadSound(soundName);
-            if (_soundChannels.Count > 0)
-            {
-                if (_soundChannels.TryGetValue(soundName, out Channel existingChannel))
-                {
-                    existingChannel.Stop();
-                    _soundChannels.Remove(soundName);
-                }
-            }
+            //create handler
+            FAudio.FAudioCreate(out _handler, 0, FAudio.FAUDIO_DEFAULT_PROCESSOR);
 
-            var channel = sound.Play();
-            channel.Volume = volume;
-            _soundChannels.Add(soundName, channel);
+            //create master voice
+            FAudio.FAudio_CreateMasteringVoice(_handler, out _masteringVoice, FAudio.FAUDIO_DEFAULT_CHANNELS, FAudio.FAUDIO_DEFAULT_SAMPLERATE, 0, 0, IntPtr.Zero);
+        }
+
+        public void PlaySound(string soundName)
+        {
+            var sound = Game1.Scene.Content.LoadSoundEffect(soundName);
+            var soundInstance = sound.CreateInstance();
+            soundInstance.Volume = _defaultSoundVolume;
+            soundInstance.Play();
         }
 
         public IEnumerator PlaySoundCoroutine(string soundName)
         {
-            var sound = CoreSystem.LoadSound(soundName);
-            var channel = sound.Play();
+            var sound = Game1.Scene.Content.LoadSoundEffect(soundName);
+            var soundInstance = sound.CreateInstance();
+            soundInstance.Volume = _defaultSoundVolume;
+            soundInstance.Play();
 
-            while (channel.IsPlaying)
+            while (soundInstance.State == Microsoft.Xna.Framework.Audio.SoundState.Playing)
             {
                 yield return null;
             }
         }
 
-        public void PlayMusic(string musicName, bool looping = true, uint loopTime = 0)
-        {
-            if (_currentMusicChannel.IsPlaying)
-            {
-                _currentMusicChannel.Stop();
-                _currentMusic = null;
-                _loopPoint = 0;
-            }
+        //public void PlayMusic(string musicName, bool looping = true, uint loopTime = 0)
+        //{
+        //    var uri = new Uri(musicName, UriKind.Relative);
+        //    var song = Song.FromUri(musicName, uri);
 
-            var music = CoreSystem.LoadStreamedSound(musicName);
-            var channel = music.Play();
-            channel.Volume = _defaultMusicVolume;
-            channel.Looping = looping;
-            _currentMusic = music;
-            _currentMusicChannel = channel;
-            CurrentSongName = musicName;
+        //    if (MediaPlayer.State == MediaState.Playing)
+        //    {
+        //        MediaPlayer.Stop();
+        //    }
 
-            _loopPoint = loopTime;
-        }
+        //    MediaPlayer.Play(song);
+        //    MediaPlayer.Volume = _defaultMusicVolume;
 
-        public void PlayMusic(Song song, bool looping = true)
-        {
-            if (_currentMusicChannel.IsPlaying)
-            {
-                _currentMusicChannel.Stop();
-                _currentMusic = null;
-                _loopPoint = 0;
-            }
+        //    CurrentSong = song;
 
-            var music = CoreSystem.LoadStreamedSound(song.Path);
-            var channel = music.Play();
-            channel.Volume = _defaultMusicVolume;
-            _currentMusic = music;
-            _currentMusicChannel = channel;
-            CurrentSongName = song.Path;
+        //    _loopPoint = loopTime;
+        //}
 
-            if (looping)
-            {
-                if (song.LoopTime > 0)
-                {
-                    _loopPoint = song.LoopTime;
-                    channel.Looping = false;
-                }
-                else
-                {
-                    _loopPoint = 0;
-                    channel.Looping = true;
-                }
-            }
-            else
-            {
-                _loopPoint = 0;
-                channel.Looping = false;
-            }
-        }
+        //public void PlayMusic(SongModel songModel, bool looping = true)
+        //{
+        //    var uri = new Uri(songModel.Path, UriKind.Relative);
+        //    var song = Song.FromUri(songModel.Path, uri);
+
+        //    if (MediaPlayer.State == MediaState.Playing)
+        //    {
+        //        MediaPlayer.Stop();
+        //    }
+
+        //    MediaPlayer.Play(song);
+        //    MediaPlayer.Volume = _defaultMusicVolume;
+
+        //    CurrentSong = song;
+
+        //    _loopPoint = songModel.LoopTime;
+        //}
 
         public void PauseMusic()
         {
-            _currentMusicChannel.Pause();
+            MediaPlayer.Pause();
         }
 
         public void ResumeMusic()
         {
-            _currentMusicChannel.Resume();
+            MediaPlayer.Resume();
         }
 
         public void StopMusic()
         {
-            _currentMusicChannel.Stop();
-            _currentMusic = null;
-            _loopPoint = 0;
-            CurrentSongName = null;
+            lock (StateLock)
+            {
+                FAudio.FAudioSourceVoice_Stop(_musicVoiceHandle, 0, FAudio.FAUDIO_COMMIT_NOW);
+                FAudio.FAudioSourceVoice_FlushSourceBuffers(_musicVoiceHandle);
+                MediaPlayer.Stop();
+            }
         }
 
         public bool IsPlayingMusic(string music)
         {
-            if (CurrentSongName == music && _currentMusicChannel.IsPlaying) return true;
+            if (MediaPlayer.State == MediaState.Playing && CurrentSong.Name == music)
+                return true;
             return false;
         }
 
@@ -140,27 +132,101 @@ namespace PuppetRoguelite.GlobalManagers
         {
             base.Update();
 
-            if (_loopPoint > 0)
+            //if (_loopPoint > 0)
+            //{
+            //    if (MediaPlayer.State == MediaState.Stopped)
+            //    {
+            //        MediaPlayer.Play(CurrentSong);
+            //        MediaPlayer.
+            //    }
+            //    if (!_currentMusicChannel.IsPlaying)
+            //    {
+            //        _currentMusicChannel = _currentMusic.Play();
+            //        _currentMusicChannel.Volume = _defaultMusicVolume;
+            //        _currentMusicChannel.TrackPosition = _loopPoint;
+            //    }
+            //}
+
+            //if (_soundChannels.Count > 0)
+            //{
+            //    var queue = new Queue<KeyValuePair<string, Channel>>(_soundChannels.ToList());
+            //    for (int i = 0; i < queue.Count; i++)
+            //    {
+            //        var pair = queue.Dequeue();
+            //        if (!pair.Value.IsPlaying)
+            //        {
+            //            _soundChannels.Remove(pair.Key);
+            //        }
+            //    }
+            //}
+        }
+
+        public unsafe void PlayMusic(SongModel songModel, bool looping = true)
+        {
+            PlayMusic(songModel.Path, looping);
+        }
+
+        public unsafe void PlayMusic(string filePath, bool looping = true)
+        {
+            //open file
+            _musicFileHandle = FAudio.stb_vorbis_open_filename(filePath, out var error, IntPtr.Zero);
+
+            //get file info
+            var info = FAudio.stb_vorbis_get_info(_musicFileHandle);
+
+            //get format
+            var blockAlign = (ushort)((32 / 8) * info.channels);
+            var format = new FAudio.FAudioWaveFormatEx
             {
-                if (!_currentMusicChannel.IsPlaying)
-                {
-                    _currentMusicChannel = _currentMusic.Play();
-                    _currentMusicChannel.Volume = _defaultMusicVolume;
-                    _currentMusicChannel.TrackPosition = _loopPoint;
-                }
+                wFormatTag = 3,
+                nChannels = (ushort)info.channels,
+                nSamplesPerSec = info.sample_rate,
+                wBitsPerSample = 32,
+                nBlockAlign = blockAlign,
+                nAvgBytesPerSec = blockAlign * info.sample_rate
+            };
+
+            //create buffer
+            var lengthInFloats = FAudio.stb_vorbis_stream_length_in_samples(_musicFileHandle) * info.channels;
+            var lengthInBytes = lengthInFloats * Marshal.SizeOf<float>();
+            var bufferDataPointer = NativeMemory.Alloc((nuint)lengthInBytes);
+            FAudio.stb_vorbis_get_samples_float_interleaved(_musicFileHandle, info.channels, (nint)bufferDataPointer, (int)lengthInFloats);
+            FAudio.stb_vorbis_close(_musicFileHandle);
+            var buffer = new FAudio.FAudioBuffer
+            {
+                Flags = FAudio.FAUDIO_END_OF_STREAM,
+                AudioBytes = (uint)lengthInBytes,
+                pAudioData = (nint)bufferDataPointer,
+                PlayBegin = 0,
+                PlayLength = 0,
+                LoopBegin = 0,
+                LoopLength = 0,
+                LoopCount = FAudio.FAUDIO_LOOP_INFINITE
+            };
+
+            //create source voice
+            FAudio.FAudio_CreateSourceVoice(_handler, out _musicVoiceHandle, ref format, FAudio.FAUDIO_VOICE_USEFILTER, FAudio.FAUDIO_DEFAULT_FREQ_RATIO, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+
+            //FAudio.FAudioSendDescriptor* sendDesc = stackalloc FAudio.FAudioSendDescriptor[1];
+            //sendDesc[0].Flags = 0;
+            //sendDesc[0].pOutputVoice = _masteringVoice;
+
+            //var sends = new FAudio.FAudioVoiceSends();
+            //sends.SendCount = 1;
+            //sends.pSends = (nint)sendDesc;
+
+            //FAudio.FAudioVoice_SetOutputVoices(_sourceVoiceHandle, ref sends);
+
+            lock (StateLock)
+            {
+                //submit buffer
+                FAudio.FAudioSourceVoice_SubmitSourceBuffer(_musicVoiceHandle, ref buffer, IntPtr.Zero);
             }
 
-            if (_soundChannels.Count > 0)
+            lock (StateLock)
             {
-                var queue = new Queue<KeyValuePair<string, Channel>>(_soundChannels.ToList());
-                for (int i = 0; i < queue.Count; i++)
-                {
-                    var pair = queue.Dequeue();
-                    if (!pair.Value.IsPlaying)
-                    {
-                        _soundChannels.Remove(pair.Key);
-                    }
-                }
+                //start music voice
+                FAudio.FAudioSourceVoice_Start(_musicVoiceHandle, 0, FAudio.FAUDIO_COMMIT_NOW);
             }
         }
     }

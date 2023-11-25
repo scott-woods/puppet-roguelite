@@ -37,7 +37,7 @@ namespace PuppetRoguelite
             _bossRoom.Camera.ZoomIn(.2f);
             //Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Burp);
             yield return Coroutine.WaitForSeconds(1.5f);
-            Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.Galacta_knight, false, 2680);
+            //Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.Galacta_knight, false, 2680);
             //yield return Game1.AudioManager.PlaySoundCoroutine(Nez.Content.Audio.Sounds.Burp);
             _bossRoom.Camera.ZoomOut(.2f);
 

@@ -65,7 +65,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Support
             var trail = PlayerController.Instance.Entity.AddComponent(new SpriteTrail(PlayerController.Instance.SpriteAnimator));
             trail.FadeDuration = .1f;
             trail.MinDistanceBetweenInstances = 16;
-            trail.InitialColor = new Color(Color.White, 32);
+            trail.InitialColor = new Color(Color.White.R, Color.White.G, Color.White.B, 32);
 
             //after 7 seconds, remove buff
             Game1.Schedule(7f, timer =>

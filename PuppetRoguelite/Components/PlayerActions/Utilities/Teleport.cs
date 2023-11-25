@@ -39,7 +39,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Utilities
             _playerSim = AddComponent(new PlayerSim(Vector2.One));
 
             var animator = _playerSim.GetComponent<SpriteAnimator>();
-            animator.SetColor(new Color(Color.White, 128));
+            animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
             animator.Play("IdleDown");
         }
 

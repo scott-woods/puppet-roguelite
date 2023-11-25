@@ -1,11 +1,9 @@
-﻿using FmodForFoxes;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Systems;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Scenes;
+using SDL2;
 using System;
 using System.IO;
 
@@ -18,13 +16,19 @@ namespace PuppetRoguelite
         //public static Point UIResolution { get => Screen.Size.ToPoint(); }
         //public static Point UIResolution = new Point(480, 270);
         public static Point UIResolution = new Point(1920, 1080);
-        public static Vector2 ResolutionScale { get => UIResolution.ToVector2() / DesignResolution.ToVector2(); }
+        public static Vector2 ResolutionScale { get => MonoGameCompat.ToVector2(UIResolution) / MonoGameCompat.ToVector2(DesignResolution); }
 
         //global managers
         public static SceneManager SceneManager = new SceneManager();
         public static AudioManager AudioManager = new AudioManager();
         public static GameStateManager GameStateManager = new GameStateManager();
         public static ResolutionManager ResolutionManager = new ResolutionManager();
+        public static CustomAudioHandler CustomAudioHandler = new CustomAudioHandler();
+
+        public Game1() : base()
+        {
+            System.Environment.SetEnvironmentVariable("FNA_OPENGL_BACKBUGGER_SCALE_NEAREST", "1");
+        }
 
         protected override void Initialize()
         {
@@ -44,12 +48,11 @@ namespace PuppetRoguelite
             Physics.SpatialHashCellSize = 32;
             Physics.Gravity = new Vector2(0, 600f);
 
-            FmodManager.Init(new DesktopNativeFmodLibrary(), FmodInitMode.CoreAndStudio, "");
-
             RegisterGlobalManager(SceneManager);
             RegisterGlobalManager(AudioManager);
             RegisterGlobalManager(GameStateManager);
             RegisterGlobalManager(ResolutionManager);
+            RegisterGlobalManager(CustomAudioHandler);
 
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
@@ -62,14 +65,14 @@ namespace PuppetRoguelite
         {
             base.Update(gameTime);
 
-            FmodManager.Update();
+            //FmodManager.Update();
         }
 
         protected override void UnloadContent()
         {
             base.UnloadContent();
 
-            FmodManager.Unload();
+            //FmodManager.Unload();
         }
     }
 }

@@ -60,7 +60,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
 
             //get animator from player sim
             _animator = _playerSim.GetComponent<SpriteAnimator>();
-            _animator.SetColor(new Color(Color.White, 128));
+            _animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
             var dashTexture = Game1.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
             var dashSprites = Sprite.SpritesFromAtlas(dashTexture, 64, 64);
             _animator.AddAnimation("DashAttackRight", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 4, 4, 4, 5, 6, 7, 7, 7 }, true));

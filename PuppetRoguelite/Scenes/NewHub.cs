@@ -74,10 +74,12 @@ namespace PuppetRoguelite.Scenes
         {
             base.OnStart();
 
-            if (!Game1.AudioManager.IsPlayingMusic(Nez.Content.Audio.Music.The_bay))
-            {
-                Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
-            }
+            Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
+
+            //if (!Game1.AudioManager.IsPlayingMusic(Nez.Content.Audio.Music.The_bay))
+            //{
+            //    Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
+            //}
 
             _playerSpawner.SpawnPlayer(_mapEntity);
 

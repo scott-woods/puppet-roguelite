@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
@@ -10,6 +10,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\Audio\Music\babbulon_double.ogg" />
@@ -443,20 +444,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FmodForFoxes" Version="3.0.0" />
-    <PackageReference Include="FmodForFoxes.Desktop" Version="3.0.0" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Nez\Nez.Persistence\Nez.MG38.Persistence.csproj" />
-    <ProjectReference Include="..\Nez\Nez.Portable\Nez.MG38.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Content\Textures\Characters\HeartHoarder\" />
     <Folder Include="Content\Textures\Effects\" />
     <Folder Include="Content\Textures\UI\Icons\Style3\Atlas\" />
     <Folder Include="Content\Textures\UI\Icons\Style4\Atlas\" />
     <Folder Include="Content\Textures\UI\Menu\Style3\Atlas\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FNA\FNA.Core.csproj" />
+    <ProjectReference Include="..\Nez\Nez.Persistence\Nez.FNA.Persistence.csproj" />
+    <ProjectReference Include="..\Nez\Nez.Portable\Nez.FNA.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="ContentPathGenerator.tt">

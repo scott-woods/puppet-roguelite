@@ -59,7 +59,7 @@ namespace PuppetRoguelite.Components.PlayerActions.Attacks
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
 
             _animator = _playerSim.GetComponent<SpriteAnimator>();
-            _animator.SetColor(new Color(Color.White, 128));
+            _animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
             var texture = Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
             var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
             _animator.AddAnimation("ChainLightningUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 32, 35));

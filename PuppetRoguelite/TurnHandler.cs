@@ -41,7 +41,7 @@ namespace PuppetRoguelite
             _playerSimEntity = Game1.Scene.CreateEntity("player-sim");
             _playerSimEntity.AddComponent(new PlayerSim(Vector2.One));
             var animator = _playerSimEntity.GetComponent<SpriteAnimator>();
-            animator.SetColor(new Color(Color.White, 128));
+            animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
             _playerSimEntity.SetPosition(PlayerController.Instance.Entity.Position);
 
             //set camera to follow sim

@@ -1,5 +1,4 @@
-﻿using FmodForFoxes;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.AI.Pathfinding;

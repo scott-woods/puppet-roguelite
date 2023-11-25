@@ -9,8 +9,8 @@ namespace PuppetRoguelite
 {
     public static class Music
     {
-        public static Song HaveAHeart = new Song(Nez.Content.Audio.Music.Have_a_heart, 97500);
-        public static Song Babbulon = new Song(Nez.Content.Audio.Music.Babbulon_double, 125902);
-        public static Song TheBay = new Song(Nez.Content.Audio.Music.The_bay, 0);
+        public static SongModel HaveAHeart = new SongModel(Nez.Content.Audio.Music.Have_a_heart, 97500);
+        public static SongModel Babbulon = new SongModel(Nez.Content.Audio.Music.Babbulon_double, 125902);
+        public static SongModel TheBay = new SongModel(Nez.Content.Audio.Music.The_bay, 0);
     }
 }
