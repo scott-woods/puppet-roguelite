@@ -30,7 +30,7 @@ namespace PuppetRoguelite.UI
 
         float _boxWidth { get => Game1.UIResolution.X * .7f; }
         float _boxHeight { get => Game1.UIResolution.Y * .3f; }
-        float _textMaxWidth { get => _innerBoxWidth - _innerTable.GetCell(_asterisk).GetPrefWidth() - _innerBoxSpacing; }
+        float _textMaxWidth { get => _innerBoxWidth - _asterisk.GetWidth() - _innerBoxSpacing; }
         
         float _innerBoxWidth { get => _boxWidth - (_innerBoxPad * 2); }
 
@@ -47,10 +47,9 @@ namespace PuppetRoguelite.UI
 
             //base table
             _table = Stage.AddElement(new Table()).Bottom();
-            _table.SetFillParent(false);
+            //_table.SetFillParent(true);
             _table.SetWidth(Game1.UIResolution.X);
             _table.SetHeight(Game1.UIResolution.Y);
-            _table.DebugAll();
 
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
@@ -75,9 +74,13 @@ namespace PuppetRoguelite.UI
             //asterisk
             _asterisk = new Label("*", _basicSkin, "default_xxxl");
             _innerTable.Add(_asterisk).SetExpandY().Top().Left();
+            _asterisk.Pack();
 
             _text = new Label("", _basicSkin, "default_xxxl").SetAlignment(Align.TopLeft);
             _innerTable.Add(_text).Grow().Top().Left().SetSpaceLeft(_innerBoxSpacing);
+
+            _innerTable.Pack();
+            _innerTable.DebugAll();
         }
 
         public IEnumerator ReadLine(DialogueLine line)

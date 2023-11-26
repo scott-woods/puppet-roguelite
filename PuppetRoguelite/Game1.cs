@@ -23,7 +23,6 @@ namespace PuppetRoguelite
         public static AudioManager AudioManager = new AudioManager();
         public static GameStateManager GameStateManager = new GameStateManager();
         public static ResolutionManager ResolutionManager = new ResolutionManager();
-        public static CustomAudioHandler CustomAudioHandler = new CustomAudioHandler();
 
         public Game1() : base()
         {
@@ -52,7 +51,6 @@ namespace PuppetRoguelite
             RegisterGlobalManager(AudioManager);
             RegisterGlobalManager(GameStateManager);
             RegisterGlobalManager(ResolutionManager);
-            RegisterGlobalManager(CustomAudioHandler);
 
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
