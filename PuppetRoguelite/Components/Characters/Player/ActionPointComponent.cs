@@ -17,7 +17,11 @@ namespace PuppetRoguelite.Components.Characters.Player
         //const float _baseDamageMultiplier = 4f;
         const float _baseChargeRate = 0f;
         const float _baseDamageMultiplier = 4f;
-        const int _damageRequiredPerPoint = 6;
+        const int _damageRequiredPerPoint = 12;
+
+        int _maxDamagePerHit = 3;
+        int _minDamagePerHit = 1;
+        int _currentDamagePerHit = 3;
 
         public int DamageRequiredPerPoint { get => _damageRequiredPerPoint; }
 
@@ -137,7 +141,14 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         void OnMeleeAttackHit(int damageAmount)
         {
-            _damageAccumulated += damageAmount;
+            _damageAccumulated += _currentDamagePerHit;
+            var newDamagePerHit = Math.Max(_minDamagePerHit, _currentDamagePerHit - 1);
+            _currentDamagePerHit = newDamagePerHit;
+            Game1.Schedule(.5f, timer =>
+            {
+                var res = Math.Clamp(_currentDamagePerHit + 1, _minDamagePerHit, _maxDamagePerHit);
+                _currentDamagePerHit = res;
+            });
 
             if (_damageAccumulated >= _damageRequiredPerPoint && ActionPoints < MaxActionPoints)
             {
