@@ -24,7 +24,7 @@ namespace PuppetRoguelite.UI.Menus
         Table _table;
         List<Button> _addButtons = new List<Button>();
         Label _totalDollahsLabel;
-        Table _box;
+        WindowTable _box;
 
         //misc
         Skin _basicSkin;
@@ -98,8 +98,7 @@ namespace PuppetRoguelite.UI.Menus
         void ArrangeElements()
         {
             //textbox table
-            _box = new Table();
-            _box.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            _box = new WindowTable(_basicSkin);
             _table.Add(_box).Expand().Width(Game1.UIResolution.X * .75f).Height(Game1.UIResolution.Y * .75f);
 
             //set padding of dialog

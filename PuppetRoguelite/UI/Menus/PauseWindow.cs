@@ -10,13 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PuppetRoguelite.UI.HUDs
+namespace PuppetRoguelite.UI.Menus
 {
     public class PauseWindow : CustomCanvas
     {
         //elements
         Table _table;
-        Table _pauseWindow;
+        WindowTable _pauseWindow;
 
         Skin _basicSkin;
 
@@ -39,7 +39,7 @@ namespace PuppetRoguelite.UI.HUDs
         {
             base.OnAddedToEntity();
 
-            Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+            Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
 
             Emitters.GameEventsEmitter.AddObserver(GameEvents.Unpaused, OnUnpaused);
         }
@@ -48,7 +48,7 @@ namespace PuppetRoguelite.UI.HUDs
         {
             base.OnRemovedFromEntity();
 
-            Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+            Core.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
 
             Emitters.GameEventsEmitter.RemoveObserver(GameEvents.Unpaused, OnUnpaused);
         }
@@ -64,8 +64,7 @@ namespace PuppetRoguelite.UI.HUDs
             _table.SetWidth(Game1.UIResolution.X);
             _table.SetHeight(Game1.UIResolution.Y);
 
-            _pauseWindow = new Table();
-            _pauseWindow.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            _pauseWindow = new WindowTable(_basicSkin);
             _table.Add(_pauseWindow).Expand();
 
             _pauseWindow.Pad(Game1.UIResolution.X * .03f);
@@ -88,14 +87,14 @@ namespace PuppetRoguelite.UI.HUDs
 
         void OnQuitClicked(Button button)
         {
-            Game1.Exit();
+            Core.Exit();
         }
 
         void OnUnpaused()
         {
             Entity.Destroy();
         }
-        
+
         void OnGraphicsDeviceReset()
         {
             CreateUI();

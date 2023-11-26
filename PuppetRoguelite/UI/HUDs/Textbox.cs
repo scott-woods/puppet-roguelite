@@ -3,6 +3,7 @@ using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.UI.Elements;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace PuppetRoguelite.UI.HUDs
         public bool IsFinishedReading = false;
 
         Table _table;
-        Table _box;
+        WindowTable _box;
         Table _innerTable;
         Label _text;
         Label _asterisk;
@@ -62,8 +63,7 @@ namespace PuppetRoguelite.UI.HUDs
         void ArrangeElements()
         {
             //textbox table
-            _box = new Table();
-            _box.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            _box = new WindowTable(_basicSkin);
             var vPad = Game1.UIResolution.Y * .05f;
             _table.Add(_box).Expand().Bottom().SetPadBottom(vPad).Width(_boxWidth).Height(_boxHeight);
 

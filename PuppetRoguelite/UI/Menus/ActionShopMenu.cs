@@ -19,13 +19,13 @@ namespace PuppetRoguelite.UI.Menus
         Table _table;
 
         //main dialog
-        Table _mainTable;
+        WindowTable _mainTable;
         List<ListButton> _attackButtons = new List<ListButton>();
         List<ListButton> _utilityButtons = new List<ListButton>();
         List<ListButton> _supportButtons = new List<ListButton>();
 
         //action selection dialog
-        Table _actionTable;
+        WindowTable _actionTable;
         List<ListButton> _newActionButtons = new List<ListButton>();
 
         //misc
@@ -82,9 +82,8 @@ namespace PuppetRoguelite.UI.Menus
         void CreateMainDialog()
         {
             //create dialog
-            _mainTable = new Table();
+            _mainTable = new WindowTable(_basicSkin);
             _mainTable.Pad(50);
-            _mainTable.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
             //_table.Add(_mainTable).Expand();
 
             UpdateMainDialog();
@@ -111,8 +110,7 @@ namespace PuppetRoguelite.UI.Menus
         void CreateActionDialog()
         {
             //create dialog
-            _actionTable = new Table();
-            _actionTable.SetBackground(_basicSkin.GetNinePatchDrawable("np_inventory_01"));
+            _actionTable = new WindowTable(_basicSkin);
             //_table.Add(_actionTable).Expand();
             _actionTable.Pad(Game1.UIResolution.X * .05f);
         }
