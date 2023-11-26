@@ -17,16 +17,13 @@ using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
 namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 {
-    public class ChainBot : Enemy, IUpdatable
+    public class ChainBot : Enemy<ChainBot>
     {
         public Guid Id = Guid.NewGuid();
 
         //stats
         float _moveSpeed = 75f;
         int _maxHp = 12;
-
-        //behavior tree
-        BehaviorTree<ChainBot> _tree;
 
         //actions
         ChainBotMelee _chainBotMelee;
@@ -46,7 +43,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
         public KnockbackComponent KnockbackComponent;
         public OriginComponent OriginComponent;
         public DeathComponent DeathComponent;
-        public StatusComponent StatusComponent;
 
         #region SETUP
 
@@ -60,7 +56,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             base.Initialize();
 
             AddComponents();
-            SetupBehaviorTree();
         }
 
         void AddComponents()
@@ -109,9 +104,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
             //actions
             _chainBotMelee = Entity.AddComponent(new ChainBotMelee(this));
-
-            //status
-            StatusComponent = Entity.AddComponent(new StatusComponent(new Status(Status.StatusType.Normal, (int)StatusPriority.Normal)));
 
             //new healthbar
             NewHealthbar = Entity.AddComponent(new Healthbar(_healthComponent));
@@ -167,45 +159,27 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             Animator.AddAnimation("Die", AnimatedSpriteHelper.GetSpriteArrayFromRange(dieSprites, 0, 4));
         }
 
-        public void SetupBehaviorTree()
-        {
-            _tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
-                .Selector(AbortTypes.Self)
-                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type != Status.StatusType.Normal, true)
-                        .Action(c => c.AbortActions())
-                    .ConditionalDecorator(c =>
-                    {
-                        var gameStateManager = Game1.GameStateManager;
-                        return gameStateManager.GameState != GameState.Combat;
-                    }, true)
-                        .Sequence()
-                            .Action(c => c.AbortActions())
-                            .Action(c => c.Idle())
-                        .EndComposite()
-                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal)
-                        .Sequence() //combat sequence
-                            .Selector() //move or attack selector
-                                .Sequence(AbortTypes.LowerPriority)
-                                    .Conditional(c => c.IsInAttackRange())
-                                    .Action(c => c.ExecuteAction(_chainBotMelee))
-                                    .Action(c => c.ClearAction())
-                                .EndComposite()
-                                .Sequence(AbortTypes.LowerPriority)
-                                    .Action(c => c.MoveTowardsPlayer())
-                                .EndComposite()
-                            .EndComposite()
-                        .EndComposite()
-                .EndComposite()
-                .Build();
-
-            _tree.UpdatePeriod = 0;
-        }
-
         #endregion
 
-        public void Update()
+        public override BehaviorTree<ChainBot> CreateSubTree()
         {
-            _tree.Tick();
+            var tree = BehaviorTreeBuilder<ChainBot>.Begin(this)
+                .Sequence() //combat sequence
+                    .Selector() //move or attack selector
+                        .Sequence(AbortTypes.LowerPriority)
+                            .Conditional(c => c.IsInAttackRange())
+                            .Action(c => c.ExecuteAction(_chainBotMelee))
+                            .Action(c => c.ClearAction())
+                        .EndComposite()
+                        .Sequence(AbortTypes.LowerPriority)
+                            .Action(c => c.MoveTowardsPlayer())
+                        .EndComposite()
+                    .EndComposite()
+                .EndComposite()
+            .Build();
+
+            tree.UpdatePeriod = 0;
+            return tree;
         }
 
         bool IsInAttackRange()
@@ -248,7 +222,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             return TaskStatus.Running;
         }
 
-        TaskStatus AbortActions()
+        public override TaskStatus AbortActions()
         {
             if (_activeAction != null)
             {
@@ -260,7 +234,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             return TaskStatus.Success;
         }
 
-        TaskStatus Idle()
+        public override TaskStatus Idle()
         {
             var animation = VelocityComponent.Direction.X >= 0 ? "IdleRight" : "IdleLeft";
 

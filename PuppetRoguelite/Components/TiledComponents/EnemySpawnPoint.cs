@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.Tiled;
+using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Enemies;
 using PuppetRoguelite.Entities;
 using System;
@@ -14,7 +15,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         }
 
-        public Enemy SpawnEnemy(Type type)
+        public EnemyBase SpawnEnemy(Type type)
         {
             ConstructorInfo info = type.GetConstructor(new Type[] { typeof(Entity) });
             if (info != null)
@@ -22,7 +23,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 var ent = new PausableEntity(type.Name);
                 Entity.Scene.AddEntity(ent);
                 ent.SetPosition(Entity.Position);
-                var enemy = ent.AddComponent((Enemy)info.Invoke(new object[] { MapEntity }));
+                var enemy = ent.AddComponent((EnemyBase)info.Invoke(new object[] { MapEntity }));
 
                 return enemy;
             }

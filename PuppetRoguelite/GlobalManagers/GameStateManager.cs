@@ -5,6 +5,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI.HUDs;
+using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections;
 using System.Collections.Generic;

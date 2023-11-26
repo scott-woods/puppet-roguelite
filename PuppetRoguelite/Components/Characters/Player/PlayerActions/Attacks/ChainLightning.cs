@@ -118,7 +118,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             var count = _hitEntities.Count;
             var lastHitEntities = new List<Entity>();
             lastHitEntities.AddRange(_hitEntities);
-            var allEnemies = Scene.FindComponentsOfType<Enemy>();
+            var allEnemies = Scene.FindComponentsOfType<EnemyBase>();
             Debug.Log("starting interval checks. Count: " + count.ToString());
             while (count > 0)
             {
@@ -134,7 +134,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 List<Entity> nextEntities = new List<Entity>();
                 foreach (var entity in lastHitEntities) //loop through hit entities
                 {
-                    var enemiesToRemove = new List<Enemy>();
+                    var enemiesToRemove = new List<EnemyBase>();
                     foreach (var enemy in allEnemies)
                     {
                         //if already hit

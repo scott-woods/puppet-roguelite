@@ -56,7 +56,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
 
         IEnumerator ExecutionCoroutine()
         {
-            var enemies = Scene.FindComponentsOfType<Enemy>().Where(e => Vector2.Distance(e.Entity.Position, _targetEntity.Position) <= _fieldRadius);
+            var enemies = Scene.FindComponentsOfType<EnemyBase>().Where(e => Vector2.Distance(e.Entity.Position, _targetEntity.Position) <= _fieldRadius);
             foreach (var enemy in enemies)
             {
                 enemy.AddComponent(new FreezeComponent(_freezeDuration));

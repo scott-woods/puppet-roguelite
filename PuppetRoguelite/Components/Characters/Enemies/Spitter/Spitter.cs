@@ -14,16 +14,13 @@ using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
 namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 {
-    public class Spitter : Enemy, IUpdatable
+    public class Spitter : Enemy<Spitter>
     {
         //stats
         int _maxHp = 10;
         float _fastMoveSpeed = 75f;
         float _moveSpeed = 50f;
         float _slowMoveSpeed = 25f;
-
-        //behavior tree
-        BehaviorTree<Spitter> _tree;
 
         //components
         public Mover Mover;
@@ -41,7 +38,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         public OriginComponent OriginComponent;
         public DollahDropper DollahDropper;
         public DeathComponent DeathComponent;
-        public StatusComponent StatusComponent;
 
         //actions
         public SpitAttack SpitAttack;
@@ -58,7 +54,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             AddComponents();
             AddAnimations();
             AddActions();
-            SetupBehaviorTree();
         }
 
         void AddComponents()
@@ -72,9 +67,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
             Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 0, Content.Audio.Sounds.Chain_bot_damaged));
-
-            //status
-            StatusComponent = Entity.AddComponent(new StatusComponent(new Status(Status.StatusType.Normal, (int)StatusPriority.Normal)));
 
             //health
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp));
@@ -148,111 +140,14 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             SpitAttack = Entity.AddComponent(new SpitAttack(this));
         }
 
-        void SetupBehaviorTree()
-        {
-            _tree = BehaviorTreeBuilder<Spitter>.Begin(this)
-                .Selector(AbortTypes.Self)
-                    .ConditionalDecorator(s => s.StatusComponent.CurrentStatus.Type == Status.StatusType.Death, true)
-                        .Action(s => s.AbortActions())
-                    .ConditionalDecorator(s => s.StatusComponent.CurrentStatus.Type == Status.StatusType.Stunned, true)
-                        .Action(s => s.AbortActions())
-                    .ConditionalDecorator(s =>
-                    {
-                        var gameStateManager = Game1.GameStateManager;
-                        return gameStateManager.GameState != GameState.Combat;
-                    })
-                        .Sequence()
-                            .Action(s => s.AbortActions())
-                            .Action(s => s.Idle())
-                        .EndComposite()
-                    .ConditionalDecorator(s => s.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal) //main sequence
-                        .Sequence()
-                            .ParallelSelector()
-                                .WaitAction(Nez.Random.Range(3f, 5f)) //after certain time, fire no matter where we are
-                                .Action(s =>
-                                {
-                                    //get dist to player
-                                    var dist = Math.Abs(Vector2.Distance(PlayerController.Instance.Entity.Position, Entity.Position));
-
-                                    //determine where to move and how fast
-                                    float speed = 0;
-                                    Vector2 direction;
-                                    if (dist <= 64) //player too close
-                                    {
-                                        speed = _fastMoveSpeed;
-                                        direction = Entity.Position - PlayerController.Instance.Entity.Position;
-                                    }
-                                    else if (dist >= 96 && dist <= 128)
-                                    {
-                                        speed = _slowMoveSpeed;
-                                        direction = PlayerController.Instance.Entity.Position - Entity.Position;
-                                    }
-                                    else if (dist >= 192)
-                                    {
-                                        speed = _moveSpeed;
-                                        direction = PlayerController.Instance.Entity.Position - Entity.Position;
-                                    }
-                                    else
-                                    {
-                                        speed = 0;
-                                        direction = PlayerController.Instance.Entity.Position - Entity.Position;
-                                    }
-
-                                    //normalize and set direction
-                                    direction.Normalize();
-                                    VelocityComponent.SetDirection(direction);
-
-                                    //play idle or move animation
-                                    var anim = speed == 0 ? "Idle" : "Move";
-                                    if (Animator.CurrentAnimationName != anim)
-                                    {
-                                        Animator.Play(anim);
-                                    }
-
-                                    //move
-                                    if (speed != 0)
-                                    {
-                                        VelocityComponent.Move(speed);
-                                    }
-
-                                    return TaskStatus.Running;
-                                })
-                            .EndComposite()
-                            .ParallelSelector()
-                                .WaitAction(1f)
-                                .Action(s =>
-                                {
-                                    var dir = PlayerController.Instance.Entity.Position - Entity.Position;
-                                    VelocityComponent.SetDirection(dir);
-                                    if (Animator.CurrentAnimationName != "Idle")
-                                    {
-                                        Animator.Play("Idle");
-                                    }
-                                    return TaskStatus.Running;
-                                })
-                            .EndComposite()
-                            //execute attack
-                            .Action(s => s.SpitAttack.Execute())
-                        .EndComposite()
-                .EndComposite()
-                .Build();
-
-            _tree.UpdatePeriod = 0;
-        }
-
-        public void Update()
-        {
-            _tree.Tick();
-        }
-
-        TaskStatus AbortActions()
+        public override TaskStatus AbortActions()
         {
             ActiveAction?.Abort();
             ActiveAction = null;
             return TaskStatus.Success;
         }
 
-        TaskStatus Idle()
+        public override TaskStatus Idle()
         {
             if (!Animator.IsAnimationActive("Idle"))
             {
@@ -260,6 +155,83 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             }
 
             return TaskStatus.Running;
+        }
+
+        public override BehaviorTree<Spitter> CreateSubTree()
+        {
+            var tree = BehaviorTreeBuilder<Spitter>.Begin(this)
+                .Sequence()
+                    .ParallelSelector()
+                        .WaitAction(Nez.Random.Range(3f, 5f)) //after certain time, fire no matter where we are
+                        .Action(s =>
+                        {
+                            //get dist to player
+                            var dist = Math.Abs(Vector2.Distance(PlayerController.Instance.Entity.Position, Entity.Position));
+
+                            //determine where to move and how fast
+                            float speed = 0;
+                            Vector2 direction;
+                            if (dist <= 64) //player too close
+                            {
+                                speed = _fastMoveSpeed;
+                                direction = Entity.Position - PlayerController.Instance.Entity.Position;
+                            }
+                            else if (dist >= 96 && dist <= 128)
+                            {
+                                speed = _slowMoveSpeed;
+                                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+                            }
+                            else if (dist >= 192)
+                            {
+                                speed = _moveSpeed;
+                                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+                            }
+                            else
+                            {
+                                speed = 0;
+                                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+                            }
+
+                            //normalize and set direction
+                            direction.Normalize();
+                            VelocityComponent.SetDirection(direction);
+
+                            //play idle or move animation
+                            var anim = speed == 0 ? "Idle" : "Move";
+                            if (Animator.CurrentAnimationName != anim)
+                            {
+                                Animator.Play(anim);
+                            }
+
+                            //move
+                            if (speed != 0)
+                            {
+                                VelocityComponent.Move(speed);
+                            }
+
+                            return TaskStatus.Running;
+                        })
+                    .EndComposite()
+                    .ParallelSelector()
+                        .WaitAction(1f)
+                        .Action(s =>
+                        {
+                            var dir = PlayerController.Instance.Entity.Position - Entity.Position;
+                            VelocityComponent.SetDirection(dir);
+                            if (Animator.CurrentAnimationName != "Idle")
+                            {
+                                Animator.Play("Idle");
+                            }
+                            return TaskStatus.Running;
+                        })
+                    .EndComposite()
+                    //execute attack
+                    .Action(s => s.SpitAttack.Execute())
+                .EndComposite()
+            .Build();
+
+            tree.UpdatePeriod = 0;
+            return tree;
         }
 
         void OnSpriteFlipped(bool flipped)

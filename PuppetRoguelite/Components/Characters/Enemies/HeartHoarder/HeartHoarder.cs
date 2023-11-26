@@ -15,11 +15,8 @@ using System.Linq;
 
 namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
 {
-    public class HeartHoarder : Enemy, IUpdatable
+    public class HeartHoarder : Enemy<HeartHoarder>
     {
-        //behavior tree
-        BehaviorTree<HeartHoarder> _tree;
-
         //components
         public Mover Mover;
         public HealthComponent HealthComponent;
@@ -36,7 +33,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
         public OriginComponent OriginComponent;
         public DollahDropper DollahDropper;
         public DeathComponent DeathComponent;
-        public StatusComponent StatusComponent;
 
         //misc
         float _normalMoveSpeed = 100f;
@@ -59,13 +55,10 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             base.Initialize();
 
             AddComponents();
-            SetupBehaviorTree();
         }
 
         void AddComponents()
         {
-            StatusComponent = Entity.AddComponent(new StatusComponent(new Status(Status.StatusType.Normal, (int)StatusPriority.Normal)));
-
             Mover = Entity.AddComponent(new Mover());
 
             HealthComponent = Entity.AddComponent(new HealthComponent(_maxHp));
@@ -168,90 +161,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             Animator.AddAnimation("Die", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 12, 36, totalColumns), 7);
         }
 
-        void SetupBehaviorTree()
-        {
-            _tree = BehaviorTreeBuilder<HeartHoarder>
-                .Begin(this)
-                    .Selector(AbortTypes.Self)
-                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type != Status.StatusType.Normal, true)
-                            .Action(h => h.AbortActions())
-                        //if not in combat, idle
-                        .ConditionalDecorator(h =>
-                        {
-                            var gameStateManager = Game1.GameStateManager;
-                            return gameStateManager.GameState != GameState.Combat;
-                        }, true)
-                            .Sequence()
-                                .Action(h => h.AbortActions())
-                                .Action(h => h.Idle())
-                            .EndComposite()
-                        .ConditionalDecorator(h => h.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal) //if not stunned, select something to do
-                            .Sequence() //main sequence
-                                .Action(h => h.StartNewAttackSequence())
-                                .Selector() //select an attack or move towards player
-                                    .Sequence(AbortTypes.LowerPriority) //try to attack
-                                        .Conditional(h => h.CanPerformAction())
-                                        .Selector()
-                                            .Sequence() //try melee attacks
-                                                .Conditional(h => h.IsInMeleeRange())
-                                                .RandomSelector()
-                                                    .Sequence()
-                                                        .ParallelSelector()
-                                                            .Action(h => h.Idle())
-                                                            .WaitAction(.5f)
-                                                        .EndComposite()
-                                                        .Action(h => h.StationaryAttack())
-                                                        .Action(h => h.WaitForAnimation("PostStationaryAttack"))
-                                                    .EndComposite()
-                                                    .Sequence()
-                                                        .Action(h => h.WaitForAnimation("MoveAttackPrepRight"))
-                                                        .ParallelSelector()
-                                                            .Action(h => h.MovingAttack())
-                                                            .WaitAction(5f)
-                                                        .EndComposite()
-                                                        .Action(h =>
-                                                        {
-                                                            h.Animator.Speed = 1f;
-                                                            return TaskStatus.Success;
-                                                        })
-                                                        .Action(h => h.WaitForAnimation("StopMovingAfterAttackRight"))
-                                                    .EndComposite()
-                                                .EndComposite()
-                                            .EndComposite()
-                                            .Sequence() //try vanish attack
-                                                .Conditional(h => h.ShouldPerformVanish())
-                                                .Action(h => h.Vanish())
-                                                .WaitAction(2f)
-                                                .ParallelSelector()
-                                                    .WaitAction(4f)
-                                                    .Action(h => h.IsInMeleeRange())
-                                                    .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _vanishedMoveSpeed))
-                                                .EndComposite()
-                                                .Action(h => h.Emerge())
-                                                .Action(h => h.StationaryAttack())
-                                                .Action(h => h.WaitForAnimation("PostStationaryAttack"))
-                                            .EndComposite()
-                                        .EndComposite()
-                                    .EndComposite()
-                                    .Sequence(AbortTypes.LowerPriority) //if neither attack possible, move towards player
-                                        .Action(h => h.WaitForAnimation("StartMovingRight"))
-                                        .ParallelSelector()
-                                            .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
-                                            .Action(h => h.PlayAnimationLoop("MoveRight"))
-                                        .EndComposite()
-                                    .EndComposite()
-                                .EndComposite()
-                                .ParallelSelector() //idle for a moment after attack sequence
-                                    .Action(h => h.Idle())
-                                    .WaitAction(1.5f)
-                                .EndComposite()
-                            .EndComposite()
-                    .EndComposite()
-                .Build();
-
-            _tree.UpdatePeriod = 0;
-        }
-
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
@@ -270,9 +179,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
 
         #endregion
 
-        public void Update()
+        public override void Update()
         {
-            _tree.Tick();
+            base.Update();
 
             if (_inAttackSequence)
             {
@@ -284,7 +193,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             Animator.FlipX = flip;
         }
 
-        public TaskStatus Idle()
+        public override TaskStatus Idle()
         {
             if (!Animator.IsAnimationActive("Idle"))
             {
@@ -338,9 +247,78 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             Animator.Speed = 1f;
         }
 
+        public override BehaviorTree<HeartHoarder> CreateSubTree()
+        {
+            var tree = BehaviorTreeBuilder<HeartHoarder>.Begin(this)
+                .Sequence() //main sequence
+                    .Action(h => h.StartNewAttackSequence())
+                    .Selector() //select an attack or move towards player
+                        .Sequence(AbortTypes.LowerPriority) //try to attack
+                            .Conditional(h => h.CanPerformAction())
+                            .Selector()
+                                .Sequence() //try melee attacks
+                                    .Conditional(h => h.IsInMeleeRange())
+                                    .RandomSelector()
+                                        .Sequence()
+                                            .ParallelSelector()
+                                                .Action(h => h.Idle())
+                                                .WaitAction(.5f)
+                                            .EndComposite()
+                                            .Action(h => h.StationaryAttack())
+                                            .Action(h => h.WaitForAnimation("PostStationaryAttack"))
+                                        .EndComposite()
+                                        .Sequence()
+                                            .Action(h => h.WaitForAnimation("MoveAttackPrepRight"))
+                                            .ParallelSelector()
+                                                .Action(h => h.MovingAttack())
+                                                .WaitAction(5f)
+                                            .EndComposite()
+                                            .Action(h =>
+                                            {
+                                                h.Animator.Speed = 1f;
+                                                return TaskStatus.Success;
+                                            })
+                                            .Action(h => h.WaitForAnimation("StopMovingAfterAttackRight"))
+                                        .EndComposite()
+                                    .EndComposite()
+                                .EndComposite()
+                                .Sequence() //try vanish attack
+                                    .Conditional(h => h.ShouldPerformVanish())
+                                    .Action(h => h.Vanish())
+                                    .WaitAction(2f)
+                                    .ParallelSelector()
+                                        .WaitAction(4f)
+                                        .Action(h => h.IsInMeleeRange())
+                                        .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _vanishedMoveSpeed))
+                                    .EndComposite()
+                                    .Action(h => h.Emerge())
+                                    .Action(h => h.StationaryAttack())
+                                    .Action(h => h.WaitForAnimation("PostStationaryAttack"))
+                                .EndComposite()
+                            .EndComposite()
+                        .EndComposite()
+                        .Sequence(AbortTypes.LowerPriority) //if neither attack possible, move towards player
+                            .Action(h => h.WaitForAnimation("StartMovingRight"))
+                            .ParallelSelector()
+                                .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
+                                .Action(h => h.PlayAnimationLoop("MoveRight"))
+                            .EndComposite()
+                        .EndComposite()
+                    .EndComposite()
+                    .ParallelSelector() //idle for a moment after attack sequence
+                        .Action(h => h.Idle())
+                        .WaitAction(1.5f)
+                    .EndComposite()
+                .EndComposite()
+            .Build();
+
+            tree.UpdatePeriod = 0;
+            return tree;
+        }
+
         #region TASKS
 
-        TaskStatus AbortActions()
+        public override TaskStatus AbortActions()
         {
             MovingAttackHitbox.SetEnabled(false);
             StationaryAttackHitboxTopLeft.SetEnabled(false);

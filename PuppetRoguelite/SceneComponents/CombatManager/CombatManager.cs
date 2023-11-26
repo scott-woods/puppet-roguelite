@@ -23,7 +23,7 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
     public class CombatManager : SceneComponent
     {
         public CombatState CombatState = CombatState.None;
-        public List<Enemy> Enemies = new List<Enemy>();
+        public List<EnemyBase> Enemies = new List<EnemyBase>();
         public List<DeathComponent> EnemyDeathComponents = new List<DeathComponent>();
         public Entity MapEntity;
         public ComboManager ComboManager = new ComboManager();
@@ -54,7 +54,7 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
             ComboManager.Reset();
         }
 
-        public void AddEnemy(Enemy enemy)
+        public void AddEnemy(EnemyBase enemy)
         {
             MapEntity = enemy.MapEntity;
             if (enemy.Entity.TryGetComponent<DeathComponent>(out var dc))
@@ -116,7 +116,7 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
 
         void OnEnemyDied(Entity enemyEntity)
         {
-            var enemy = enemyEntity.GetComponent<Enemy>();
+            var enemy = enemyEntity.GetComponent<EnemyBase>();
             Enemies.Remove(enemy);
             if (!Enemies.Any())
             {

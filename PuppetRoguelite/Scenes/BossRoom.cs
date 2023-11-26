@@ -41,7 +41,7 @@ namespace PuppetRoguelite.Scenes
         public BossSpawnPoint BossSpawnPoint;
         public HeartHoarder Boss;
 
-        public List<Enemy> FodderEnemies = new List<Enemy>();
+        public List<EnemyBase> FodderEnemies = new List<EnemyBase>();
         public ITimer EnemySpawnTimer;
         bool _isEnemySpawnTimerActive = false;
         float _enemySpawnTime = 0;
@@ -293,7 +293,7 @@ namespace PuppetRoguelite.Scenes
 
         void OnEnemyDied(HealthComponent hc)
         {
-            var enemy = hc.Entity.GetComponent<Enemy>();
+            var enemy = hc.Entity.GetComponent<EnemyBase>();
             FodderEnemies.Remove(enemy);
 
             if (FodderEnemies.Count == 0)
@@ -307,7 +307,7 @@ namespace PuppetRoguelite.Scenes
             Boss.HealthComponent.Emitter.RemoveObserver(HealthComponentEventType.HealthDepleted, OnBossDied);
 
             Game1.AudioManager.StopMusic();
-            var queue = new Queue<Enemy>(FodderEnemies);
+            var queue = new Queue<EnemyBase>(FodderEnemies);
             while (queue.Count > 0)
             {
                 var enemy = queue.Dequeue();

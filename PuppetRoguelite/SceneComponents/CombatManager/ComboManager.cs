@@ -17,7 +17,7 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
         List<HealthComponent> _connectedHealthComponents = new List<HealthComponent>();
         List<DollahDropper> _connectedDollahDroppers = new List<DollahDropper>();
 
-        public void StartCounting(List<Enemy> enemies)
+        public void StartCounting(List<EnemyBase> enemies)
         {
             ComboCounter = 0;
 

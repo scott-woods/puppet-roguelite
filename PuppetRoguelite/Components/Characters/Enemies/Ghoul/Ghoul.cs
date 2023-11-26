@@ -14,14 +14,11 @@ using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
 namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
 {
-    public class Ghoul : Enemy, IUpdatable
+    public class Ghoul : Enemy<Ghoul>
     {
         //stats
         float _moveSpeed = 115f;
         int _maxHp = 9;
-
-        //behavior tree
-        BehaviorTree<Ghoul> _tree;
 
         //actions
         EnemyAction<Ghoul> _activeAction;
@@ -41,7 +38,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
         public KnockbackComponent KnockbackComponent;
         public OriginComponent OriginComponent;
         public DeathComponent DeathComponent;
-        public StatusComponent StatusComponent;
         public SpriteFlipper SpriteFlipper;
 
         //misc spawn status
@@ -59,7 +55,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
             base.Initialize();
 
             AddComponents();
-            SetupBehaviorTree();
         }
 
         void AddComponents()
@@ -112,9 +107,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
             //y sorter
             _ySorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
 
-            //status
-            StatusComponent = Entity.AddComponent(new StatusComponent(new Status(Status.StatusType.Normal, (int)StatusPriority.Normal)));
-
             //new healthbar
             NewHealthbar = Entity.AddComponent(new Healthbar(_healthComponent));
             NewHealthbar.SetLocalOffset(new Vector2(0, -25));
@@ -135,38 +127,51 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
             Animator.AddAnimation("Spawn", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 5, 11, 11));
         }
 
-        public void SetupBehaviorTree()
+        #endregion
+
+        #region Enemy overrides
+
+        public override TaskStatus Idle()
         {
-            _tree = BehaviorTreeBuilder<Ghoul>.Begin(this)
-                .Selector(AbortTypes.Self)
-                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type != Status.StatusType.Normal, true)
-                        .Action(c => c.AbortActions())
-                    .ConditionalDecorator(c =>
-                    {
-                        var gameStateManager = Game1.GameStateManager;
-                        return gameStateManager.GameState != GameState.Combat;
-                    }, true)
-                        .Sequence()
-                            .Action(c => c.AbortActions())
-                            .Action(c => c.Idle())
+            if (!Animator.IsAnimationActive("Idle"))
+            {
+                Animator.Play("Idle");
+            }
+
+            return TaskStatus.Running;
+        }
+
+        public override BehaviorTree<Ghoul> CreateSubTree()
+        {
+            var tree = BehaviorTreeBuilder<Ghoul>.Begin(this)
+                .Sequence() //combat sequence
+                    .Selector() //move or attack selector
+                        .Sequence(AbortTypes.LowerPriority)
+                            .Conditional(c => c.IsInAttackRange())
+                            .Action(c => c.ExecuteAction(_ghoulAttack))
+                            .Action(c => c.ClearAction())
                         .EndComposite()
-                    .ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal)
-                        .Sequence() //combat sequence
-                            .Selector() //move or attack selector
-                                .Sequence(AbortTypes.LowerPriority)
-                                    .Conditional(c => c.IsInAttackRange())
-                                    .Action(c => c.ExecuteAction(_ghoulAttack))
-                                    .Action(c => c.ClearAction())
-                                .EndComposite()
-                                .Sequence(AbortTypes.LowerPriority)
-                                    .Action(c => c.MoveTowardsPlayer())
-                                .EndComposite()
-                            .EndComposite()
+                        .Sequence(AbortTypes.LowerPriority)
+                            .Action(c => c.MoveTowardsPlayer())
                         .EndComposite()
+                    .EndComposite()
                 .EndComposite()
                 .Build();
 
-            _tree.UpdatePeriod = 0;
+            tree.UpdatePeriod = 0f;
+
+            return tree;
+        }
+
+        public override TaskStatus AbortActions()
+        {
+            if (_activeAction != null)
+            {
+                _activeAction.Abort();
+                _activeAction = null;
+            }
+
+            return TaskStatus.Success;
         }
 
         #endregion
@@ -179,11 +184,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
             StatusComponent.PushStatus(_spawnStatus);
             Animator.Play("Spawn", SpriteAnimator.LoopMode.Once);
             Animator.OnAnimationCompletedEvent += OnSpawnCompleted;
-        }
-
-        public void Update()
-        {
-            _tree.Tick();
         }
 
         bool IsInAttackRange()
@@ -229,27 +229,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
             //follow path
             Pathfinder.FollowPath(target, true);
             VelocityComponent.Move();
-
-            return TaskStatus.Running;
-        }
-
-        TaskStatus AbortActions()
-        {
-            if (_activeAction != null)
-            {
-                _activeAction.Abort();
-                _activeAction = null;
-            }
-
-            return TaskStatus.Success;
-        }
-
-        TaskStatus Idle()
-        {
-            if (!Animator.IsAnimationActive("Idle"))
-            {
-                Animator.Play("Idle");
-            }
 
             return TaskStatus.Running;
         }

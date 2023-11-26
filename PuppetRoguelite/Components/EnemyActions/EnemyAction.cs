@@ -10,7 +10,7 @@ using System.Text;
 
 namespace PuppetRoguelite.Components.EnemyActions
 {
-    public abstract class EnemyAction<T> : Component where T : Enemy
+    public abstract class EnemyAction<T> : Component where T : EnemyBase
     {
         protected enum EnemyActionState
         {
