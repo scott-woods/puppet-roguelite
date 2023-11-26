@@ -2,7 +2,7 @@
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Components.PlayerActions;
+using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.UI.Elements;
 using System;
 using System.Collections.Generic;

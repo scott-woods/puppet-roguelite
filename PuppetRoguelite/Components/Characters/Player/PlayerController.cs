@@ -4,14 +4,13 @@ using Nez;
 using Nez.AI.FSM;
 using Nez.Sprites;
 using Nez.Textures;
-using Nez.UI;
+using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
 using PuppetRoguelite.Components.Characters.Player.States;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.Items;
-using PuppetRoguelite.Models;
+using PuppetRoguelite.SaveData;
+using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.Tools;
-using PuppetRoguelite.UI;
 using System;
 
 namespace PuppetRoguelite.Components.Characters.Player

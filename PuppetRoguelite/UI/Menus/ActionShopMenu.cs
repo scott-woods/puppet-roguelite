@@ -1,18 +1,14 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Nez;
-using Nez.Textures;
 using Nez.UI;
-using PuppetRoguelite.Models.Upgrades;
-using PuppetRoguelite.Models;
+using PuppetRoguelite.Components.Characters.Player.PlayerActions;
+using PuppetRoguelite.Enums;
+using PuppetRoguelite.SaveData;
+using PuppetRoguelite.SaveData.Unlocks;
+using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.UI.Elements;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PuppetRoguelite.Components.PlayerActions;
-using PuppetRoguelite.Enums;
-using PuppetRoguelite.Tools;
 
 namespace PuppetRoguelite.UI.Menus
 {

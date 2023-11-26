@@ -1,7 +1,7 @@
 ﻿using Nez;
 using Nez.Sprites;
-using PuppetRoguelite.Components.Characters.ChainBot;
-using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
+using PuppetRoguelite.SceneComponents.CombatManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;

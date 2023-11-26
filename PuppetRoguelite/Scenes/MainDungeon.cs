@@ -1,23 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Nez;
-using Nez.AI.Pathfinding;
-using Nez.Textures;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Characters;
-using PuppetRoguelite.Components.Characters.ChainBot;
-using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Entities;
-using PuppetRoguelite.Enums;
+using PuppetRoguelite.Components.Cameras;
 using PuppetRoguelite.SceneComponents;
-using PuppetRoguelite.UI;
+using PuppetRoguelite.SceneComponents.CombatManager;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.HUDs;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Scenes
 {
@@ -33,7 +21,6 @@ namespace PuppetRoguelite.Scenes
         Dungenerator _dungenerator;
         CombatManager _combatManager;
         PlayerSpawner _playerSpawner;
-        ComboManager _comboComponent;
 
         public override void Initialize()
         {
@@ -75,7 +62,7 @@ namespace PuppetRoguelite.Scenes
             _playerSpawner.SpawnPlayer(spawn);
             _playerEntity.SetPosition(spawn);
 
-            Game1.AudioManager.PlayMusic(Music.Babbulon, true);
+            Game1.AudioManager.PlayMusic(Songs.Babbulon, true);
         }
 
         public override void End()

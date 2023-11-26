@@ -3,7 +3,7 @@ using Nez.Systems;
 using Nez.Textures;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Models;
-using PuppetRoguelite.UI;
+using PuppetRoguelite.UI.HUDs;
 using System;
 using System.Collections;
 using System.Collections.Generic;

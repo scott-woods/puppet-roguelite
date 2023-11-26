@@ -3,7 +3,6 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.UI.HUDs;
+using PuppetRoguelite.SaveData;
+using PuppetRoguelite.SaveData.Upgrades;
+using PuppetRoguelite.Components.Cameras;
 
 namespace PuppetRoguelite.Scenes
 {

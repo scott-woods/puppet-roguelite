@@ -1,18 +1,14 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
+using PuppetRoguelite.Components;
+using PuppetRoguelite.Components.Cameras;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
-using PuppetRoguelite.Components;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.SaveData;
+using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.SceneComponents;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using PuppetRoguelite.Tools;
-using PuppetRoguelite.Interfaces;
-using PuppetRoguelite.Models;
 
 namespace PuppetRoguelite.Scenes
 {

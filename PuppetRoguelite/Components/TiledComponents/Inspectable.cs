@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections;
 using System.Collections.Generic;

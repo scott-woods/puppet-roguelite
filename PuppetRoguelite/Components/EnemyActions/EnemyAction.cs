@@ -1,5 +1,6 @@
 ﻿using Nez;
 using Nez.AI.BehaviorTrees;
+using PuppetRoguelite.Components.Characters.Enemies;
 using PuppetRoguelite.Components.Shared;
 using System;
 using System.Collections;

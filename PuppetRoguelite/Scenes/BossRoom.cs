@@ -1,25 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using PuppetRoguelite.Components;
-using PuppetRoguelite.Components.Characters.ChainBot;
-using PuppetRoguelite.Components.Characters.HeartHoarder;
+using PuppetRoguelite.Components.Cameras;
+using PuppetRoguelite.Components.Characters.Enemies;
+using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
+using PuppetRoguelite.Components.Characters.Enemies.HeartHoarder;
+using PuppetRoguelite.Components.Characters.Enemies.Spitter;
 using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Components.Characters.Spitter;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.Interfaces;
 using PuppetRoguelite.SceneComponents;
-using PuppetRoguelite.Tools;
+using PuppetRoguelite.SceneComponents.CombatManager;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.HUDs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Nez.Content.Textures;
 
 namespace PuppetRoguelite.Scenes
 {
@@ -182,7 +181,7 @@ namespace PuppetRoguelite.Scenes
             yield return Coroutine.WaitForSeconds(1f);
 
             //start music
-            Game1.AudioManager.PlayMusic(Music.HaveAHeart, true);
+            Game1.AudioManager.PlayMusic(Songs.HaveAHeart, true);
 
             //pan camera to boss spawn position
             var cam = Camera.Entity.GetComponent<DeadzoneFollowCamera>();

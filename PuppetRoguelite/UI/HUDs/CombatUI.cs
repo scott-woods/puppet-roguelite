@@ -4,6 +4,7 @@ using Nez;
 using Nez.Textures;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;

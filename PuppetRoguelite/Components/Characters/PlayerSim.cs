@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.Components.Shared;
-using PuppetRoguelite.Components.PlayerActions;
+using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 
 namespace PuppetRoguelite.Components.Characters
 {

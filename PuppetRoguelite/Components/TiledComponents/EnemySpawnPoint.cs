@@ -1,12 +1,8 @@
 ﻿using Nez;
 using Nez.Tiled;
-using PuppetRoguelite.Components.Characters.ChainBot;
-using PuppetRoguelite.Components.Characters.Spitter;
-using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Components.Characters.Enemies;
 using PuppetRoguelite.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace PuppetRoguelite.Components.TiledComponents

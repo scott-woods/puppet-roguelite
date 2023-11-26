@@ -1,9 +1,9 @@
 ﻿using Nez;
 using Nez.Tiled;
-using PuppetRoguelite.Components.Characters.ChainBot;
-using PuppetRoguelite.Components.Characters.Ghoul;
-using PuppetRoguelite.Components.Characters.Spitter;
-using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
+using PuppetRoguelite.Components.Characters.Enemies.Ghoul;
+using PuppetRoguelite.Components.Characters.Enemies.Spitter;
+using PuppetRoguelite.SceneComponents.CombatManager;
 using System;
 using System.Collections;
 using System.Collections.Generic;

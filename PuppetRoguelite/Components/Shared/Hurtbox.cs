@@ -5,6 +5,7 @@ using Nez.Sprites;
 using Nez.Systems;
 using Nez.Timers;
 using Nez.Tweens;
+using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using System;

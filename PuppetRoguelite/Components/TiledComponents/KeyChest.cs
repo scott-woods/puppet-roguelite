@@ -1,19 +1,14 @@
-﻿using Nez.Tiled;
-using Nez;
-using System;
+﻿using Nez;
+using Nez.Textures;
+using Nez.Tiled;
+using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
+using PuppetRoguelite.Models;
+using PuppetRoguelite.Models.Items;
+using PuppetRoguelite.SceneComponents;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nez.Sprites;
-using Nez.Textures;
-using PuppetRoguelite.Components.Shared;
-using Microsoft.Xna.Framework;
-using System.Collections;
-using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Items;
-using PuppetRoguelite.Models;
-using PuppetRoguelite.SceneComponents;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {

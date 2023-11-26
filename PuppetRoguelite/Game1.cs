@@ -3,6 +3,7 @@ using Nez;
 using Nez.Systems;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Scenes;
+using PuppetRoguelite.StaticData;
 using SDL2;
 using System;
 using System.IO;

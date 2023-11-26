@@ -2,7 +2,7 @@
 using Nez.AI.FSM;
 using Nez.Sprites;
 using PuppetRoguelite.Components.Shared;
-using PuppetRoguelite.Models;
+using PuppetRoguelite.SaveData;
 using System;
 using System.Collections.Generic;
 using System.Linq;

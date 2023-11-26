@@ -1,5 +1,5 @@
 ﻿using Nez;
-using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Components.Shared.Hitboxes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

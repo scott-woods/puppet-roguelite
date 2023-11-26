@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Shared
 {
+    /// <summary>
+    /// Manages a direction based on the entity's angle to the mouse
+    /// </summary>
     public class DirectionByMouse : Component, IUpdatable
     {
         public Direction PreviousDirection = Direction.Right;

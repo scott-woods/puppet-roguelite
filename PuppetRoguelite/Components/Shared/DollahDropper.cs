@@ -1,4 +1,5 @@
 ﻿using Nez;
+using PuppetRoguelite.Components.Objects;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Scenes;
 using System;

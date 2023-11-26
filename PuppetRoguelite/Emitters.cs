@@ -1,13 +1,5 @@
 ﻿using Nez.Systems;
-using PuppetRoguelite.Components.Characters;
-using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Components.PlayerActions;
-using PuppetRoguelite.Components.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
 
 namespace PuppetRoguelite
 {

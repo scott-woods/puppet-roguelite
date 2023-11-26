@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.UI;
-using PuppetRoguelite.Models.Upgrades;
+using PuppetRoguelite.SaveData.Upgrades;
 using System;
 using System.Collections.Generic;
 using System.Linq;

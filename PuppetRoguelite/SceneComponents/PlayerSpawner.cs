@@ -3,13 +3,8 @@ using Nez;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
-using PuppetRoguelite.Interfaces;
 using PuppetRoguelite.Tools;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.SceneComponents
 {
