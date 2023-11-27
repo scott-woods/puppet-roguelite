@@ -186,7 +186,7 @@ namespace PuppetRoguelite.Components.Characters.Player
                 PlayerUpgradeData.Instance.UtilitySlotsUpgrade.GetCurrentValue(),
                 PlayerUpgradeData.Instance.SupportSlotsUpgrade.GetCurrentValue()));
 
-            var shadow = Entity.AddComponent(new SpriteMime(Entity.GetComponent<SpriteRenderer>()));
+            var shadow = Entity.AddComponent(new SpriteMime(SpriteAnimator));
             shadow.Color = new Color(10, 10, 10, 80);
             shadow.Material = Material.StencilRead();
             shadow.RenderLayer = int.MinValue;

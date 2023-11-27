@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Sprites;
 using Nez.Tiled;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
@@ -27,7 +28,8 @@ namespace PuppetRoguelite.Components.Shared
         {
             base.OnAddedToEntity();
 
-            _allRenderables = Entity.GetComponents<RenderableComponent>();
+            var renderables = Entity.GetComponents<RenderableComponent>();
+            _allRenderables = renderables.Where(r => r is not SpriteMime).ToList();
         }
 
         public void Update()
