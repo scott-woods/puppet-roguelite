@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
@@ -16,11 +17,14 @@ namespace PuppetRoguelite.UI
     {
         public static Skin CreateBasicSkin()
         {
-            //load assets
             var skin = new Skin();
+
+            //load sprite atlas assets
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style3/Atlas/icons_style_3.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Icons/Style4/Atlas/icons_style_4.atlas"));
             skin.AddSprites(Game1.Content.LoadSpriteAtlas("Content/Textures/UI/Menu/Style3/Atlas/menu_style_3.atlas"));
+
+            //load fonts
             skin.Add("font_m57_12", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.M57_12));
             skin.Add("font_abaddon_light_12", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_12));
             skin.Add("font_abaddon_light_18", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_18));
@@ -30,9 +34,15 @@ namespace PuppetRoguelite.UI
             skin.Add("font_abaddon_light_60", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_60));
             skin.Add("font_abaddon_light_72", Game1.Content.LoadBitmapFont(Nez.Content.Fonts.Abaddon_light_72));
 
+            //nine patches
             var subTexture = skin.GetSprite("Inventory_01");
             var ninePatch = new NinePatchDrawable(subTexture, 16, 16, 16, 16);
             skin.Add("np_inventory_01", ninePatch);
+
+            var dark1Texture = Game1.Content.LoadTexture(Nez.Content.Textures.UI.Borders_and_hp_no_glow);
+            var dark1Sprite = new Sprite(dark1Texture, 208, 64, 48, 48);
+            var dark1NinePatch = new NinePatchDrawable(dark1Sprite, 16, 16, 16, 16);
+            skin.Add("np_dark_1", dark1NinePatch);
 
             //action buttons
             //skin.Add("attackActionButton", new ButtonStyle(skin.GetDrawable("Style 4 Icon 005"),

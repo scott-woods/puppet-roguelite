@@ -82,8 +82,9 @@ namespace PuppetRoguelite.Components.Shared
                     var tiledMapRenderers = Entity.Scene.FindComponentsOfType<TiledMapRenderer>();
                     foreach (var renderer in tiledMapRenderers)
                     {
-                        var rect = _renderable.Bounds;
+                        //var rect = _renderable.Bounds;
                         var origin = _originComponent.Origin;
+                        var rect = new Rectangle((int)origin.X, (int)origin.Y, 1, 1);
 
                         if (renderer.TiledMap.TileLayers.TryGetValue("above-details", out var layer))
                         {

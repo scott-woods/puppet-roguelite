@@ -40,6 +40,12 @@ namespace PuppetRoguelite.Components
             return _mapRenderer.TiledMap.TileToWorldPosition(gridPosition) + Entity.Position;
         }
 
+        public bool IsPositionInWall(Vector2 worldPosition)
+        {
+            var gridPos = WorldToGridPosition(worldPosition);
+            return _graph.Walls.Contains(gridPos);
+        }
+
         /// <summary>
         /// given a start and end point in world space, return list of world space positions along grid between them
         /// </summary>

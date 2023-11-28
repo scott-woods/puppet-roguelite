@@ -60,16 +60,16 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //spawn enemies
             var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapEntity == MapEntity).ToList();
-            int i = 0;
-            while (i < enemySpawns.Count)
-            {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
-                var spawn = enemySpawns[i];
-                combatManager.AddEnemy(spawn.SpawnEnemy(_enemyTypes.RandomItem()));
-                i++;
-                yield return Coroutine.WaitForSeconds(.2f);
-            }
-            //combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(ChainBot)));
+            //int i = 0;
+            //while (i < enemySpawns.Count)
+            //{
+            //    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
+            //    var spawn = enemySpawns[i];
+            //    combatManager.AddEnemy(spawn.SpawnEnemy(_enemyTypes.RandomItem()));
+            //    i++;
+            //    yield return Coroutine.WaitForSeconds(.2f);
+            //}
+            combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(ChainBot)));
             //combatManager.AddEnemy(enemySpawns[1].SpawnEnemy(typeof(ChainBot)));
 
             //destroy entity

@@ -20,6 +20,10 @@ namespace PuppetRoguelite.Components.Shared
 
         public Entity MapEntity;
 
+        bool _active = true;
+
+        List<Entity> _debugPoints = new List<Entity>();
+
         public PathfindingComponent(VelocityComponent velocityComponent, OriginComponent originComponent, Entity mapEntity, int pathDesiredDistance = 16, int targetDesiredDistance = 16)
         {
             MapEntity = mapEntity;
@@ -42,7 +46,7 @@ namespace PuppetRoguelite.Components.Shared
         /// <param name="target"></param>
         /// <param name="applySmoothing"></param>
         /// <returns></returns>
-        public bool FollowPath(Vector2 target, bool applySmoothing = true)
+        public bool FollowPath(Vector2 target, bool applySmoothing = true, float interval = .5f)
         {
             var origin = _originComponent.Origin;
 
@@ -51,21 +55,31 @@ namespace PuppetRoguelite.Components.Shared
                 return true;
             }
 
+            if (!_active) return false;
+            else if (interval > 0)
+            {
+                _active = false;
+                Game1.Schedule(interval, timer =>
+                {
+                    _active = true;
+                });
+            }
+
             //get basic path on grid
             var path = _gridGraphManager.FindPath(origin, target);
 
-            //foreach(var point in points)
-            //{
-            //    point.Destroy();
-            //}
-            //points.Clear();
-            //foreach(var point in path)
-            //{
-            //    var ent = Entity.Scene.CreateEntity("path-point");
-            //    ent.SetPosition(point);
-            //    ent.AddComponent(new PrototypeSpriteRenderer(2, 2));
-            //    points.Add(ent);
-            //}
+            foreach (var point in _debugPoints)
+            {
+                point.Destroy();
+            }
+            _debugPoints.Clear();
+            foreach (var point in path)
+            {
+                var ent = Entity.Scene.CreateEntity("path-point");
+                ent.SetPosition(point);
+                ent.AddComponent(new PrototypeSpriteRenderer(2, 2));
+                _debugPoints.Add(ent);
+            }
 
             var finalPath = new List<Vector2>();
 

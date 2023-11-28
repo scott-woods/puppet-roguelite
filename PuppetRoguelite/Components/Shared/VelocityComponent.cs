@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Tweens;
 using Nez.UI;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,7 @@ namespace PuppetRoguelite.Components.Shared
         public void Move(float? speed = null)
         {
             speed = speed == null ? Speed : speed.Value;
+
             //move
             var movement = Direction * (float)speed * Time.DeltaTime;
             _mover.CalculateMovement(ref movement, out var result);

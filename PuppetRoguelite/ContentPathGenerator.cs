@@ -68,7 +68,7 @@ namespace Nez
 				public const string Player_teleport = @"Content\Audio\Sounds\player_teleport.wav";
 				public const string Purchase = @"Content\Audio\Sounds\purchase.wav";
 				public const string Small_lightning = @"Content\Audio\Sounds\small_lightning.wav";
-				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.mp3";
+				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.wav";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
 				public const string Unfreeze = @"Content\Audio\Sounds\unfreeze.wav";
 				public const string Whirlwind_speen = @"Content\Audio\Sounds\whirlwind_speen.wav";
@@ -892,6 +892,7 @@ namespace Nez
 				}
 
 				public const string Borders_and_hp = @"Content\Textures\UI\borders_and_hp.png";
+				public const string Borders_and_hp_no_glow = @"Content\Textures\UI\borders_and_hp_no_glow.png";
 				public const string Crosshair038 = @"Content\Textures\UI\crosshair038.png";
 				public const string Glow_sliders = @"Content\Textures\UI\glow_sliders.png";
 				public const string Healthbar = @"Content\Textures\UI\healthbar.png";

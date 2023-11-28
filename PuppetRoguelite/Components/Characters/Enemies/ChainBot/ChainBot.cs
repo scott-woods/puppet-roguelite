@@ -184,11 +184,18 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         bool IsInAttackRange()
         {
-            if (Vector2.Distance(Entity.Position, PlayerController.Instance.Entity.Position) <= 32)
+            var xDist = Math.Abs(OriginComponent.Origin.X - PlayerController.Instance.OriginComponent.Origin.X);
+            var yDist = Math.Abs(OriginComponent.Origin.Y - PlayerController.Instance.OriginComponent.Origin.Y);
+            if (xDist <= 16 && yDist <= 8)
             {
                 return true;
             }
-            else return false;
+            return false;
+            //if (Vector2.Distance(Entity.Position, PlayerController.Instance.Entity.Position) <= 10)
+            //{
+            //    return true;
+            //}
+            //else return false;
         }
 
         #region TASKS
@@ -216,7 +223,28 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             }
 
             //follow path
-            Pathfinder.FollowPath(PlayerController.Instance.Entity.Position, true);
+            var gridGraphManager = MapEntity.GetComponent<GridGraphManager>();
+
+            var leftTarget = PlayerController.Instance.OriginComponent.Origin + new Vector2(-10, 0);
+            var rightTarget = PlayerController.Instance.OriginComponent.Origin + new Vector2(10, 0);
+            var leftDistance = Vector2.Distance(OriginComponent.Origin, leftTarget);
+            var rightDistance = Vector2.Distance(OriginComponent.Origin, rightTarget);
+
+            var target = leftDistance > rightDistance ? rightTarget : leftTarget;
+            var altTarget = target == rightTarget ? leftTarget : rightTarget;
+
+            Vector2 finalTarget = PlayerController.Instance.OriginComponent.Origin;
+
+            if (!gridGraphManager.IsPositionInWall(target))
+            {
+                finalTarget = target;
+            }
+            else if (!gridGraphManager.IsPositionInWall(altTarget))
+            {
+                finalTarget = altTarget;
+            }
+
+            Pathfinder.FollowPath(finalTarget, true);
             VelocityComponent.Move();
 
             return TaskStatus.Running;
