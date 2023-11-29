@@ -83,6 +83,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //idle for a moment
                 _animator.Speed = 1f;
                 _playerSim.Idle(_dirByMouse.CurrentDirection);
+                _playerSim.VelocityComponent.SetDirection(_dirByMouse.CurrentDirection);
                 yield return Coroutine.WaitForSeconds(.2f);
 
                 //attack

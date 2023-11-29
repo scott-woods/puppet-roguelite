@@ -6,6 +6,7 @@ using PuppetRoguelite.Components.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,8 +14,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
 {
     public class Dash : Component, IUpdatable
     {
-        const float _dashSpeed = 375f;
-        const float _dashDuration = .2f;
+        const float _initialDashSpeed = 425f;
         const float _shortDashCooldown = .025f;
         const float _dashCooldown = .65f;
         const float _successionLifespan = .65f;
@@ -31,6 +31,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
         float _dashTimer = 0f;
         int _successionCount = 0;
 
+        float _elapsedTime = 0f;
+
         public Dash(int maxSuccession)
         {
             _maxSuccession = maxSuccession;
@@ -45,11 +47,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             _spriteTrail = spriteTrail;
 
             _isDashing = true;
-            _dashTimer = _dashDuration;
             _successionCount += 1;
             Core.Schedule(_successionLifespan, timer => _successionCount -= 1);
-
-            //_velocityComponent.Speed = _dashSpeed;
 
             //configure trail
             _spriteTrail.FadeDelay = 0;
@@ -62,40 +61,45 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             Game1.AudioManager.PlaySound(Content.Audio.Sounds.Player_dash);
 
             //animation
-            var animation = "DashRight";
+            var animation = "Roll";
             if (_velocityComponent.Direction.X != 0)
             {
-                animation = _velocityComponent.Direction.X > 0 ? "DashRight" : "DashLeft";
+                animation = "Roll";
             }
             else if (_velocityComponent.Direction.Y != 0)
             {
-                animation = _velocityComponent.Direction.Y > 0 ? "DashDown" : "DashUp";
+                animation = _velocityComponent.Direction.Y >= 0 ? "RollDown" : "RollUp";
             }
 
+            _elapsedTime = 0;
+
             _spriteAnimator.Color = Color.White * .8f;
-            _spriteAnimator.Play(animation);
+            _spriteAnimator.Play(animation, SpriteAnimator.LoopMode.Once);
+            _spriteAnimator.OnAnimationCompletedEvent += OnAnimationFinished;
         }
 
         public void Update()
         {
             if (_isDashing)
             {
-                _dashTimer -= Time.DeltaTime;
-                if (_dashTimer > 0f)
-                {
-                    _velocityComponent.Move(_dashSpeed);
-                }
-                else
-                {
-                    var cooldown = _successionCount >= _maxSuccession ? _dashCooldown : _shortDashCooldown;
+                //increment time
+                _elapsedTime += Time.DeltaTime;
 
-                    IsOnCooldown = true;
-                    Core.Schedule(cooldown, timer => IsOnCooldown = false);
+                //get animation duration
+                //var animationDuration = _animator.CurrentAnimation.Sprites.Count() / _animator.CurrentAnimation.FrameRate;
+                var animationDuration = 8 / _spriteAnimator.CurrentAnimation.FrameRate;
 
-                    _spriteAnimator.Color = Color.White;
-                    _spriteTrail.DisableSpriteTrail();
-                    _isDashing = false;
-                    _dashCompleteCallback?.Invoke();
+                //if elapsed time is less than duration, we are still attacking
+                if (_elapsedTime < animationDuration)
+                {
+                    //get lerp factor
+                    float lerpFactor = _elapsedTime / animationDuration;
+
+                    //determine move speed based on which combo we are on
+                    var initialSpeed = _initialDashSpeed;
+
+                    float currentSpeed = Lerps.Lerp(initialSpeed, 0, lerpFactor);
+                    _velocityComponent.Move(currentSpeed);
                 }
             }
         }
@@ -105,6 +109,24 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             _spriteAnimator.Color = Color.White;
             _spriteTrail.DisableSpriteTrail();
             _isDashing = false;
+            _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
+            _spriteAnimator.Stop();
+        }
+
+        void OnAnimationFinished(string animationName)
+        {
+            _spriteAnimator.OnAnimationCompletedEvent -= OnAnimationFinished;
+
+            var cooldown = _successionCount >= _maxSuccession ? _dashCooldown : _shortDashCooldown;
+
+            IsOnCooldown = true;
+            Core.Schedule(cooldown, timer => IsOnCooldown = false);
+
+            _spriteAnimator.Color = Color.White;
+            _spriteTrail.DisableSpriteTrail();
+            _isDashing = false;
+            _elapsedTime = 0;
+            _dashCompleteCallback?.Invoke();
         }
     }
 }

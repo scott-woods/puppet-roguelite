@@ -37,6 +37,25 @@ namespace PuppetRoguelite.Components.Shared
             Direction = direction;
         }
 
+        public void SetDirection(Nez.Direction direction)
+        {
+            switch (direction)
+            {
+                case Nez.Direction.Up:
+                    Direction = new Vector2(0, -1);
+                    break;
+                case Nez.Direction.Down:
+                    Direction = new Vector2(0, 1);
+                    break;
+                case Nez.Direction.Left:
+                    Direction = new Vector2(-1, 0);
+                    break;
+                case Nez.Direction.Right:
+                    Direction = new Vector2(1, 0);
+                    break;
+            }
+        }
+
         /// <summary>
         /// Move, optionally override the default speed
         /// </summary>

@@ -16,11 +16,29 @@ namespace PuppetRoguelite.Components.Shared
         public Direction PreviousDirection = Direction.Right;
         public Direction CurrentDirection = Direction.Right;
 
+        Vector2? _position;
+
+        public DirectionByMouse()
+        {
+
+        }
+
+        /// <summary>
+        /// constructor for a static position to check direction against
+        /// </summary>
+        /// <param name="position"></param>
+        public DirectionByMouse(Vector2 position)
+        {
+            _position = position;
+        }
+
         public void Update()
         {
             PreviousDirection = CurrentDirection;
 
-            var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(Entity.Position, Entity.Scene.Camera.MouseToWorldPoint()));
+            var pos = _position != null ? _position.Value : Entity.Position;
+
+            var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(pos, Entity.Scene.Camera.MouseToWorldPoint()));
             angle = (angle + 360) % 360;
             var newDirection = Direction.Right;
             if (angle >= 45 && angle < 135) newDirection = Direction.Down;

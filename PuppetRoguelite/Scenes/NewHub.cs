@@ -39,7 +39,7 @@ namespace PuppetRoguelite.Scenes
             _mapEntity = CreateEntity("map");
             var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Hub.Hub_2);
             var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-            mapRenderer.SetLayersToRender(new[] { "floor", "details", "furniture", "entities" });
+            mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities" });
             mapRenderer.RenderLayer = 1;
             Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
@@ -49,6 +49,12 @@ namespace PuppetRoguelite.Scenes
             tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
             tiledMapDetailsRenderer.Material = Material.StencilWrite();
             //tiledMapDetailsRenderer.Material.Effect = Content.LoadNezEffect<SpriteAlphaTestEffect>();
+
+            //furniture
+            var furnitureRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "furniture"));
+            furnitureRenderer.SetLayersToRender(new[] { "furniture" });
+            furnitureRenderer.RenderLayer = 1;
+            Flags.SetFlagExclusive(ref furnitureRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
 
             var tiledMapAboveFurnitureRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
             tiledMapAboveFurnitureRenderer.SetLayersToRender("above-furniture");

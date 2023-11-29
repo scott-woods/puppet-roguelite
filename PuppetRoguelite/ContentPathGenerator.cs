@@ -130,6 +130,7 @@ namespace Nez
 					public const string Hooded_knight_hurt = @"Content\Textures\Characters\Player\hooded_knight_hurt.png";
 					public const string Hooded_knight_idle = @"Content\Textures\Characters\Player\hooded_knight_idle.png";
 					public const string Hooded_knight_run = @"Content\Textures\Characters\Player\hooded_knight_run.png";
+					public const string Sci_fi_player_with_sword = @"Content\Textures\Characters\Player\sci_fi_player_with_sword.png";
 				}
 
 				public static class Spitter
@@ -151,6 +152,7 @@ namespace Nez
 				public const string Boss_gate = @"Content\Textures\Objects\boss_gate.png";
 				public const string Chest = @"Content\Textures\Objects\chest.png";
 				public const string Dungeon_prison_gate_horizontal = @"Content\Textures\Objects\dungeon_prison_gate_horizontal.png";
+				public const string Dungeon_prison_gate_horizontal_nine_slice = @"Content\Textures\Objects\dungeon_prison_gate_horizontal_nine_slice.png";
 				public const string Dungeon_prison_gate_vertical = @"Content\Textures\Objects\dungeon_prison_gate_vertical.png";
 				public const string Dungeon_prison_gate_vertical_nine_slice = @"Content\Textures\Objects\dungeon_prison_gate_vertical_nine_slice.png";
 				public const string Large_chest = @"Content\Textures\Objects\large_chest.png";
@@ -933,6 +935,11 @@ namespace Nez
 					public const string BLR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\BLR_1.tmx";
 					public const string Boss_room = @"Content\Tiled\Tilemaps\DungeonPrison\boss_room.tmx";
 					public const string BR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\BR_1.tmx";
+					public const string Dp_b_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_b_1.tmx";
+					public const string Dp_l_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_l_1.tmx";
+					public const string Dp_r_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_r_1.tmx";
+					public const string Dp_t_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_t_1.tmx";
+					public const string Dp_template = @"Content\Tiled\Tilemaps\DungeonPrison\dp_template.tmx";
 					public const string Dp_test = @"Content\Tiled\Tilemaps\DungeonPrison\dp_test.tmx";
 					public const string DP_TR_2 = @"Content\Tiled\Tilemaps\DungeonPrison\DP_TR_2.tmx";
 					public const string L_1 = @"Content\Tiled\Tilemaps\DungeonPrison\L_1.tmx";

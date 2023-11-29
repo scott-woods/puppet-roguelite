@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.Sprites;
 using Nez.Systems;
 using System;
@@ -31,13 +32,22 @@ namespace PuppetRoguelite.Components.Shared
             {
                 var dir = _velocityComponent.Direction;
                 var flip = dir.X < 0;
+
+                //if facing a different direction than previous frame, emit flipped signal
                 if (_renderer.FlipX != flip)
                 {
                     Emitter.Emit(SpriteFlipperEvents.Flipped, flip);
                     _isOnCooldown = true;
                     Game1.Schedule(_cooldown, timer => _isOnCooldown = false);
+
+                    //flip renderer
+                    _renderer.FlipX = flip;
+
+                    //adjust offset
+                    var newOffsetX = _renderer.LocalOffset.X * -1;
+                    var newOffset = new Vector2(newOffsetX, _renderer.LocalOffset.Y);
+                    _renderer.SetLocalOffset(newOffset);
                 }
-                _renderer.FlipX = flip;
             }
         }
     }

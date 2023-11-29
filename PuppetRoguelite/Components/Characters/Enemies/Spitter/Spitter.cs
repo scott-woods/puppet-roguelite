@@ -62,7 +62,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             Mover = Entity.AddComponent(new Mover());
 
             //hurtbox
-            var hurtboxCollider = Entity.AddComponent(new BoxCollider(-5, -3, 11, 20));
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(1, 0, 11, 20));
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
@@ -91,6 +91,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
+            Animator.SetLocalOffset(new Vector2(-3, 5));
 
             //y sorter
             YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
@@ -107,20 +108,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             //death
             DeathComponent = Entity.AddComponent(new DeathComponent(Content.Audio.Sounds.Enemy_death_1, Animator, "Die", "Hit"));
-        }
-
-        public override void OnAddedToEntity()
-        {
-            base.OnAddedToEntity();
-
-            SpriteFlipper.Emitter.AddObserver(SpriteFlipperEvents.Flipped, OnSpriteFlipped);
-        }
-
-        public override void OnRemovedFromEntity()
-        {
-            base.OnRemovedFromEntity();
-
-            SpriteFlipper.Emitter.RemoveObserver(SpriteFlipperEvents.Flipped, OnSpriteFlipped);
         }
 
         void AddAnimations()
@@ -232,17 +219,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             tree.UpdatePeriod = 0;
             return tree;
-        }
-
-        void OnSpriteFlipped(bool flipped)
-        {
-            var newOffsetX = Collider.LocalOffset.X * -1;
-            var newOffset = new Vector2(newOffsetX, Collider.LocalOffset.Y);
-            Collider.SetLocalOffset(newOffset);
-
-            var newHurtboxOffsetX = Hurtbox.Collider.LocalOffset.X * -1;
-            var newHurtboxOffset = new Vector2(newHurtboxOffsetX, Hurtbox.Collider.LocalOffset.Y);
-            Hurtbox.Collider.SetLocalOffset(newHurtboxOffset);
         }
     }
 }

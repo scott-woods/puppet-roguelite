@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Sprites;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
@@ -29,7 +30,7 @@ namespace PuppetRoguelite.SceneComponents
             }
             else
             {
-                _playerEntity = Scene.AddEntity(new PausableEntity("player"));
+                _playerEntity = Scene.AddEntity(new Entity("player"));
                 _playerEntity.AddComponent(new PlayerController());
             }
 
@@ -52,6 +53,11 @@ namespace PuppetRoguelite.SceneComponents
             _playerEntity.SetPosition(spawnPosition);
             _playerEntity.SetEnabled(true);
 
+            if (_playerEntity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.OnEntityTransformChanged(Transform.Component.Position);
+            }
+
             if (Game1.SceneManager.State == GlobalManagers.SceneManagerState.Transitioning)
             {
                 if (_playerEntity.TryGetComponent<PlayerController>(out var player))
@@ -65,6 +71,11 @@ namespace PuppetRoguelite.SceneComponents
         {
             _playerEntity.SetPosition(position);
             _playerEntity.SetEnabled(true);
+
+            if (_playerEntity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                animator.OnEntityTransformChanged(Transform.Component.Position);
+            }
 
             if (Game1.SceneManager.State == GlobalManagers.SceneManagerState.Transitioning)
             {

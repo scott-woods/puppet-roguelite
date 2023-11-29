@@ -69,7 +69,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             //    i++;
             //    yield return Coroutine.WaitForSeconds(.2f);
             //}
-            combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(ChainBot)));
+            combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(Spitter)));
             //combatManager.AddEnemy(enemySpawns[1].SpawnEnemy(typeof(ChainBot)));
 
             //destroy entity

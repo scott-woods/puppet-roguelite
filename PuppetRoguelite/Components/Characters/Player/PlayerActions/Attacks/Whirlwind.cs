@@ -33,8 +33,12 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         DirectionByMouse _dirByMouse;
 
         //misc
-        List<int> _hitboxActiveFrames = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 };
+        List<int> _hitboxActiveFrames = new List<int>() { 0, 1, 2, 3, 4 };
         Direction _direction;
+        List<int> _leftFlipFrames = new List<int>() { 0, 4, 5 };
+        List<int> _rightFlipFrames = new List<int>() { 2 };
+        List<int> _upFlipFrames = new List<int>() { 3 };
+        List<int> _downFlipFrames = new List<int>() { 1 };
 
         //coroutines
         CoroutineManager _coroutineManager = new CoroutineManager();
@@ -54,25 +58,30 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
             _animator = _playerSim.GetComponent<SpriteAnimator>();
             _animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
-            _animator.Speed = 2f;
-            var texture = Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_attack);
-            var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
-            _animator.AddAnimation("WhirlwindRight", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            {
-                0, 1, 2, 19, 20, 14, 15, 28, 29, 0
-            }, true));
-            _animator.AddAnimation("WhirlwindLeft", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            {
-                9, 14, 15, 28, 29, 1, 2, 19, 20, 9
-            }, true));
-            _animator.AddAnimation("WhirlwindDown", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            {
-                18, 19, 20, 14, 15, 28, 29, 1, 2, 18
-            }, true));
-            _animator.AddAnimation("WhirlwindUp", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            {
-                27, 28, 29, 1, 2, 19, 20, 14, 15, 27
-            }, true));
+            var texture = Scene.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Sci_fi_player_with_sword);
+            var sprites = Sprite.SpritesFromAtlas(texture, 64, 65);
+            _animator.AddAnimation("WhirlwindLeft", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 143, 210, 143, 54, 143, 144 }, true));
+            _animator.AddAnimation("WhirlwindRight", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 143, 54, 143, 210, 143, 144 }, true));
+            _animator.AddAnimation("WhirlwindUp", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 210, 143, 54, 143, 210, 211 }, true));
+            _animator.AddAnimation("WhirlwindDown", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 54, 143, 210, 143, 54, 55 }, true));
+            //var texture = Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_attack);
+            //var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
+            //_animator.AddAnimation("WhirlwindRight", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
+            //{
+            //    0, 1, 2, 19, 20, 14, 15, 28, 29, 0
+            //}, true));
+            //_animator.AddAnimation("WhirlwindLeft", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
+            //{
+            //    9, 14, 15, 28, 29, 1, 2, 19, 20, 9
+            //}, true));
+            //_animator.AddAnimation("WhirlwindDown", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
+            //{
+            //    18, 19, 20, 14, 15, 28, 29, 1, 2, 18
+            //}, true));
+            //_animator.AddAnimation("WhirlwindUp", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
+            //{
+            //    27, 28, 29, 1, 2, 19, 20, 14, 15, 27
+            //}, true));
 
             _dirByMouse = AddComponent(new DirectionByMouse());
 
@@ -85,7 +94,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             base.Execute();
 
             _animator.SetColor(Color.White);
-            _animator.Speed = 2.25f;
+            _animator.Speed = 1.4f;
             _executionCoroutine = _coroutineManager.StartCoroutine(ExecutionCoroutine());
         }
 
@@ -95,6 +104,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             Game1.AudioManager.PlaySound(Content.Audio.Sounds.Whirlwind_speen);
             _spin = _coroutineManager.StartCoroutine(Spin());
             yield return _spin;
+            _spin = null;
             //yield return Spin();
             Debug.Log("whirlwind spin finished");
             HandleExecutionFinished();
@@ -106,6 +116,32 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
             _coroutineManager.Update();
 
+            if (_spin != null)
+            {
+                var flipFrames = new List<int>();
+                switch (_animator.CurrentAnimationName)
+                {
+                    case "WhirlwindUp":
+                        flipFrames = _upFlipFrames; break;
+                    case "WhirlwindDown":
+                        flipFrames = _downFlipFrames; break;
+                    case "WhirlwindRight":
+                        flipFrames = _rightFlipFrames; break;
+                    case "WhirlwindLeft":
+                        flipFrames = _leftFlipFrames; break;
+                }
+
+                if (flipFrames.Contains(_animator.CurrentFrame + 1)
+                    || (_animator.CurrentAnimationName == "WhirlwindLeft" && flipFrames.Contains(_animator.CurrentFrame)))
+                {
+                    _playerSim.VelocityComponent.SetDirection(Direction.Left);
+                }
+                else
+                {
+                    _playerSim.VelocityComponent.SetDirection(Direction.Right);
+                }
+            }
+
             if (State == PlayerActionState.Preparing)
             {
                 //handle confirm
@@ -113,11 +149,17 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 {
                     _animator.Stop();
                     _coroutineManager.StopAllCoroutines();
+                    _spin = null;
                     HandlePreparationFinished(Position);
                     return;
                 }
 
                 _direction = _dirByMouse.CurrentDirection;
+
+                if (_spin == null)
+                {
+                    _playerSim.VelocityComponent.SetDirection(_direction);
+                }
 
                 //handle direction change
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
@@ -126,6 +168,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
                     //stop animator
                     _animator.Stop();
+
+                    _spin = null;
 
                     //restart sim loop
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
@@ -211,9 +255,10 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 yield return Coroutine.WaitForSeconds(.2f);
 
                 //spin
-                _animator.Speed = 2f;
+                _animator.Speed = 1.4f;
                 _spin = _coroutineManager.StartCoroutine(Spin());
                 yield return _spin;
+                _spin = null;
             }
         }
     }

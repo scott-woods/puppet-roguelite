@@ -25,7 +25,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             var animation = "RunDown";
             if (_context.VelocityComponent.Direction.X != 0)
             {
-                animation = _context.VelocityComponent.Direction.X >= 0 ? "RunRight" : "RunLeft";
+                animation = "Run";
             }
             else if (_context.VelocityComponent.Direction.Y != 0)
             {

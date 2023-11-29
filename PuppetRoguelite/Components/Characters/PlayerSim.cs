@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Characters.Player.PlayerActions;
+using PuppetRoguelite.Components.Characters.Player;
 
 namespace PuppetRoguelite.Components.Characters
 {
@@ -23,8 +24,10 @@ namespace PuppetRoguelite.Components.Characters
         //components
         SpriteAnimator _spriteAnimator;
         YSorter _ySorter;
-        OriginComponent _originComponent;
+        public OriginComponent OriginComponent;
+        public VelocityComponent VelocityComponent;
         Mover _mover;
+        public SpriteFlipper SpriteFlipper;
 
         public PlayerSim(Vector2 direction)
         {
@@ -40,56 +43,19 @@ namespace PuppetRoguelite.Components.Characters
         {
             base.Initialize();
 
-            _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
-            //_spriteAnimator.SetColor(new Color(Color.White, 128));
+            _spriteAnimator = Entity.AddComponent(PlayerController.Instance.SpriteAnimator.Clone() as SpriteAnimator);
+            _spriteAnimator.SetColor(new Color(255, 255, 255, 128));
 
-            _originComponent = Entity.AddComponent(new OriginComponent(new Vector2(0, 12)));
+            VelocityComponent = Entity.AddComponent(PlayerController.Instance.VelocityComponent.Clone() as VelocityComponent);
 
-            _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, _originComponent));
+            var offset = PlayerController.Instance.Collider.LocalOffset;
+            OriginComponent = Entity.AddComponent(new OriginComponent(offset));
+
+            _ySorter = Entity.AddComponent(new YSorter(_spriteAnimator, OriginComponent));
 
             _mover = Entity.AddComponent(new Mover());
 
-            AddAnimations();
-        }
-
-        void AddAnimations()
-        {
-            //idle
-            var idleTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_idle);
-            var idleSprites = Sprite.SpritesFromAtlas(idleTexture, 64, 64);
-            _spriteAnimator.AddAnimation("IdleDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 0, 2));
-            _spriteAnimator.AddAnimation("IdleRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 3, 5));
-            _spriteAnimator.AddAnimation("IdleUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 6, 8));
-            _spriteAnimator.AddAnimation("IdleLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(idleSprites, 9, 11));
-
-            //run
-            var runTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_run);
-            var runSprites = Sprite.SpritesFromAtlas(runTexture, 64, 64);
-            var runFps = 13;
-            _spriteAnimator.AddAnimation("RunRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 0, 9), runFps);
-            _spriteAnimator.AddAnimation("RunLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 10, 19), runFps);
-            _spriteAnimator.AddAnimation("RunDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 20, 27), runFps);
-            _spriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(runSprites, 30, 37), runFps);
-
-            //hurt
-            var hurtTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_hurt);
-            var hurtSprites = Sprite.SpritesFromAtlas(hurtTexture, 64, 64);
-            _spriteAnimator.AddAnimation("HurtRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 0, 4));
-            _spriteAnimator.AddAnimation("HurtLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(hurtSprites, 5, 9));
-
-            //death
-            var deathTexture = Game1.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_death);
-            var deathSprites = Sprite.SpritesFromAtlas(deathTexture, 64, 64);
-            _spriteAnimator.AddAnimation("DeathRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 0, 9));
-            _spriteAnimator.AddAnimation("DeathLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(deathSprites, 10, 19));
-
-            //dash
-            var dashTexture = Game1.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Hooded_knight_attack);
-            var dashSprites = Sprite.SpritesFromAtlas(dashTexture, 64, 64);
-            _spriteAnimator.AddAnimation("DashRight", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 4, 4));
-            _spriteAnimator.AddAnimation("DashLeft", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 13, 13));
-            _spriteAnimator.AddAnimation("DashDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 26, 26));
-            _spriteAnimator.AddAnimation("DashUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(dashSprites, 35, 35));
+            SpriteFlipper = Entity.AddComponent(new SpriteFlipper(_spriteAnimator, VelocityComponent));
         }
 
         public void Update()
@@ -97,10 +63,10 @@ namespace PuppetRoguelite.Components.Characters
             if (Entity.GetType().BaseType != typeof(PlayerAction))
             {
                 //handle animation
-                var animation = "IdleRight";
+                var animation = "IdleDown";
                 if (_direction.X != 0)
                 {
-                    animation = _direction.X >= 0 ? "IdleRight" : "IdleLeft";
+                    animation = "Idle";
                 }
                 else if (_direction.Y != 0)
                 {
@@ -125,10 +91,10 @@ namespace PuppetRoguelite.Components.Characters
                     animation = "IdleDown";
                     break;
                 case Direction.Left:
-                    animation = "IdleLeft";
+                    animation = "Idle";
                     break;
                 case Direction.Right:
-                    animation = "IdleRight";
+                    animation = "Idle";
                     break;
             }
 
@@ -137,21 +103,5 @@ namespace PuppetRoguelite.Components.Characters
                 _spriteAnimator.Play(animation);
             }
         }
-
-        //public override void OnDisabled()
-        //{
-        //    base.OnDisabled();
-
-        //    _spriteAnimator.Stop();
-        //}
-
-        //public override void OnRemovedFromEntity()
-        //{
-        //    Entity.RemoveComponent(_spriteAnimator);
-        //    Entity.RemoveComponent(_originComponent);
-        //    Entity.RemoveComponent(_ySorter);
-        //    Entity.RemoveComponent(_mover);
-        //    base.OnRemovedFromEntity();
-        //}
     }
 }

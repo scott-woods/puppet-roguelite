@@ -22,15 +22,8 @@ namespace PuppetRoguelite.GlobalManagers
 
         public void ChangeScene(Type targetSceneType, string targetEntranceId = "", Color? fadeToColor = null,
             float delayBeforeFadeInDuration = .2f, float fadeInDuration = .1f, float fadeOutDuration = .5f,
-            EaseType fadeEaseType = EaseType.Linear)
+            EaseType fadeEaseType = EaseType.Linear, float delayBeforeTransitionStarts = .25f)
         {
-            var transferEntity = TransferManager.Instance.GetEntityToTransfer();
-            if (transferEntity != null)
-            {
-                transferEntity.DetachFromScene();
-                transferEntity.SetEnabled(false);
-            }
-
             TargetEntranceId = targetEntranceId;
 
             var transition = new FadeTransition(() => _newScene = Activator.CreateInstance(targetSceneType) as Scene);
@@ -41,11 +34,15 @@ namespace PuppetRoguelite.GlobalManagers
             transition.FadeEaseType = fadeEaseType;
             transition.OnTransitionCompleted += OnTransitionCompleted;
             transition.OnScreenObscured += OnScreenObscured;
-
-            Game1.StartSceneTransition(transition);
+            
             State = SceneManagerState.Transitioning;
 
             Emitter.Emit(SceneEvents.TransitionStarted);
+
+            Game1.Schedule(delayBeforeTransitionStarts, timer =>
+            {
+                Game1.StartSceneTransition(transition);
+            });
         }
 
         void OnTransitionCompleted()
@@ -56,6 +53,13 @@ namespace PuppetRoguelite.GlobalManagers
 
         void OnScreenObscured()
         {
+            var transferEntity = TransferManager.Instance.GetEntityToTransfer();
+            if (transferEntity != null)
+            {
+                transferEntity.DetachFromScene();
+                transferEntity.SetEnabled(false);
+            }
+
             Emitter.Emit(SceneEvents.ScreenObscured);
         }
     }

@@ -51,6 +51,9 @@ namespace PuppetRoguelite.UI.Menus
                 var apCostColor = Color.White;
                 var disabled = false;
                 var apCost = PlayerActionUtils.GetApCost(type);
+#if DEBUG
+                if (Game1.DebugSettings.FreeActions) apCost = 0;
+#endif
                 if (apCost > PlayerController.Instance.ActionPointComponent.ActionPoints)
                 {
                     apCostColor = Color.Gray;
@@ -128,6 +131,9 @@ namespace PuppetRoguelite.UI.Menus
                 //check affordability
                 var disabled = false;
                 var apCost = PlayerActionUtils.GetApCost(_buttonDictionary[button]);
+#if DEBUG
+                if (Game1.DebugSettings.FreeActions) apCost = 0;
+#endif
                 if (apCost > PlayerController.Instance.ActionPointComponent.ActionPoints)
                 {
                     disabled = true;

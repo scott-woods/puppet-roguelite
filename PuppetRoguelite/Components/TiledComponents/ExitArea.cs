@@ -16,7 +16,7 @@ namespace PuppetRoguelite.Components.TiledComponents
     /// <summary>
     /// includes a collider with a trigger to transition to a new scene
     /// </summary>
-    public class ExitArea : TiledComponent, ITriggerListener
+    public class ExitArea : TiledComponent, IUpdatable
     {
         public Emitter<ExitAreaEvents> Emitter = new Emitter<ExitAreaEvents>();
 
@@ -24,6 +24,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         public Type TargetSceneType;
         string _targetEntranceId;
+        bool _triggered = false;
 
         public ExitArea(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
@@ -44,24 +45,25 @@ namespace PuppetRoguelite.Components.TiledComponents
             //collider
             _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
             _collider.IsTrigger = true;
-            _collider.PhysicsLayer = 1 << (int)PhysicsLayers.Trigger;
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Trigger);
             Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.PlayerCollider);
             Entity.AddComponent(_collider);
         }
 
-        public void OnTriggerEnter(Collider other, Collider local)
+        public void Update()
         {
-            if (other.HasComponent<PlayerController>())
+            if (!_triggered)
             {
-                Emitter.Emit(ExitAreaEvents.Triggered);
-                TransferManager.Instance.SetEntityToTransfer(PlayerController.Instance.Entity);
-                Game1.SceneManager.ChangeScene(TargetSceneType, _targetEntranceId);
+                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_collider, _collider.CollidesWithLayers);
+                if (colliders.Count > 0)
+                {
+                    _triggered = true;
+                    Emitter.Emit(ExitAreaEvents.Triggered);
+                    TransferManager.Instance.SetEntityToTransfer(PlayerController.Instance.Entity);
+                    Game1.SceneManager.ChangeScene(TargetSceneType, _targetEntranceId);
+                    Entity.Destroy();
+                }
             }
-        }
-
-        public void OnTriggerExit(Collider other, Collider local)
-        {
-            //throw new NotImplementedException();
         }
     }
 

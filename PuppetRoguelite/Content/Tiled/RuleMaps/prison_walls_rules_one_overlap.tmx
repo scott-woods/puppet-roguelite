@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="34" height="37" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="1">
  <properties>
-  <property name="DeleteTiles" type="bool" value="false"/>
+  <property name="DeleteTiles" type="bool" value="true"/>
   <property name="MatchInOrder" type="bool" value="false"/>
   <property name="NoOverlappingOutput" type="bool" value="false"/>
  </properties>

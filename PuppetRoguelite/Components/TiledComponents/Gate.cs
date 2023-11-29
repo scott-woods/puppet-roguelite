@@ -46,8 +46,13 @@ namespace PuppetRoguelite.Components.TiledComponents
                         _ySorter = Entity.AddComponent(new YSorter(_renderer, _origin));
                         break;
                     case "horizontal":
-                        var hTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_horizontal);
-                        _renderer = Entity.AddComponent(new SpriteRenderer(hTexture));
+                        var hTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_horizontal_nine_slice);
+                        var hSprite = new NinePatchSprite(hTexture, 0, 0, 16, 16);
+                        var hNineSliceRenderer = new NineSliceSpriteRenderer(hSprite);
+                        _renderer = Entity.AddComponent(hNineSliceRenderer);
+                        hNineSliceRenderer.Width = hTexture.Width;
+                        hNineSliceRenderer.Height = TmxObject.Height;
+                        hNineSliceRenderer.SetLocalOffset(new Vector2(-TmxObject.Width / 2, -TmxObject.Height / 2));
                         _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
                         if (TmxObject.Properties.TryGetValue("Flip", out var flip))
                         {

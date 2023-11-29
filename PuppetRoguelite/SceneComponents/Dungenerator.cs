@@ -37,8 +37,11 @@ namespace PuppetRoguelite.SceneComponents
             new Map(Content.Tiled.Tilemaps.DungeonPrison.LR_1, false, false, true, true),
             new Map(Content.Tiled.Tilemaps.DungeonPrison.T_1, true, false, false, false),
             new Map(Content.Tiled.Tilemaps.DungeonPrison.B_1, false, true, false, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.L_1, false, false, true, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.R_1, false, false, false, true)
+            //new Map(Content.Tiled.Tilemaps.DungeonPrison.L_1, false, false, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.R_1, false, false, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_t_1, true, false, false, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_b_1, false, true, false, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_l_1, false, false, true, false)
         };
 
         Map _leftKeyMap = new Map(Content.Tiled.Tilemaps.DungeonPrison.Left_key_room, false, false, false, true);
@@ -126,6 +129,10 @@ namespace PuppetRoguelite.SceneComponents
                 node.MapEntity = mapEntity;
 
                 //load map
+                if (node.Map.Name == Nez.Content.Tiled.Tilemaps.DungeonPrison.Dp_l_1)
+                {
+                    Debug.Log("test");
+                }
                 var map = Scene.Content.LoadTiledMap(node.Map.Name);
 
                 //create main map renderer
@@ -139,7 +146,7 @@ namespace PuppetRoguelite.SceneComponents
                 var tiledMapDetailsRenderer = mapEntity.AddComponent(new TiledMapRenderer(map));
                 tiledMapDetailsRenderer.SetLayerToRender("above-details");
                 tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
-                //tiledMapDetailsRenderer.Material = Material.StencilWrite();
+                tiledMapDetailsRenderer.Material = Material.StencilWrite();
                 //tiledMapDetailsRenderer.Material.Effect = Scene.Content.LoadNezEffect<SpriteAlphaTestEffect>();
             }
 

@@ -24,6 +24,7 @@ namespace PuppetRoguelite
         public static AudioManager AudioManager = new AudioManager();
         public static GameStateManager GameStateManager = new GameStateManager();
         public static ResolutionManager ResolutionManager = new ResolutionManager();
+        public static DebugSettings DebugSettings = new DebugSettings();
 
         public Game1() : base()
         {
@@ -34,7 +35,7 @@ namespace PuppetRoguelite
         {
             base.Initialize();
 
-            DebugRenderEnabled = false;
+            DebugRenderEnabled = true;
             Window.AllowUserResizing = false;
             IsFixedTimeStep = true;
             TargetElapsedTime = System.TimeSpan.FromSeconds((double)1 / 240);
@@ -52,6 +53,7 @@ namespace PuppetRoguelite
             RegisterGlobalManager(AudioManager);
             RegisterGlobalManager(GameStateManager);
             RegisterGlobalManager(ResolutionManager);
+            RegisterGlobalManager(DebugSettings);
 
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
