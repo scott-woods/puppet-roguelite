@@ -12,6 +12,7 @@ using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.Tools;
 using System;
+using System.Collections.Generic;
 
 namespace PuppetRoguelite.Components.Characters.Player
 {
@@ -58,6 +59,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public Vector2 Direction = new Vector2(1, 0);
         public Vector2 LastNonZeroDirection = new Vector2(1, 0);
         public bool WaitingForSceneTransition = false;
+        public Vector2 SpriteOffset = new Vector2(13, -2);
 
         //data
         //public PlayerData PlayerData;
@@ -125,7 +127,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             //add sprites
             SpriteAnimator = Entity.AddComponent(new SpriteAnimator());
-            SpriteAnimator.SetLocalOffset(new Vector2(13, -2));
+            SpriteAnimator.SetLocalOffset(SpriteOffset);
             AddAnimations();
 
             //add mover
@@ -191,11 +193,15 @@ namespace PuppetRoguelite.Components.Characters.Player
                 PlayerUpgradeData.Instance.SupportSlotsUpgrade.GetCurrentValue()));
 
             var shadow = Entity.AddComponent(new SpriteMime(SpriteAnimator));
+            shadow.SetLocalOffset(SpriteOffset);
             shadow.Color = new Color(10, 10, 10, 80);
             shadow.Material = Material.StencilRead();
             shadow.RenderLayer = int.MinValue;
 
-            SpriteFlipper = Entity.AddComponent(new SpriteFlipper(SpriteAnimator, VelocityComponent));
+            SpriteFlipper = Entity.AddComponent(new SpriteFlipper(
+                new List<SpriteRenderer>() { SpriteAnimator },
+                VelocityComponent,
+                otherRenderableComponents: new List<RenderableComponent> { shadow }));
         }
 
         void SetupInput()
