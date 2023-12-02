@@ -46,7 +46,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         ICoroutine _attackCoroutine;
 
         //misc
-        List<int> _hitboxActiveFrames = new List<int>() { 0, 1 };
+        List<int> _hitboxActiveFrames = new List<int>() { 0 };
         List<Entity> _hitEntities = new List<Entity>();
         int _currentChain = 0;
         bool _hasFinishedSwinging = false;
@@ -242,12 +242,15 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             else if (!_hasFinishedSwinging)
             {
                 //enable hitbox if in valid frame
-                List<string> validAnims = new List<string> { "ChainLightningUp", "ChainLightningDown", "ChainLightningLeft", "ChainLightningRight" };
+                List<string> validAnims = new List<string> { "Slash", "SlashDown", "SlashUp" };
                 if (validAnims.Contains(_animator.CurrentAnimationName))
                 {
                     if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
                     {
-                        _hitbox.SetEnabled(true);
+                        if (!_hitbox.Enabled)
+                        {
+                            _hitbox.SetEnabled(true);
+                        }
                     }
                     else _hitbox.SetEnabled(false);
                 }
@@ -272,8 +275,18 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         {
             _hasFinishedSwinging = false;
 
-            if (State == PlayerActionState.Executing) Debug.Log($"playing animation ChainLightning{_direction}");
-            _animator.Play($"ChainLightning{_direction}", SpriteAnimator.LoopMode.Once);
+            var animation = "Slash";
+            switch (_direction)
+            {
+                case Direction.Left:
+                case Direction.Right:
+                    animation = "Slash"; break;
+                case Direction.Up:
+                    animation = "SlashUp"; break;
+                case Direction.Down:
+                    animation = "SlashDown"; break;
+            }
+            _animator.Play(animation, SpriteAnimator.LoopMode.Once);
             _animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
             bool hasPlayedSound = false;
@@ -283,7 +296,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 {
                     if (!hasPlayedSound)
                     {
-                        if (_animator.CurrentAnimationName == $"ChainLightning{_direction}" && _hitboxActiveFrames.Contains(_animator.CurrentFrame))
+                        if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
                         {
                             hasPlayedSound = true;
                             Game1.AudioManager.PlaySound(Content.Audio.Sounds.Big_lightning);

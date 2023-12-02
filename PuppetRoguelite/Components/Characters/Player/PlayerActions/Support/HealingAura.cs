@@ -40,8 +40,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Support
             //get animator from player sim
             var animator = _playerSim.GetComponent<SpriteAnimator>();
 
-            //play idle
-            animator.Play("IdleRight");
+            _playerSim.Idle(Direction.Down);
 
             yield return Coroutine.WaitForSeconds(.1f);
 

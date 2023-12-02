@@ -153,6 +153,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
                         .Action(s =>
                         {
                             //get dist to player
+                            if (PlayerController.Instance.Entity == null) return TaskStatus.Failure;
                             var dist = Math.Abs(Vector2.Distance(PlayerController.Instance.Entity.Position, Entity.Position));
 
                             //determine where to move and how fast
@@ -213,12 +214,18 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
                         })
                     .EndComposite()
                     //execute attack
-                    .Action(s => s.SpitAttack.Execute())
+                    .Action(s => s.ExecuteAction(SpitAttack))
                 .EndComposite()
             .Build();
 
             tree.UpdatePeriod = 0;
             return tree;
+        }
+
+        TaskStatus ExecuteAction(EnemyAction<Spitter> action)
+        {
+            ActiveAction = action;
+            return action.Execute();
         }
     }
 }

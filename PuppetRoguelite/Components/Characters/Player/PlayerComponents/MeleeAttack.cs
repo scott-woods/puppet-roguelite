@@ -1,327 +1,317 @@
-﻿//using Microsoft.Xna.Framework;
-//using Nez;
-//using Nez.Sprites;
-//using Nez.Systems;
-//using Nez.Textures;
-//using Nez.Tweens;
-//using PuppetRoguelite.Components.Shared;
-//using PuppetRoguelite.Components.Shared.Hitboxes;
-//using PuppetRoguelite.Enums;
-//using PuppetRoguelite.GlobalManagers;
-//using PuppetRoguelite.Tools;
-//using System;
-//using System.Collections;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Reflection.Metadata;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
+using Nez;
+using Nez.Sprites;
+using Nez.Systems;
+using Nez.Tweens;
+using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Components.Shared.Hitboxes;
+using PuppetRoguelite.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
-//{
-//    public class MeleeAttack : Component, IUpdatable, ITweenTarget<float>
-//    {
-//        public Emitter<MeleeAttackEvents, int> Emitter = new Emitter<MeleeAttackEvents, int>();
+namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
+{
+    public class MeleeAttack : Component, IUpdatable
+    {
+        public Emitter<MeleeAttackEvents, int> Emitter = new Emitter<MeleeAttackEvents, int>();
 
-//        public bool IsOnCooldown = false;
-//        public float Speed = 1f;
+        const float _initialMoveSpeed = 170f;
+        const float _finalMoveSpeed = 0f;
+        const float _finisherDelay = .08f;
+        const int _damage = 1;
+        const float _normalPushForce = 1f;
+        const float _finisherPushForce = 1.5f;
+        const int _movementFrames = 3; //the number of frames that we are moving for
 
-//        //const float _comboThreshold = .8f;
-//        const float _maxCombo = 3;
-//        const float _minComboThreshold = .05f;
-//        const float _offset = 12;
-//        const float _attackMoveSpeed = 350f;
-//        const float _fps = 15;
-//        const float _cooldown = .2f;
-//        const float _delayBeforeFinisher = .1f;
-//        const int _damage = 1;
+        public float Speed = 1f;
+        float _originalAnimatorSpeed;
 
-//        int _comboCounter = 0;
-//        float _timeSinceLastClick = 0f;
-//        float _timeSinceAttackStarted = 0f;
-//        bool _isAttacking = false;
-//        bool _continueCombo = false;
-//        int _activeFrame = -1;
-//        float _speed = 0f;
+        Action _completedCallback;
 
-//        Action _attackCompleteCallback;
+        int _comboCounter = 0;
+        bool _continueCombo = false;
+        float _hitboxOffset = 12f;
+        float _elapsedTime = 0f;
+        bool _isAttacking = false;
+        bool _shouldPerformFinisher = false;
+        Vector2 _direction;
 
-//        //components from parent
-//        SpriteAnimator _animator;
-//        VelocityComponent _velocityComponent;
+        List<int> _hitboxActiveFrames = new List<int>();
+        List<int> _postAttackFrames = new List<int>();
+        int _preFinisherFrame;
 
-//        //added components
-//        CircleHitbox _hitbox;
+        //passed components
+        SpriteAnimator _animator;
+        VelocityComponent _velocityComponent;
 
-//        List<Collider> _hitColliders = new List<Collider>();
+        //added components
+        CircleHitbox _hitbox;
 
-//        FloatTween _speedTween;
-//        ITimer _delayBeforeFinisherTimer;
-//        ITimer _delayBeforeEndTimer;
+        List<Collider> _hitColliders = new List<Collider>();
 
-//        public MeleeAttack(SpriteAnimator animator, VelocityComponent velocityComponent)
-//        {
-//            _animator = animator;
-//            _velocityComponent = velocityComponent;
-//        }
+        public MeleeAttack(SpriteAnimator animator, VelocityComponent velocityComponent)
+        {
+            _animator = animator;
+            _velocityComponent = velocityComponent;
+        }
 
-//        public override void Initialize()
-//        {
-//            base.Initialize();
+        public override void Initialize()
+        {
+            base.Initialize();
 
-//            _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 12));
-//            Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
-//            Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
-//            _hitbox.SetEnabled(false);
+            _hitbox = Entity.AddComponent(new CircleHitbox(_damage, 12));
+            Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
+            Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
+            _hitbox.SetEnabled(false);
+        }
 
-//            var texture = Core.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_attack);
-//            var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
-//            _animator.AddAnimation("MeleeRight_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 1, 4), _fps);
-//            _animator.AddAnimation("MeleeRight_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 5, 7), _fps);
-//            _animator.AddAnimation("MeleeRight_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 1, 4), _fps);
-//            _animator.AddAnimation("MeleeLeft_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 10, 13), _fps);
-//            _animator.AddAnimation("MeleeLeft_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 14, 16), _fps);
-//            _animator.AddAnimation("MeleeLeft_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 10, 13), _fps);
-//            _animator.AddAnimation("MeleeDown_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 19, 22), _fps);
-//            _animator.AddAnimation("MeleeDown_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 23, 25), _fps);
-//            _animator.AddAnimation("MeleeDown_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 19, 22), _fps);
-//            _animator.AddAnimation("MeleeUp_1", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 28, 31), _fps);
-//            _animator.AddAnimation("MeleeUp_2", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 32, 34), _fps);
-//            _animator.AddAnimation("MeleeUp_3", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 28, 31), _fps);
-//        }
+        public void Update()
+        {
+            if (_isAttacking)
+            {
+                //if it's been at least one frame, check for combos
+                if (_animator.CurrentFrame > 0)
+                {
+                    //check if we can move to the next attack
+                    if (_comboCounter < 3)
+                    {
+                        //if left click
+                        if (Input.LeftMouseButtonPressed)
+                        {
+                            //get direction
+                            var dir = Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;
+                            dir.Normalize();
+                            _direction = dir;
 
-//        public override void OnDisabled()
-//        {
-//            base.OnDisabled();
+                            if (_comboCounter == 2)
+                            {
+                                //queue up finisher
+                                _shouldPerformFinisher = true;
+                            }
+                            else
+                            {
+                                //queue up next in combo
+                                _continueCombo = true;
+                            }
+                        }
 
-//            _hitbox.SetEnabled(false);
-//        }
+                        //if next in combo is queued but not on finisher
+                        if (_continueCombo && _postAttackFrames.Contains(_animator.CurrentFrame))
+                        {
+                            _continueCombo = false;
+                            _isAttacking = false;
+                            _elapsedTime = 0;
 
-//        public void Update()
-//        {
-//            if (_isAttacking)
-//            {
-//                //increment timers
-//                _timeSinceLastClick += Time.DeltaTime;
-//                _timeSinceAttackStarted += Time.DeltaTime;
+                            PerformAttack(_direction);
+                            return;
+                        }
 
-//                //spam clicking for combo
-//                var boostedThreshold = _minComboThreshold * Speed;
-//                var threshold = _minComboThreshold + (_minComboThreshold - boostedThreshold);
-//                if (Input.LeftMouseButtonPressed && _timeSinceAttackStarted >= threshold)
-//                {
-//                    _timeSinceLastClick = 0f;
-//                    _continueCombo = true;
-//                }
+                        //if finisher is queued and we are on pre finisher frame get ready
+                        if (_shouldPerformFinisher && _animator.CurrentFrame >= _preFinisherFrame)
+                        {
+                            _shouldPerformFinisher = false;
+                            _isAttacking = false;
+                            _elapsedTime = 0;
 
-//                //active hitbox if on active frame
-//                _hitbox.SetEnabled(_animator.CurrentFrame == _activeFrame);
+                            _animator.Pause();
+                            _animator.SetSprite(_animator.CurrentAnimation.Sprites[_preFinisherFrame]);
 
-//                //move
-//                _velocityComponent.Move(_speed);
+                            Game1.Schedule(_finisherDelay / Speed, timer =>
+                            {
+                                PerformAttack(_direction);
+                            });
 
-//                //check for hit
-//                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_hitbox, _hitbox.CollidesWithLayers);
-//                if (colliders.Count > 0)
-//                {
-//                    foreach (var collider in colliders)
-//                    {
-//                        if (!_hitColliders.Contains(collider))
-//                        {
-//                            Emitter.Emit(MeleeAttackEvents.Hit, _damage);
-//                            _hitColliders.Add(collider);
-//                        }
-//                    }
-//                }
-//            }
-//        }
+                            return;
+                        }
+                    }
+                }
 
-//        public void ExecuteAttack(Action attackCompleteCallback)
-//        {
-//            _attackCompleteCallback = attackCompleteCallback;
+                //increment time
+                _elapsedTime += Time.DeltaTime;
 
-//            _comboCounter = 0;
-//            _timeSinceLastClick = 0f;
-//            _timeSinceAttackStarted = 0f;
+                //get animation duration
+                //var animationDuration = _animator.CurrentAnimation.Sprites.Count() / _animator.CurrentAnimation.FrameRate;
+                var animationDuration = _movementFrames / (_animator.CurrentAnimation.FrameRate * _animator.Speed);
 
-//            _isAttacking = true;
+                //if elapsed time is less than duration, we are still attacking
+                if (_elapsedTime < animationDuration)
+                {
+                    //get lerp factor
+                    float lerpFactor = _elapsedTime / animationDuration;
 
-//            PerformAttack();
-//        }
+                    //determine move speed based on which combo we are on
+                    var initialSpeed = _initialMoveSpeed;
+                    if (_comboCounter == 2) initialSpeed *= 1.1f;
+                    else if (_comboCounter == 3) initialSpeed *= 2f;
 
-//        void PerformAttack()
-//        {
-//            _timeSinceLastClick = 0f;
-//            _timeSinceAttackStarted = 0f;
-//            _continueCombo = false;
-//            _activeFrame = -1;
-//            _hitColliders.Clear();
+                    float currentSpeed = Lerps.Lerp(initialSpeed, _finalMoveSpeed, lerpFactor);
+                    _velocityComponent.Move(currentSpeed);
+                }
 
-//            //increment combo
-//            _comboCounter += 1;
+                //handle hitbox
+                if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
+                {
+                    _hitbox.SetEnabled(true);
+                }
+                else _hitbox.SetEnabled(false);
 
-//            //determine direction to mouse
-//            var dir = Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;
-//            dir.Normalize();
+                //check for hit
+                var colliders = Physics.BoxcastBroadphaseExcludingSelf(_hitbox, _hitbox.CollidesWithLayers);
+                if (colliders.Count > 0)
+                {
+                    foreach (var collider in colliders)
+                    {
+                        if (!_hitColliders.Contains(collider))
+                        {
+                            Emitter.Emit(MeleeAttackEvents.Hit, _damage);
+                            _hitColliders.Add(collider);
+                        }
+                    }
+                }
+            }
+        }
 
-//            //set hitbox position
-//            var hitboxPosition = Entity.Position + dir * _offset;
-//            _hitbox.SetLocalOffset(hitboxPosition - Entity.Position);
-//            _hitbox.Direction = dir;
-//            _hitbox.SetEnabled(true);
+        /// <summary>
+        /// called from player state, starts a new attack
+        /// </summary>
+        /// <param name="attackCompletedCallback"></param>
+        public void ExecuteAttack(Action attackCompletedCallback)
+        {
+            //set callback
+            _completedCallback = attackCompletedCallback;
 
-//            //if this is the final hit in combo, increase force
-//            if (_comboCounter == _maxCombo)
-//            {
-//                _hitbox.PushForce = 1.5f;
-//            }
+            //set animation handler
+            _animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
-//            //get angle in degrees
-//            var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(Entity.Position, hitboxPosition));
-//            angle = (angle + 360) % 360;
+            //set original animator speed to return to once finished attack
+            _originalAnimatorSpeed = _animator.Speed;
 
-//            //determine animation by angle
-//            //var animation = $"MeleeRight_{_comboCounter}";
-//            //if (angle >= 45 && angle < 135) animation = $"MeleeDown_{_comboCounter}";
-//            //else if (angle >= 135 && angle < 225) animation = $"MeleeLeft_{_comboCounter}";
-//            //else if (angle >= 225 && angle < 315) animation = $"MeleeUp_{_comboCounter}";
-//            var animation = "Slash";
-//            if (angle >= 45 && angle < 135) animation = $"SlashDown";
-//            else if (angle >= 225 && angle < 315) animation = $"SlashUp";
+            //set animator speed
+            _animator.Speed *= Speed;
 
-//            //play animation
-//            _animator.Speed = Speed;
-//            _animator.Play(animation, SpriteAnimator.LoopMode.Once);
-//            _animator.OnAnimationCompletedEvent += OnAttackAnimationCompleted;
+            //attack in direction of mouse
+            var dir = Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;
+            dir.Normalize();
+            _direction = dir;
 
-//            //start moving
-//            _velocityComponent.SetDirection(dir);
-//            _speed = _comboCounter == _maxCombo ? _attackMoveSpeed * 1.25f : _attackMoveSpeed;
-//            var animationDuration = _animator.CurrentAnimation.Sprites.Count() / _animator.CurrentAnimation.FrameRate;
-//            _speedTween = new FloatTween(this, 0, 1);
-//            //_speedTween = new FloatTween(_velocityComponent, 0, 1);
-//            _speedTween.SetEaseType(EaseType.CubicOut);
-//            _speedTween.SetDuration(animationDuration);
-//            _speedTween.Start();
+            PerformAttack(dir);
+        }
 
-//            //determine active frame and sound
-//            switch (_comboCounter)
-//            {
-//                case 1:
-//                    _activeFrame = 0;
-//                    Game1.AudioManager.PlaySound(Content.Audio.Sounds._32_Swoosh_sword_2);
-//                    break;
-//                case 2:
-//                    _activeFrame = 0;
-//                    Game1.AudioManager.PlaySound(Content.Audio.Sounds._33_Swoosh_Sword_3);
-//                    break;
-//                case 3:
-//                    _activeFrame = 0;
-//                    Game1.AudioManager.PlaySound(Content.Audio.Sounds._31_swoosh_sword_1);
-//                    break;
-//            }
-//        }
+        void PerformAttack(Vector2 dir)
+        {
+            //increment combo
+            _comboCounter++;
 
-//        void OnAttackAnimationCompleted(string animationName)
-//        {
-//            _animator.Speed = 1;
-//            _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
+            //clear hit colliders
+            _hitColliders.Clear();
 
-//            _activeFrame = -1;
+            //set hitbox position
+            var hitboxPosition = Entity.Position + dir * _hitboxOffset;
+            _hitbox.SetLocalOffset(hitboxPosition - Entity.Position);
+            _hitbox.Direction = dir;
+            //_hitbox.SetEnabled(true);
 
-//            //if reached max combo, end attack
-//            if (_comboCounter >= _maxCombo)
-//            {
-//                EndAttack();
-//            }
-//            else if (_continueCombo || Input.LeftMouseButtonDown)
-//            {
-//                if (_comboCounter == _maxCombo - 1)
-//                {
-//                    _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
-//                    var boostedDelay = _delayBeforeFinisher * Speed;
-//                    var delay = _delayBeforeFinisher + (_delayBeforeFinisher - boostedDelay);
-//                    _delayBeforeFinisherTimer = Core.Schedule(delay, timer => PerformAttack());
-//                }
-//                else
-//                {
-//                    PerformAttack();
-//                }
-//            }
-//            else
-//            {
-//                EndAttack();
-//                //hold last frame for a moment, give player a chance to extend combo
-//                //_animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
-//                //_delayBeforeEndTimer = Core.Schedule(.16f, timer =>
-//                //{
-//                //    if (_continueCombo || Input.LeftMouseButtonDown)
-//                //    {
-//                //        PerformAttack();
-//                //    }
-//                //    else
-//                //    {
-//                //        EndAttack();
-//                //    }
-//                //});
-//            }
-//        }
+            //update hitbox push force
+            if (_comboCounter > 2)
+            {
+                _hitbox.PushForce = _finisherPushForce;
+            }
+            else _hitbox.PushForce = _normalPushForce;
 
-//        public void CancelAttack()
-//        {
-//            _isAttacking = false;
-//            _continueCombo = false;
-//            _timeSinceLastClick = 0f;
-//            _timeSinceAttackStarted = 0f;
-//            _comboCounter = 0;
-//            _activeFrame = -1;
-//            _hitbox.PushForce = 1f;
-//            _hitbox.SetEnabled(false);
-//            _hitColliders.Clear();
-//            _speedTween?.Stop();
-//            _delayBeforeFinisherTimer?.Stop();
-//            _delayBeforeEndTimer?.Stop();
-//            _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
-//            _animator.Speed = 1;
-//        }
+            //get angle in degrees
+            var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(Entity.Position, hitboxPosition));
+            angle = (angle + 360) % 360;
 
-//        void EndAttack()
-//        {
-//            _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
-//            _isAttacking = false;
-//            _continueCombo = false;
-//            _timeSinceLastClick = 0f;
-//            _timeSinceAttackStarted = 0f;
-//            _comboCounter = 0;
-//            _activeFrame = -1;
-//            _hitbox.PushForce = 1f;
-//            _hitbox.SetEnabled(false);
-//            _animator.Speed = 1;
+            //set velocity component direction
+            _velocityComponent.SetDirection(dir);
 
-//            IsOnCooldown = true;
-//            Core.Schedule(_cooldown, timer => IsOnCooldown = false);
+            //animation
+            var animation = "";
+            if (_comboCounter == 1 || _comboCounter == 3)
+            {
+                animation = "Thrust";
+            }
+            else
+            {
+                animation = "Slash";
+            }
 
-//            _attackCompleteCallback?.Invoke();
-//        }
+            //account for angle
+            if (angle >= 45 && angle < 135) animation += "Down";
+            else if (angle >= 225 && angle < 315) animation += "Up";
 
-//        public void SetTweenedValue(float value)
-//        {
-//            _speed = value;
-//        }
+            switch (animation)
+            {
+                case "ThrustDown":
+                case "ThrustUp":
+                case "Thrust":
+                case "Slash":
+                    _hitboxActiveFrames = new List<int> { 0 };
+                    _postAttackFrames = new List<int> { 2, 3 };
+                    _preFinisherFrame = 2;
+                    break;
+                case "SlashUp":
+                case "SlashDown":
+                    _hitboxActiveFrames = new List<int> { 0 };
+                    _postAttackFrames = new List<int> { 2, 3 };
+                    _preFinisherFrame = 2;
+                    break;
+            }
 
-//        public float GetTweenedValue()
-//        {
-//            return _speed;
-//        }
+            //determine and play sound
+            switch (_comboCounter)
+            {
+                case 1:
+                    Game1.AudioManager.PlaySound(Content.Audio.Sounds._32_Swoosh_sword_2);
+                    break;
+                case 2:
+                    Game1.AudioManager.PlaySound(Content.Audio.Sounds._33_Swoosh_Sword_3);
+                    break;
+                case 3:
+                    Game1.AudioManager.PlaySound(Content.Audio.Sounds._31_swoosh_sword_1);
+                    break;
+            }
 
-//        public object GetTargetObject()
-//        {
-//            return this;
-//        }
-//    }
+            //play animation
+            _animator.Play(animation, SpriteAnimator.LoopMode.Once);
 
-//    public enum MeleeAttackEvents
-//    {
-//        Hit
-//    }
-//}
+            //set is attacking to true so update starts moving and reset elapsed time
+            _isAttacking = true;
+            _elapsedTime = 0f;
+        }
+
+        void OnAnimationFinished(string animationName)
+        {
+            //remove event handler
+            _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
+
+            //hold last frame so it doesn't look weird
+            _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
+
+            //reset
+            _comboCounter = 0;
+            _isAttacking = false;
+            _elapsedTime = 0;
+            _shouldPerformFinisher = false;
+            _continueCombo = false;
+            _hitbox.SetEnabled(false);
+            _animator.Speed = _originalAnimatorSpeed;
+
+            _completedCallback?.Invoke();
+        }
+
+        public void CancelAttack()
+        {
+
+        }
+    }
+
+    public enum MeleeAttackEvents
+    {
+        Hit
+    }
+}

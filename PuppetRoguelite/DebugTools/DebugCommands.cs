@@ -58,6 +58,12 @@ namespace PuppetRoguelite.DebugTools
         {
             Game1.DebugSettings.FreeActions = !Game1.DebugSettings.FreeActions;
         }
+
+        [Command("set-hp", "set player's hp to the given amount")]
+        static void SetPlayerHealth(int health)
+        {
+            PlayerController.Instance.HealthComponent.Health = health;
+        }
     }
 }
 #endif

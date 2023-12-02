@@ -14,7 +14,7 @@ namespace PuppetRoguelite.Components.Shared
     /// <summary>
     /// component for anything that can be knocked back by hits
     /// </summary>
-    public class KnockbackComponent : Component, IUpdatable, ITweenTarget<float>
+    public class KnockbackComponent : Component, IUpdatable
     {
         public bool IsStunned;
 
@@ -30,7 +30,7 @@ namespace PuppetRoguelite.Components.Shared
         float _hitLifespan = 1.5f;
         bool _isImmune;
 
-        FloatTween _tween;
+        ITween<float> _speedTween;
         float _speed = 0f;
 
         Status _status = new Status(Status.StatusType.Stunned, (int)StatusPriority.Stunned);
@@ -83,37 +83,48 @@ namespace PuppetRoguelite.Components.Shared
             base.OnRemovedFromEntity();
 
             _hurtbox.Emitter.RemoveObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
+
+            _speedTween?.Stop();
         }
 
         public void Update()
         {
             if (_statusComponent != null)
             {
+                //if affected by a greater priority status, do nothing
                 if (_statusComponent.CurrentStatus.Priority > _status.Priority)
                 {
                     return;
                 }
             }
+
+            //if stunned
             if (IsStunned)
             {
-                if (_tween != null)
-                {
-                    if (_tween.IsRunning())
-                    {
-                        _velocityComponent.Move(_speed);
-                    }
-                    else
-                    {
-                        _tween = null;
-                        IsStunned = false;
-                        if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
-                        {
-                            statusComponent.PopStatus(_status);
-                        }
-                        return;
-                    }
-                }
+                //move at current speed
+                _velocityComponent.Move(_speed);
 
+                ////if speed tween is not null
+                //if (_speedTween != null)
+                //{
+                //    //if speed tween is still running, continue to move
+                //    if (_speedTween.IsRunning())
+                //    {
+                //        _velocityComponent.Move(_speed);
+                //    }
+                //    else //tween finished, end stun
+                //    {
+                //        _speedTween = null;
+                //        IsStunned = false;
+                //        if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
+                //        {
+                //            statusComponent.PopStatus(_status);
+                //        }
+                //        return;
+                //    }
+                //}
+
+                //play a hit animation if the entity has a sprite animator with one
                 if (Entity.TryGetComponent<SpriteAnimator> (out var animator))
                 {
                     if (animator.Animations.ContainsKey("Hit"))
@@ -129,6 +140,7 @@ namespace PuppetRoguelite.Components.Shared
 
         void OnHurtboxHit(HurtboxHit hurtboxHit)
         {
+            //if affected by a higher priority status, do nothing
             if (_statusComponent != null)
             {
                 if (_statusComponent.CurrentStatus.Priority > _status.Priority)
@@ -154,7 +166,10 @@ namespace PuppetRoguelite.Components.Shared
                     }
                 }
 
+                //set stunned to true
                 IsStunned = true;
+
+                //update status component
                 if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
                 {
                     statusComponent.PushStatus(_status);
@@ -172,29 +187,32 @@ namespace PuppetRoguelite.Components.Shared
                 _velocityComponent.SetDirection(dir);
                 _speed = _knockbackSpeed * hurtboxHit.Hitbox.PushForce;
 
-                if (_tween != null)
+                //var test = this.Tween("_speed", 0, _knockbackDuration);
+                //test.SetEaseType(EaseType.CubicOut);
+                //test.Start();
+
+                //if tween not null, one is already in progress. cancel that one and start over
+                if (_speedTween != null)
                 {
-                    _tween.Stop();
+                    _speedTween.Stop();
+                    _speedTween.SetCompletionHandler(null);
+                    _speedTween = null;
                 }
-                _tween = new FloatTween(this, 0, _knockbackDuration);
-                _tween.SetEaseType(EaseType.CubicOut);
-                _tween.Start();
+                _speedTween = this.Tween("_speed", 0f, _knockbackDuration);
+                _speedTween.SetEaseType(EaseType.CubicOut);
+                _speedTween.Start();
+                _speedTween.SetCompletionHandler(OnTweenFinished);
             }
         }
 
-        public void SetTweenedValue(float value)
+        void OnTweenFinished(ITween<float> tween)
         {
-            _speed = value;
-        }
-
-        public float GetTweenedValue()
-        {
-            return _speed;
-        }
-
-        public object GetTargetObject()
-        {
-            return this;
+            _speedTween = null;
+            IsStunned = false;
+            if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
+            {
+                statusComponent.PopStatus(_status);
+            }
         }
     }
 }

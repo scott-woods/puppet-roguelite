@@ -217,6 +217,9 @@ namespace PuppetRoguelite.GlobalManagers
 
             //FAudio.FAudioVoice_SetOutputVoices(_sourceVoiceHandle, ref sends);
 
+            //set volume
+            FAudio.FAudioVoice_SetVolume(_musicVoiceHandle, _defaultMusicVolume, 0);
+
             lock (StateLock)
             {
                 //submit buffer

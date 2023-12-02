@@ -44,7 +44,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         YSorter _ySorter;
         public VelocityComponent VelocityComponent;
         //public MeleeAttack MeleeAttack;
-        public NewMeleeAttack MeleeAttack;
+        public MeleeAttack MeleeAttack;
         public Dash Dash;
         public SpriteTrail _spriteTrail;
         public KnockbackComponent KnockbackComponent;
@@ -165,7 +165,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             DollahInventory = Entity.AddComponent(new DollahInventory(PlayerData.Instance.Dollahs));
 
             //death
-            DeathComponent = Entity.AddComponent(new DeathComponent(Nez.Content.Audio.Sounds._69_Die_02, SpriteAnimator, "DeathRight", "HurtRight"));
+            DeathComponent = Entity.AddComponent(new DeathComponent(Nez.Content.Audio.Sounds._69_Die_02, SpriteAnimator, "Die", "Idle", false));
 
             //ySort
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, OriginComponent));
@@ -174,7 +174,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, PlayerData.Instance.MovementSpeed));
 
             //MeleeAttack = Entity.AddComponent(new MeleeAttack(SpriteAnimator, VelocityComponent));
-            MeleeAttack = Entity.AddComponent(new NewMeleeAttack(SpriteAnimator, VelocityComponent));
+            MeleeAttack = Entity.AddComponent(new MeleeAttack(SpriteAnimator, VelocityComponent));
 
             Dash = Entity.AddComponent(new Dash(PlayerData.Instance.MaxDashes));
 
@@ -235,7 +235,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             SpriteAnimator.AddAnimation("WalkDown", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 1, 8, totalCols));
             SpriteAnimator.AddAnimation("RunDown", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 2, 8, totalCols));
             SpriteAnimator.AddAnimation("ThrustDown", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 3, 4, totalCols), thrustFps);
-            SpriteAnimator.AddAnimation("SlashDown", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 4, 5, totalCols), slashFps);
+            //SpriteAnimator.AddAnimation("SlashDown", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 4, 5, totalCols), slashFps);
+            SpriteAnimator.AddAnimation("SlashDown", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 54, 58), slashFps);
             SpriteAnimator.AddAnimation("RollDown", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 5, 8, totalCols), rollFps);
 
             //side
@@ -251,7 +252,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             SpriteAnimator.AddAnimation("WalkUp", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 13, 8, totalCols));
             SpriteAnimator.AddAnimation("RunUp", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 14, 8, totalCols));
             SpriteAnimator.AddAnimation("ThrustUp", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 15, 4, totalCols), thrustFps);
-            SpriteAnimator.AddAnimation("SlashUp", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 16, 5, totalCols), slashFps);
+            //SpriteAnimator.AddAnimation("SlashUp", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 16, 5, totalCols), slashFps);
+            SpriteAnimator.AddAnimation("SlashUp", AnimatedSpriteHelper.GetSpriteArrayFromRange(sprites, 210, 214), slashFps);
             SpriteAnimator.AddAnimation("RollUp", AnimatedSpriteHelper.GetSpriteArrayByRow(sprites, 17, 8, totalCols), rollFps);
 
             //death

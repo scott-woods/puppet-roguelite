@@ -111,13 +111,7 @@ namespace PuppetRoguelite.GlobalManagers
             //change game state
             GameState = GameState.Exploration;
 
-            //wait for player entity to be destroyed
-            while (PlayerController.Instance.Entity != null)
-            {
-                yield return null;
-            }
-
-            Game1.SceneManager.ChangeScene(typeof(NewHub), "0");
+            yield break;
         }
 
         void OnEncounterStarted()

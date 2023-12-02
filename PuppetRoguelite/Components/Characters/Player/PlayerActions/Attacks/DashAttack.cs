@@ -61,6 +61,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             _hitbox.PushForce = 0f;
+            _hitbox.SetEnabled(false);
 
             //target that shows where dash will go
             _target = AddComponent(new PrototypeSpriteRenderer(8, 8));
@@ -199,11 +200,14 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //update target
                 _target.SetLocalOffset(FinalPosition - Position);
             }
-            else
+            else if (State == PlayerActionState.Executing && _isAttacking)
             {
                 if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
                 {
-                    _hitbox.SetEnabled(true);
+                    if (!_hitbox.Enabled)
+                    {
+                        _hitbox.SetEnabled(true);
+                    }
                 }
                 else _hitbox.SetEnabled(false);
             }

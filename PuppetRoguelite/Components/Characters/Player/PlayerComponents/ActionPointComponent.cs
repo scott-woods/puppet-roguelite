@@ -77,7 +77,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
-            if (Entity.TryGetComponent<NewMeleeAttack>(out var meleeAttack))
+            if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
             {
                 meleeAttack.Emitter.AddObserver(MeleeAttackEvents.Hit, OnMeleeAttackHit);
             }
@@ -90,7 +90,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.DodgePhaseStarted, OnDodgePhaseStarted);
             Emitters.CombatEventsEmitter.RemoveObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
 
-            if (Entity.TryGetComponent<NewMeleeAttack>(out var meleeAttack))
+            if (Entity.TryGetComponent<MeleeAttack>(out var meleeAttack))
             {
                 meleeAttack.Emitter.RemoveObserver(MeleeAttackEvents.Hit, OnMeleeAttackHit);
             }

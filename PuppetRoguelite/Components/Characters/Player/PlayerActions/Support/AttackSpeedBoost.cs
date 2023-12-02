@@ -46,8 +46,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Support
             //get animator from player sim
             var animator = _playerSim.GetComponent<SpriteAnimator>();
 
-            //play idle
-            animator.Play("IdleRight");
+            _playerSim.Idle(Direction.Down);
 
             yield return Coroutine.WaitForSeconds(.1f);
 
@@ -60,7 +59,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Support
             animator.SetColor(Color.White);
 
             //apply speed buff
-            PlayerController.Instance.MeleeAttack.Speed *= 1.75f;
+            PlayerController.Instance.MeleeAttack.Speed *= 1.6f;
 
             //after 7 seconds, remove buff
             Core.Schedule(7f, timer =>

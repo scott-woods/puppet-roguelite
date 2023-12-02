@@ -55,8 +55,14 @@ namespace PuppetRoguelite.Components.Characters.Enemies
                             .Action(c => c.AbortActions())
                             .Action(c => c.Idle())
                         .EndComposite()
-                    //.ConditionalDecorator(c => c.StatusComponent.CurrentStatus.Type == Status.StatusType.Normal)
-                    .SubTree(_subTree)
+                    .ConditionalDecorator(c =>
+                    {
+                        var gameStateManager = Game1.GameStateManager;
+                        if (gameStateManager.GameState != GameState.Combat) return false;
+                        if (c.StatusComponent.CurrentStatus.Type != Status.StatusType.Normal) return false;
+                        return true;
+                    }, true)
+                        .SubTree(_subTree)
                 .EndComposite()
                 .Build();
 

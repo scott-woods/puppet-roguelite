@@ -35,7 +35,7 @@ namespace PuppetRoguelite
         {
             base.Initialize();
 
-            DebugRenderEnabled = true;
+            DebugRenderEnabled = false;
             Window.AllowUserResizing = false;
             IsFixedTimeStep = true;
             TargetElapsedTime = System.TimeSpan.FromSeconds((double)1 / 240);
@@ -59,7 +59,7 @@ namespace PuppetRoguelite
             Screen.SetSize(1920, 1080);
 
             SceneManager.TargetEntranceId = "0";
-            Scene = new MainDungeon();
+            Scene = new NewHub();
         }
 
         protected override void Update(GameTime gameTime)

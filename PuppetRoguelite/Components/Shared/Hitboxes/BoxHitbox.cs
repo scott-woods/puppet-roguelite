@@ -15,7 +15,7 @@ namespace PuppetRoguelite.Components.Shared.Hitboxes
         int _damage;
         public int Damage { get => _damage; set => _damage = value; }
 
-        float _pushForce;
+        float _pushForce = 1f;
         public float PushForce { get => _pushForce; set => _pushForce = value; }
 
         Vector2 _direction;

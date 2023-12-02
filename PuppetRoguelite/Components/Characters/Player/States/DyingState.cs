@@ -19,7 +19,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
             PlayerData.Instance.UpdateAndSave();
 
-            Game1.AudioManager.StopMusic();
+            Emitters.PlayerEventsEmitter.Emit(PlayerEvents.PlayerDied);
 
             _context.DeathComponent.OnDeathFinished += OnDeathFinished;
         }

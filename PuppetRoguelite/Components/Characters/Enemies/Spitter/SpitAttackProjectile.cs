@@ -48,6 +48,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             Hitbox = Entity.AddComponent(new CircleHitbox(_damage, _radius));
             Flags.SetFlagExclusive(ref Hitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
             Flags.SetFlagExclusive(ref Hitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
+            Hitbox.PushForce = 1f;
 
             Trail = Entity.AddComponent(new SpriteTrail(Animator));
             Trail.FadeDelay = 0;
