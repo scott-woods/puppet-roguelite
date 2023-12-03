@@ -20,6 +20,12 @@ namespace PuppetRoguelite.DebugTools
             PlayerController.Instance.Collider.SetEnabled(!PlayerController.Instance.Collider.Enabled);
         }
 
+        [Command("tgm", "Disable player's hurtbox")]
+        static void ToggleGodMode()
+        {
+            PlayerController.Instance.Hurtbox.SetEnabled(!PlayerController.Instance.Hurtbox.Enabled);
+        }
+
         [Command("kill-all", "kills all enemies")]
         static void KillAllEnemies()
         {
