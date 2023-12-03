@@ -33,6 +33,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
         public OriginComponent OriginComponent;
         public DollahDropper DollahDropper;
         public DeathComponent DeathComponent;
+        public Shadow Shadow;
 
         //misc
         float _normalMoveSpeed = 100f;
@@ -82,7 +83,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
 
-            Entity.AddComponent(new Shadow(Animator, new Vector2(0, 45), new Vector2(2, 2)));
+            Shadow = Entity.AddComponent(new Shadow(Animator, new Vector2(0, 45), new Vector2(2, 2)));
 
             NewHealthbar = Entity.AddComponent(new Healthbar(HealthComponent, 48));
             NewHealthbar.SetLocalOffset(new Vector2(0, -24));
@@ -346,6 +347,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             {
                 Hurtbox.SetEnabled(true);
                 NewHealthbar.SetEnabled(true);
+                Shadow.SetEnabled(true);
                 Animator.Speed = 1f;
                 return TaskStatus.Success;
             }
@@ -361,6 +363,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
                 Animator.OnAnimationCompletedEvent += OnVanishAnimationCompleted;
                 Hurtbox.SetEnabled(false);
                 NewHealthbar.SetEnabled(false);
+                Shadow.SetEnabled(false);
             }
 
             if (Animator.IsAnimationActive("Vanish") && Animator.AnimationState == SpriteAnimator.State.Completed)

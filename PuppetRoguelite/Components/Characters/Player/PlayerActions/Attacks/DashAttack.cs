@@ -116,7 +116,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _playerSim.Idle(_dirByMouse.CurrentDirection);
             yield return Coroutine.WaitForSeconds(.2f);
 
-            yield return ExecuteDash();
+            var dashExecution = _coroutineManager.StartCoroutine(ExecuteDash());
+            yield return dashExecution;
 
             _execution = null;
             _simulationLoop = null;

@@ -3,10 +3,7 @@ using Nez;
 using Nez.Sprites;
 using Nez.Systems;
 using Nez.Textures;
-using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Enemies;
-using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Effects;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
@@ -17,8 +14,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
@@ -32,6 +27,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         const int _hitboxDistFromPlayer = 12;
         const float _strikeInterval = .2f;
         const int _chainRadius = 100;
+        List<int> _hitboxActiveFrames = new List<int>() { 0 };
 
         //components
         PlayerSim _playerSim;
@@ -46,7 +42,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         ICoroutine _attackCoroutine;
 
         //misc
-        List<int> _hitboxActiveFrames = new List<int>() { 0 };
         List<Entity> _hitEntities = new List<Entity>();
         int _currentChain = 0;
         bool _hasFinishedSwinging = false;
@@ -61,6 +56,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _hitbox = AddComponent(new CircleHitbox(_damage, _hitboxRadius));
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
+            _hitbox.SetEnabled(false);
 
             _animator = _playerSim.GetComponent<SpriteAnimator>();
             _animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
@@ -90,6 +86,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 _animator.Speed = 1f;
                 _attackCoroutine = _coroutineManager.StartCoroutine(Attack());
                 yield return _attackCoroutine;
+                _attackCoroutine = null;
 
                 //idle again
                 _animator.Speed = 1f;
@@ -107,65 +104,71 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
         IEnumerator ExecutionCoroutine()
         {
+            //set animator speed and color
             _animator.SetColor(Color.White);
             _animator.Speed = 1.3f;
 
+            //attack and wait for completion
             Debug.Log("starting attack");
             _attackCoroutine = _coroutineManager.StartCoroutine(Attack());
             yield return _attackCoroutine;
+            _attackCoroutine = null;
 
+            //ensure that hitbox is disabled after attack completion
             _hitbox.SetEnabled(false);
 
-            var count = _hitEntities.Count;
-            var lastHitEntities = new List<Entity>();
-            lastHitEntities.AddRange(_hitEntities);
+            //get all enemies
             var allEnemies = Scene.FindComponentsOfType<EnemyBase>();
-            Debug.Log("starting interval checks. Count: " + count.ToString());
-            while (count > 0)
+
+            //loop to chain to other enemies
+            Debug.Log("starting chain lightning loop");
+            bool finished = false;
+            while (!finished)
             {
-                _currentChain += 1;
+                //increment chain
+                _currentChain++;
 
-                //wait for strike interval
-                Debug.Log("waiting for strike interval");
-                yield return Coroutine.WaitForSeconds(_strikeInterval);
-                Debug.Log("strike interval passed");
+                //get all enemies that haven't been hit
+                var unhitEnemies = allEnemies.Where(e => !_hitEntities.Contains(e.Entity));
 
-                //get next entities to hit
-                Debug.Log("starting loop through hit entities");
-                List<Entity> nextEntities = new List<Entity>();
-                foreach (var entity in lastHitEntities) //loop through hit entities
+                //get list of next entities to hit
+                var entitiesToHit = new List<Entity>();
+                foreach (var ent in _hitEntities)
                 {
-                    var enemiesToRemove = new List<EnemyBase>();
-                    foreach (var enemy in allEnemies)
+                    foreach (var unhitEnemy in unhitEnemies)
                     {
-                        //if already hit
-                        if (nextEntities.Contains(enemy.Entity) || _hitEntities.Contains(enemy.Entity))
+                        //if enemy hasn't already been added to next list
+                        if (!entitiesToHit.Contains(unhitEnemy.Entity))
                         {
-                            enemiesToRemove.Add(enemy);
-                            continue;
+                            //if within distance
+                            if (Vector2.Distance(unhitEnemy.Entity.Position, ent.Position) <= _chainRadius)
+                            {
+                                entitiesToHit.Add(unhitEnemy.Entity);
+                            }
                         }
-
-                        //if within distance
-                        if (Vector2.Distance(enemy.Entity.Position, entity.Position) <= _chainRadius)
-                        {
-                            nextEntities.Add(enemy.Entity);
-                            _hitEntities.Add(enemy.Entity);
-                            enemiesToRemove.Add(enemy);
-                        }
-                    }
-
-                    foreach (var enemy in enemiesToRemove)
-                    {
-                        allEnemies.Remove(enemy);
                     }
                 }
 
-                Debug.Log("Starting loop through enemies to strike");
-                //strike next entities
-                foreach (var entity in nextEntities)
+                //if no more entities to hit, break
+                if (entitiesToHit.Count == 0)
                 {
+                    Debug.Log("no more entities to hit, breaking chain lightning loop");
+                    break;
+                }
+
+                //wait for strike interval
+                Debug.Log("starting strike interval");
+                yield return Coroutine.WaitForSeconds(_strikeInterval);
+                Debug.Log("finished strike interval");
+
+                //strike next entities
+                Debug.Log("striking next entities");
+                foreach (var entity in entitiesToHit)
+                {
+                    //play sound
                     Game1.AudioManager.PlaySound(Content.Audio.Sounds.Small_lightning);
 
+                    //create lightning strike effect
                     var effectEntity = Scene.CreateEntity("lightning-effect");
                     effectEntity.SetPosition(entity.Position);
                     var effectComponent = effectEntity.AddComponent(new HitEffectComponent(HitEffects.Lightning2));
@@ -174,16 +177,16 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                     Flags.SetFlagExclusive(ref effectHitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
                     effectComponent.PlayAnimation();
                 }
+                Debug.Log("finished striking next entities");
 
-                Debug.Log("clearing last hit entities");
-                lastHitEntities.Clear();
-                lastHitEntities.AddRange(nextEntities);
-                count = lastHitEntities.Count;
-                Debug.Log("Finished strike interval. Count: " + count.ToString());
+                //add newly hit entities to hitEntities list
+                _hitEntities.AddRange(entitiesToHit);
             }
 
             Debug.Log("Handling execution finished");
             HandleExecutionFinished();
+
+            Reset();
         }
 
         public override void Update()
@@ -197,24 +200,16 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //handle confirm
                 if (Input.LeftMouseButtonPressed)
                 {
-                    _coroutineManager.StopAllCoroutines();
-                    _simulationLoop = null;
-                    _executionCoroutine = null;
-                    _attackCoroutine = null;
-                    _animator.Stop();
-                    _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
+                    Debug.Log("stopping chain lightning because confirm button clicked");
+                    Reset();
                     HandlePreparationFinished(Position);
                 }
 
                 //restart loop if changed direction
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
-                    _coroutineManager.StopAllCoroutines();
-                    _simulationLoop = null;
-                    _executionCoroutine = null;
-                    _attackCoroutine = null;
-                    _animator.Stop();
-                    _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
+                    Debug.Log("stopping chain lightning because changed direction");
+                    Reset();
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
                 }
 
@@ -260,8 +255,10 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 var colliders = Physics.BoxcastBroadphaseExcludingSelf(_hitbox, _hitbox.CollidesWithLayers);
                 if (colliders.Count > 0)
                 {
+                    //loop through colliding hurtboxes
                     foreach (var collider in colliders)
                     {
+                        //if hit entities doesn't already of this entity, add it
                         if (!_hitEntities.Contains(collider.Entity))
                         {
                             _hitEntities.Add(collider.Entity);
@@ -322,6 +319,29 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
             _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
             _hasFinishedSwinging = true;
+        }
+
+        void Reset()
+        {
+            //handle coroutines
+            _simulationLoop?.Stop();
+            _simulationLoop = null;
+            _executionCoroutine?.Stop();
+            _executionCoroutine = null;
+            _attackCoroutine?.Stop();
+            _attackCoroutine = null;
+
+            //fields
+            _hitEntities.Clear();
+            _hasFinishedSwinging = false;
+            _currentChain = 0;
+
+            //disable hitbox
+            _hitbox.SetEnabled(false);
+
+            //animator
+            _animator.Stop();
+            _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
         }
     }
 }

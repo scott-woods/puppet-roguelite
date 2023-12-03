@@ -48,5 +48,19 @@ namespace PuppetRoguelite.Components.Shared
         {
             _renderer.SetRenderLayer(_baseRenderer.RenderLayer + 1);
         }
+
+        public override void OnEnabled()
+        {
+            base.OnEnabled();
+
+            _renderer?.SetEnabled(true);
+        }
+
+        public override void OnDisabled()
+        {
+            base.OnDisabled();
+
+            _renderer?.SetEnabled(false);
+        }
     }
 }

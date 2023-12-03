@@ -34,7 +34,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         //misc
         int _soundCounter = 0;
-        bool _isSwinging = false;
+        bool _isAttacking = false;
+        bool _transitioningToCharge = false;
 
         public ChainBotMelee(ChainBot chainBot) : base(chainBot) { }
 
@@ -78,7 +79,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
         {
             _coroutineManager.Update();
 
-            if (_isSwinging)
+            if (_isAttacking)
             {
                 if (_hitboxActiveFrames.Contains(_animator.CurrentFrame))
                 {
@@ -129,12 +130,22 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         IEnumerator TransitionToCharge()
         {
+            _transitioningToCharge = true;
+
             var transitionAnimation = _enemy.VelocityComponent.Direction.X >= 0 ? "TransitionRight" : "TransitionLeft";
             _animator.Play(transitionAnimation, SpriteAnimator.LoopMode.Once);
-            while (_animator.CurrentAnimationName == transitionAnimation && _animator.AnimationState != SpriteAnimator.State.Completed)
+            _animator.OnAnimationCompletedEvent += OnTransitionToChargeCompleted;
+
+            while (_transitioningToCharge)
             {
                 yield return null;
             }
+        }
+
+        void OnTransitionToChargeCompleted(string animationName)
+        {
+            _animator.OnAnimationCompletedEvent -= OnTransitionToChargeCompleted;
+            _transitioningToCharge = false;
         }
 
         void ChargeAttack()
@@ -145,6 +156,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         IEnumerator AttackPlayer()
         {
+            _isAttacking = true;
+
             //select hitbox
             _activeHitbox = _enemy.VelocityComponent.Direction.X >= 0 ? _rightHitbox : _leftHitbox;
             _activeHitbox.Direction = _enemy.VelocityComponent.Direction;
@@ -152,28 +165,44 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             //play animation
             var attackAnimation = _enemy.VelocityComponent.Direction.X >= 0 ? "AttackRight" : "AttackLeft";
             _animator.Play(attackAnimation, SpriteAnimator.LoopMode.Once);
-
-            _isSwinging = true;
+            _animator.OnAnimationCompletedEvent += OnAttackAnimationCompleted;
 
             //yield until animation is completed
-            while (_animator.CurrentAnimationName == attackAnimation && _animator.AnimationState != SpriteAnimator.State.Completed)
+            while (_isAttacking)
             {
                 yield return null;
             }
+        }
 
-            _isSwinging = false;
+        void OnAttackAnimationCompleted(string animationName)
+        {
+            _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
+            _isAttacking = false;
         }
 
         void Reset()
         {
-            _coroutineManager.StopAllCoroutines();
+            //handle coroutines
+            _executionCoroutine?.Stop();
             _executionCoroutine = null;
+            _transitionToCharge?.Stop();
             _transitionToCharge = null;
+            _attackPlayer?.Stop();
             _attackPlayer = null;
+
+            //disable hitboxes
             _leftHitbox.SetEnabled(false);
             _rightHitbox.SetEnabled(false);
+
+            //reset fields
+            _transitioningToCharge = false;
+            _isAttacking = false;
             _soundCounter = 0;
-            _isSwinging = false;
+            _activeHitbox = null;
+
+            //remove animation handlers
+            _animator.OnAnimationCompletedEvent -= OnTransitionToChargeCompleted;
+            _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
         }
 
         public override void Abort()
@@ -181,6 +210,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             base.Abort();
 
             Debug.Log($"{_enemy.Id}: aborting");
+
             Reset();
         }
     }
