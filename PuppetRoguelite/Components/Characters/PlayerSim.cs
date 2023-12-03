@@ -56,6 +56,8 @@ namespace PuppetRoguelite.Components.Characters
             _mover = Entity.AddComponent(new Mover());
 
             SpriteFlipper = Entity.AddComponent(new SpriteFlipper(_spriteAnimator, VelocityComponent));
+
+            Entity.AddComponent(new Shadow(_spriteAnimator, new Vector2(0, 6), Vector2.One));
         }
 
         public void Update()

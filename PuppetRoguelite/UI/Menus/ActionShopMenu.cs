@@ -2,10 +2,10 @@
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player.PlayerActions;
-using PuppetRoguelite.Enums;
 using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SaveData.Unlocks;
 using PuppetRoguelite.SaveData.Upgrades;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Elements;
 using System.Collections.Generic;
 using System.Linq;

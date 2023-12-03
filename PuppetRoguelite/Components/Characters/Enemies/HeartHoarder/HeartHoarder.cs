@@ -82,6 +82,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             Animator = Entity.AddComponent(new SpriteAnimator());
             AddAnimations();
 
+            Entity.AddComponent(new Shadow(Animator, new Vector2(0, 45), new Vector2(2, 2)));
+
             NewHealthbar = Entity.AddComponent(new Healthbar(HealthComponent, 48));
             NewHealthbar.SetLocalOffset(new Vector2(0, -24));
 

@@ -91,7 +91,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
-            Animator.SetLocalOffset(new Vector2(-3, 5));
+            Animator.SetLocalOffset(new Vector2(3, -5));
 
             //y sorter
             YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
@@ -108,6 +108,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             //death
             DeathComponent = Entity.AddComponent(new DeathComponent(Content.Audio.Sounds.Enemy_death_1, Animator, "Die", "Hit"));
+
+            //shadow
+            Entity.AddComponent(new Shadow(Animator, new Vector2(-1, 13), Vector2.One));
         }
 
         void AddAnimations()

@@ -145,6 +145,7 @@ namespace Nez
 			{
 				public const string Electric_hit_1 = @"Content\Textures\Effects\electric_hit_1.png";
 				public const string Electric_hit_2 = @"Content\Textures\Effects\electric_hit_2.png";
+				public const string Shadow = @"Content\Textures\Effects\shadow.png";
 			}
 
 			public static class Objects

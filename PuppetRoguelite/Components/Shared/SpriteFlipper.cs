@@ -58,12 +58,15 @@ namespace PuppetRoguelite.Components.Shared
 
                 if (_flipped != flip)
                 {
-                    foreach (var renderable in _otherRenderableComponents)
+                    if (_otherRenderableComponents != null)
                     {
-                        //adjust offset
-                        var newOffsetX = renderable.LocalOffset.X * -1;
-                        var newOffset = new Vector2(newOffsetX, renderable.LocalOffset.Y);
-                        renderable.SetLocalOffset(newOffset);
+                        foreach (var renderable in _otherRenderableComponents)
+                        {
+                            //adjust offset
+                            var newOffsetX = renderable.LocalOffset.X * -1;
+                            var newOffset = new Vector2(newOffsetX, renderable.LocalOffset.Y);
+                            renderable.SetLocalOffset(newOffset);
+                        }
                     }
                 }
 

@@ -113,6 +113,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
 
             //knockback
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, 4, 2f, VelocityComponent, _hurtbox));
+
+            //shadow
+            Entity.AddComponent(new Shadow(Animator, new Vector2(0, 15), new Vector2(.5f, .5f)));
         }
 
         void AddAnimations()

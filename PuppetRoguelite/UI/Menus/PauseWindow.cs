@@ -2,7 +2,7 @@
 using Nez;
 using Nez.Textures;
 using Nez.UI;
-using PuppetRoguelite.Enums;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Elements;
 using System;
 using System.Collections.Generic;

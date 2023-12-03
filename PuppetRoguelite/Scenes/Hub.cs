@@ -8,6 +8,7 @@ using PuppetRoguelite.Enums;
 using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.StaticData;
 using System.Linq;
 
 namespace PuppetRoguelite.Scenes

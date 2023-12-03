@@ -2,8 +2,8 @@
 using Nez;
 using Nez.Sprites;
 using Nez.Tiled;
-using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections.Generic;
 using System.Linq;

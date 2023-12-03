@@ -1,8 +1,8 @@
 ﻿using Nez;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
-using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Elements;
 using System;
 using System.Collections;

@@ -9,8 +9,8 @@ using PuppetRoguelite.Components.Characters.Player;
 using Microsoft.Xna.Framework.Input;
 using PuppetRoguelite.Tools;
 using Nez.UI;
-using PuppetRoguelite.Enums;
 using Microsoft.Xna.Framework;
+using PuppetRoguelite.StaticData;
 
 namespace PuppetRoguelite.Components
 {

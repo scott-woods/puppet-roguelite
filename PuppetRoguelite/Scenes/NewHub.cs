@@ -14,6 +14,7 @@ using PuppetRoguelite.UI.HUDs;
 using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.Components.Cameras;
+using PuppetRoguelite.StaticData;
 
 namespace PuppetRoguelite.Scenes
 {

@@ -59,7 +59,7 @@ namespace PuppetRoguelite
             Screen.SetSize(1920, 1080);
 
             SceneManager.TargetEntranceId = "0";
-            Scene = new NewHub();
+            Scene = new BossRoom();
         }
 
         protected override void Update(GameTime gameTime)

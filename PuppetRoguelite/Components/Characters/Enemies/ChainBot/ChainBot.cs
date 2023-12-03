@@ -111,6 +111,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
             //knockback
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(150f, .5f, 4, 2f, VelocityComponent, _hurtbox));
+
+            //shadow
+            Entity.AddComponent(new Shadow(Animator, new Vector2(4, 9), Vector2.One));
         }
 
         void AddAnimations()

@@ -60,6 +60,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public Vector2 LastNonZeroDirection = new Vector2(1, 0);
         public bool WaitingForSceneTransition = false;
         public Vector2 SpriteOffset = new Vector2(13, -2);
+        Vector2 _collisionOffset = new Vector2(-4, 4);
 
         //data
         //public PlayerData PlayerData;
@@ -142,7 +143,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             //Hurtbox.SetEnabled(false);
 
             //add collision box
-            Collider = Entity.AddComponent(new BoxCollider(-4, 4, 8, 5));
+            Collider = Entity.AddComponent(new BoxCollider(_collisionOffset.X, _collisionOffset.Y, 8, 5));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
             Flags.UnsetFlag(ref Collider.CollidesWithLayers, -1);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
@@ -202,6 +203,8 @@ namespace PuppetRoguelite.Components.Characters.Player
                 new List<SpriteRenderer>() { SpriteAnimator },
                 VelocityComponent,
                 otherRenderableComponents: new List<RenderableComponent> { shadow }));
+
+            Entity.AddComponent(new Shadow(SpriteAnimator, new Vector2(0, 6), Vector2.One));
         }
 
         void SetupInput()

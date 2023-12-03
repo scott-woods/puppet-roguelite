@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
-using PuppetRoguelite.Enums;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
