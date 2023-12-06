@@ -2,6 +2,7 @@
 using Nez;
 using Nez.AI.FSM;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             if (gameStateManager.GameState == GameState.Exploration && _context.CheckInput.IsPressed)
             {
                 var hitArray = new RaycastHit[10];
-                var raycastHits = Physics.LinecastAll(_context.OriginComponent.Origin, _context.OriginComponent.Origin + _context.VelocityComponent.Direction * _context.RaycastDistance, hitArray);
+                var raycastHits = Physics.LinecastAll(_context.OriginComponent.Origin, _context.OriginComponent.Origin + _context.VelocityComponent.Direction * _context.RaycastDistance, hitArray, 1 << (int)PhysicsLayers.Interactable);
 
                 foreach (var raycastHit in hitArray)
                 {
@@ -99,7 +100,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
                     }
                     else
                     {
-                        var overlap = Physics.OverlapRectangle(new RectangleF(_context.Entity.Position, new Vector2(16, 16)));
+                        var overlap = Physics.OverlapRectangle(new RectangleF(_context.Entity.Position, new Vector2(16, 16)), 1 << (int)PhysicsLayers.Interactable);
                         if (overlap != null)
                         {
                             if (overlap.Entity.TryGetComponent<Interactable>(out var interactable))

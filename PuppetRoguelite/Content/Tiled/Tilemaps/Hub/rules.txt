@@ -1,3 +1,2 @@
-..\..\RuleMaps\collision_rules.tmx
-..\..\RuleMaps\wooden_floor_rules.tmx
-..\..\RuleMaps\prison_walls_rules_one_overlap.tmx
+..\..\RuleMaps\prison_walls_rules_one_overlap_3.tmx
+..\..\RuleMaps\wooden_floor_rules_2.tmx

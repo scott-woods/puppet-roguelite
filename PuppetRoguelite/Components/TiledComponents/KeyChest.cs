@@ -3,6 +3,8 @@ using Nez.Textures;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
+using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.Models.Items;
 using PuppetRoguelite.SceneComponents;
@@ -42,13 +44,17 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _collider = Entity.AddComponent(new BoxCollider(-8, 0, 16, 16));
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
 
             //load sprites
             var chestTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Chest);
             _openSprite = new Sprite(chestTexture, new RectangleF(0, 0, TmxObject.Width, TmxObject.Height));
             _closedSprite = new Sprite(chestTexture, new RectangleF(TmxObject.Width, 0, TmxObject.Width, TmxObject.Height));
             _renderer.SetSprite(_closedSprite);
-            _renderer.SetRenderLayer(-(int)_collider.Bounds.Center.Y);
+            //_renderer.SetRenderLayer(-(int)_collider.Bounds.Center.Y);
+
+            var origin = Entity.AddComponent(new OriginComponent(_collider));
+            Entity.AddComponent(new YSorter(_renderer, origin));
         }
 
         public override IEnumerator HandleInteraction()

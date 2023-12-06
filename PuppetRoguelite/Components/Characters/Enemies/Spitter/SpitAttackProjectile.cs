@@ -25,6 +25,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         public ProjectileMover Mover;
         public CircleHitbox Hitbox;
         public SpriteTrail Trail;
+        //public CircleCollider DestroyCollider;
 
         //misc
         Vector2 _direction;
@@ -47,8 +48,14 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             Hitbox = Entity.AddComponent(new CircleHitbox(_damage, _radius));
             Flags.SetFlagExclusive(ref Hitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
-            Flags.SetFlagExclusive(ref Hitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
+            Hitbox.CollidesWithLayers = 0;
+            Flags.SetFlag(ref Hitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
+            Flags.SetFlag(ref Hitbox.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Hitbox.PushForce = 1f;
+
+            //DestroyCollider = Entity.AddComponent(new CircleCollider(_radius));
+            //DestroyCollider.IsTrigger = true;
+            //Flags.SetFlagExclusive(ref DestroyCollider.CollidesWithLayers, (int)PhysicsLayers.Environment);
 
             Trail = Entity.AddComponent(new SpriteTrail(Animator));
             Trail.FadeDelay = 0;
@@ -67,20 +74,42 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         {
             if (!_isBursting)
             {
+                //increment timer. if past max time, destroy
                 _timeSinceLaunched += Time.DeltaTime;
-                if (_timeSinceLaunched >= _maxTime) Entity.Destroy();
+                if (_timeSinceLaunched >= _maxTime)
+                {
+                    Burst();
+                    return;
+                }
+
+                //if (Hitbox.CollidesWithAny(out var hitboxResult))
+                //{
+                //    Burst();
+                //    return;
+                //}
+                //else if (DestroyCollider.CollidesWithAny(out var destroyColliderResult))
+                //{
+                //    Burst();
+                //    return;
+                //}
 
                 if (Mover.Move(_direction * _speed * Time.DeltaTime))
                 {
-                    _isBursting = true;
-                    Animator.Play("Burst_1", SpriteAnimator.LoopMode.Once);
-                    Animator.OnAnimationCompletedEvent += OnBurstAnimationCompleted;
+                    Burst();
+                    return;
                 }
-                else if (Animator.CurrentAnimationName != "Travel")
+                if (Animator.CurrentAnimationName != "Travel")
                 {
                     Animator.Play("Travel");
                 }
             }
+        }
+
+        void Burst()
+        {
+            _isBursting = true;
+            Animator.Play("Burst_1", SpriteAnimator.LoopMode.Once);
+            Animator.OnAnimationCompletedEvent += OnBurstAnimationCompleted;
         }
 
         void OnBurstAnimationCompleted(string animationName)

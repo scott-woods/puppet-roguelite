@@ -5,6 +5,7 @@ using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.StaticData;
 using System;
@@ -24,24 +25,22 @@ namespace PuppetRoguelite.SceneComponents
 
         List<Map> _maps = new List<Map>()
         {
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.TBLR_1, true, true, true, true),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.TBL_1, true, true, true, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.TBR_1, true, true, false, true),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.TLR_1, true, false, true, true),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.BLR_1, false, true, true, true),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.TB_1, true, true, false, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.TL_1, true, false, true, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.TR_1, true, false, false, true),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.BL_1, false, true, true, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.BR_1, false, true, false, true),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.LR_1, false, false, true, true),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.T_1, true, false, false, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.B_1, false, true, false, false),
-            //new Map(Content.Tiled.Tilemaps.DungeonPrison.L_1, false, false, true, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.R_1, false, false, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_tblr_1, true, true, true, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_tbl_1, true, true, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_tbr_1, true, true, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_tlr_1, true, false, true, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_blr_1, false, true, true, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_tb_1, true, true, false, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_tl_1, true, false, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_tr_1, true, false, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_bl_1, false, true, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_br_1, false, true, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_lr_1, false, false, true, true),
             new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_t_1, true, false, false, false),
             new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_b_1, false, true, false, false),
-            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_l_1, false, false, true, false)
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_l_1, false, false, true, false),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_r_1, false, false, false, true),
+            new Map(Content.Tiled.Tilemaps.DungeonPrison.Dp_b_2, false, true, false, false),
         };
 
         Map _leftKeyMap = new Map(Content.Tiled.Tilemaps.DungeonPrison.Left_key_room, false, false, false, true);
@@ -58,7 +57,7 @@ namespace PuppetRoguelite.SceneComponents
 
         public Vector2 GetPlayerSpawnPoint()
         {
-            var point = _preBossPoint * _roomSize * _tileSize;
+            var point = _hubPoint * _roomSize * _tileSize;
             var midPoint = point + new Point(_roomSize.X * _tileSize.X / 2, _roomSize.Y * _tileSize.Y / 2);
             return midPoint.ToVector2();
         }
@@ -119,6 +118,7 @@ namespace PuppetRoguelite.SceneComponents
                 success = true;
             }
 
+            //create actual maps
             foreach (var node in Nodes)
             {
                 //create map entity
@@ -129,22 +129,24 @@ namespace PuppetRoguelite.SceneComponents
                 node.MapEntity = mapEntity;
 
                 //load map
-                if (node.Map.Name == Nez.Content.Tiled.Tilemaps.DungeonPrison.Dp_l_1)
-                {
-                    Debug.Log("test");
-                }
                 var map = Scene.Content.LoadTiledMap(node.Map.Name);
 
                 //create main map renderer
-                var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-                mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities" });
+                var mapRenderer = mapEntity.AddComponent(new TiledMapRenderer(map, "Walls"));
+                mapRenderer.SetLayersToRender(new[] { "Back", "Walls" });
                 mapRenderer.RenderLayer = 10;
                 mapEntity.AddComponent(new GridGraphManager(mapRenderer));
                 mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
+                Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
 
                 //create above map renderer
                 var tiledMapDetailsRenderer = mapEntity.AddComponent(new TiledMapRenderer(map));
-                tiledMapDetailsRenderer.SetLayerToRender("above-details");
+                var layersToRender = new List<string>();
+                if (map.Layers.Contains("Front"))
+                    layersToRender.Add("Front");
+                if (map.Layers.Contains("AboveFront"))
+                    layersToRender.Add("AboveFront");
+                tiledMapDetailsRenderer.SetLayersToRender(layersToRender.ToArray());
                 tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
                 tiledMapDetailsRenderer.Material = Material.StencilWrite();
                 //tiledMapDetailsRenderer.Material.Effect = Scene.Content.LoadNezEffect<SpriteAlphaTestEffect>();

@@ -48,6 +48,8 @@ namespace PuppetRoguelite
 
             Physics.SpatialHashCellSize = 32;
             Physics.Gravity = new Vector2(0, 600f);
+            Physics.RaycastsHitTriggers = true;
+            Physics.RaycastsStartInColliders = true;
 
             RegisterGlobalManager(SceneManager);
             RegisterGlobalManager(AudioManager);

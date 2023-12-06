@@ -1,890 +1,201 @@
 {
-    "Map/SizeTest": {
-        "height": 4300,
-        "width": 2
-    },
-    "activeFile": "Tilemaps/DungeonPrison/dp_r_1.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
-        ".",
-        "RuleMaps",
-        "Tilemaps/DungeonPrison",
-        "Tilesets",
-        "Rules",
-        "Tilemaps",
-        "Tilemaps/Hub"
     ],
-    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
-        ":/automap-tiles.tsx": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx": {
-            "scale": 1.2182870370370371,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 216.6977009310279,
-                "y": 216.6977009310279
-            }
-        },
-        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#CollisionTileset": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#Stardew-Spring-Outdoors": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#bunny_npc": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#edge_test_tileset": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#large_sprite_test": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx": {
-            "scale": 1.2182870370370371,
+        "RuleMaps/prison_walls_rules_one_overlap_3.tmx": {
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 64.84514535436062,
-                "y": 215.46646399391977
-            }
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#CollisionTileset": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#Stardew-Spring-Outdoors": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#bunny_npc": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#edge_test_tileset": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/NezFun/NezFun/Content/Tilemaps/field.tmx#large_sprite_test": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx": {
-            "scale": 0.7831845238095237,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 336.44689340680225,
-                "y": 337.0853125593768
-            }
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/NinjaAdventure/map/tilemap.tmx#tileset": {
-            "scaleInDock": 1
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx": {
-            "scale": 1.096458333333333,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 320.57761732851986,
-                "y": 240.77522325669776
-            }
-        },
-        "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Reference-Projects/Nez-Samples/Nez.Samples/Content/Platformer/tiledMap.tmx#tileset": {
-            "scaleInDock": 1
-        },
-        "RuleMaps/autotile_rules.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 159.25,
-                "y": 136.5
-            }
-        },
-        "RuleMaps/collision_rules.tmx": {
-            "scale": 2,
-            "selectedLayer": 1,
-            "viewCenter": {
-                "x": 240,
-                "y": 159.75
-            }
-        },
-        "RuleMaps/prison_floor_rules.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 123.25,
-                "y": 137.5
-            }
-        },
-        "RuleMaps/prison_floor_rules_2.tmx": {
-            "scale": 2,
-            "selectedLayer": 2,
-            "viewCenter": {
-                "x": 121.75,
-                "y": 110
-            }
-        },
-        "RuleMaps/prison_floor_rules_one_overlap.tmx": {
-            "scale": 2,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 216,
-                "y": 159.75
-            }
-        },
-        "RuleMaps/prison_floor_rules_two_overlap.tmx": {
-            "scale": 1.4705208333333333,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 240.39101792165474,
-                "y": 160.48735567046822
-            }
-        },
-        "RuleMaps/prison_walls_rules.tmx": {
-            "scale": 2,
-            "selectedLayer": 1,
-            "viewCenter": {
-                "x": 184.75,
-                "y": 134
-            }
-        },
-        "RuleMaps/prison_walls_rules_2.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 168.66666666666669,
-                "y": 284
-            }
-        },
-        "RuleMaps/prison_walls_rules_3.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 167,
-                "y": 164
-            }
-        },
-        "RuleMaps/prison_walls_rules_one_overlap.tmx": {
-            "scale": 0.8890202702702703,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 272.77218316549494,
-                "y": 295.83127493824816
-            }
-        },
-        "RuleMaps/prison_walls_rules_two_overlap.tmx": {
-            "scale": 0.8890202702702703,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 272.772183165495,
-                "y": 296.9561086832604
-            }
-        },
-        "RuleMaps/walls_rules.tmx": {
-            "scale": 1.4705208333333333,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 240.39101792165474,
-                "y": 160.48735567046822
-            }
-        },
-        "RuleMaps/wooden_floor_rules.tmx": {
-            "scale": 2,
-            "selectedLayer": 2,
-            "viewCenter": {
-                "x": 138.75,
-                "y": 139
-            }
-        },
-        "Rules/autotile_rules.tmx": {
-            "scale": 2,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 70.25,
-                "y": 97
-            }
-        },
-        "Rules/walls_rules.tmx": {
-            "scale": 2,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 151.75,
-                "y": 131
-            }
-        },
-        "Tilemaps/BLR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/BL_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 2,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 192,
-                "y": 191.75
-            }
-        },
-        "Tilemaps/BR_1.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191,
-                "y": 191
-            }
-        },
-        "Tilemaps/B_1.tmx": {
-            "scale": 1.3705729166666665,
-            "selectedLayer": 2,
-            "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/DungeonPrison/BLR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.66666666666663,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/BL_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.99999999999997,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/BR_1.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 192.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/DungeonPrison/B_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 187.72054691889866,
-                "y": 191.3167259786477
-            }
-        },
-        "Tilemaps/DungeonPrison/DP_TR_2.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 217,
-                "y": 158
-            }
-        },
-        "Tilemaps/DungeonPrison/LR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.99999999999997,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/L_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 192.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/DungeonPrison/R_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 192.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/DungeonPrison/TBLR_1.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 1.5,
-            "selectedLayer": 4,
-            "viewCenter": {
-                "x": 191.66666666666663,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/TBL_1.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.66666666666663,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/TBR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.66666666666663,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/TB_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1.5,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.66666666666663,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/TLR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 0.6951822916666667,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 192.03596179059753,
-                "y": 192.0359617905975
-            }
-        },
-        "Tilemaps/DungeonPrison/TL_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 192.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/DungeonPrison/TR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 0.6951822916666667,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 192.03596179059753,
-                "y": 192.0359617905975
-            }
-        },
-        "Tilemaps/DungeonPrison/T_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 189.5,
-                "y": 192
-            }
-        },
-        "Tilemaps/DungeonPrison/T_2.tmx": {
-            "expandedObjectLayers": [
-                10
-            ],
-            "scale": 2,
-            "selectedLayer": 6,
-            "viewCenter": {
-                "x": 192,
-                "y": 191.75
+                "x": 154.33333333333331,
+                "y": 150
             }
         },
         "Tilemaps/DungeonPrison/boss_room.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 1.5,
-            "selectedLayer": 3,
+            "scale": 0.46329225352112674,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 207.66666666666663,
-                "y": 567.6666666666666
+                "x": 208.29184875546264,
+                "y": 569.8346950408513
             }
         },
         "Tilemaps/DungeonPrison/dp_b_1.tmx": {
-            "expandedObjectLayers": [
-                2
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 191.8905567167015,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/DungeonPrison/dp_l_1.tmx": {
-            "expandedObjectLayers": [
-                2
-            ],
-            "scale": 1.5,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 201.99999999999997,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/dp_new_pre_boss.tmx": {
-            "scale": 1,
-            "selectedLayer": 1,
-            "viewCenter": {
-                "x": 229.5,
-                "y": 176
-            }
-        },
-        "Tilemaps/DungeonPrison/dp_new_pre_boss_2.tmx": {
             "scale": 1.3705729166666665,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 224.35873076192286,
-                "y": 221.80505415162455
-            }
-        },
-        "Tilemaps/DungeonPrison/dp_r_1.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 158.66666666666669,
-                "y": 190.99999999999997
-            }
-        },
-        "Tilemaps/DungeonPrison/dp_t_1.tmx": {
-            "expandedObjectLayers": [
-                2
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 191.8905567167015,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/DungeonPrison/dp_template.tmx": {
-            "scale": 1.3705729166666665,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 191.16093482804487
-            }
-        },
-        "Tilemaps/DungeonPrison/dp_test.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 378.33333333333326,
-                "y": 312
-            }
-        },
-        "Tilemaps/DungeonPrison/left_key_room.tmx": {
-            "expandedObjectLayers": [
-                9
-            ],
-            "scale": 1.5,
-            "selectedLayer": 4,
-            "viewCenter": {
-                "x": 191.66666666666663,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/pre_boss_room.tmx": {
-            "expandedObjectLayers": [
-                10
-            ],
-            "scale": 1.5,
-            "selectedLayer": 4,
-            "viewCenter": {
-                "x": 148,
-                "y": 191.66666666666669
-            }
-        },
-        "Tilemaps/DungeonPrison/right_key_room.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 192.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/Hub/bedroom.tmx": {
-            "scale": 1.1122916666666667,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 175.76325154523317,
-                "y": 241.84304176812134
-            }
-        },
-        "Tilemaps/Hub/hub_1.tmx": {
-            "scale": 0.6951822916666667,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 256.76718486607984,
-                "y": 386.94886682899426
-            }
-        },
-        "Tilemaps/Hub/hub_2.tmx": {
-            "expandedObjectLayers": [
-                14
-            ],
-            "scale": 1.5,
-            "selectedLayer": 8,
-            "viewCenter": {
-                "x": 785.6666666666666,
-                "y": 450.66666666666663
-            }
-        },
-        "Tilemaps/Hub/puppet_shop.tmx": {
-            "scale": 0.9814338235294118,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 160.47949054129984,
-                "y": 274.0887806705376
-            }
-        },
-        "Tilemaps/LR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/L_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/R_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 190.4313129393882,
-                "y": 190.43131293938822
-            }
-        },
-        "Tilemaps/TBLR_1.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 2,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 203.25,
-                "y": 195.5
-            }
-        },
-        "Tilemaps/TBL_1.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/TBR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/TB_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/TLR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/TL_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.5,
-                "y": 192.5
-            }
-        },
-        "Tilemaps/TR_1.tmx": {
-            "expandedObjectLayers": [
-                7
-            ],
-            "scale": 1,
-            "selectedLayer": 2,
-            "viewCenter": {
-                "x": 189.5,
-                "y": 189
-            }
-        },
-        "Tilemaps/T_1.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/Tilesets/dungeon_prison_props.tsx": {
-            "scaleInDock": 1
-        },
-        "Tilemaps/Tilesets/dungeon_prison_tileset.tsx": {
-            "scaleInDock": 1
-        },
-        "Tilemaps/bedroom.tmx": {
-            "expandedObjectLayers": [
-                5
-            ],
-            "scale": 1,
-            "selectedLayer": 3,
-            "viewCenter": {
-                "x": 176,
-                "y": 151
-            }
-        },
-        "Tilemaps/boss_room.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
-            "scale": 3,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 71.83333333333333,
-                "y": 522.3333333333333
-            }
-        },
-        "Tilemaps/hub.tmx": {
-            "expandedObjectLayers": [
-                3
-            ],
-            "scale": 1,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 254.5,
-                "y": 38
-            }
-        },
-        "Tilemaps/hub_2.tmx": {
-            "expandedObjectLayers": [
-                14
-            ],
-            "scale": 2,
-            "selectedLayer": 5,
-            "viewCenter": {
-                "x": 510.25,
-                "y": 381
-            }
-        },
-        "Tilemaps/hub_room.tmx": {
-            "scale": 1.3705729166666665,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 192.25536766102985,
+                "x": 192.25536766102982,
                 "y": 192.62017860535818
             }
         },
-        "Tilemaps/left_key_room.tmx": {
-            "expandedObjectLayers": [
-                9
-            ],
+        "Tilemaps/DungeonPrison/dp_b_2.tmx": {
             "scale": 1.3705729166666665,
-            "selectedLayer": 4,
-            "viewCenter": {
-                "x": 191.5257457723732,
-                "y": 191.52574577237317
-            }
-        },
-        "Tilemaps/pre_boss_room.tmx": {
-            "expandedObjectLayers": [
-                10
-            ],
-            "scale": 1.3705729166666665,
-            "selectedLayer": 4,
-            "viewCenter": {
-                "x": 191.89055671670152,
-                "y": 23.347900437013095
-            }
-        },
-        "Tilemaps/prototype_test_map.tmx": {
-            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 110.5,
-                "y": -37
+                "x": 188.60725821774656,
+                "y": 188.24244727341824
             }
         },
-        "Tilemaps/puppet_shop.tmx": {
-            "expandedObjectLayers": [
-                3
-            ],
-            "scale": 1.5,
+        "Tilemaps/DungeonPrison/dp_b_2.tmx#dungeon_prison_tileset_short_walls": {
+            "scaleInDock": 1
+        },
+        "Tilemaps/DungeonPrison/dp_bl_1.tmx": {
+            "scale": 1.3705729166666665,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 199.66666666666666,
-                "y": 110
+                "x": 190.79612388371655,
+                "y": 190.43131293938822
             }
         },
-        "Tilemaps/right_key_room.tmx": {
-            "expandedObjectLayers": [
-                8
-            ],
+        "Tilemaps/DungeonPrison/dp_blr_1.tmx": {
             "scale": 1.3705729166666665,
-            "selectedLayer": 3,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 191.16093482804487,
+                "x": 190.79612388371655,
+                "y": 190.43131293938822
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_br_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 191.52574577237317,
                 "y": 191.16093482804487
             }
         },
-        "Tilemaps/test.tmx": {
+        "Tilemaps/DungeonPrison/dp_l_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 190.79612388371655,
+                "y": 190.43131293938822
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_lr_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 191.52574577237317,
+                "y": 191.16093482804487
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_r_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 191.52574577237317,
+                "y": 191.16093482804487
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_t_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 191.52574577237317,
+                "y": 191.16093482804487
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_tb_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_tbl_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_tblr_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_tbr_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_tl_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_tlr_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/DungeonPrison/dp_tr_1.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/DungeonPrison/left_key_room.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 191.89055671670152
+            }
+        },
+        "Tilemaps/DungeonPrison/pre_boss_room.tmx": {
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 247.5,
+                "y": 231
+            }
+        },
+        "Tilemaps/DungeonPrison/right_key_room.tmx": {
+            "scale": 1.3705729166666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.25536766102982,
+                "y": 192.62017860535818
+            }
+        },
+        "Tilemaps/Hub/hub_2.tmx": {
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 517,
-                "y": -98.66666666666666
+                "x": 711,
+                "y": 597.3333333333333
             }
-        },
-        "Tilesets/blood_temple_tileset.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
-        },
-        "Tilesets/dungeon_prison_props.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1.5
-        },
-        "Tilesets/dungeon_prison_tileset.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1.5
-        },
-        "Tilesets/hub_2.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 29.75,
-                "y": 73
-            }
-        },
-        "Tilesets/prototype_tileset.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
         }
     },
-    "last.externalTilesetPath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Tilesets",
-    "last.imagePath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Textures/Tilesets",
-    "last.objectTemplatePath": "C:/Users/scott/OneDrive/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRoguelite/PuppetRoguelite/Content/Tiled/Templates",
-    "map.fixedSize": true,
-    "map.height": 24,
-    "map.lastUsedFormat": "tmx",
-    "map.tileHeight": 16,
-    "map.tileWidth": 16,
-    "map.width": 24,
+    "last.externalTilesetPath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRogueliteFNA/puppet-roguelite/PuppetRoguelite/Content/Tiled/Tilesets",
     "openFiles": [
-        "Tilemaps/DungeonPrison/dp_l_1.tmx",
-        "Tilemaps/DungeonPrison/BL_1.tmx",
-        "Tilemaps/DungeonPrison/LR_1.tmx",
-        "Tilemaps/Hub/hub_2.tmx",
-        "Tilemaps/DungeonPrison/dp_template.tmx",
-        "Tilemaps/DungeonPrison/dp_b_1.tmx",
-        "Tilemaps/DungeonPrison/dp_t_1.tmx",
-        "RuleMaps/collision_rules.tmx",
-        "Tilemaps/DungeonPrison/dp_r_1.tmx",
-        "RuleMaps/prison_floor_rules_one_overlap.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
-    "property.type": "string",
     "recentFiles": [
-        "Tilemaps/DungeonPrison/dp_l_1.tmx",
-        "Tilemaps/DungeonPrison/BL_1.tmx",
-        "Tilemaps/DungeonPrison/LR_1.tmx",
-        "Tilemaps/Hub/hub_2.tmx",
-        "Tilemaps/DungeonPrison/dp_template.tmx",
-        "Tilemaps/DungeonPrison/dp_b_1.tmx",
         "Tilemaps/DungeonPrison/dp_t_1.tmx",
-        "RuleMaps/collision_rules.tmx",
-        "RuleMaps/prison_floor_rules_one_overlap.tmx",
         "Tilemaps/DungeonPrison/dp_r_1.tmx",
-        "RuleMaps/prison_walls_rules_one_overlap.tmx",
-        "Tilesets/dungeon_prison_tileset.tsx"
+        "Tilemaps/DungeonPrison/dp_lr_1.tmx",
+        "Tilemaps/DungeonPrison/dp_l_1.tmx",
+        "Tilemaps/DungeonPrison/dp_blr_1.tmx",
+        "Tilemaps/DungeonPrison/dp_br_1.tmx",
+        "Tilemaps/DungeonPrison/dp_bl_1.tmx",
+        "Tilemaps/DungeonPrison/dp_b_2.tmx"
     ],
-    "resizeMap.removeObjects": true,
-    "tileset.lastUsedFormat": "tsx",
-    "tileset.tileSize": {
-        "height": 16,
-        "width": 16
-    }
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)"
 }

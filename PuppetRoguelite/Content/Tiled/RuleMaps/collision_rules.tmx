@@ -5,7 +5,6 @@
   <property name="Disabled" type="bool" value="false"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/prototype_tileset.tsx"/>
- <tileset firstgid="5" source="../Tilesets/dungeon_prison_tileset.tsx"/>
  <layer id="1" name="regions" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

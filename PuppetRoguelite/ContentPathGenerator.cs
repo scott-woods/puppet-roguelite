@@ -153,9 +153,7 @@ namespace Nez
 				public const string Boss_gate = @"Content\Textures\Objects\boss_gate.png";
 				public const string Chest = @"Content\Textures\Objects\chest.png";
 				public const string Dungeon_prison_gate_horizontal = @"Content\Textures\Objects\dungeon_prison_gate_horizontal.png";
-				public const string Dungeon_prison_gate_horizontal_nine_slice = @"Content\Textures\Objects\dungeon_prison_gate_horizontal_nine_slice.png";
 				public const string Dungeon_prison_gate_vertical = @"Content\Textures\Objects\dungeon_prison_gate_vertical.png";
-				public const string Dungeon_prison_gate_vertical_nine_slice = @"Content\Textures\Objects\dungeon_prison_gate_vertical_nine_slice.png";
 				public const string Large_chest = @"Content\Textures\Objects\large_chest.png";
 				public const string Shelf = @"Content\Textures\Objects\shelf.png";
 			}
@@ -171,6 +169,7 @@ namespace Nez
 				public const string Blood_temple_tileset = @"Content\Textures\Tilesets\blood_temple_tileset.png";
 				public const string Dungeon_prison_props = @"Content\Textures\Tilesets\dungeon_prison_props.png";
 				public const string Dungeon_prison_tileset = @"Content\Textures\Tilesets\dungeon_prison_tileset.png";
+				public const string Dungeon_prison_tileset_short_walls = @"Content\Textures\Tilesets\dungeon_prison_tileset_short_walls.png";
 				public const string Prototype_tileset = @"Content\Textures\Tilesets\prototype_tileset.png";
 			}
 
@@ -917,8 +916,11 @@ namespace Nez
 				public const string Prison_floor_rules_one_overlap = @"Content\Tiled\RuleMaps\prison_floor_rules_one_overlap.tmx";
 				public const string Prison_floor_rules_two_overlap = @"Content\Tiled\RuleMaps\prison_floor_rules_two_overlap.tmx";
 				public const string Prison_walls_rules_one_overlap = @"Content\Tiled\RuleMaps\prison_walls_rules_one_overlap.tmx";
+				public const string Prison_walls_rules_one_overlap_2 = @"Content\Tiled\RuleMaps\prison_walls_rules_one_overlap_2.tmx";
+				public const string Prison_walls_rules_one_overlap_3 = @"Content\Tiled\RuleMaps\prison_walls_rules_one_overlap_3.tmx";
 				public const string Prison_walls_rules_two_overlap = @"Content\Tiled\RuleMaps\prison_walls_rules_two_overlap.tmx";
 				public const string Wooden_floor_rules = @"Content\Tiled\RuleMaps\wooden_floor_rules.tmx";
+				public const string Wooden_floor_rules_2 = @"Content\Tiled\RuleMaps\wooden_floor_rules_2.tmx";
 			}
 
 			public static class Templates
@@ -931,42 +933,33 @@ namespace Nez
 			{
 				public static class DungeonPrison
 				{
-					public const string B_1 = @"Content\Tiled\Tilemaps\DungeonPrison\B_1.tmx";
-					public const string BL_1 = @"Content\Tiled\Tilemaps\DungeonPrison\BL_1.tmx";
-					public const string BLR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\BLR_1.tmx";
 					public const string Boss_room = @"Content\Tiled\Tilemaps\DungeonPrison\boss_room.tmx";
-					public const string BR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\BR_1.tmx";
 					public const string Dp_b_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_b_1.tmx";
+					public const string Dp_b_2 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_b_2.tmx";
+					public const string Dp_bl_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_bl_1.tmx";
+					public const string Dp_blr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_blr_1.tmx";
+					public const string Dp_br_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_br_1.tmx";
 					public const string Dp_l_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_l_1.tmx";
+					public const string Dp_lr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_lr_1.tmx";
 					public const string Dp_r_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_r_1.tmx";
 					public const string Dp_t_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_t_1.tmx";
-					public const string Dp_template = @"Content\Tiled\Tilemaps\DungeonPrison\dp_template.tmx";
-					public const string Dp_test = @"Content\Tiled\Tilemaps\DungeonPrison\dp_test.tmx";
-					public const string DP_TR_2 = @"Content\Tiled\Tilemaps\DungeonPrison\DP_TR_2.tmx";
-					public const string L_1 = @"Content\Tiled\Tilemaps\DungeonPrison\L_1.tmx";
+					public const string Dp_tb_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tb_1.tmx";
+					public const string Dp_tbl_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tbl_1.tmx";
+					public const string Dp_tblr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tblr_1.tmx";
+					public const string Dp_tbr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tbr_1.tmx";
+					public const string Dp_tl_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tl_1.tmx";
+					public const string Dp_tlr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tlr_1.tmx";
+					public const string Dp_tr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tr_1.tmx";
 					public const string Left_key_room = @"Content\Tiled\Tilemaps\DungeonPrison\left_key_room.tmx";
-					public const string LR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\LR_1.tmx";
 					public const string Pre_boss_room = @"Content\Tiled\Tilemaps\DungeonPrison\pre_boss_room.tmx";
-					public const string R_1 = @"Content\Tiled\Tilemaps\DungeonPrison\R_1.tmx";
 					public const string Right_key_room = @"Content\Tiled\Tilemaps\DungeonPrison\right_key_room.tmx";
 					public const string Rules = @"Content\Tiled\Tilemaps\DungeonPrison\rules.txt";
-					public const string T_1 = @"Content\Tiled\Tilemaps\DungeonPrison\T_1.tmx";
-					public const string T_2 = @"Content\Tiled\Tilemaps\DungeonPrison\T_2.tmx";
-					public const string TB_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TB_1.tmx";
-					public const string TBL_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TBL_1.tmx";
-					public const string TBLR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TBLR_1.tmx";
-					public const string TBR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TBR_1.tmx";
-					public const string TL_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TL_1.tmx";
-					public const string TLR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TLR_1.tmx";
-					public const string TR_1 = @"Content\Tiled\Tilemaps\DungeonPrison\TR_1.tmx";
 				}
 
 				public static class Hub
 				{
-					public const string Bedroom = @"Content\Tiled\Tilemaps\Hub\bedroom.tmx";
 					public const string Hub_1 = @"Content\Tiled\Tilemaps\Hub\hub_1.tmx";
 					public const string Hub_2 = @"Content\Tiled\Tilemaps\Hub\hub_2.tmx";
-					public const string Puppet_shop = @"Content\Tiled\Tilemaps\Hub\puppet_shop.tmx";
 					public const string Rules = @"Content\Tiled\Tilemaps\Hub\rules.txt";
 				}
 
@@ -977,6 +970,7 @@ namespace Nez
 				public const string Blood_temple_tileset = @"Content\Tiled\Tilesets\blood_temple_tileset.tsx";
 				public const string Dungeon_prison_props = @"Content\Tiled\Tilesets\dungeon_prison_props.tsx";
 				public const string Dungeon_prison_tileset = @"Content\Tiled\Tilesets\dungeon_prison_tileset.tsx";
+				public const string Dungeon_prison_tileset_short_walls = @"Content\Tiled\Tilesets\dungeon_prison_tileset_short_walls.tsx";
 				public const string Prototype_tileset = @"Content\Tiled\Tilesets\prototype_tileset.tsx";
 			}
 

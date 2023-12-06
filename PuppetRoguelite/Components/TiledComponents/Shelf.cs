@@ -45,6 +45,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
 
             _interactable = Entity.AddComponent(new Interactable(OnInteracted, true));
         }

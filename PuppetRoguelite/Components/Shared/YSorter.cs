@@ -49,27 +49,29 @@ namespace PuppetRoguelite.Components.Shared
                         foreach (var renderer in renderers)
                         {
                             //translate entity's bounds to be compatible with the renderer
-                            var rect = _renderable.Bounds;
-                            rect.X -= (node.Point.X * 16 * 24);
-                            rect.Y -= (node.Point.Y * 16 * 24);
+                            //var rect = _renderable.Bounds;
+                            //rect.X -= (node.Point.X * 16 * 24);
+                            //rect.Y -= (node.Point.Y * 16 * 24);
 
                             //translate origin component
                             var origin = _originComponent.Origin;
                             origin.X -= (node.Point.X * 16 * 24);
                             origin.Y -= (node.Point.Y * 16 * 24);
 
-                            //try to get the renderer's above-details layer
-                            if (renderer.TiledMap.TileLayers.TryGetValue("above-details", out var layer))
+                            var rect = new Rectangle((int)origin.X, (int)origin.Y, 1, 1);
+
+                            //try to get the renderer's Front layer
+                            if (renderer.TiledMap.TileLayers.TryGetValue("Front", out var frontLayer))
                             {
-                                if (HandleLayer(layer, rect, origin))
+                                if (HandleLayer(frontLayer, rect, origin))
                                 {
                                     return;
                                 }
                             }
 
-                            if (renderer.TiledMap.TileLayers.TryGetValue("above-furniture", out var aboveFurnitureLayer))
+                            if (renderer.TiledMap.TileLayers.TryGetValue("AboveFront", out var aboveFrontLayer))
                             {
-                                if (HandleLayer(aboveFurnitureLayer, rect, origin))
+                                if (HandleLayer(aboveFrontLayer, rect, origin))
                                 {
                                     return;
                                 }
@@ -86,17 +88,17 @@ namespace PuppetRoguelite.Components.Shared
                         var origin = _originComponent.Origin;
                         var rect = new Rectangle((int)origin.X, (int)origin.Y, 1, 1);
 
-                        if (renderer.TiledMap.TileLayers.TryGetValue("above-details", out var layer))
+                        if (renderer.TiledMap.TileLayers.TryGetValue("Front", out var frontLayer))
                         {
-                            if (HandleLayer(layer, rect, origin))
+                            if (HandleLayer(frontLayer, rect, origin))
                             {
                                 return;
                             }
                         }
 
-                        if (renderer.TiledMap.TileLayers.TryGetValue("above-furniture", out var aboveFurnitureLayer))
+                        if (renderer.TiledMap.TileLayers.TryGetValue("AboveFront", out var aboveFrontLayer))
                         {
-                            if (HandleLayer(aboveFurnitureLayer, rect, origin))
+                            if (HandleLayer(aboveFrontLayer, rect, origin))
                             {
                                 return;
                             }

@@ -5,6 +5,7 @@ using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SaveData.Unlocks;
 using PuppetRoguelite.SceneComponents;
@@ -39,6 +40,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             _renderer.SetRenderLayer(-(int)_renderer.Bounds.Center.Y);
 
             _collider = Entity.AddComponent(new BoxCollider(-16, 0, 32, 16));
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
         }
 
         public override IEnumerator HandleInteraction()

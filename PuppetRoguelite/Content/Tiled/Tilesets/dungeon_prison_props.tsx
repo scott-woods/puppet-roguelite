@@ -56,6 +56,13 @@
    <object id="1" x="0" y="0" width="16" height="11"/>
   </objectgroup>
  </tile>
+ <tile id="275">
+  <animation>
+   <frame tileid="275" duration="100"/>
+   <frame tileid="276" duration="100"/>
+   <frame tileid="277" duration="100"/>
+  </animation>
+ </tile>
  <tile id="283">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="16" height="14"/>

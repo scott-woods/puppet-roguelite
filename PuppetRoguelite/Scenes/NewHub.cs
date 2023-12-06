@@ -39,33 +39,22 @@ namespace PuppetRoguelite.Scenes
             //map renderer
             _mapEntity = CreateEntity("map");
             var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Hub.Hub_2);
-            var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-            mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities" });
+            var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "Walls"));
+            mapRenderer.SetLayersToRender(new[] { "Back", "Walls" });
             mapRenderer.RenderLayer = 1;
             Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));
 
+            //create above map renderer
             var tiledMapDetailsRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
-            tiledMapDetailsRenderer.SetLayersToRender("above-details");
+            var layersToRender = new List<string>();
+            if (map.Layers.Contains("Front"))
+                layersToRender.Add("Front");
+            if (map.Layers.Contains("AboveFront"))
+                layersToRender.Add("AboveFront");
+            tiledMapDetailsRenderer.SetLayersToRender(layersToRender.ToArray());
             tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
             tiledMapDetailsRenderer.Material = Material.StencilWrite();
-            //tiledMapDetailsRenderer.Material.Effect = Content.LoadNezEffect<SpriteAlphaTestEffect>();
-
-            //furniture
-            var furnitureRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "furniture"));
-            furnitureRenderer.SetLayersToRender(new[] { "furniture" });
-            furnitureRenderer.RenderLayer = 1;
-            Flags.SetFlagExclusive(ref furnitureRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
-
-            var tiledMapAboveFurnitureRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
-            tiledMapAboveFurnitureRenderer.SetLayersToRender("above-furniture");
-            tiledMapAboveFurnitureRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
-            tiledMapAboveFurnitureRenderer.Material = Material.StencilWrite();
-
-            var tiledMapPropsRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
-            tiledMapPropsRenderer.SetLayersToRender("props");
-            tiledMapPropsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
-            tiledMapPropsRenderer.Material = Material.StencilWrite();
 
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();

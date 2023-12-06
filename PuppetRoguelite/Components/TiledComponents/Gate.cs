@@ -32,31 +32,31 @@ namespace PuppetRoguelite.Components.TiledComponents
             {
                 switch (orientation)
                 {
-                    case "vertical":
-                        var vTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_vertical_nine_slice);
-                        var sprite = new NinePatchSprite(vTexture, 16, 16, 0, 0);
-                        var nineSliceRenderer = new NineSliceSpriteRenderer(sprite);
+                    case "Horizontal":
+                        var hTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_horizontal);
+                        var hSprite = new NinePatchSprite(hTexture, 16, 16, 0, 0);
+                        var nineSliceRenderer = new NineSliceSpriteRenderer(hSprite);
                         _renderer = Entity.AddComponent(nineSliceRenderer);
                         nineSliceRenderer.Width = TmxObject.Width;
-                        nineSliceRenderer.Height = vTexture.Height;
+                        nineSliceRenderer.Height = hTexture.Height;
                         nineSliceRenderer.SetLocalOffset(new Vector2(-TmxObject.Width / 2, -TmxObject.Height / 2));
                         _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, 16));
                         _collider.SetLocalOffset(new Vector2(0, (TmxObject.Height / 2) - 8));
                         _origin = Entity.AddComponent(new OriginComponent(_collider));
                         _ySorter = Entity.AddComponent(new YSorter(_renderer, _origin));
                         break;
-                    case "horizontal":
-                        var hTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_horizontal_nine_slice);
-                        var hSprite = new NinePatchSprite(hTexture, 0, 0, 16, 16);
-                        var hNineSliceRenderer = new NineSliceSpriteRenderer(hSprite);
+                    case "Vertical":
+                        var vTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_vertical);
+                        var vSprite = new NinePatchSprite(vTexture, 0, 0, 16, 16);
+                        var hNineSliceRenderer = new NineSliceSpriteRenderer(vSprite);
                         _renderer = Entity.AddComponent(hNineSliceRenderer);
-                        hNineSliceRenderer.Width = hTexture.Width;
+                        hNineSliceRenderer.Width = vTexture.Width;
                         hNineSliceRenderer.Height = TmxObject.Height;
                         hNineSliceRenderer.SetLocalOffset(new Vector2(-TmxObject.Width / 2, -TmxObject.Height / 2));
                         _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
                         if (TmxObject.Properties.TryGetValue("Flip", out var flip))
                         {
-                            _renderer.FlipX = flip == "true";
+                            _renderer.FlipX = flip == "True";
                         }
                         _origin = Entity.AddComponent(new OriginComponent(_collider));
                         _ySorter = Entity.AddComponent(new YSorter(_renderer, _origin));
@@ -66,8 +66,10 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //_collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
             //Entity.AddComponent(_collider);
-            _renderer.SetEnabled(false);
-            _collider.SetEnabled(false);
+            //_renderer.SetEnabled(false);
+            //_collider.SetEnabled(false);
+            _renderer.FlipY = true;
+
 
             //TmxObject.Visible = false;
         }

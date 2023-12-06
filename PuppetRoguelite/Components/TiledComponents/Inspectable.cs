@@ -1,6 +1,7 @@
 ﻿using Nez;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.StaticData;
 using System;
 using System.Collections;
@@ -27,6 +28,8 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             Collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
+            Collider.IsTrigger = true;
+            Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
             Interactable = Entity.AddComponent(new Interactable(OnInteracted));
         }
 

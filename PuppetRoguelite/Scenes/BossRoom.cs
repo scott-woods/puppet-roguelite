@@ -60,10 +60,21 @@ namespace PuppetRoguelite.Scenes
             //map renderer
             _mapEntity = CreateEntity("map");
             var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.DungeonPrison.Boss_room);
-            var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "collision"));
-            mapRenderer.SetLayersToRender(new[] { "floor", "details", "entities", "above-details" });
+            var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "Walls"));
+            mapRenderer.SetLayersToRender(new[] { "Back", "Walls" });
             mapRenderer.RenderLayer = 10;
             Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
+
+            //create above map renderer
+            var tiledMapDetailsRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map));
+            var layersToRender = new List<string>();
+            if (map.Layers.Contains("Front"))
+                layersToRender.Add("Front");
+            if (map.Layers.Contains("AboveFront"))
+                layersToRender.Add("AboveFront");
+            tiledMapDetailsRenderer.SetLayersToRender(layersToRender.ToArray());
+            tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
+            tiledMapDetailsRenderer.Material = Material.StencilWrite();
 
             //grid graph
             var gridGraphManager = _mapEntity.AddComponent(new GridGraphManager(mapRenderer));
