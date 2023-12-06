@@ -65,6 +65,11 @@ namespace PuppetRoguelite.Components.Shared
 
         public override void Render(Batcher batcher, Camera camera)
         {
+            if (Entity.TryGetComponent<SpriteAnimator>(out var animator))
+            {
+                RenderLayer = animator.RenderLayer;
+            }
+
             var healthPercentage = (float)_healthComponent.Health / (float)_healthComponent.MaxHealth;
             var healthBarWidth = _width * healthPercentage;
             var position = Entity.Position + _localOffset - new Vector2(_width / 2, 0);

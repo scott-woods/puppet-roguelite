@@ -66,9 +66,8 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //_collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
             //Entity.AddComponent(_collider);
-            //_renderer.SetEnabled(false);
-            //_collider.SetEnabled(false);
-            _renderer.FlipY = true;
+            _renderer.SetEnabled(false);
+            _collider.SetEnabled(false);
 
 
             //TmxObject.Visible = false;

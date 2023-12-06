@@ -17,6 +17,9 @@ namespace PuppetRoguelite.Components.Shared
         //passed in components
         SpriteRenderer _baseRenderer;
 
+        //entity
+        Entity _shadowEntity;
+
         //misc
         Vector2 _offset;
         Vector2 _scale;
@@ -33,12 +36,12 @@ namespace PuppetRoguelite.Components.Shared
             base.Initialize();
 
             //create separate entity for shadow and parent it to main entity
-            var shadowEntity = Entity.Scene.CreateEntity("shadow");
-            shadowEntity.SetParent(Entity);
+            //_shadowEntity = Entity.Scene.CreateEntity("shadow");
+            //_shadowEntity.SetParent(Entity);
 
             //create renderer and add it to shadow entity
             var texture = Game1.Content.LoadTexture(Nez.Content.Textures.Effects.Shadow);
-            _renderer = shadowEntity.AddComponent(new SpriteRenderer(texture));
+            _renderer = Entity.AddComponent(new SpriteRenderer(texture));
             _renderer.SetLocalOffset(_offset);
             _renderer.Transform.SetLocalScale(_scale);
             _renderer.SetRenderLayer(_baseRenderer.RenderLayer + 1);

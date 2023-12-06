@@ -18,10 +18,11 @@ namespace PuppetRoguelite.Components.Shared
         OriginComponent _originComponent;
         List<RenderableComponent> _allRenderables;
 
-        public YSorter(IRenderable renderable, OriginComponent originComponent)
+        public YSorter(IRenderable renderable, OriginComponent originComponent, List<RenderableComponent> allRenderables = null)
         {
             _renderable = renderable;
             _originComponent = originComponent;
+            _allRenderables = allRenderables == null ? new List<RenderableComponent>() : allRenderables;
         }
 
         public override void OnAddedToEntity()
@@ -29,7 +30,7 @@ namespace PuppetRoguelite.Components.Shared
             base.OnAddedToEntity();
 
             var renderables = Entity.GetComponents<RenderableComponent>();
-            _allRenderables = renderables.Where(r => r is not SpriteMime).ToList();
+            //_allRenderables = renderables.Where(r => r is not SpriteMime).ToList();
         }
 
         public void Update()
