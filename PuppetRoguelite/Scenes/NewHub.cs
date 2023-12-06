@@ -40,7 +40,7 @@ namespace PuppetRoguelite.Scenes
             _mapEntity = CreateEntity("map");
             var map = Content.LoadTiledMap(Nez.Content.Tiled.Tilemaps.Hub.Hub_2);
             var mapRenderer = _mapEntity.AddComponent(new TiledMapRenderer(map, "Walls"));
-            mapRenderer.SetLayersToRender(new[] { "Back", "Walls" });
+            mapRenderer.SetLayersToRender(new[] { "Back", "AboveBack", "Walls" });
             mapRenderer.RenderLayer = 1;
             Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
             _mapEntity.AddComponent(new TiledObjectHandler(mapRenderer));

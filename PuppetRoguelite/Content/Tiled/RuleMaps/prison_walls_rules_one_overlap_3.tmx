@@ -4,7 +4,7 @@
   <property name="DeleteTiles" type="bool" value="false"/>
   <property name="MatchInOrder" type="bool" value="true"/>
   <property name="MatchOutsideMap" type="bool" value="false"/>
-  <property name="NoOverlappingOutput" type="bool" value="false"/>
+  <property name="NoOverlappingOutput" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/prototype_tileset.tsx"/>
  <tileset firstgid="5" source=":/automap-tiles.tsx"/>
@@ -132,7 +132,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="4" name="output_Front" width="34" height="37" visible="0">
+ <layer id="4" name="output_Front" width="34" height="37">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,86,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
