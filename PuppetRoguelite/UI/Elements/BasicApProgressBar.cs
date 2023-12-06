@@ -1,4 +1,5 @@
-﻿using Nez.UI;
+﻿using Nez;
+using Nez.UI;
 using PuppetRoguelite.Components.Characters.Player;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,28 @@ namespace PuppetRoguelite.UI.Elements
 {
     public class BasicApProgressBar : ProgressBar
     {
+        const string _barStyle = "progressBar";
+        const string _glowBarStyle = "glowProgressBar";
+
+        Skin _skin;
+
         public BasicApProgressBar(Skin skin, string styleName = null) : base(skin, styleName)
         {
+            _skin = skin;
+
             SetMinMax(0, 1f);
 
             SetStepSize(.01f);
+        }
+
+        public override void Draw(Batcher batcher, float parentAlpha)
+        {
+            if (Value == Max)
+                SetStyle(_skin.Get<ProgressBarStyle>(_glowBarStyle));
+            else
+                SetStyle(_skin.Get<ProgressBarStyle>(_barStyle));
+
+            base.Draw(batcher, parentAlpha);
         }
 
         //public void AddObservers()

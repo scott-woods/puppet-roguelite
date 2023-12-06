@@ -48,7 +48,15 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             get => _actionPoints;
             set
             {
-                _actionPoints = Math.Max(0, Math.Min(value, MaxActionPoints));
+                var newApValue = Math.Max(0, Math.Min(value, MaxActionPoints));
+
+                if (newApValue == MaxActionPoints)
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Ap_full);
+                else if (newApValue > _actionPoints)
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Ap_gain);
+
+                _actionPoints = newApValue;
+
                 Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsChanged, this);
             }
         }

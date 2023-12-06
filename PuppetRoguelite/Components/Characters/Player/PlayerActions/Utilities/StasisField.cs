@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Sprites;
 using Nez.Systems;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Enemies;
@@ -32,15 +33,16 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
         ICoroutine _executionCoroutine;
 
         //components
-        PrototypeSpriteRenderer _targetRenderer;
+        SpriteRenderer _targetRenderer;
         PlayerSim _playerSim;
 
         public override void Prepare()
         {
             base.Prepare();
 
+            var targetTexture = Scene.Content.LoadTexture(Nez.Content.Textures.UI.Crosshair005);
             _targetEntity = Scene.CreateEntity("stasis-field-target");
-            _targetRenderer = _targetEntity.AddComponent(new PrototypeSpriteRenderer(8, 8));
+            _targetRenderer = _targetEntity.AddComponent(new SpriteRenderer(targetTexture));
 
             _playerSim = AddComponent(new PlayerSim());
 

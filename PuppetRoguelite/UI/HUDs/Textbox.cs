@@ -80,7 +80,6 @@ namespace PuppetRoguelite.UI.HUDs
             _innerTable.Add(_text).Grow().Top().Left().SetSpaceLeft(_innerBoxSpacing);
 
             _innerTable.Pack();
-            _innerTable.DebugAll();
         }
 
         public IEnumerator ReadLine(DialogueLine line)

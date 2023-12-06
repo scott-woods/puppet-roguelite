@@ -43,7 +43,7 @@ namespace PuppetRoguelite.Components.Shared
             var texture = Game1.Content.LoadTexture(Nez.Content.Textures.Effects.Shadow);
             _renderer = Entity.AddComponent(new SpriteRenderer(texture));
             _renderer.SetLocalOffset(_offset);
-            _renderer.Transform.SetLocalScale(_scale);
+            //_renderer.Transform.SetLocalScale(_scale);
             _renderer.SetRenderLayer(_baseRenderer.RenderLayer + 1);
         }
 

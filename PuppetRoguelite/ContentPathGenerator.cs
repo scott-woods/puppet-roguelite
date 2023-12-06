@@ -38,6 +38,8 @@ namespace Nez
 				public const string _69_Die_02 = @"Content\Audio\Sounds\69_Die_02.wav";
 				public const string _81_Whip_woosh_1 = @"Content\Audio\Sounds\81_Whip_woosh_1.wav";
 				public const string _86_Whip_hit_03 = @"Content\Audio\Sounds\86_Whip_hit_03.wav";
+				public const string Ap_full = @"Content\Audio\Sounds\ap_full.wav";
+				public const string Ap_gain = @"Content\Audio\Sounds\ap_gain.wav";
 				public const string Attack = @"Content\Audio\Sounds\attack.wav";
 				public const string Attack_speed_boost = @"Content\Audio\Sounds\attack_speed_boost.wav";
 				public const string Attack_speed_boost_end = @"Content\Audio\Sounds\attack_speed_boost_end.wav";
@@ -168,7 +170,6 @@ namespace Nez
 			{
 				public const string Blood_temple_tileset = @"Content\Textures\Tilesets\blood_temple_tileset.png";
 				public const string Dungeon_prison_props = @"Content\Textures\Tilesets\dungeon_prison_props.png";
-				public const string Dungeon_prison_tileset = @"Content\Textures\Tilesets\dungeon_prison_tileset.png";
 				public const string Dungeon_prison_tileset_short_walls = @"Content\Textures\Tilesets\dungeon_prison_tileset_short_walls.png";
 				public const string Prototype_tileset = @"Content\Textures\Tilesets\prototype_tileset.png";
 			}
@@ -895,6 +896,7 @@ namespace Nez
 
 				public const string Borders_and_hp = @"Content\Textures\UI\borders_and_hp.png";
 				public const string Borders_and_hp_no_glow = @"Content\Textures\UI\borders_and_hp_no_glow.png";
+				public const string Crosshair005 = @"Content\Textures\UI\crosshair005.png";
 				public const string Crosshair038 = @"Content\Textures\UI\crosshair038.png";
 				public const string Glow_sliders = @"Content\Textures\UI\glow_sliders.png";
 				public const string Healthbar = @"Content\Textures\UI\healthbar.png";
@@ -903,6 +905,8 @@ namespace Nez
 				public const string Heartspritefullhealth = @"Content\Textures\UI\heart-sprite-full-health.png";
 				public const string Heartspritehealth1 = @"Content\Textures\UI\heart-sprite-health-1.png";
 				public const string Heartspritehealth2 = @"Content\Textures\UI\heart-sprite-health-2.png";
+				public const string ProgressBar = @"Content\Textures\UI\progressBar.png";
+				public const string ProgressBarGlow = @"Content\Textures\UI\progressBarGlow.png";
 				public const string Sliders = @"Content\Textures\UI\sliders.png";
 			}
 
@@ -914,12 +918,7 @@ namespace Nez
 			{
 				public const string Collision_rules = @"Content\Tiled\RuleMaps\collision_rules.tmx";
 				public const string Prison_floor_rules_one_overlap = @"Content\Tiled\RuleMaps\prison_floor_rules_one_overlap.tmx";
-				public const string Prison_floor_rules_two_overlap = @"Content\Tiled\RuleMaps\prison_floor_rules_two_overlap.tmx";
-				public const string Prison_walls_rules_one_overlap = @"Content\Tiled\RuleMaps\prison_walls_rules_one_overlap.tmx";
-				public const string Prison_walls_rules_one_overlap_2 = @"Content\Tiled\RuleMaps\prison_walls_rules_one_overlap_2.tmx";
 				public const string Prison_walls_rules_one_overlap_3 = @"Content\Tiled\RuleMaps\prison_walls_rules_one_overlap_3.tmx";
-				public const string Prison_walls_rules_two_overlap = @"Content\Tiled\RuleMaps\prison_walls_rules_two_overlap.tmx";
-				public const string Wooden_floor_rules = @"Content\Tiled\RuleMaps\wooden_floor_rules.tmx";
 				public const string Wooden_floor_rules_2 = @"Content\Tiled\RuleMaps\wooden_floor_rules_2.tmx";
 			}
 
@@ -958,7 +957,6 @@ namespace Nez
 
 				public static class Hub
 				{
-					public const string Hub_1 = @"Content\Tiled\Tilemaps\Hub\hub_1.tmx";
 					public const string Hub_2 = @"Content\Tiled\Tilemaps\Hub\hub_2.tmx";
 					public const string Rules = @"Content\Tiled\Tilemaps\Hub\rules.txt";
 				}
@@ -969,7 +967,6 @@ namespace Nez
 			{
 				public const string Blood_temple_tileset = @"Content\Tiled\Tilesets\blood_temple_tileset.tsx";
 				public const string Dungeon_prison_props = @"Content\Tiled\Tilesets\dungeon_prison_props.tsx";
-				public const string Dungeon_prison_tileset = @"Content\Tiled\Tilesets\dungeon_prison_tileset.tsx";
 				public const string Dungeon_prison_tileset_short_walls = @"Content\Tiled\Tilesets\dungeon_prison_tileset_short_walls.tsx";
 				public const string Prototype_tileset = @"Content\Tiled\Tilesets\prototype_tileset.tsx";
 			}

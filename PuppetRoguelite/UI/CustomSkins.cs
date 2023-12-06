@@ -79,6 +79,39 @@ namespace PuppetRoguelite.UI
                 ImageOver = skin.GetDrawable("Style 3 Icon 324"),
             });
 
+            //progress bar
+            var barTexture = Game1.Content.LoadTexture(Nez.Content.Textures.UI.ProgressBar);
+            var barBgSprite = new Sprite(barTexture, new Rectangle(0, 0, 64, 16));
+            var barKnobBeforeSprite = new Sprite(barTexture, new Rectangle(0, 16, 64, 16));
+            var barBg = new SpriteDrawable(barBgSprite);
+            barBg.MinHeight = 32;
+            barBg.LeftWidth = 1;
+            barBg.RightWidth = 1;
+            var barKnobBefore = new SpriteDrawable(barKnobBeforeSprite);
+            barKnobBefore.MinHeight = 32;
+            barKnobBefore.MinWidth = 0;
+            skin.Add("progressBar", new ProgressBarStyle()
+            {
+                Background = barBg,
+                KnobBefore = barKnobBefore,
+            });
+
+            var glowBarTexture = Game1.Content.LoadTexture(Nez.Content.Textures.UI.ProgressBarGlow);
+            var glowBarBgSprite = new Sprite(glowBarTexture, new Rectangle(0, 0, 64, 16));
+            var glowBarKnobBeforeSprite = new Sprite(glowBarTexture, new Rectangle(0, 16, 64, 16));
+            var glowBarBg = new SpriteDrawable(glowBarBgSprite);
+            glowBarBg.MinHeight = 48;
+            glowBarBg.LeftWidth = 1;
+            glowBarBg.RightWidth = 1;
+            var glowBarKnobBefore = new SpriteDrawable(glowBarKnobBeforeSprite);
+            glowBarKnobBefore.MinHeight = 48;
+            glowBarKnobBefore.MinWidth = 0;
+            skin.Add("glowProgressBar", new ProgressBarStyle()
+            {
+                Background = glowBarBg,
+                KnobBefore = glowBarKnobBefore,
+            });
+
             //progress bar sprites
             var progressBarTextures = Game1.Content.LoadTexture(Nez.Content.Textures.UI.Sliders);
             var progressBarSprites = Sprite.SpritesFromAtlas(progressBarTextures, 35, 16);
@@ -201,11 +234,11 @@ namespace PuppetRoguelite.UI
                 ImageOver = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
             });
 
-            skin.Add("progressBar", new ProgressBarStyle()
-            {
-                Background = new PrimitiveDrawable(1, 16, Color.LightGray),
-                KnobBefore = new PrimitiveDrawable(1, 16, Color.Green)
-            });
+            //skin.Add("progressBar", new ProgressBarStyle()
+            //{
+            //    Background = new PrimitiveDrawable(1, 16, Color.LightGray),
+            //    KnobBefore = new PrimitiveDrawable(1, 16, Color.Green)
+            //});
 
             //progress bar
             //for (int i = 0; i < 10; i++)

@@ -35,7 +35,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         //components
         PlayerSim _playerSim;
         CircleHitbox _hitbox;
-        PrototypeSpriteRenderer _target;
+        SpriteRenderer _target;
         SpriteTrail _trail;
         SpriteAnimator _animator;
         DirectionByMouse _dirByMouse;
@@ -64,7 +64,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _hitbox.SetEnabled(false);
 
             //target that shows where dash will go
-            _target = AddComponent(new PrototypeSpriteRenderer(8, 8));
+            var targetTexture = Scene.Content.LoadTexture(Nez.Content.Textures.UI.Crosshair005);
+            _target = AddComponent(new SpriteRenderer(targetTexture));
 
             //get animator from player sim
             _animator = _playerSim.GetComponent<SpriteAnimator>();
@@ -96,6 +97,9 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         public override void Execute()
         {
             base.Execute();
+
+            //disable target
+            _target.SetEnabled(false);
 
             //move to initial position
             Position = InitialPosition;

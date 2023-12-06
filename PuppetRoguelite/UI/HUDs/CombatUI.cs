@@ -127,7 +127,7 @@ namespace PuppetRoguelite.UI.HUDs
                 //setup ap progress bars
                 for (int i = 0; i < PlayerController.Instance.ActionPointComponent.MaxActionPoints; i++)
                 {
-                    var bar = new BasicApProgressBar(_basicSkin);
+                    var bar = new BasicApProgressBar(_basicSkin, "progressBar");
                     _apProgressBars.Add(bar);
                     _apTable.Add(bar).GrowX();
                 }
