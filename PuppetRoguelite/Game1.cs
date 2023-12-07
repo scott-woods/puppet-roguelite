@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Systems;
+using Nez.UI;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.StaticData;

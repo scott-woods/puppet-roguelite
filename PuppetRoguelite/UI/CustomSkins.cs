@@ -234,6 +234,12 @@ namespace PuppetRoguelite.UI
                 ImageOver = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Icons.Plus_icon_down)),
             });
 
+            skin.Add("tooltip", new TextTooltipStyle()
+            {
+                LabelStyle = skin.Get<LabelStyle>("default_md"),
+                Background = skin.GetNinePatchDrawable("np_inventory_01")
+            });
+
             //skin.Add("progressBar", new ProgressBarStyle()
             //{
             //    Background = new PrimitiveDrawable(1, 16, Color.LightGray),

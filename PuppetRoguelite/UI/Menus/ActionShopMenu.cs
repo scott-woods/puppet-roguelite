@@ -60,6 +60,8 @@ namespace PuppetRoguelite.UI.Menus
             //set stage action key
             Stage.KeyboardActionKey = Keys.E;
 
+            TooltipManager.GetInstance().InitialTime = 1;
+
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             //arrange elements
@@ -233,6 +235,9 @@ namespace PuppetRoguelite.UI.Menus
                 listTable.Add(button).Left();
                 listTable.Row();
                 buttonList.Add(button);
+
+                //var toolTip = new TextTooltip("test", button, _basicSkin);
+                //Stage.AddElement(toolTip);
             }
         }
 

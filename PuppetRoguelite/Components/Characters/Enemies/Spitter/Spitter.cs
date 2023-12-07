@@ -21,6 +21,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         float _fastMoveSpeed = 75f;
         float _moveSpeed = 50f;
         float _slowMoveSpeed = 25f;
+        float _cooldown = 3f;
 
         //components
         public Mover Mover;
@@ -43,6 +44,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         public SpitAttack SpitAttack;
         public EnemyAction<Spitter> ActiveAction;
 
+        //misc
+        float _cooldownTimer;
+
         public Spitter(Entity mapEntity) : base(mapEntity)
         {
         }
@@ -54,6 +58,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             AddComponents();
             AddAnimations();
             AddActions();
+
+            _cooldownTimer = _cooldown;
         }
 
         void AddComponents()
@@ -130,6 +136,54 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             SpitAttack = Entity.AddComponent(new SpitAttack(this));
         }
 
+        public override BehaviorTree<Spitter> CreateSubTree()
+        {
+            var tree = BehaviorTreeBuilder<Spitter>.Begin(this)
+                .Selector(AbortTypes.Self)
+                    .ConditionalDecorator(s => !s.HasLineOfSight() || !s.CanAttack(), true)
+                        .Sequence()
+                            .Action(s => s.Move())
+                        .EndComposite()
+                    .Sequence()
+                        .ParallelSelector()
+                            .WaitAction(1f)
+                            .Action(s => s.Idle())
+                        .EndComposite()
+                        .Action(s => s.ExecuteAction(SpitAttack))
+                        .Action(s => s.ResetTimer())
+                    .EndComposite()
+                .EndComposite()
+                .Build();
+
+            tree.UpdatePeriod = 0;
+            return tree;
+        }
+
+        bool HasLineOfSight()
+        {
+            var cast = Physics.Linecast(Entity.Position, PlayerController.Instance.Entity.Position, 1 << (int)PhysicsLayers.Environment);
+            return cast.Collider == null;
+        }
+
+        bool CanAttack()
+        {
+            return _cooldownTimer <= 0;
+        }
+
+        #region TASKS
+
+        TaskStatus ResetTimer()
+        {
+            _cooldownTimer = _cooldown;
+            return TaskStatus.Success;
+        }
+
+        TaskStatus ExecuteAction(EnemyAction<Spitter> action)
+        {
+            ActiveAction = action;
+            return action.Execute();
+        }
+
         public override TaskStatus AbortActions()
         {
             ActiveAction?.Abort();
@@ -147,88 +201,68 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             return TaskStatus.Running;
         }
 
-        public override BehaviorTree<Spitter> CreateSubTree()
+        TaskStatus Move()
         {
-            var tree = BehaviorTreeBuilder<Spitter>.Begin(this)
-                .Sequence()
-                    .ParallelSelector()
-                        .WaitAction(Nez.Random.Range(3f, 5f)) //after certain time, fire no matter where we are
-                        .Action(s =>
-                        {
-                            //get dist to player
-                            if (PlayerController.Instance.Entity == null) return TaskStatus.Failure;
-                            var dist = Math.Abs(Vector2.Distance(PlayerController.Instance.Entity.Position, Entity.Position));
+            //handle cooldown timer
+            if (HasLineOfSight())
+                _cooldownTimer -= Time.DeltaTime;
+            else
+            {
+                Pathfinder.FollowPath(PlayerController.Instance.Entity.Position);
+                VelocityComponent.Move(_fastMoveSpeed);
+                if (!Animator.IsAnimationActive("Move"))
+                    Animator.Play("Move");
+                return TaskStatus.Running;
+            }
 
-                            //determine where to move and how fast
-                            float speed = 0;
-                            Vector2 direction;
-                            if (dist <= 64) //player too close
-                            {
-                                speed = _fastMoveSpeed;
-                                direction = Entity.Position - PlayerController.Instance.Entity.Position;
-                            }
-                            else if (dist >= 96 && dist <= 128)
-                            {
-                                speed = _slowMoveSpeed;
-                                direction = PlayerController.Instance.Entity.Position - Entity.Position;
-                            }
-                            else if (dist >= 192)
-                            {
-                                speed = _moveSpeed;
-                                direction = PlayerController.Instance.Entity.Position - Entity.Position;
-                            }
-                            else
-                            {
-                                speed = 0;
-                                direction = PlayerController.Instance.Entity.Position - Entity.Position;
-                            }
+            //get dist to player
+            if (PlayerController.Instance.Entity == null) return TaskStatus.Failure;
+            var dist = Math.Abs(Vector2.Distance(PlayerController.Instance.Entity.Position, Entity.Position));
 
-                            //normalize and set direction
-                            direction.Normalize();
-                            VelocityComponent.SetDirection(direction);
+            //determine where to move and how fast
+            float speed = 0;
+            Vector2 direction;
+            if (dist <= 64) //player too close
+            {
+                speed = _fastMoveSpeed;
+                direction = Entity.Position - PlayerController.Instance.Entity.Position;
+            }
+            else if (dist >= 96 && dist <= 128)
+            {
+                speed = _slowMoveSpeed;
+                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+            }
+            else if (dist >= 192)
+            {
+                speed = _moveSpeed;
+                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+            }
+            else
+            {
+                speed = 0;
+                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+            }
 
-                            //play idle or move animation
-                            var anim = speed == 0 ? "Idle" : "Move";
-                            if (Animator.CurrentAnimationName != anim)
-                            {
-                                Animator.Play(anim);
-                            }
+            //normalize and set direction
+            direction.Normalize();
+            VelocityComponent.SetDirection(direction);
 
-                            //move
-                            if (speed != 0)
-                            {
-                                VelocityComponent.Move(speed);
-                            }
+            //play idle or move animation
+            var anim = speed == 0 ? "Idle" : "Move";
+            if (Animator.CurrentAnimationName != anim)
+            {
+                Animator.Play(anim);
+            }
 
-                            return TaskStatus.Running;
-                        })
-                    .EndComposite()
-                    .ParallelSelector()
-                        .WaitAction(1f)
-                        .Action(s =>
-                        {
-                            var dir = PlayerController.Instance.Entity.Position - Entity.Position;
-                            VelocityComponent.SetDirection(dir);
-                            if (Animator.CurrentAnimationName != "Idle")
-                            {
-                                Animator.Play("Idle");
-                            }
-                            return TaskStatus.Running;
-                        })
-                    .EndComposite()
-                    //execute attack
-                    .Action(s => s.ExecuteAction(SpitAttack))
-                .EndComposite()
-            .Build();
+            //move
+            if (speed != 0)
+            {
+                VelocityComponent.Move(speed);
+            }
 
-            tree.UpdatePeriod = 0;
-            return tree;
+            return TaskStatus.Running;
         }
 
-        TaskStatus ExecuteAction(EnemyAction<Spitter> action)
-        {
-            ActiveAction = action;
-            return action.Execute();
-        }
+        #endregion
     }
 }
