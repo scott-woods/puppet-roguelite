@@ -17,8 +17,10 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
 {
     public class MeleeAttack : Component, IUpdatable
     {
+        //emitter
         public Emitter<MeleeAttackEvents, int> Emitter = new Emitter<MeleeAttackEvents, int>();
 
+        //constants
         const float _initialMoveSpeed = 170f;
         const float _finalMoveSpeed = 0f;
         const float _finisherDelay = .08f;
@@ -26,6 +28,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
         const float _normalPushForce = 1f;
         const float _finisherPushForce = 1.5f;
         const int _movementFrames = 3; //the number of frames that we are moving for
+        const float _hitboxOffset = 12f;
 
         public float Speed = 1f;
         float _originalAnimatorSpeed;
@@ -34,7 +37,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
 
         int _comboCounter = 0;
         bool _continueCombo = false;
-        float _hitboxOffset = 12f;
         float _elapsedTime = 0f;
         bool _isAttacking = false;
         bool _shouldPerformFinisher = false;
@@ -51,6 +53,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
         //added components
         CircleHitbox _hitbox;
 
+        //list of colliders hit during attack
         List<Collider> _hitColliders = new List<Collider>();
 
         public MeleeAttack(SpriteAnimator animator, VelocityComponent velocityComponent)
@@ -293,20 +296,34 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
 
             //reset
-            _comboCounter = 0;
-            _isAttacking = false;
-            _elapsedTime = 0;
-            _shouldPerformFinisher = false;
-            _continueCombo = false;
-            _hitbox.SetEnabled(false);
-            _animator.Speed = _originalAnimatorSpeed;
+            Reset();
 
             _completedCallback?.Invoke();
         }
 
+        void Reset()
+        {
+            //animator
+            _animator.Speed = _originalAnimatorSpeed != 0 ? _originalAnimatorSpeed : 1f;
+            _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
+
+            //fields
+            _comboCounter = 0;
+            _continueCombo = false;
+            _elapsedTime = 0f;
+            _isAttacking = false;
+            _shouldPerformFinisher = false;
+
+            //hitbox
+            _hitbox.SetEnabled(false);
+
+            //clear hit colliders
+            _hitColliders.Clear();
+        }
+
         public void CancelAttack()
         {
-
+            Reset();
         }
     }
 

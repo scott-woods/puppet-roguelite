@@ -102,10 +102,10 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         protected override void StartAction()
         {
-            _executionCoroutine = _coroutineManager.StartCoroutine(ExecutionCoroutine());
+            _executionCoroutine = _coroutineManager.StartCoroutine(ChainBotMeleeExecutionCoroutine());
         }
 
-        IEnumerator ExecutionCoroutine()
+        IEnumerator ChainBotMeleeExecutionCoroutine()
         {
             var id = _enemy.Id;
             //Debug.Log($"{id}: transitioning to charge");
@@ -123,9 +123,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             _attackPlayer = null;
             //Debug.Log($"{id}: finished attack player");
 
-            Reset();
-
             HandleActionFinished();
+            Reset();
         }
 
         IEnumerator TransitionToCharge()

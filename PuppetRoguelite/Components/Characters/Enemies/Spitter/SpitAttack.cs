@@ -30,6 +30,10 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
                 //if haven't launched yet
                 if (!_hasLaunchedProjectile)
                 {
+                    //ensure animation is running
+                    if (_enemy.Animator.CurrentAnimationName != "Attack")
+                        _enemy.Animator.Play("Attack");
+
                     //if in the correct animation frame
                     if (_enemy.Animator.CurrentAnimationName == "Attack" && _enemy.Animator.CurrentFrame == 3)
                     {

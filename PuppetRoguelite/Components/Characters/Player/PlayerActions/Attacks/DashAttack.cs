@@ -2,33 +2,27 @@
 using Nez;
 using Nez.Sprites;
 using Nez.Systems;
-using Nez.Textures;
-using Nez.UI;
-using PuppetRoguelite.Components.Characters;
-using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Enums;
-using PuppetRoguelite.Tools;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
     [PlayerActionInfo("Dash", 2, PlayerActionCategory.Attack)]
     public class DashAttack : PlayerAction
     {
-        int _damage = 6;
-        int _range = 48;
-        int _startFrame = 0;
+        //constants
+        const int _damage = 6;
+        const int _range = 48;
+        const int _startFrame = 0;
         int[] _hitboxActiveFrames = new int[] { 0 };
-        bool _isAttacking = false;
 
+        //misc
+        bool _isAttacking = false;
         Vector2 _direction = Vector2.One;
         Vector2 _initialOriginPos;
 
@@ -43,17 +37,20 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         //coroutines
         CoroutineManager _coroutineManager = new CoroutineManager();
         ICoroutine _simulationLoop;
-        ICoroutine _execution;
+        ICoroutine _dashAttackExecutionCoroutine;
+        ICoroutine _executeDashCoroutine;
 
         public override void Prepare()
         {
             base.Prepare();
 
+            //set final position
             FinalPosition = Position + _direction * _range;
 
             //player sim
             _playerSim = AddComponent(new PlayerSim());
 
+            //set initial origin pos
             _initialOriginPos = _playerSim.OriginComponent.Origin;
 
             //hitbox
@@ -70,12 +67,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //get animator from player sim
             _animator = _playerSim.GetComponent<SpriteAnimator>();
             _animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
-            //var dashTexture = Core.Scene.Content.LoadTexture(Content.Textures.Characters.Player.Sci_fi_player_with_sword);
-            //var dashSprites = Sprite.SpritesFromAtlas(dashTexture, 64, 65);
-            //_animator.AddAnimation("DashAttackRight", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 4, 4, 4, 5, 6, 7, 7, 7 }, true));
-            //_animator.AddAnimation("DashAttackLeft", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 13, 13, 13, 14, 15, 16, 16, 16 }, true));
-            //_animator.AddAnimation("DashAttackDown", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 22, 22, 22, 23, 24, 25, 25, 25 }, true));
-            //_animator.AddAnimation("DashAttackUp", AnimatedSpriteHelper.GetSpriteArray(dashSprites, new List<int>() { 31, 31, 31, 32, 33, 34, 34, 34 }, true));
 
             //sprite trail
             _trail = AddComponent(new SpriteTrail(_animator));
@@ -85,10 +76,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
             //dir by mouse
             _dirByMouse = AddComponent(new DirectionByMouse(_initialOriginPos));
-
-            //start playing animation
-            //var animation = GetNextAnimation();
-            //_animator.Play(animation);
 
             //start sim loop
             _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
@@ -110,28 +97,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //_animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
             //execute
-            _execution = _coroutineManager.StartCoroutine(ExecutionCoroutine());
-        }
-
-        IEnumerator ExecutionCoroutine()
-        {
-            //idle for a moment
-            _animator.Speed = 1f;
-            _playerSim.Idle(_dirByMouse.CurrentDirection);
-            yield return Coroutine.WaitForSeconds(.2f);
-
-            var dashExecution = _coroutineManager.StartCoroutine(ExecuteDash());
-            yield return dashExecution;
-
-            _execution = null;
-            _simulationLoop = null;
-            HandleExecutionFinished();
-        }
-
-        void OnAnimationFinished(string animationName)
-        {
-            _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
-            _isAttacking = false;
+            _dashAttackExecutionCoroutine = _coroutineManager.StartCoroutine(DashAttackExecutionCoroutine());
         }
 
         public override void Update()
@@ -145,11 +111,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //handle confirm
                 if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
                 {
-                    _animator.Stop();
-                    _coroutineManager.StopAllCoroutines();
-                    _execution = null;
-                    _simulationLoop = null;
-                    _isAttacking = false;
+                    Reset();
                     HandlePreparationFinished(FinalPosition);
                     return;
                 }
@@ -158,15 +120,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
                     Debug.Log("direction change");
-                    _coroutineManager.StopAllCoroutines();
-
-                    //stop animator
-                    _animator.Stop();
-
-                    //reset position
-                    Position = InitialPosition;
-
-                    _isAttacking = false;
+                    Reset();
 
                     //restart sim loop
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
@@ -193,13 +147,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                     range--;
                 }
 
-                //position player at their origin instead of by entity
-                //if (TryGetComponent<OriginComponent>(out var originComponent))
-                //{
-                //    var diff = Position - originComponent.Origin;
-                //    newFinalPos += diff;
-                //}
-
                 FinalPosition = new Vector2((float)Math.Round(newFinalPos.X), (float)Math.Round(newFinalPos.Y));
 
                 //update target
@@ -216,17 +163,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 }
                 else _hitbox.SetEnabled(false);
             }
-
-            //if (_animator.IsRunning)
-            //{
-            //    var animation = GetNextAnimation();
-            //    if (_animator.CurrentAnimationName != animation)
-            //    {
-            //        var frame = _animator.CurrentFrame;
-            //        _animator.Play(animation, SpriteAnimator.LoopMode.Once);
-            //        _animator.CurrentFrame = frame;
-            //    }
-            //}
         }
 
         IEnumerator SimulationLoop()
@@ -240,8 +176,9 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
                 //dash
                 _animator.Speed = 1f;
-                _execution = _coroutineManager.StartCoroutine(ExecuteDash());
-                yield return _execution;
+                _executeDashCoroutine = _coroutineManager.StartCoroutine(ExecuteDash());
+                yield return _executeDashCoroutine;
+                _executeDashCoroutine = null;
 
                 //idle at end point for a moment
                 _animator.Speed = 1f;
@@ -253,6 +190,21 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             }
         }
 
+        IEnumerator DashAttackExecutionCoroutine()
+        {
+            //idle for a moment
+            _animator.Speed = 1f;
+            _playerSim.Idle(_dirByMouse.CurrentDirection);
+            yield return Coroutine.WaitForSeconds(.2f);
+
+            _executeDashCoroutine = _coroutineManager.StartCoroutine(ExecuteDash());
+            yield return _executeDashCoroutine;
+            _executeDashCoroutine = null;
+
+            HandleExecutionFinished();
+            Reset();
+        }
+
         IEnumerator ExecuteDash()
         {
             _isAttacking = true;
@@ -260,12 +212,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             var animation = GetNextAnimation();
             _animator.Play(animation, SpriteAnimator.LoopMode.Once);
             _animator.OnAnimationCompletedEvent += OnAnimationFinished;
-
-            //wait to reach frame where movement should start
-            //while (_animator.CurrentFrame != _startFrame)
-            //{
-            //    yield return null;
-            //}
 
             //if not in prep mode, play sound
             if (State == PlayerActionState.Executing)
@@ -297,22 +243,45 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             }
         }
 
+        void OnAnimationFinished(string animationName)
+        {
+            _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
+            _isAttacking = false;
+        }
+
         string GetNextAnimation()
         {
             var angle = MathHelper.ToDegrees(Mathf.AngleBetweenVectors(InitialPosition, FinalPosition));
             angle = (angle + 360) % 360;
-            //var animation = "DashAttackRight";
-            //if (angle >= 45 && angle < 135) animation = "DashAttackDown";
-            //else if (angle >= 135 && angle < 225) animation = "DashAttackLeft";
-            //else if (angle >= 225 && angle < 315) animation = "DashAttackUp";
             var animation = "Thrust";
             if (angle >= 45 && angle < 135) animation = "ThrustDown";
             else if (angle >= 225 && angle < 315) animation = "ThrustUp";
 
-            //if (angle >= 135 && angle < 225) _animator.FlipX = true;
-            //else _animator.FlipX = false;
-
             return animation;
+        }
+
+        void Reset()
+        {
+            //handle coroutines
+            _simulationLoop?.Stop();
+            _simulationLoop = null;
+            _executeDashCoroutine?.Stop();
+            _executeDashCoroutine = null;
+            _dashAttackExecutionCoroutine?.Stop();
+            _dashAttackExecutionCoroutine = null;
+
+            //fields
+            _isAttacking = false;
+
+            //hitbox
+            _hitbox.SetEnabled(false);
+
+            //reset position
+            Position = InitialPosition;
+
+            //animator
+            _animator.Stop();
+            _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
         }
     }
 }
