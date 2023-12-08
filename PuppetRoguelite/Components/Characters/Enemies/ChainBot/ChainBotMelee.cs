@@ -18,7 +18,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 {
     public class ChainBotMelee : EnemyAction<ChainBot>, IUpdatable
     {
-        const int _damage = 3;
+        const int _damage = 2;
         Vector2 _offset = new Vector2(24, 0);
         List<int> _hitboxActiveFrames = new List<int> { 0, 4 };
 

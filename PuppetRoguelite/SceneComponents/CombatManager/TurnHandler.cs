@@ -176,7 +176,11 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
             action.Destroy();
 
             //reenable sim and real player
-            _playerSimEntity.SetEnabled(true);
+            if (_playerSimEntity.Position == PlayerController.Instance.Entity.Position)
+            {
+                _playerSimEntity.SetEnabled(false);
+            }
+            else _playerSimEntity.SetEnabled(true);
             PlayerController.Instance.Entity.SetEnabled(true);
 
             //reenable last menu

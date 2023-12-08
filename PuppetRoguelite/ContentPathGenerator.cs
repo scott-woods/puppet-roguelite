@@ -71,6 +71,8 @@ namespace Nez
 				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
 				public const string Player_teleport = @"Content\Audio\Sounds\player_teleport.wav";
 				public const string Purchase = @"Content\Audio\Sounds\purchase.wav";
+				public const string Quickshot_draw = @"Content\Audio\Sounds\quickshot_draw.wav";
+				public const string Quickshot_fire = @"Content\Audio\Sounds\quickshot_fire.wav";
 				public const string Small_lightning = @"Content\Audio\Sounds\small_lightning.wav";
 				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.wav";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
@@ -136,17 +138,21 @@ namespace Nez
 					public const string Hit = @"Content\Textures\Characters\OrbMage\hit.png";
 					public const string Idle = @"Content\Textures\Characters\OrbMage\idle.png";
 					public const string Move = @"Content\Textures\Characters\OrbMage\move.png";
+					public const string SweepAttackwithVFX = @"Content\Textures\Characters\OrbMage\Sweep Attack with VFX.png";
 					public const string Sweepattack = @"Content\Textures\Characters\OrbMage\sweep attack.png";
 					public const string VFXforSweep = @"Content\Textures\Characters\OrbMage\VFX for Sweep.png";
 				}
 
 				public static class Player
 				{
+					public const string Gun1 = @"Content\Textures\Characters\Player\gun1.png";
 					public const string Hooded_knight_attack = @"Content\Textures\Characters\Player\hooded_knight_attack.png";
 					public const string Hooded_knight_death = @"Content\Textures\Characters\Player\hooded_knight_death.png";
 					public const string Hooded_knight_hurt = @"Content\Textures\Characters\Player\hooded_knight_hurt.png";
 					public const string Hooded_knight_idle = @"Content\Textures\Characters\Player\hooded_knight_idle.png";
 					public const string Hooded_knight_run = @"Content\Textures\Characters\Player\hooded_knight_run.png";
+					public const string Player_gun_projectile = @"Content\Textures\Characters\Player\player_gun_projectile.png";
+					public const string Sci_fi_player_no_sword = @"Content\Textures\Characters\Player\sci_fi_player_no_sword.png";
 					public const string Sci_fi_player_with_sword = @"Content\Textures\Characters\Player\sci_fi_player_with_sword.png";
 				}
 

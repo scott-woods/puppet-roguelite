@@ -82,17 +82,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
                     return;
                 }
 
-                //if (Hitbox.CollidesWithAny(out var hitboxResult))
-                //{
-                //    Burst();
-                //    return;
-                //}
-                //else if (DestroyCollider.CollidesWithAny(out var destroyColliderResult))
-                //{
-                //    Burst();
-                //    return;
-                //}
-
                 if (Mover.Move(_direction * _speed * Time.DeltaTime))
                 {
                     Burst();
@@ -115,6 +104,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         void OnBurstAnimationCompleted(string animationName)
         {
             Animator.OnAnimationCompletedEvent -= OnBurstAnimationCompleted;
+            Animator.SetEnabled(false);
             Entity.Destroy();
         }
     }

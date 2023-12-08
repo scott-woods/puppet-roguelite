@@ -23,7 +23,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         //stats
         float _moveSpeed = 75f;
-        int _maxHp = 12;
+        int _maxHp = 15;
 
         //actions
         ChainBotMelee _chainBotMelee;

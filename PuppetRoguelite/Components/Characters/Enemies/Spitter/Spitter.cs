@@ -17,7 +17,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
     public class Spitter : Enemy<Spitter>
     {
         //stats
-        int _maxHp = 10;
+        int _maxHp = 12;
         float _fastMoveSpeed = 75f;
         float _moveSpeed = 50f;
         float _slowMoveSpeed = 25f;
