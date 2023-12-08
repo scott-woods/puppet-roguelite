@@ -205,11 +205,11 @@
             }
         },
         "Tilemaps/Hub/hub_2.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 3,
+            "scale": 1,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 835.6666666666666,
-                "y": 438.66666666666663
+                "x": 306.5,
+                "y": 459
             }
         },
         "Tilesets/tech_shop.tsx": {

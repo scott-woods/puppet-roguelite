@@ -40,6 +40,15 @@ namespace PuppetRoguelite.Components.Shared
             _gridGraphManager = Entity.Scene.FindComponentsOfType<GridGraphManager>().FirstOrDefault(g => g.Entity == MapEntity);
         }
 
+        public override void OnRemovedFromEntity()
+        {
+            foreach (var point in _debugPoints)
+            {
+                point.Destroy();
+            }
+            _debugPoints.Clear();
+        }
+
         /// <summary>
         /// follow a path to a target. returns true when the entity is within a set distance of the target
         /// </summary>
@@ -48,13 +57,16 @@ namespace PuppetRoguelite.Components.Shared
         /// <returns></returns>
         public bool FollowPath(Vector2 target, bool applySmoothing = true, float interval = .5f)
         {
+            //get origin from origin component
             var origin = _originComponent.Origin;
 
+            //if within range of target, return true
             if (Math.Abs(Vector2.Distance(origin, target)) <= _targetDesiredDistance)
             {
                 return true;
             }
 
+            //check if active and handle timer if necessary
             if (!_active) return false;
             else if (interval > 0)
             {
@@ -68,18 +80,18 @@ namespace PuppetRoguelite.Components.Shared
             //get basic path on grid
             var path = _gridGraphManager.FindPath(origin, target);
 
-            //foreach (var point in _debugPoints)
-            //{
-            //    point.Destroy();
-            //}
-            //_debugPoints.Clear();
-            //foreach (var point in path)
-            //{
-            //    var ent = Entity.Scene.CreateEntity("path-point");
-            //    ent.SetPosition(point);
-            //    ent.AddComponent(new PrototypeSpriteRenderer(2, 2));
-            //    _debugPoints.Add(ent);
-            //}
+            foreach (var point in _debugPoints)
+            {
+                point.Destroy();
+            }
+            _debugPoints.Clear();
+            foreach (var point in path)
+            {
+                var ent = Entity.Scene.CreateEntity("path-point");
+                ent.SetPosition(point);
+                ent.AddComponent(new PrototypeSpriteRenderer(2, 2));
+                _debugPoints.Add(ent);
+            }
 
             var finalPath = new List<Vector2>();
 
@@ -92,7 +104,7 @@ namespace PuppetRoguelite.Components.Shared
                     int furthestVisibleIndex = currentIndex;
                     for (int i = currentIndex + 1; i < path.Count; i++)
                     {
-                        var raycastHit = Physics.Linecast(path[currentIndex], path[i]);
+                        var raycastHit = Physics.Linecast(path[currentIndex], path[i], 1 << (int)PhysicsLayers.Environment);
                         if (raycastHit.Collider == null)
                         {
                             furthestVisibleIndex = i;

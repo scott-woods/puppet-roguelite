@@ -23,21 +23,24 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         public override void HandleTriggered()
         {
-            //disable self
-            SetEnabled(false);
-
-            //destroy other enemy spawn triggers
-            var triggers = Entity.Scene.FindComponentsOfType<EnemySpawnTrigger>().Where(t => t.MapEntity == MapEntity).ToList();
-            foreach (var trigger in triggers)
+            if (Entity != null)
             {
-                if (trigger != this)
-                {
-                    trigger.Entity.Destroy();
-                }
-            }
+                //disable self
+                SetEnabled(false);
 
-            //start encounter coroutine
-            Game1.StartCoroutine(HandleEncounterStart());
+                //destroy other enemy spawn triggers
+                var triggers = Entity.Scene.FindComponentsOfType<EnemySpawnTrigger>().Where(t => t.MapEntity == MapEntity).ToList();
+                foreach (var trigger in triggers)
+                {
+                    if (trigger != this)
+                    {
+                        trigger.Entity.Destroy();
+                    }
+                }
+
+                //start encounter coroutine
+                Game1.StartCoroutine(HandleEncounterStart());
+            }
         }
 
         IEnumerator HandleEncounterStart()
