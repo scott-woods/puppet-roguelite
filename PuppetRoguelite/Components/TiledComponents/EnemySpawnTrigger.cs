@@ -2,6 +2,7 @@
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
 using PuppetRoguelite.Components.Characters.Enemies.Ghoul;
+using PuppetRoguelite.Components.Characters.Enemies.OrbMage;
 using PuppetRoguelite.Components.Characters.Enemies.Spitter;
 using PuppetRoguelite.SceneComponents.CombatManager;
 using System;
@@ -15,7 +16,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnTrigger : Trigger
     {
-        List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot), typeof(Spitter), typeof(Ghoul) };
+        List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot), typeof(Spitter), typeof(Ghoul), typeof(OrbMage) };
 
         public EnemySpawnTrigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {
@@ -63,16 +64,16 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //spawn enemies
             var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapEntity == MapEntity).ToList();
-            int i = 0;
-            while (i < enemySpawns.Count)
-            {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
-                var spawn = enemySpawns[i];
-                combatManager.AddEnemy(spawn.SpawnEnemy(_enemyTypes.RandomItem()));
-                i++;
-                yield return Coroutine.WaitForSeconds(.2f);
-            }
-            //combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(Spitter)));
+            //int i = 0;
+            //while (i < enemySpawns.Count)
+            //{
+            //    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
+            //    var spawn = enemySpawns[i];
+            //    combatManager.AddEnemy(spawn.SpawnEnemy(_enemyTypes.RandomItem()));
+            //    i++;
+            //    yield return Coroutine.WaitForSeconds(.2f);
+            //}
+            combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(OrbMage)));
             //combatManager.AddEnemy(enemySpawns[1].SpawnEnemy(typeof(ChainBot)));
 
             //destroy entity

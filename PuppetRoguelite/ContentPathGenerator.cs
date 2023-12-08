@@ -66,6 +66,8 @@ namespace Nez
 				public const string Hh_vanish = @"Content\Audio\Sounds\hh_vanish.wav";
 				public const string Loot_get = @"Content\Audio\Sounds\loot_get.wav";
 				public const string Menu_select = @"Content\Audio\Sounds\menu_select.wav";
+				public const string Orb_mage_attack = @"Content\Audio\Sounds\orb_mage_attack.wav";
+				public const string Orb_mage_telegraph = @"Content\Audio\Sounds\orb_mage_telegraph.wav";
 				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
 				public const string Player_teleport = @"Content\Audio\Sounds\player_teleport.wav";
 				public const string Purchase = @"Content\Audio\Sounds\purchase.wav";
@@ -123,6 +125,19 @@ namespace Nez
 				{
 					public const string Heart_hoarder = @"Content\Textures\Characters\HeartHoarder\heart_hoarder.png";
 					public const string Heart_hoarder_left = @"Content\Textures\Characters\HeartHoarder\heart_hoarder_left.png";
+				}
+
+				public static class OrbMage
+				{
+					public const string Attack = @"Content\Textures\Characters\OrbMage\attack .png";
+					public const string Attackvfx = @"Content\Textures\Characters\OrbMage\attack vfx .png";
+					public const string Death = @"Content\Textures\Characters\OrbMage\death.png";
+					public const string HealwithVFX = @"Content\Textures\Characters\OrbMage\heal with VFX.png";
+					public const string Hit = @"Content\Textures\Characters\OrbMage\hit.png";
+					public const string Idle = @"Content\Textures\Characters\OrbMage\idle.png";
+					public const string Move = @"Content\Textures\Characters\OrbMage\move.png";
+					public const string SweepAttackwithVFX = @"Content\Textures\Characters\OrbMage\Sweep Attack with VFX.png";
+					public const string VFXforSweep = @"Content\Textures\Characters\OrbMage\VFX for Sweep.png";
 				}
 
 				public static class Player

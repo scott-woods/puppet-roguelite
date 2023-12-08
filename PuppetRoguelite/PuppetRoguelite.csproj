@@ -55,6 +55,8 @@
     <None Remove="Content\Audio\Sounds\hh_vanish.wav" />
     <None Remove="Content\Audio\Sounds\loot_get.wav" />
     <None Remove="Content\Audio\Sounds\menu_select.wav" />
+    <None Remove="Content\Audio\Sounds\orb_mage_attack.wav" />
+    <None Remove="Content\Audio\Sounds\orb_mage_telegraph.wav" />
     <None Remove="Content\Audio\Sounds\player_dash.wav" />
     <None Remove="Content\Audio\Sounds\player_teleport.wav" />
     <None Remove="Content\Audio\Sounds\purchase.wav" />
@@ -449,6 +451,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Textures\Characters\HeartHoarder\" />
+    <Folder Include="Content\Textures\Characters\OrbMage\" />
     <Folder Include="Content\Textures\Effects\" />
     <Folder Include="Content\Textures\UI\Icons\Style3\Atlas\" />
     <Folder Include="Content\Textures\UI\Icons\Style4\Atlas\" />
