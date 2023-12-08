@@ -95,11 +95,9 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
             }
         }
 
-        public override void HandlePreparationCanceled()
+        public override void Reset()
         {
-            base.HandlePreparationCanceled();
-
-            _targetEntity.Destroy();
+            _targetEntity?.Destroy();
         }
     }
 }

@@ -79,5 +79,10 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Support
 
             HandleExecutionFinished();
         }
+
+        public override void Reset()
+        {
+
+        }
     }
 }

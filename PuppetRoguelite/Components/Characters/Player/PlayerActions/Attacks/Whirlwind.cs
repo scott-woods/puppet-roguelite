@@ -64,24 +64,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _animator.AddAnimation("WhirlwindRight", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 143, 54, 143, 210, 143, 144 }, true));
             _animator.AddAnimation("WhirlwindUp", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 210, 143, 54, 143, 210, 211 }, true));
             _animator.AddAnimation("WhirlwindDown", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 54, 143, 210, 143, 54, 55 }, true));
-            //var texture = Scene.Content.LoadTexture(Content.Textures.Characters.Player.Hooded_knight_attack);
-            //var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
-            //_animator.AddAnimation("WhirlwindRight", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            //{
-            //    0, 1, 2, 19, 20, 14, 15, 28, 29, 0
-            //}, true));
-            //_animator.AddAnimation("WhirlwindLeft", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            //{
-            //    9, 14, 15, 28, 29, 1, 2, 19, 20, 9
-            //}, true));
-            //_animator.AddAnimation("WhirlwindDown", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            //{
-            //    18, 19, 20, 14, 15, 28, 29, 1, 2, 18
-            //}, true));
-            //_animator.AddAnimation("WhirlwindUp", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int>
-            //{
-            //    27, 28, 29, 1, 2, 19, 20, 14, 15, 27
-            //}, true));
 
             _dirByMouse = AddComponent(new DirectionByMouse());
 
@@ -147,9 +129,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //handle confirm
                 if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
                 {
-                    _animator.Stop();
-                    _coroutineManager.StopAllCoroutines();
-                    _spin = null;
+                    Reset();
                     HandlePreparationFinished(Position);
                     return;
                 }
@@ -164,12 +144,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //handle direction change
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
-                    _coroutineManager.StopAllCoroutines();
-
-                    //stop animator
-                    _animator.Stop();
-
-                    _spin = null;
+                    Reset();
 
                     //restart sim loop
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
@@ -260,6 +235,23 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 yield return _spin;
                 _spin = null;
             }
+        }
+
+        public override void Reset()
+        {
+            //coroutines
+            _simulationLoop?.Stop();
+            _simulationLoop = null;
+            _executionCoroutine?.Stop();
+            _executionCoroutine = null;
+            _spin?.Stop();
+            _spin = null;
+
+            //animator
+            _animator.Stop();
+
+            //hitbox
+            _hitbox.SetEnabled(false);
         }
     }
 }

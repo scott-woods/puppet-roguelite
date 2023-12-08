@@ -202,7 +202,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _executeDashCoroutine = null;
 
             HandleExecutionFinished();
-            Reset();
         }
 
         IEnumerator ExecuteDash()
@@ -260,7 +259,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             return animation;
         }
 
-        void Reset()
+        public override void Reset()
         {
             //handle coroutines
             _simulationLoop?.Stop();
@@ -278,7 +277,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
             //reset position
             Position = InitialPosition;
-
+            
             //animator
             _animator.Stop();
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;

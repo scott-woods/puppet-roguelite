@@ -25,6 +25,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
         const float _fastMoveSpeed = 40f;
         const float _normalMoveSpeed = 25f;
         const int _attackRange = 192;
+        const int _sweepAttackRange = 64;
         const int _minDistanceToPlayer = 48;
         const int _preferredDistanceToPlayer = 80;
         const float _attackPrepTime = 2.5f;
@@ -36,6 +37,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
         //actions
         EnemyAction<OrbMage> _currentAction;
         OrbMageAttack _orbMageAttack;
+        OrbMageSweepAttack _sweepAttack;
 
         //components
         public Mover Mover;
@@ -63,6 +65,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
 
             //actions
             _orbMageAttack = Entity.AddComponent(new OrbMageAttack(this));
+            _sweepAttack = Entity.AddComponent(new OrbMageSweepAttack(this));
 
             //Mover
             Mover = Entity.AddComponent(new Mover());
@@ -134,6 +137,10 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             var attackSprites = Sprite.SpritesFromAtlas(attackTexture, 119, 34);
             Animator.AddAnimation("Attack", attackSprites.ToArray());
 
+            var sweepAttackTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.OrbMage.Sweepattack);
+            var sweepAttackSprites = Sprite.SpritesFromAtlas(sweepAttackTexture, 119, 34);
+            Animator.AddAnimation("SweepAttack", sweepAttackSprites.ToArray());
+
             var hitTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Characters.OrbMage.Hit);
             var hitSprites = Sprite.SpritesFromAtlas(hitTexture, 119, 34);
             Animator.AddAnimation("Hit", hitSprites.ToArray());
@@ -147,6 +154,12 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
         {
             var distToPlayer = Vector2.Distance(OriginComponent.Origin, PlayerController.Instance.OriginComponent.Origin);
             return distToPlayer <= _attackRange;
+        }
+
+        bool IsInSweepAttackRange()
+        {
+            var distToPlayer = Vector2.Distance(OriginComponent.Origin, PlayerController.Instance.OriginComponent.Origin);
+            return distToPlayer <= _sweepAttackRange;
         }
 
         bool IsTooCloseToPlayer()
@@ -189,23 +202,29 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
         {
             var tree = BehaviorTreeBuilder<OrbMage>.Begin(this)
                 .Sequence()
+                    .Action(o => o.StartAttackTimer())
                     .Selector(AbortTypes.Self)
-                        .ConditionalDecorator(o => o.IsTooCloseToPlayer(), true)
-                            .Sequence()
-                                .Action(o => o.MoveAwayFromPlayer())
-                            .EndComposite()
                         .ConditionalDecorator(o => !o.IsInAttackRange(), true)
                             .Sequence()
                                 .Action(o => o.MoveTowardsAttackRange())
                             .EndComposite()
+                        .ConditionalDecorator(o => o.IsTooCloseToPlayer(), true)
+                            .Sequence()
+                                .Action(o => o.MoveAwayFromPlayer())
+                            .EndComposite()
                         .ConditionalDecorator(o => o.IsInAttackRange(), true)
                             .Sequence()
-                                .Action(o => o.StartAttack())
                                 .Action(o => o.WaitToAttack())
                             .EndComposite()
                     .EndComposite()
-                    .Sequence()
+                    .Selector()
+                        .Sequence()
+                            .Conditional(o => o.IsInSweepAttackRange())
+                            .Action(o => o.ExecuteAction(_sweepAttack))
+                        .EndComposite()
+                        .Sequence()
                             .Action(o => o.ExecuteAction(_orbMageAttack))
+                        .EndComposite()
                     .EndComposite()
                     .Sequence()
                         .ParallelSelector()
@@ -230,6 +249,16 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
 
         TaskStatus MoveAwayFromPlayer()
         {
+            //if timer finished, reset timer and return success
+            if (_attackPrepTimer >= _attackPrepTime)
+            {
+                _attackPrepTimer = 0;
+                return TaskStatus.Success;
+            }
+
+            //increment timer
+            _attackPrepTimer += Time.DeltaTime;
+
             //get direction
             var dir = PlayerController.Instance.OriginComponent.Origin - OriginComponent.Origin;
             dir.Normalize();
@@ -248,7 +277,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             return TaskStatus.Running;
         }
 
-        TaskStatus StartAttack()
+        TaskStatus StartAttackTimer()
         {
             _attackPrepTimer = 0;
             return TaskStatus.Success;

@@ -170,6 +170,9 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
         void OnActionPrepCanceled(PlayerAction action)
         {
             //destroy action
+            action.Emitter.RemoveObserver(PlayerActionEvent.PrepCanceled, OnActionPrepCanceled);
+            action.Emitter.RemoveObserver(PlayerActionEvent.PrepFinished, OnActionPrepFinished);
+            action.Emitter.RemoveObserver(PlayerActionEvent.ExecutionFinished, OnActionExecutionFinished);
             action.Destroy();
 
             //reenable sim and real player
@@ -186,6 +189,11 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
 
             //get final position
             var finalPos = action.FinalPosition;
+
+            //remove observers
+            action.Emitter.RemoveObserver(PlayerActionEvent.PrepCanceled, OnActionPrepCanceled);
+            action.Emitter.RemoveObserver(PlayerActionEvent.PrepFinished, OnActionPrepFinished);
+            action.Emitter.RemoveObserver(PlayerActionEvent.ExecutionFinished, OnActionExecutionFinished);
 
             //destroy action
             if (!action.ShouldDestroySelf)

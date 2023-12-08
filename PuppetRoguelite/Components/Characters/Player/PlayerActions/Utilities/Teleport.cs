@@ -122,5 +122,10 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
                 }
             }
         }
+
+        public override void Reset()
+        {
+
+        }
     }
 }

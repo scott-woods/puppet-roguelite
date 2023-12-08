@@ -34,7 +34,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
         {
             base.Initialize();
 
-            _hitbox = Entity.AddComponent(new BoxHitbox(_damage, new Rectangle(-3, -14, 7, 28)));
+            _hitbox = Entity.AddComponent(new BoxHitbox(_damage, new Rectangle(-3, -4, 7, 18)));
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
             _hitbox.SetEnabled(false);

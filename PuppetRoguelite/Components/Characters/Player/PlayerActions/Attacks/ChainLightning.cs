@@ -185,8 +185,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
             Debug.Log("Handling execution finished");
             HandleExecutionFinished();
-
-            Reset();
         }
 
         public override void Update()
@@ -321,7 +319,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _hasFinishedSwinging = true;
         }
 
-        void Reset()
+        public override void Reset()
         {
             //handle coroutines
             _simulationLoop?.Stop();

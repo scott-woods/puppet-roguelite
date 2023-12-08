@@ -80,18 +80,18 @@ namespace PuppetRoguelite.Components.Shared
             //get basic path on grid
             var path = _gridGraphManager.FindPath(origin, target);
 
-            foreach (var point in _debugPoints)
-            {
-                point.Destroy();
-            }
-            _debugPoints.Clear();
-            foreach (var point in path)
-            {
-                var ent = Entity.Scene.CreateEntity("path-point");
-                ent.SetPosition(point);
-                ent.AddComponent(new PrototypeSpriteRenderer(2, 2));
-                _debugPoints.Add(ent);
-            }
+            //foreach (var point in _debugPoints)
+            //{
+            //    point.Destroy();
+            //}
+            //_debugPoints.Clear();
+            //foreach (var point in path)
+            //{
+            //    var ent = Entity.Scene.CreateEntity("path-point");
+            //    ent.SetPosition(point);
+            //    ent.AddComponent(new PrototypeSpriteRenderer(2, 2));
+            //    _debugPoints.Add(ent);
+            //}
 
             var finalPath = new List<Vector2>();
 

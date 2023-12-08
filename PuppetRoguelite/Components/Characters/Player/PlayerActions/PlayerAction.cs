@@ -47,8 +47,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
             {
                 if (Input.IsKeyPressed(Keys.X))
                 {
-                    Game1.AudioManager.PlaySound(Content.Audio.Sounds._021_Decline_01);
-                    State = PlayerActionState.None;
                     HandlePreparationCanceled();
                 }
             }
@@ -67,15 +65,21 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
 
         public virtual void HandlePreparationCanceled()
         {
+            Reset();
+
+            Game1.AudioManager.PlaySound(Content.Audio.Sounds._021_Decline_01);
             State = PlayerActionState.None;
             Emitter.Emit(PlayerActionEvent.PrepCanceled, this);
         }
 
         public virtual void HandleExecutionFinished()
         {
+            Reset();
             State = PlayerActionState.None;
             Emitter.Emit(PlayerActionEvent.ExecutionFinished, this);
         }
+
+        public abstract void Reset();
     }
 
     public enum PlayerActionCategory

@@ -136,7 +136,7 @@ namespace Nez
 					public const string Hit = @"Content\Textures\Characters\OrbMage\hit.png";
 					public const string Idle = @"Content\Textures\Characters\OrbMage\idle.png";
 					public const string Move = @"Content\Textures\Characters\OrbMage\move.png";
-					public const string SweepAttackwithVFX = @"Content\Textures\Characters\OrbMage\Sweep Attack with VFX.png";
+					public const string Sweepattack = @"Content\Textures\Characters\OrbMage\sweep attack.png";
 					public const string VFXforSweep = @"Content\Textures\Characters\OrbMage\VFX for Sweep.png";
 				}
 
