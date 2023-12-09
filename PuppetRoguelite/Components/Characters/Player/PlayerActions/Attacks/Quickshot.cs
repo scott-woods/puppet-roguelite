@@ -14,7 +14,7 @@ using Nez.UI;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Quickshot", 2, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Quickshot", 1, PlayerActionCategory.Attack)]
     public class Quickshot : PlayerAction
     {
         //coroutines

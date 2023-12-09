@@ -45,17 +45,29 @@ namespace PuppetRoguelite.Components.Characters
         {
             base.Initialize();
 
-            SpriteAnimator = Entity.AddComponent(PlayerController.Instance.SpriteAnimator.Clone() as SpriteAnimator);
+            //create sprite animator
+            SpriteAnimator = Entity.AddComponent(new SpriteAnimator());
+
+            //get animations from player animator
+            foreach (var animation in PlayerController.Instance.SpriteAnimator.Animations)
+            {
+                SpriteAnimator.AddAnimation(animation.Key, animation.Value);
+            }
+
+            //get offset from player animator
+            SpriteAnimator.SetLocalOffset(PlayerController.Instance.SpriteOffset);
+
+            //set color
             SpriteAnimator.SetColor(new Color(255, 255, 255, 128));
 
-            VelocityComponent = Entity.AddComponent(PlayerController.Instance.VelocityComponent.Clone() as VelocityComponent);
+            _mover = Entity.AddComponent(new Mover());
+
+            VelocityComponent = Entity.AddComponent(new VelocityComponent(_mover, PlayerController.Instance.VelocityComponent.Speed));
 
             var offset = PlayerController.Instance.Collider.LocalOffset;
             OriginComponent = Entity.AddComponent(new OriginComponent(offset));
 
             _ySorter = Entity.AddComponent(new YSorter(SpriteAnimator, OriginComponent));
-
-            _mover = Entity.AddComponent(new Mover());
 
             SpriteFlipper = Entity.AddComponent(new SpriteFlipper(SpriteAnimator, VelocityComponent));
 

@@ -279,6 +279,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
                     break;
             }
 
+            Debug.Log($"Playing animation: {animation}");
+
             //play animation
             _animator.Play(animation, SpriteAnimator.LoopMode.Once);
 
@@ -289,6 +291,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
 
         void OnAnimationFinished(string animationName)
         {
+            Debug.Log("Finished melee attack animation: " + animationName);
+
             //remove event handler
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
 
@@ -323,6 +327,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
 
         public void CancelAttack()
         {
+            Debug.Log("Cancel melee attack");
             Reset();
         }
     }
