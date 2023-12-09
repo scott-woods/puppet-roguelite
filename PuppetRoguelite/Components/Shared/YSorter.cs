@@ -14,15 +14,18 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class YSorter : Component, IUpdatable
     {
-        IRenderable _renderable;
+        RenderableComponent _renderable;
         OriginComponent _originComponent;
         List<RenderableComponent> _allRenderables;
 
-        public YSorter(IRenderable renderable, OriginComponent originComponent, List<RenderableComponent> allRenderables = null)
+        public YSorter(RenderableComponent renderable, OriginComponent originComponent, List<RenderableComponent> allRenderables = null)
         {
             _renderable = renderable;
             _originComponent = originComponent;
             _allRenderables = allRenderables == null ? new List<RenderableComponent>() : allRenderables;
+
+            if (!_allRenderables.Contains(_renderable))
+                _allRenderables.Add(_renderable);
         }
 
         public override void OnAddedToEntity()

@@ -55,8 +55,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
         {
             Position = InitialPosition;
 
-            yield return Coroutine.WaitForSeconds(.1f);
-
             var animator = _playerSim.GetComponent<SpriteAnimator>();
             animator.SetColor(Color.White);
             var tween = animator.TweenColorTo(Color.Transparent, .15f);
@@ -75,8 +73,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
             _tweenCoroutine = _coroutineManager.StartCoroutine(tween.WaitForCompletion());
             yield return _tweenCoroutine;
             //yield return tween.WaitForCompletion();
-
-            yield return Coroutine.WaitForSeconds(.25f);
 
             HandleExecutionFinished();
         }

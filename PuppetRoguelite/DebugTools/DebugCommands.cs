@@ -2,6 +2,7 @@
 using PuppetRoguelite.Components.Characters.Enemies;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.SaveData.Unlocks;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,17 @@ namespace PuppetRoguelite.DebugTools
         static void SetPlayerHealth(int health)
         {
             PlayerController.Instance.HealthComponent.Health = health;
+        }
+
+        [Command("unlock-boss", "unlock the boss gate")]
+        static void UnlockBossGate()
+        {
+            var bossGate = Game1.Scene.FindComponentOfType<BossGate>();
+            if (bossGate != null)
+            {
+                bossGate.AddKey();
+                bossGate.AddKey();
+            }
         }
     }
 }

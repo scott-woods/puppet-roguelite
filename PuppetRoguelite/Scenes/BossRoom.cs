@@ -5,6 +5,7 @@ using PuppetRoguelite.Components.Cameras;
 using PuppetRoguelite.Components.Characters.Enemies;
 using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
 using PuppetRoguelite.Components.Characters.Enemies.HeartHoarder;
+using PuppetRoguelite.Components.Characters.Enemies.OrbMage;
 using PuppetRoguelite.Components.Characters.Enemies.Spitter;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Shared;
@@ -283,7 +284,7 @@ namespace PuppetRoguelite.Scenes
                         enemyType = typeof(Spitter);
                         break;
                     case "chainBot":
-                        enemyType = typeof(ChainBot);
+                        enemyType = typeof(OrbMage);
                         break;
                     default:
                         enemyType = typeof(Spitter);

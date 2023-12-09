@@ -4,6 +4,7 @@ using Nez.AI.Pathfinding;
 using Nez.Splines;
 using Nez.Tiled;
 using PuppetRoguelite.Components.TiledComponents;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,14 +99,23 @@ namespace PuppetRoguelite.Components
                 {
                     var pos = GridToWorldPosition(pathItem) + new Vector2(8, 8);
 
-                    //check that this point is in a combat area
-                    if (!CombatArea.IsPointInCombatArea(pos))
+                    //check that point isn't in a collider
+                    if (Physics.OverlapCircle(pos, .5f, 1 << (int)PhysicsLayers.Environment) != null)
                     {
                         _graph.Walls.Add(pathItem);
                         path.Clear();
                         success = false;
                         break;
                     }
+
+                    //check that this point is in a combat area
+                    //if (!CombatArea.IsPointInCombatArea(pos))
+                    //{
+                    //    _graph.Walls.Add(pathItem);
+                    //    path.Clear();
+                    //    success = false;
+                    //    break;
+                    //}
 
                     path.Add(GridToWorldPosition(pathItem) + new Vector2(8, 8));
                 }

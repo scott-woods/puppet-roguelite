@@ -125,7 +125,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Quickshot_draw);
 
             //wait a moment
-            yield return Coroutine.WaitForSeconds(.35f);
+            yield return Coroutine.WaitForSeconds(.3f);
 
             //fire
             _gun.Fire();
@@ -134,7 +134,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Quickshot_fire);
 
             //wait a moment
-            yield return Coroutine.WaitForSeconds(.25f);
+            yield return Coroutine.WaitForSeconds(.1f);
 
             HandleExecutionFinished();
         }

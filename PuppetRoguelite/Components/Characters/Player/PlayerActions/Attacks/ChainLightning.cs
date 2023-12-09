@@ -25,7 +25,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         const int _damageAddedPerChain = 1;
         const int _hitboxRadius = 12;
         const int _hitboxDistFromPlayer = 12;
-        const float _strikeInterval = .2f;
+        const float _strikeInterval = .1f;
         const int _chainRadius = 100;
         List<int> _hitboxActiveFrames = new List<int>() { 0 };
 

@@ -16,7 +16,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class EnemySpawnTrigger : Trigger
     {
-        List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot), typeof(Spitter), typeof(Ghoul), typeof(OrbMage) };
+        List<Type> _enemyTypes = new List<Type>() { /*typeof(ChainBot)*/typeof(Spitter), typeof(Ghoul), typeof(OrbMage) };
 
         public EnemySpawnTrigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {

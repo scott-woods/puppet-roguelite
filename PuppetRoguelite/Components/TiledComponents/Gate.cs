@@ -4,6 +4,7 @@ using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,11 +65,12 @@ namespace PuppetRoguelite.Components.TiledComponents
                 }
             }
 
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Environment);
+
             //_collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
             //Entity.AddComponent(_collider);
             _renderer.SetEnabled(false);
             _collider.SetEnabled(false);
-
 
             //TmxObject.Visible = false;
         }

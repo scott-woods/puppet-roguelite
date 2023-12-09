@@ -8,6 +8,7 @@ using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
 using PuppetRoguelite.Components.Characters.Player.States;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Models.Items;
 using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.Tools;
@@ -162,8 +163,8 @@ namespace PuppetRoguelite.Components.Characters.Player
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());
-            //_inventory.AddItem(new CerealBox("feef"));
-            //_inventory.AddItem(new CerealBox("feef"));
+            _inventory.AddItem(new CerealBox("feef"));
+            _inventory.AddItem(new CerealBox("feef"));
 
             //dollahs
             DollahInventory = Entity.AddComponent(new DollahInventory(PlayerData.Instance.Dollahs));
