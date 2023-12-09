@@ -42,7 +42,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
         //actions
         public SpitAttack SpitAttack;
-        public EnemyAction<Spitter> ActiveAction;
 
         //misc
         float _cooldownTimer;
@@ -68,7 +67,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             Mover = Entity.AddComponent(new Mover());
 
             //hurtbox
-            var hurtboxCollider = Entity.AddComponent(new BoxCollider(1, 0, 11, 20));
+            var hurtboxCollider = Entity.AddComponent(new BoxCollider(11, 20));
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.EnemyHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.PlayerHitbox);
@@ -84,9 +83,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             VelocityComponent = Entity.AddComponent(new VelocityComponent(Mover, _moveSpeed));
 
             //collider
-            Collider = Entity.AddComponent(new BoxCollider(-5, 13, 9, 6));
+            Collider = Entity.AddComponent(new BoxCollider(-4, 8, 6, 6));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
-            Flags.UnsetFlag(ref Collider.CollidesWithLayers, -1);
+            Collider.CollidesWithLayers = 0;
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 
@@ -97,7 +96,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             //animator
             Animator = Entity.AddComponent(new SpriteAnimator());
-            Animator.SetLocalOffset(new Vector2(3, -5));
+            Animator.SetLocalOffset(new Vector2(2, -6));
 
             //y sorter
             YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
@@ -175,19 +174,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         TaskStatus ResetTimer()
         {
             _cooldownTimer = _cooldown;
-            return TaskStatus.Success;
-        }
-
-        TaskStatus ExecuteAction(EnemyAction<Spitter> action)
-        {
-            ActiveAction = action;
-            return action.Execute();
-        }
-
-        public override TaskStatus AbortActions()
-        {
-            ActiveAction?.Abort();
-            ActiveAction = null;
             return TaskStatus.Success;
         }
 

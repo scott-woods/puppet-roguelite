@@ -178,7 +178,14 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
                     //create lightning strike effect
                     var effectEntity = Scene.CreateEntity("lightning-effect");
-                    effectEntity.SetPosition(entity.Position);
+                    if (entity.TryGetComponent<BoxHitbox>(out var boxHitbox))
+                        effectEntity.SetPosition(boxHitbox.Bounds.Center);
+                    else if (entity.TryGetComponent<CircleHitbox>(out var circleHitbox))
+                        effectEntity.SetPosition(circleHitbox.Bounds.Center);
+                    else if (entity.TryGetComponent<PolygonHitbox>(out var polygonHitbox))
+                        effectEntity.SetPosition(polygonHitbox.Bounds.Center);
+                    else
+                        effectEntity.SetPosition(entity.Position);
                     var effectComponent = effectEntity.AddComponent(new HitEffectComponent(HitEffects.Lightning2));
                     var effectHitbox = effectEntity.AddComponent(new CircleHitbox(_damage + _currentChain * _damageAddedPerChain, 1));
                     Flags.SetFlagExclusive(ref effectHitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);

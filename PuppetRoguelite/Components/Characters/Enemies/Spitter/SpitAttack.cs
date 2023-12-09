@@ -71,6 +71,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         void OnAttackAnimationCompleted(string animationName)
         {
             _enemy.Animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
+            _hasLaunchedProjectile = false;
+
             _state = EnemyActionState.Succeeded;
         }
 
@@ -78,6 +80,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         {
             base.Abort();
 
+            _hasLaunchedProjectile = false;
             _enemy.Animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
         }
     }
