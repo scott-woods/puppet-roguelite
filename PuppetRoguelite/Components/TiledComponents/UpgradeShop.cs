@@ -6,7 +6,9 @@ using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI.Menus;
 using System;
@@ -30,6 +32,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         //misc
         bool _isShowingMenu = false;
+        bool _purchaseMade = false;
 
         public UpgradeShop(TmxObject tmxObject, Entity mapEntity) : base(tmxObject, mapEntity)
         {
@@ -40,7 +43,9 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _collider = Entity.AddComponent(new BoxCollider(-48, -10, 93, 10));
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
+            _collider.PhysicsLayer = 0;
+            Flags.SetFlag(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
+            Flags.SetFlag(ref _collider.PhysicsLayer, (int)PhysicsLayers.Environment);
 
             _animator = Entity.AddComponent(new SpriteAnimator());
             _animator.SetLocalOffset(new Vector2(0, -54));
@@ -69,50 +74,50 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         IEnumerator OnInteracted()
         {
-            //display text
+            _purchaseMade = false;
+
+            //get textbox manager
             var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            var lines = new List<DialogueLine>()
-            {
-                new DialogueLine("Baba booey"),
-            };
+
+            //pick dialogue lines
+            List<DialogueLine> lines;
+            if (PlayerData.Instance.Dollahs >= 400)
+                lines = UpgradeShopDialogue.HighWealth;
+            else if (PlayerData.Instance.Dollahs >= 250)
+                lines = UpgradeShopDialogue.MediumWealth;
+            else if (PlayerData.Instance.Dollahs <= 50)
+                lines = UpgradeShopDialogue.LowWealth;
+            else
+                lines = UpgradeShopDialogue.DefaultLines.RandomItem();
+
+            //display text
             yield return textboxManager.DisplayTextbox(lines);
 
             //_menu = Entity.Scene.Camera.AddComponent(new UpgradeShopMenu(OnShopClosed));
             _menu = Entity.Scene.CreateEntity("upgrade-shop-ui")
                 .AddComponent(new UpgradeShopMenu(OnShopClosed));
 
+            //wait for menu to close
             _isShowingMenu = true;
             while (_isShowingMenu)
             {
                 yield return null;
             }
 
-            ////display shop
-            //if (_menuEntity == null)
-            //{
-            //    _menuEntity = Entity.Scene.CreateEntity("shop-ui");
-            //    _menuEntity.AddComponent(new UpgradeShopMenu(OnShopClosed));
-            //}
-            //else _menuEntity.SetEnabled(true);
-
-            ////while menu is showing, wait
-            //_isShowingMenu = true;
-            //while (_isShowingMenu)
-            //{
-            //    yield return null;
-            //}
+            //show ending lines
+            if (_purchaseMade)
+                lines = UpgradeShopDialogue.ExitWithPurchase;
+            else
+                lines = UpgradeShopDialogue.ExitNoPurchase;
 
             //show more lines
-            lines = new List<DialogueLine>()
-            {
-                new DialogueLine("Dash fast eat ass, kid.")
-            };
             yield return textboxManager.DisplayTextbox(lines);
             Debug.Log("finished with shop");
         }
 
-        void OnShopClosed()
+        void OnShopClosed(bool purchaseMade)
         {
+            _purchaseMade = purchaseMade;
             _menu.Entity.Destroy();
             _isShowingMenu = false;
         }

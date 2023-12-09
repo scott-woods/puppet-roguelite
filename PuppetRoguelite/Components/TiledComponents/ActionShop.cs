@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI.Menus;
 using System;
@@ -40,7 +41,9 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _collider = Entity.AddComponent(new BoxCollider(-26, -10, 55, 10));
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
+            _collider.PhysicsLayer = 0;
+            Flags.SetFlag(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
+            Flags.SetFlag(ref _collider.PhysicsLayer, (int)PhysicsLayers.Environment);
 
             _animator = Entity.AddComponent(new SpriteAnimator());
             _animator.SetLocalOffset(new Vector2(0, -26));
@@ -69,17 +72,20 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         IEnumerator OnInteracted()
         {
-            //display text
+            //get textbox manager
             var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            var lines = new List<DialogueLine>()
-            {
-                new DialogueLine("Howdy sweet pea! Let's take a gander at yer gear...")
-            };
+
+            //pick lines
+            List<DialogueLine> lines;
+            lines = ActionShopDialogue.DefaultLines.RandomItem();
+
+            //display text
             yield return textboxManager.DisplayTextbox(lines);
 
             _menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
             //_menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
 
+            //wait for menu to close
             _isShowingMenu = true;
             while (_isShowingMenu)
             {
@@ -87,10 +93,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             }
 
             //show more lines
-            lines = new List<DialogueLine>()
-            {
-                new DialogueLine("!$#& off now, dearie :)")
-            };
+            lines = ActionShopDialogue.ExitLines.RandomItem();
             yield return textboxManager.DisplayTextbox(lines);
             Debug.Log("finished with shop");
         }

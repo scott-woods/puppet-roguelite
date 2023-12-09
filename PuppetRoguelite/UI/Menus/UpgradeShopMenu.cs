@@ -32,11 +32,12 @@ namespace PuppetRoguelite.UI.Menus
         Dictionary<int, Label> _upgradeValueLabels = new Dictionary<int, Label>();
         Dictionary<int, Label> _upgradeCostLabels = new Dictionary<int, Label>();
 
-        Action _closedCallback;
+        Action<bool> _closedCallback;
+        bool _purchaseMade = false;
 
         bool _canActivateButton = true;
 
-        public UpgradeShopMenu(Action closedCallback)
+        public UpgradeShopMenu(Action<bool> closedCallback)
         {
             _closedCallback = closedCallback;
         }
@@ -184,7 +185,7 @@ namespace PuppetRoguelite.UI.Menus
             if (Input.IsKeyPressed(Keys.X))
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
-                _closedCallback?.Invoke();
+                _closedCallback?.Invoke(_purchaseMade);
             }
         }
 
@@ -209,6 +210,8 @@ namespace PuppetRoguelite.UI.Menus
                 }
 
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Purchase);
+
+                _purchaseMade = true;
 
                 PlayerController.Instance.DollahInventory.Dollahs -= upgradeButton.Upgrade.GetCurrentCost();
                 //PlayerData.Instance.Dollahs -= upgradeButton.Upgrade.GetCurrentCost();
