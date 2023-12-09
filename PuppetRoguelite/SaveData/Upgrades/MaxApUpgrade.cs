@@ -33,12 +33,12 @@ namespace PuppetRoguelite.SaveData.Upgrades
 
         protected override void DefineLevels()
         {
-            Levels.Add(0, 100);
-            Levels.Add(1, 200);
-            Levels.Add(2, 300);
-            Levels.Add(3, 400);
-            Levels.Add(4, 500);
-            Levels.Add(5, 600);
+            Levels.Add(0, 75);
+            Levels.Add(1, 150);
+            Levels.Add(2, 225);
+            Levels.Add(3, 300);
+            Levels.Add(4, 400);
+            Levels.Add(5, 500);
         }
 
         public override void ApplyUpgrade()
