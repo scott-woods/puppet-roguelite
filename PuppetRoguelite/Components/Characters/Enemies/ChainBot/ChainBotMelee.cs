@@ -8,6 +8,7 @@ using Nez.UI;
 using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,6 +43,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
         public override void Initialize()
         {
             base.Initialize();
+
+            Log.Information("Initializing ChainBotMelee");
 
             //animator
             _animator = Entity.GetComponent<SpriteAnimator>();
@@ -102,26 +105,28 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         protected override void StartAction()
         {
+            Log.Information("Starting ChainBotMelee");
             _executionCoroutine = _coroutineManager.StartCoroutine(ChainBotMeleeExecutionCoroutine());
         }
 
         IEnumerator ChainBotMeleeExecutionCoroutine()
         {
-            var id = _enemy.Id;
-            //Debug.Log($"{id}: transitioning to charge");
+            Log.Debug($"ChainBotMelee for ChainBot with Id {_enemy.Id} Transitioning to Charge");
             _transitionToCharge = _coroutineManager.StartCoroutine(TransitionToCharge());
             yield return _transitionToCharge;
             _transitionToCharge = null;
-            //Debug.Log($"{id}: finished transition to charge");
-            //Debug.Log($"{id}: starting charge");
+            Log.Debug($"ChainBotMelee for ChainBot with Id {_enemy.Id} Finished Transitioning to Charge");
+
+            Log.Debug($"ChainBotMelee for ChainBot with Id {_enemy.Id} Starting Charge");
             ChargeAttack();
             yield return Coroutine.WaitForSeconds(.2f);
-            //Debug.Log($"{id}: finished charge");
-            //Debug.Log($"{id}: starting attack player");
+            Log.Debug($"ChainBotMelee for ChainBot with Id {_enemy.Id} Finished Charging");
+
+            Log.Debug($"ChainBotMelee for ChainBot with Id {_enemy.Id} Starting AttackPlayer");
             _attackPlayer = _coroutineManager.StartCoroutine(AttackPlayer());
             yield return _attackPlayer;
             _attackPlayer = null;
-            //Debug.Log($"{id}: finished attack player");
+            Log.Debug($"ChainBotMelee for ChainBot with Id {_enemy.Id} Finished Attacking Player");
 
             HandleActionFinished();
             Reset();
@@ -181,6 +186,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         void Reset()
         {
+            Log.Information("Resetting ChainBotMelee");
+
             //handle coroutines
             _executionCoroutine?.Stop();
             _executionCoroutine = null;
@@ -207,8 +214,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
         public override void Abort()
         {
             base.Abort();
-
-            Debug.Log($"{_enemy.Id}: aborting");
 
             Reset();
         }

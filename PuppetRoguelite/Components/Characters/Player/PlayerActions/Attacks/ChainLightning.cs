@@ -10,6 +10,7 @@ using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,6 +70,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
             _dirByMouse = AddComponent(new DirectionByMouse());
 
+            Log.Debug("Starting ChainLightning SimulationLoop");
             _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
         }
 
@@ -83,10 +85,12 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 yield return Coroutine.WaitForSeconds(.2f);
 
                 //attack
+                Log.Debug("Starting ChainLightning Attack Coroutine");
                 _animator.Speed = 1f;
                 _attackCoroutine = _coroutineManager.StartCoroutine(Attack());
                 yield return _attackCoroutine;
                 _attackCoroutine = null;
+                Log.Debug("Finished ChainLightning Attack Coroutine");
 
                 //idle again
                 _animator.Speed = 1f;
@@ -99,6 +103,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         {
             base.Execute();
 
+            Log.Debug("Starting ChainLightning Execution Coroutine");
+
             _executionCoroutine = _coroutineManager.StartCoroutine(ExecutionCoroutine());
         }
 
@@ -109,10 +115,11 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _animator.Speed = 1.3f;
 
             //attack and wait for completion
-            Debug.Log("starting attack");
+            Log.Debug("Starting ChainLightning Attack Coroutine");
             _attackCoroutine = _coroutineManager.StartCoroutine(Attack());
             yield return _attackCoroutine;
             _attackCoroutine = null;
+            Log.Debug("Finished ChainLightning Attack Coroutine");
 
             //ensure that hitbox is disabled after attack completion
             _hitbox.SetEnabled(false);
@@ -121,11 +128,12 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             var allEnemies = Scene.FindComponentsOfType<EnemyBase>();
 
             //loop to chain to other enemies
-            Debug.Log("starting chain lightning loop");
+            Log.Debug("Starting ChainLightning Chain Loop");
             bool finished = false;
             while (!finished)
             {
                 //increment chain
+                Log.Debug("Incrementing ChainLightning Chain");
                 _currentChain++;
 
                 //get all enemies that haven't been hit
@@ -152,17 +160,17 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //if no more entities to hit, break
                 if (entitiesToHit.Count == 0)
                 {
-                    Debug.Log("no more entities to hit, breaking chain lightning loop");
+                    Log.Debug("No more Entities to hit, breaking ChainLightning Loop");
                     break;
                 }
 
                 //wait for strike interval
-                Debug.Log("starting strike interval");
+                Log.Debug("ChainLightning: starting strike interval");
                 yield return Coroutine.WaitForSeconds(_strikeInterval);
-                Debug.Log("finished strike interval");
+                Log.Debug("ChainLightning: finished strike interval");
 
                 //strike next entities
-                Debug.Log("striking next entities");
+                Log.Debug("ChainLightning: striking next entities");
                 foreach (var entity in entitiesToHit)
                 {
                     //play sound
@@ -177,13 +185,12 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                     Flags.SetFlagExclusive(ref effectHitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
                     effectComponent.PlayAnimation();
                 }
-                Debug.Log("finished striking next entities");
+                Log.Debug("ChainLightning: finished striking next entities");
 
                 //add newly hit entities to hitEntities list
                 _hitEntities.AddRange(entitiesToHit);
             }
 
-            Debug.Log("Handling execution finished");
             HandleExecutionFinished();
         }
 
@@ -198,7 +205,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //handle confirm
                 if (Input.LeftMouseButtonPressed)
                 {
-                    Debug.Log("stopping chain lightning because confirm button clicked");
+                    Log.Debug("stopping chain lightning because confirm button clicked");
                     Reset();
                     HandlePreparationFinished(Position);
                 }
@@ -206,7 +213,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //restart loop if changed direction
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
-                    Debug.Log("stopping chain lightning because changed direction");
+                    Log.Debug("stopping chain lightning because changed direction");
                     Reset();
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
                 }
@@ -308,12 +315,12 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 yield return null;
             }
 
-            Debug.Log("finished attack");
+            Log.Debug("ChainLightning: finished attack");
         }
 
         void OnAnimationFinished(string animation)
         {
-            Debug.Log("animation finished " + Name);
+            Log.Debug("animation finished " + Name);
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
             _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
             _hasFinishedSwinging = true;
@@ -321,6 +328,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
         public override void Reset()
         {
+            Log.Debug("Resetting ChainLightning");
+
             //handle coroutines
             _simulationLoop?.Stop();
             _simulationLoop = null;

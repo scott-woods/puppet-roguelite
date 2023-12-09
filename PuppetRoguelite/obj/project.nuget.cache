@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "7ouaH06iJPdoZR33XCWLdec7c363iYH2CswUkBz/WCGjAYrrL2Hx6/nN+nwGIe7RTuiXHo40ZpeJY3ucjRLkPQ==",
+  "dgSpecHash": "G+xoQHIuHUzAeW7PcDIU7HsQDUGkGci16Hx6HhsaVjOBjNeNVJhakuYPsV+hGbqYPWq2SNpLHiUGUu/ym9YonA==",
   "success": true,
   "projectFilePath": "C:\\Users\\scott\\Desktop\\Game-Dev\\MonoGame\\Personal-Projects\\PuppetRogueliteFNA\\puppet-roguelite\\PuppetRoguelite\\PuppetRoguelite.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.netcore.platforms\\3.0.0\\microsoft.netcore.platforms.3.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\microsoft.win32.systemevents\\4.6.0\\microsoft.win32.systemevents.4.6.0.nupkg.sha512",
+    "C:\\Users\\scott\\.nuget\\packages\\serilog\\3.1.1\\serilog.3.1.1.nupkg.sha512",
+    "C:\\Users\\scott\\.nuget\\packages\\serilog.sinks.console\\5.0.1\\serilog.sinks.console.5.0.1.nupkg.sha512",
+    "C:\\Users\\scott\\.nuget\\packages\\serilog.sinks.file\\5.0.0\\serilog.sinks.file.5.0.0.nupkg.sha512",
     "C:\\Users\\scott\\.nuget\\packages\\system.drawing.common\\4.6.0\\system.drawing.common.4.6.0.nupkg.sha512"
   ],
   "logs": []

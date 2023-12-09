@@ -6,6 +6,7 @@ using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -61,7 +62,9 @@ namespace PuppetRoguelite.UI.Menus
             {
                 if (_waitCoroutine != null)
                 {
-                    _waitCoroutine.Stop();
+                    Log.Debug("Stopping UIMenu Wait Coroutine");
+                    _waitCoroutine?.Stop();
+                    _waitCoroutine = null;
                 }
 
                 _cancelHandler?.Invoke();

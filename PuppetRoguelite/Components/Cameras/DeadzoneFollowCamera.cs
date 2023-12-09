@@ -2,6 +2,7 @@
 using Nez;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.SceneComponents;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace PuppetRoguelite.Components.Cameras
         {
             base.OnAddedToEntity();
 
+            Log.Information("Creating Deadzone Follow Camera");
             _cameraHandler = Entity.Scene.GetOrCreateSceneComponent<CameraHandler>();
             _cameraHandler.FormatCamera();
         }
@@ -60,11 +62,13 @@ namespace PuppetRoguelite.Components.Cameras
 
         public void SetFollowTarget(Entity target)
         {
+            Log.Information("Setting Camera Target", target);
             _targetEntity = target;
         }
 
         public void RemoveFollowTarget()
         {
+            Log.Information("Removing Camera Target");
             if (_targetEntity != null)
             {
                 _targetEntity = null;

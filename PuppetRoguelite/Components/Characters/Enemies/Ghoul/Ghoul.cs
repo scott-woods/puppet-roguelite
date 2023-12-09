@@ -9,6 +9,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Tools;
+using Serilog;
 using System;
 using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
@@ -21,7 +22,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
         int _maxHp = 9;
 
         //actions
-        EnemyAction<Ghoul> _activeAction;
         GhoulAttack _ghoulAttack;
 
         //components
@@ -53,6 +53,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
         public override void Initialize()
         {
             base.Initialize();
+
+            Log.Information("Initializing Ghoul");
 
             AddComponents();
         }
@@ -152,7 +154,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
                         .Sequence(AbortTypes.LowerPriority)
                             .Conditional(c => c.IsInAttackRange())
                             .Action(c => c.ExecuteAction(_ghoulAttack))
-                            .Action(c => c.ClearAction())
                         .EndComposite()
                         .Sequence(AbortTypes.LowerPriority)
                             .Action(c => c.MoveTowardsPlayer())
@@ -164,17 +165,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
             tree.UpdatePeriod = 0f;
 
             return tree;
-        }
-
-        public override TaskStatus AbortActions()
-        {
-            if (_activeAction != null)
-            {
-                _activeAction.Abort();
-                _activeAction = null;
-            }
-
-            return TaskStatus.Success;
         }
 
         #endregion
@@ -200,19 +190,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
         }
 
         #region TASKS
-
-        TaskStatus ExecuteAction(EnemyAction<Ghoul> action)
-        {
-            _activeAction = action;
-
-            return action.Execute();
-        }
-
-        TaskStatus ClearAction()
-        {
-            _activeAction = null;
-            return TaskStatus.Success;
-        }
 
         TaskStatus MoveTowardsPlayer()
         {

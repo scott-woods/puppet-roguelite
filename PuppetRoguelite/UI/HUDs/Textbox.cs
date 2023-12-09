@@ -4,6 +4,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Elements;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -153,7 +154,10 @@ namespace PuppetRoguelite.UI.HUDs
 
         public void SkipText()
         {
-            _readTextCoroutine.Stop();
+            Log.Debug("Skipping Textbox Text");
+
+            _readTextCoroutine?.Stop();
+            _readTextCoroutine = null;
             _text.SetText(_currentText);
             IsFinishedReading = true;
         }

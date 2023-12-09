@@ -460,6 +460,11 @@
     <Folder Include="Content\Textures\UI\Menu\Style3\Atlas\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\FNA\FNA.Core.csproj" />
     <ProjectReference Include="..\Nez\Nez.Persistence\Nez.FNA.Persistence.csproj" />
     <ProjectReference Include="..\Nez\Nez.Portable\Nez.FNA.csproj" />

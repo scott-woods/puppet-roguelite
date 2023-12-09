@@ -6,6 +6,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Enums;
+using Serilog;
 using System;
 using System.Collections;
 using System.Linq;
@@ -85,6 +86,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         {
             base.Execute();
 
+            Log.Information("Executing DashAttack");
+
             //disable target
             _target.SetEnabled(false);
 
@@ -97,6 +100,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //_animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
             //execute
+            Log.Debug("Starting DashAttackExecutionCoroutine");
             _dashAttackExecutionCoroutine = _coroutineManager.StartCoroutine(DashAttackExecutionCoroutine());
         }
 
@@ -119,7 +123,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //handle direction change
                 if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
                 {
-                    Debug.Log("direction change");
+                    Log.Debug("DashAttack: direction change");
                     Reset();
 
                     //restart sim loop
@@ -197,9 +201,11 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _playerSim.Idle(_dirByMouse.CurrentDirection);
             yield return Coroutine.WaitForSeconds(.2f);
 
+            Log.Debug("Starting ExecuteDash Coroutine");
             _executeDashCoroutine = _coroutineManager.StartCoroutine(ExecuteDash());
             yield return _executeDashCoroutine;
             _executeDashCoroutine = null;
+            Log.Debug("Finished ExecuteDash Coroutine");
 
             HandleExecutionFinished();
         }
@@ -225,6 +231,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             var movementTimeRemaining = movementFrames * secondsPerFrame;
 
             //move entity
+            Log.Debug($"ExecuteDash: Waiting for {movementTimeRemaining}");
             while (movementTimeRemaining > 0)
             {
                 //lerp towards target position using progress towards total movement time
@@ -235,15 +242,19 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
                 yield return null;
             }
+            Log.Debug($"ExecuteDash: Finished waiting");
 
+            Log.Debug($"ExecuteDash: Waiting for _isAttacking to be false");
             while (_isAttacking)
             {
                 yield return null;
             }
+            Log.Debug("ExecuteDash finished");
         }
 
         void OnAnimationFinished(string animationName)
         {
+            Log.Debug($"DashAttack: Animation Finished: {animationName}");
             _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
             _isAttacking = false;
         }
@@ -261,6 +272,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
         public override void Reset()
         {
+            Log.Debug("Resetting DashAttack");
+
             //handle coroutines
             _simulationLoop?.Stop();
             _simulationLoop = null;

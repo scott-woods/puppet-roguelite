@@ -9,6 +9,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Tools;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -239,6 +240,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
         public override void Reset()
         {
+            Log.Debug("Resetting Whirlwind");
+
             //coroutines
             _simulationLoop?.Stop();
             _simulationLoop = null;

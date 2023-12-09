@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Nez.UI;
+using Serilog;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
@@ -141,6 +142,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
         public override void Reset()
         {
+            Log.Debug("Resetting Quickshot");
+
             //coroutines
             _simulationLoop?.Stop();
             _simulationLoop = null;

@@ -3,6 +3,7 @@ using Nez.Systems;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Entities;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -86,6 +87,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
 
         void Reset()
         {
+            Log.Debug("Resetting OrbMageSweepAttack");
+
             //coroutines
             _sweepAttackCoroutine?.Stop();
             _sweepAttackCoroutine = null;

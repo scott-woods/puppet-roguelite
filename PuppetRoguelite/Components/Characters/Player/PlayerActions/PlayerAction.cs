@@ -5,6 +5,7 @@ using Nez.Systems;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Player;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
 
         public virtual void Prepare()
         {
+            Log.Information($"Preparing Action: {this}");
+
             InitialPosition = Position;
             FinalPosition = Position;
             Emitter.Emit(PlayerActionEvent.PrepStarted, this);
@@ -35,6 +38,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
         }
         public virtual void Execute()
         {
+            Log.Information($"Executing Action: {this}");
+
             Emitter.Emit(PlayerActionEvent.ExecutionStarted, this);
             State = PlayerActionState.Executing;
         }
@@ -58,6 +63,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
 
         public virtual void HandlePreparationFinished(Vector2 finalPosition)
         {
+            Log.Information($"Finished Preparing Action: {this}");
+
             State = PlayerActionState.None;
             PlayerController.Instance.ActionPointComponent.DecrementActionPoints(PlayerActionUtils.GetApCost(GetType()));
             Emitter.Emit(PlayerActionEvent.PrepFinished, this);
@@ -65,6 +72,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
 
         public virtual void HandlePreparationCanceled()
         {
+            Log.Information($"Canceled Preparing Action: {this}");
+
             Reset();
 
             Game1.AudioManager.PlaySound(Content.Audio.Sounds._021_Decline_01);
@@ -74,6 +83,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
 
         public virtual void HandleExecutionFinished()
         {
+            Log.Information($"Finished Executing Action: {this}");
+
             Reset();
             State = PlayerActionState.None;
             Emitter.Emit(PlayerActionEvent.ExecutionFinished, this);

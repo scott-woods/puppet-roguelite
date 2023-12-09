@@ -2,6 +2,7 @@
 using Nez.AI.BehaviorTrees;
 using PuppetRoguelite.Components.Characters.Enemies;
 using PuppetRoguelite.Components.Shared;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,6 +77,7 @@ namespace PuppetRoguelite.Components.EnemyActions
 
         protected virtual void HandleActionFinished()
         {
+            Log.Information($"EnemyAction Finished: {this}");
             _state = EnemyActionState.Succeeded;
         }
 
@@ -84,6 +86,7 @@ namespace PuppetRoguelite.Components.EnemyActions
         /// </summary>
         public virtual void Abort()
         {
+            Log.Information($"Aborting EnemyAction: {this}");
             _state = EnemyActionState.NotStarted;
         }
 

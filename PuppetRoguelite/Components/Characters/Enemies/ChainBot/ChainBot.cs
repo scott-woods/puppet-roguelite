@@ -10,6 +10,7 @@ using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Tools;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 {
     public class ChainBot : Enemy<ChainBot>
     {
-        public Guid Id = Guid.NewGuid();
-
         //stats
         float _moveSpeed = 75f;
         int _maxHp = 15;
@@ -54,6 +53,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
         public override void Initialize()
         {
             base.Initialize();
+
+            Log.Information($"Initializing ChainBot: {Id}");
 
             AddComponents();
         }
@@ -172,7 +173,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
                         .Sequence(AbortTypes.LowerPriority)
                             .Conditional(c => c.IsInAttackRange())
                             .Action(c => c.ExecuteAction(_chainBotMelee))
-                            .Action(c => c.ClearAction())
                         .EndComposite()
                         .Sequence(AbortTypes.LowerPriority)
                             .Action(c => c.MoveTowardsPlayer())
@@ -194,27 +194,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
                 return true;
             }
             return false;
-            //if (Vector2.Distance(Entity.Position, PlayerController.Instance.Entity.Position) <= 10)
-            //{
-            //    return true;
-            //}
-            //else return false;
         }
 
         #region TASKS
-
-        TaskStatus ExecuteAction(EnemyAction<ChainBot> action)
-        {
-            _activeAction = action;
-
-            return action.Execute();
-        }
-
-        TaskStatus ClearAction()
-        {
-            _activeAction = null;
-            return TaskStatus.Success;
-        }
 
         TaskStatus MoveTowardsPlayer()
         {
@@ -251,18 +233,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             VelocityComponent.Move();
 
             return TaskStatus.Running;
-        }
-
-        public override TaskStatus AbortActions()
-        {
-            if (_activeAction != null)
-            {
-                Debug.Log($"Aborting action for enemy with Id: {Id}. Reason: {StatusComponent.CurrentStatus.Type}");
-                _activeAction.Abort();
-                _activeAction = null;
-            }
-
-            return TaskStatus.Success;
         }
 
         public override TaskStatus Idle()

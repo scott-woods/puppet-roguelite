@@ -6,6 +6,7 @@ using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.StaticData;
 using SDL2;
+using Serilog;
 using System;
 using System.IO;
 
@@ -36,6 +37,20 @@ namespace PuppetRoguelite
         {
             base.Initialize();
 
+            //configure logger
+            if (!Directory.Exists("Logs")) Directory.CreateDirectory("Logs");
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            //setup fna logger ext
+            FNALoggerEXT.LogInfo = (msg) => Log.Information($"FNA: {msg}", msg);
+            FNALoggerEXT.LogWarn = (msg) => Log.Warning($"FNA: {msg}", msg);
+            FNALoggerEXT.LogError = (msg) => Log.Error($"FNA: {msg}", msg);
+
+            //global variables
             DebugRenderEnabled = false;
             Window.AllowUserResizing = false;
             IsFixedTimeStep = true;
@@ -44,23 +59,31 @@ namespace PuppetRoguelite
             PauseOnFocusLost = true;
             ExitOnEscapeKeypress = false;
 
+            //init data directory
             if (!Directory.Exists("Data")) Directory.CreateDirectory("Data");
+
+            //init inspectables
             Inspectables.Initialize();
 
+            //physics config
             Physics.SpatialHashCellSize = 32;
             Physics.Gravity = new Vector2(0, 600f);
             Physics.RaycastsHitTriggers = true;
             Physics.RaycastsStartInColliders = true;
 
+            //global managers
             RegisterGlobalManager(SceneManager);
             RegisterGlobalManager(AudioManager);
             RegisterGlobalManager(GameStateManager);
             RegisterGlobalManager(ResolutionManager);
             RegisterGlobalManager(DebugSettings);
 
+            //resolution and screen size
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
 
+            //start scene
+            Log.Information("Starting initial Scene");
             SceneManager.TargetEntranceId = "0";
             Scene = new NewHub();
         }
@@ -76,7 +99,11 @@ namespace PuppetRoguelite
         {
             base.UnloadContent();
 
+            Log.Information("Unloading Content");
+
             //FmodManager.Unload();
+
+            Log.CloseAndFlush();
         }
     }
 }

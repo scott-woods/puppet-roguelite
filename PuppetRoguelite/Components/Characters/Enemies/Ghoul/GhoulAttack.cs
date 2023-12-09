@@ -4,6 +4,7 @@ using Nez.Systems;
 using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
+using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
         {
             base.Initialize();
 
+            Log.Information("Initializing GhoulAttack");
+
             _hitbox = Entity.AddComponent(new CircleHitbox(1, 8));
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.EnemyHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.PlayerHurtbox);
@@ -38,6 +41,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
 
         protected override void StartAction()
         {
+            Log.Information("Starting GhoulAttack");
+
             Game1.AudioManager.PlaySound(Content.Audio.Sounds.Ghoul_claw);
             _enemy.Animator.Play("Attack", Nez.Sprites.SpriteAnimator.LoopMode.Once);
             _enemy.Animator.OnAnimationCompletedEvent += OnAnimationCompleted;

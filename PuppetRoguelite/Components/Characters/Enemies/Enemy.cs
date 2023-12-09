@@ -1,13 +1,19 @@
 ﻿using Nez;
 using Nez.AI.BehaviorTrees;
 using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
+using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.GlobalManagers;
+using Serilog;
+using System;
 
 namespace PuppetRoguelite.Components.Characters.Enemies
 {
     public abstract class Enemy<T> : EnemyBase, IUpdatable where T : Enemy<T>
     {
+        //misc properties
+        public Guid Id = Guid.NewGuid();
+
         //components
         public StatusComponent StatusComponent;
 
@@ -15,6 +21,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies
 
         protected BehaviorTree<T> _tree;
         protected BehaviorTree<T> _subTree;
+
+        public EnemyAction<T> ActiveAction;
 
         public Enemy(Entity mapEntity)
         {
@@ -75,7 +83,34 @@ namespace PuppetRoguelite.Components.Characters.Enemies
 
         #region Tasks
 
-        public abstract Nez.AI.BehaviorTrees.TaskStatus AbortActions();
+        public virtual Nez.AI.BehaviorTrees.TaskStatus AbortActions()
+        {
+            if (ActiveAction != null)
+            {
+                Log.Debug($"Aborting action for enemy with Id: {Id}. Reason: {StatusComponent.CurrentStatus.Type}");
+
+                ActiveAction?.Abort();
+                ActiveAction = null;
+            }
+
+            return TaskStatus.Success;
+        }
+
+        public virtual TaskStatus ExecuteAction(EnemyAction<T> action)
+        {
+            ActiveAction = action;
+
+            var status = action.Execute();
+
+            if (status == TaskStatus.Success || status == TaskStatus.Failure)
+            {
+                Log.Debug($"Enemy Action {action} completed with Status: {status} Id: {Id}");
+                ActiveAction = null;
+            }
+
+            return status;
+        }
+
         public abstract Nez.AI.BehaviorTrees.TaskStatus Idle();
 
         #endregion
