@@ -51,7 +51,7 @@ namespace PuppetRoguelite
             FNALoggerEXT.LogError = (msg) => Log.Error($"FNA: {msg}", msg);
 
             //global variables
-            DebugRenderEnabled = true;
+            DebugRenderEnabled = false;
             Window.AllowUserResizing = false;
             IsFixedTimeStep = true;
             TargetElapsedTime = System.TimeSpan.FromSeconds((double)1 / 240);

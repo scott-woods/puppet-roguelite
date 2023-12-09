@@ -16,7 +16,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
     public class PlayerGunProjectile : Component, IUpdatable
     {
         //constants
-        const int _damage = 3;
+        const int _damage = 6;
         const float _speed = 450f;
         const float _maxTime = 10f;
 

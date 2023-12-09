@@ -17,7 +17,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
     public class DashAttack : PlayerAction
     {
         //constants
-        const int _damage = 6;
+        const int _damage = 4;
         const int _range = 48;
         const int _startFrame = 0;
         int[] _hitboxActiveFrames = new int[] { 0 };
@@ -55,7 +55,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _initialOriginPos = _playerSim.OriginComponent.Origin;
 
             //hitbox
-            _hitbox = AddComponent(new CircleHitbox(_damage, 16));
+            _hitbox = AddComponent(new CircleHitbox(_damage, 8));
             Flags.SetFlagExclusive(ref _hitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
             Flags.SetFlagExclusive(ref _hitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
             _hitbox.PushForce = 0f;

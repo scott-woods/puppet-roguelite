@@ -146,9 +146,9 @@ namespace PuppetRoguelite.Components.Characters.Player
             //add collision box
             Collider = Entity.AddComponent(new BoxCollider(_collisionOffset.X, _collisionOffset.Y, 8, 5));
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.PlayerCollider);
-            //Collider.CollidesWithLayers = 0;
+            Collider.CollidesWithLayers = 0;
             //Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
-            //Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
+            Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             //Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Trigger);
             //Collider.SetEnabled(false);
 

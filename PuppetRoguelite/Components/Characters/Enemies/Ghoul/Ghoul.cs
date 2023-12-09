@@ -87,6 +87,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
             _collider = Entity.AddComponent(new BoxCollider(9, 6));
             _collider.SetLocalOffset(new Vector2(0, 9));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
+            _collider.CollidesWithLayers = 0;
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 

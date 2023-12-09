@@ -65,11 +65,26 @@ namespace PuppetRoguelite.Components.TiledComponents
             //spawn enemies
             var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapEntity == MapEntity).ToList();
             int i = 0;
+            var typesPicked = new List<Type>();
             while (i < enemySpawns.Count)
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
                 var spawn = enemySpawns[i];
-                combatManager.AddEnemy(spawn.SpawnEnemy(_enemyTypes.RandomItem()));
+
+                Type enemyType;
+
+                //get enemy types that have been picked less than 3 times
+                var possibleTypes = _enemyTypes.Where(t => typesPicked.Where(x => x == t).Count() < 3).ToList();
+
+                //if any possible types, get a random from that list
+                if (possibleTypes.Any())
+                    enemyType = possibleTypes.RandomItem();
+                else //if all types are already at max, just pick another random one
+                    enemyType = _enemyTypes.RandomItem();
+
+                typesPicked.Add(enemyType);
+
+                combatManager.AddEnemy(spawn.SpawnEnemy(enemyType));
                 i++;
                 yield return Coroutine.WaitForSeconds(.2f);
             }

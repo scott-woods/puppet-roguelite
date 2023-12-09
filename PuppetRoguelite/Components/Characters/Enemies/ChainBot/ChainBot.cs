@@ -84,6 +84,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             _collider = Entity.AddComponent(new BoxCollider(10, 5));
             _collider.SetLocalOffset(new Vector2(-1, 7));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
+            _collider.CollidesWithLayers = 0;
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 

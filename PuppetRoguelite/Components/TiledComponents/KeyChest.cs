@@ -44,7 +44,9 @@ namespace PuppetRoguelite.Components.TiledComponents
             base.Initialize();
 
             _collider = Entity.AddComponent(new BoxCollider(-8, 0, 16, 16));
-            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
+            _collider.PhysicsLayer = 0;
+            Flags.SetFlag(ref _collider.PhysicsLayer, (int)PhysicsLayers.Interactable);
+            Flags.SetFlag(ref _collider.PhysicsLayer, (int)PhysicsLayers.Environment);
 
             //load sprites
             var chestTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Chest);

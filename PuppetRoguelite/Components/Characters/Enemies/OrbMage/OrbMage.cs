@@ -89,6 +89,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             //collider
             _collider = Entity.AddComponent(new BoxCollider(-5, 5, 10, 7));
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
+            _collider.CollidesWithLayers = 0;
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
             Flags.SetFlag(ref _collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 

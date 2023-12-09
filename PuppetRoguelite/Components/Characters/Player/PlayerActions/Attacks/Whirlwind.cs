@@ -23,7 +23,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
     public class Whirlwind : PlayerAction
     {
         //data
-        const int _damage = 3;
+        const int _damage = 4;
         const float _radius = 12;
         const float _pushForce = 2.5f;
 

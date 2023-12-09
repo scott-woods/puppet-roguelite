@@ -15,9 +15,6 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Begin();
 
-            //allow movement through enemies
-            Flags.UnsetFlag(ref _context.Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
-
             //disable hurtbox
             _context.Hurtbox.SetEnabled(false);
 
@@ -32,9 +29,6 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public override void End()
         {
             base.End();
-
-            //reenable collisions with enemies
-            Flags.SetFlag(ref _context.Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 
             //reenable hurtbox
             _context.Hurtbox.SetEnabled(true);
