@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Whirlwind", 1, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Whirlwind", 1, PlayerActionCategory.Attack, "Spinning melee that hits enemies 360 degrees around you.")]
     public class Whirlwind : PlayerAction
     {
         //data

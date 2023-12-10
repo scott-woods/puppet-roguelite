@@ -15,7 +15,7 @@ using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Support
 {
-    [PlayerActionInfo("Swiftstrike", 2, PlayerActionCategory.Support)]
+    [PlayerActionInfo("Swiftstrike", 2, PlayerActionCategory.Support, "Greatly increases Melee Attack Speed for a short time.")]
     public class AttackSpeedBoost : PlayerAction
     {
         //components

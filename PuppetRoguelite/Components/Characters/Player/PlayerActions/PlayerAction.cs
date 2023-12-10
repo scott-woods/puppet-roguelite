@@ -121,12 +121,14 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
         public string Name { get; }
         public int ApCost { get; }
         public PlayerActionCategory Category { get; }
+        public string Description { get; }
 
-        public PlayerActionInfoAttribute(string name, int apCost, PlayerActionCategory category)
+        public PlayerActionInfoAttribute(string name, int apCost, PlayerActionCategory category, string description)
         {
             Name = name;
             ApCost = apCost;
             Category = category;
+            Description = description;
         }
     }
 
@@ -148,6 +150,12 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
         {
             var attribute = (PlayerActionInfoAttribute)Attribute.GetCustomAttribute(actionType, typeof(PlayerActionInfoAttribute));
             return attribute.Category;
+        }
+
+        public static string GetDescription(Type actionType)
+        {
+            var attribute = (PlayerActionInfoAttribute)Attribute.GetCustomAttribute(actionType, typeof(PlayerActionInfoAttribute));
+            return attribute?.Description;
         }
     }
 }

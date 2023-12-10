@@ -23,6 +23,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
             base.Reason();
 
             if (TryTriggerTurn()) return;
+            if (TryShowStats()) return;
             if (TryCheck()) return;
             if (TryMove()) return;
             if (TryMelee()) return;

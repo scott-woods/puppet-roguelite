@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Dash", 2, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Dash", 2, PlayerActionCategory.Attack, "Slice along a straight line, damaging any enemies in your path.")]
     public class DashAttack : PlayerAction
     {
         //constants

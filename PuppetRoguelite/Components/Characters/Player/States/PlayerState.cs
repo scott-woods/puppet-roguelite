@@ -4,6 +4,7 @@ using Nez.AI.FSM;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
+using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,21 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public override void Update(float deltaTime)
         {
             //throw new NotImplementedException();
+        }
+
+        public bool TryShowStats()
+        {
+            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Tab))
+            {
+                _machine.ChangeState<CutsceneState>();
+
+                var statsMenuEntity = Game1.Scene.CreateEntity("stats-menu");
+                statsMenuEntity.AddComponent(new StatsMenu(OnStatsMenuClosed));
+
+                return true;
+            }
+
+            return false;
         }
 
         public bool TryTriggerTurn()
@@ -121,6 +137,11 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         }
 
         void HandleInteractionFinished()
+        {
+            Game1.Schedule(.1f, timer => _machine.ChangeState<IdleState>());
+        }
+
+        void OnStatsMenuClosed()
         {
             Game1.Schedule(.1f, timer => _machine.ChangeState<IdleState>());
         }

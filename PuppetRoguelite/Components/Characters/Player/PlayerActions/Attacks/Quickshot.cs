@@ -15,7 +15,7 @@ using Serilog;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Quickshot", 1, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Quickshot", 1, PlayerActionCategory.Attack, "Fire a fast-moving projectile, dealing heavy damage to a single enemy.")]
     public class Quickshot : PlayerAction
     {
         //coroutines

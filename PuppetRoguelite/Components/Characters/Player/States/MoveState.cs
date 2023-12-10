@@ -44,6 +44,8 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.Reason();
 
+            if (TryShowStats())
+                return;
             if (TryTriggerTurn())
                 return;
             if (TryCheck())

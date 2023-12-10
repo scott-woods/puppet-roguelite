@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
 {
-    [PlayerActionInfo("Stasis Field", 2, PlayerActionCategory.Utility)]
+    [PlayerActionInfo("Stasis Field", 2, PlayerActionCategory.Utility, "Freeze any enemies caught in its radius for a short time.")]
     public class StasisField : PlayerAction
     {
         //data

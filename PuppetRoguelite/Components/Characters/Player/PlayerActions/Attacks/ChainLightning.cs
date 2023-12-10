@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
-    [PlayerActionInfo("Chain Lightning", 3, PlayerActionCategory.Attack)]
+    [PlayerActionInfo("Chain Lightning", 3, PlayerActionCategory.Attack, "Strike in any direction, chaining to nearby enemies.")]
     public class ChainLightning : PlayerAction
     {
         //data

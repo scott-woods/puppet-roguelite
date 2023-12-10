@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
 {
-    [PlayerActionInfo("Teleport", 1, PlayerActionCategory.Utility)]
+    [PlayerActionInfo("Teleport", 1, PlayerActionCategory.Utility, "Instantly teleport to a nearby location.")]
     public class Teleport : PlayerAction
     {
         const float _maxRadius = 100f;

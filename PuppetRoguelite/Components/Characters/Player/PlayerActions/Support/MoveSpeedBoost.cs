@@ -15,7 +15,7 @@ using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Support
 {
-    [PlayerActionInfo("Haste", 1, PlayerActionCategory.Support)]
+    [PlayerActionInfo("Haste", 1, PlayerActionCategory.Support, "Greatly increases Move Speed for a short time.")]
     public class MoveSpeedBoost : PlayerAction
     {
         //components

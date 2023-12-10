@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Support
 {
-    [PlayerActionInfo("Healing Aura", 3, PlayerActionCategory.Support)]
+    [PlayerActionInfo("Healing Aura", 3, PlayerActionCategory.Support, "Heal yourself for 2 HP.")]
     public class HealingAura : PlayerAction
     {
         //components
