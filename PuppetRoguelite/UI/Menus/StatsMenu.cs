@@ -26,9 +26,9 @@ namespace PuppetRoguelite.UI.Menus
         Table _attacksTable;
         Table _utilitiesTable;
         Table _supportTable;
-        List<FocusLabel> _attackButtons = new List<FocusLabel>();
-        List<FocusLabel> _utilityButtons = new List<FocusLabel>();
-        List<FocusLabel> _supportButtons = new List<FocusLabel>();
+        List<FocusLabel> _attackLabels = new List<FocusLabel>();
+        List<FocusLabel> _utilityLabels = new List<FocusLabel>();
+        List<FocusLabel> _supportLabels = new List<FocusLabel>();
         Label _infoTableNameLabel, _infoTableTypeLabel, _infoTableCostLabel, _infoTableDescriptionLabel;
 
         //misc
@@ -68,7 +68,8 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.OnEnabled();
 
-            Stage.SetGamepadFocusElement(_attackButtons.First());
+            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Open_stats_menu);
+            Stage.SetGamepadFocusElement(_attackLabels.First());
         }
 
         public override void Update()
@@ -77,6 +78,7 @@ namespace PuppetRoguelite.UI.Menus
 
             if (Input.IsKeyPressed(Keys.Tab))
             {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Close_stats_menu);
                 _closedCallback?.Invoke();
                 Entity.Destroy();
             }
@@ -145,11 +147,12 @@ namespace PuppetRoguelite.UI.Menus
                 {
                     var attackAction = PlayerData.Instance.AttackActions[i];
                     var attackFocusLabel = new FocusLabel(PlayerActionUtils.GetName(attackAction.ToType()), _basicSkin, "default_lg");
+                    attackFocusLabel.SetWrap(true);
                     attackFocusLabel.OnLabelFocused += () =>
                     {
                         UpdateInfoTable(attackAction);
                     };
-                    _attackButtons.Add(attackFocusLabel);
+                    _attackLabels.Add(attackFocusLabel);
                     _attacksTable.Add(attackFocusLabel)
                         .GrowX()
                         .SetUniformX();
@@ -175,13 +178,14 @@ namespace PuppetRoguelite.UI.Menus
                 if (PlayerData.Instance.UtilityActions.Count() > i)
                 {
                     var utilityAction = PlayerData.Instance.UtilityActions[i];
-                    var utilityListButton = new FocusLabel(PlayerActionUtils.GetName(utilityAction.ToType()), _basicSkin, "default_lg");
-                    utilityListButton.OnLabelFocused += () =>
+                    var utilityFocusLabel = new FocusLabel(PlayerActionUtils.GetName(utilityAction.ToType()), _basicSkin, "default_lg");
+                    utilityFocusLabel.SetWrap(true);
+                    utilityFocusLabel.OnLabelFocused += () =>
                     {
                         UpdateInfoTable(utilityAction);
                     };
-                    _utilityButtons.Add(utilityListButton);
-                    _utilitiesTable.Add(utilityListButton)
+                    _utilityLabels.Add(utilityFocusLabel);
+                    _utilitiesTable.Add(utilityFocusLabel)
                         .GrowX()
                         .SetUniformX();
                 }
@@ -206,13 +210,14 @@ namespace PuppetRoguelite.UI.Menus
                 if (PlayerData.Instance.SupportActions.Count() > i)
                 {
                     var supportAction = PlayerData.Instance.SupportActions[i];
-                    var supportListButton = new FocusLabel(PlayerActionUtils.GetName(supportAction.ToType()), _basicSkin, "default_lg");
-                    supportListButton.OnLabelFocused += () =>
+                    var supportFocusLabel = new FocusLabel(PlayerActionUtils.GetName(supportAction.ToType()), _basicSkin, "default_lg");
+                    supportFocusLabel.SetWrap(true);
+                    supportFocusLabel.OnLabelFocused += () =>
                     {
                         UpdateInfoTable(supportAction);
                     };
-                    _supportButtons.Add(supportListButton);
-                    _supportTable.Add(supportListButton)
+                    _supportLabels.Add(supportFocusLabel);
+                    _supportTable.Add(supportFocusLabel)
                         .GrowX()
                         .SetUniformX();
                 }
@@ -226,6 +231,7 @@ namespace PuppetRoguelite.UI.Menus
 
             //info window table
             _infoTable = new WindowTable(_basicSkin);
+            _infoTable.DebugAll();
             _infoTable.Pad(50f);
             _mainTable.Add(_infoTable)
                 .Expand(1, 2)
@@ -236,23 +242,25 @@ namespace PuppetRoguelite.UI.Menus
                 .SetFillY()
                 .Width(Game1.UIResolution.X * .4f);
 
-            var infoInnerTable = new Table();
-            infoInnerTable.DebugAll();
-            _infoTable.Add(infoInnerTable).Top().Left().Grow();
-
+            var infoUpperTable = new Table();
+            _infoTable.Add(infoUpperTable)
+                .GrowX()
+                .Top().Left();
             _infoTableNameLabel = new Label("", _basicSkin, "default_xxl");
-            infoInnerTable.Add(_infoTableNameLabel).GrowX().Left();
-            infoInnerTable.Row();
+            infoUpperTable.Add(_infoTableNameLabel).GrowX().Left();
+            infoUpperTable.Row();
             _infoTableTypeLabel = new Label("", _basicSkin, "default_lg");
-            infoInnerTable.Add(_infoTableTypeLabel).GrowX().Left();
-            infoInnerTable.Row();
+            infoUpperTable.Add(_infoTableTypeLabel).GrowX().Left();
+            infoUpperTable.Row();
             _infoTableCostLabel = new Label("", _basicSkin, "default_lg");
-            infoInnerTable.Add(_infoTableCostLabel).GrowX().Left();
-            infoInnerTable.Row();
+            infoUpperTable.Add(_infoTableCostLabel).GrowX().Left();
+
+            _infoTable.Row();
+
             _infoTableDescriptionLabel = new Label("", _basicSkin, "default_md");
-            _infoTableDescriptionLabel.SetWrap(true);
-            infoInnerTable.Add(_infoTableDescriptionLabel).GrowX().Left();
-            infoInnerTable.Row();
+            _infoTableDescriptionLabel.SetWrap(true).SetAlignment(Align.Center);
+            _infoTable.Add(_infoTableDescriptionLabel)
+                .Grow();
         }
 
         void UpdateInfoTable(PlayerActionType actionType)

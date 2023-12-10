@@ -50,6 +50,7 @@ namespace Nez
 				public const string Cereal_slot_2 = @"Content\Audio\Sounds\cereal_slot_2.wav";
 				public const string Cereal_slot_3 = @"Content\Audio\Sounds\cereal_slot_3.wav";
 				public const string Chain_bot_damaged = @"Content\Audio\Sounds\chain_bot_damaged.wav";
+				public const string Close_stats_menu = @"Content\Audio\Sounds\close_stats_menu.wav";
 				public const string Default_text = @"Content\Audio\Sounds\default_text.wav";
 				public const string Dollah_pickup = @"Content\Audio\Sounds\dollah_pickup.wav";
 				public const string Enemy_death_1 = @"Content\Audio\Sounds\enemy_death_1.wav";
@@ -66,6 +67,7 @@ namespace Nez
 				public const string Hh_vanish = @"Content\Audio\Sounds\hh_vanish.wav";
 				public const string Loot_get = @"Content\Audio\Sounds\loot_get.wav";
 				public const string Menu_select = @"Content\Audio\Sounds\menu_select.wav";
+				public const string Open_stats_menu = @"Content\Audio\Sounds\open_stats_menu.wav";
 				public const string Orb_mage_attack = @"Content\Audio\Sounds\orb_mage_attack.wav";
 				public const string Orb_mage_telegraph = @"Content\Audio\Sounds\orb_mage_telegraph.wav";
 				public const string Player_dash = @"Content\Audio\Sounds\player_dash.wav";
