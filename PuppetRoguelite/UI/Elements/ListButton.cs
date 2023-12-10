@@ -27,7 +27,13 @@ namespace PuppetRoguelite.UI.Elements
 
         void IInputListener.OnMouseEnter()
         {
-            OnFocused();
+            GetStage().SetGamepadFocusElement(null);
+            GetStage().SetGamepadFocusElement(this);
+        }
+
+        void IInputListener.OnMouseExit()
+        {
+
         }
 
         bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
