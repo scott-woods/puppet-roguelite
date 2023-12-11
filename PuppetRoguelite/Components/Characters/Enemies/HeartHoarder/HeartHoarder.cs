@@ -88,7 +88,10 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             NewHealthbar = Entity.AddComponent(new Healthbar(HealthComponent, 48));
             NewHealthbar.SetLocalOffset(new Vector2(0, -24));
 
-            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, 3, 5f, VelocityComponent, Hurtbox));
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, VelocityComponent, Hurtbox, "Hit"));
+
+            //sturdy
+            Entity.AddComponent(new SturdyComponent(8, 4f, 4));
 
             YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
 

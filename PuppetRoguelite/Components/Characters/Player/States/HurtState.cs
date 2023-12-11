@@ -20,13 +20,29 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._64_Get_hit_03);
 
-            //var hurtAnimation = _context.VelocityComponent.Direction.X >= 0 ? "HurtRight" : "HurtLeft";
-            _context.SpriteAnimator.Play("Idle");
-
-            _timer = Game1.Schedule(.5f, timer =>
+            //shake screen
+            if (_context.Entity.Scene.Camera.Entity.TryGetComponent<CameraShake>(out var cameraShake))
             {
+                cameraShake.Shake(20f, 3f);
+            }
+
+            //_timer = Game1.Schedule(.5f, timer =>
+            //{
+            //    _machine.ChangeState<IdleState>();
+            //});
+        }
+
+        public override void Reason()
+        {
+            base.Reason();
+
+            if (_context.Entity.TryGetComponent<KnockbackComponent>(out var knockbackComponent))
+            {
+                if (!knockbackComponent.IsStunned)
+                    _machine.ChangeState<IdleState>();
+            }
+            else
                 _machine.ChangeState<IdleState>();
-            });
         }
 
         public override void Update(float deltaTime)
@@ -38,7 +54,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         {
             base.End();
 
-            _timer.Stop();
+            //_timer.Stop();
         }
     }
 }

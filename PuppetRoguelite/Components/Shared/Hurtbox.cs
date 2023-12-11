@@ -5,9 +5,12 @@ using Nez.Sprites;
 using Nez.Systems;
 using Nez.Timers;
 using Nez.Tweens;
+using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.Components.Effects;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +21,20 @@ namespace PuppetRoguelite.Components.Shared
 {
     public class Hurtbox : Component, IUpdatable
     {
-        const float _attackLifespan = 2f;
-
+        //emitter
         public Emitter<HurtboxEventTypes, HurtboxHit> Emitter = new Emitter<HurtboxEventTypes, HurtboxHit>();
 
-        public bool IsInRecovery { get; set; }
+        //constants
+        const float _attackLifespan = 2f;
 
+        //components
         public Collider Collider;
 
+        //misc
+        bool _isInRecovery;
         float _recoveryTime;
-
         ITimer _recoveryTimer;
-
         List<string> _recentAttackIds = new List<string>();
-
         string _damageSound;
 
         /// <summary>
@@ -43,6 +46,7 @@ namespace PuppetRoguelite.Components.Shared
         public Hurtbox(Collider collider, float recoveryTime, string damageSound = "")
         {
             Collider = collider;
+            Collider.IsTrigger = true;
             _recoveryTime = recoveryTime;
             _damageSound = damageSound;
         }
@@ -83,15 +87,17 @@ namespace PuppetRoguelite.Components.Shared
 
         public void Update()
         {
-            if (!IsInRecovery)
+            //only check for collisions if not in recovery
+            if (!_isInRecovery)
             {
-                //var renderer = Entity.GetComponent<SpriteRenderer>();
-                //renderer.Color = Color.White;
-
+                //get collisions
                 var hitboxes = Physics.BoxcastBroadphaseExcludingSelf(Collider, Collider.CollidesWithLayers);
                 foreach (IHitbox hitbox in hitboxes)
                 {
-                    if (IsInRecovery) break;
+                    //if hit by something else already, break for loop
+                    if (_isInRecovery) break;
+
+                    //if hasn't already been hit by this hitbox's attack
                     if (!_recentAttackIds.Contains(hitbox.AttackId))
                     {
                         var id = hitbox.AttackId;
@@ -105,28 +111,49 @@ namespace PuppetRoguelite.Components.Shared
 
         void HandleHit(IHitbox hitbox)
         {
-            if (!String.IsNullOrWhiteSpace(_damageSound))
-            {
+            //play sound
+            if (!string.IsNullOrWhiteSpace(_damageSound))
                 Game1.AudioManager.PlaySound(_damageSound);
-            }
 
             //start recovery timer if necessary
             if (_recoveryTime > 0)
             {
-                IsInRecovery = true;
-                //var renderer = Entity.GetComponent<SpriteRenderer>();
-                //renderer.Color = Color.White * .5f;
+                //animator should be slightly transparent while in recovery
+                if (Entity.TryGetComponent<SpriteAnimator>(out var animator))
+                    animator.SetColor(new Color(255, 255, 255, 128));
+
+                _isInRecovery = true;
                 _recoveryTimer = Core.Schedule(_recoveryTime, timer =>
                 {
-                    //renderer.Color = Color.White;
-                    IsInRecovery = false;
+                    if (Entity.TryGetComponent<SpriteAnimator>(out var animator))
+                        animator.SetColor(new Color(255, 255, 255, 255));
+
+                    _isInRecovery = false;
                 });
             }
 
-            //emit hit signal
+            //get collision result
             var collider = hitbox as Collider;
             if (collider.CollidesWith(Collider, out CollisionResult collisionResult))
             {
+                //get angle from normal
+                var angle = (float)Math.Atan2(collisionResult.Normal.Y, collisionResult.Normal.X);
+
+                //choose hit effect
+                var effects = new List<HitEffect>() { HitEffects.Hit1, HitEffects.Hit2, HitEffects.Hit3 };
+                var effect = effects.RandomItem();
+
+                //effect color
+                Color color = Color.White;
+                if (Entity == PlayerController.Instance.Entity)
+                    color = Color.Red;
+
+                //hit effect
+                var effectEntity = Entity.Scene.CreateEntity("hit-effect", collisionResult.Point);
+                effectEntity.SetRotation(angle);
+                var effectComponent = effectEntity.AddComponent(new HitEffectComponent(effect, color));
+
+                //emit hit signal
                 Emitter.Emit(HurtboxEventTypes.Hit, new HurtboxHit(collisionResult, hitbox));
             }
         }

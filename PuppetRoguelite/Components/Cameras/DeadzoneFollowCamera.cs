@@ -17,10 +17,20 @@ namespace PuppetRoguelite.Components.Cameras
         public RectangleF Deadzone = new RectangleF(0, 0, 64, 64);
         CameraHandler _cameraHandler;
 
+        //components
+        CameraShake _shake;
+
         public DeadzoneFollowCamera(Entity target, Vector2 deadzoneSize)
         {
             _targetEntity = target;
             Deadzone = new RectangleF(0, 0, deadzoneSize.X, deadzoneSize.Y);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            _shake = Entity.AddComponent(new CameraShake());
         }
 
         public override void OnAddedToEntity()

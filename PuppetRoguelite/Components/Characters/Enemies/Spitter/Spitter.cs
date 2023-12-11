@@ -106,7 +106,10 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             NewHealthbar.SetLocalOffset(new Vector2(0, -25));
 
             //knockback
-            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(200f, .25f, 6, 2f, VelocityComponent, Hurtbox));
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(200f, .25f, VelocityComponent, Hurtbox, "Hit"));
+
+            //sturdy
+            Entity.AddComponent(new SturdyComponent(6, 2f));
 
             //sprite flipper
             SpriteFlipper = Entity.AddComponent(new SpriteFlipper(Animator, VelocityComponent));

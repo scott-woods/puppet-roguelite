@@ -82,6 +82,10 @@
     <None Remove="Content\Textures\Characters\Player\hooded_knight_run.png" />
     <None Remove="Content\Textures\Characters\Player\sci_fi_player_no_sword.png" />
     <None Remove="Content\Textures\Characters\Player\sci_fi_player_with_sword.png" />
+    <None Remove="Content\Textures\Effects\hit 1.png" />
+    <None Remove="Content\Textures\Effects\hit 2.png" />
+    <None Remove="Content\Textures\Effects\hit 3.png" />
+    <None Remove="Content\Textures\Effects\hit 4.png" />
     <None Remove="Content\Textures\Objects\boss_gate.png" />
     <None Remove="Content\Textures\Objects\dungeon_prison_gate_horizontal.png" />
     <None Remove="Content\Textures\Objects\dungeon_prison_gate_vertical.png" />
@@ -454,7 +458,6 @@
   <ItemGroup>
     <Folder Include="Content\Textures\Characters\HeartHoarder\" />
     <Folder Include="Content\Textures\Characters\OrbMage\" />
-    <Folder Include="Content\Textures\Effects\" />
     <Folder Include="Content\Textures\UI\Icons\Style3\Atlas\" />
     <Folder Include="Content\Textures\UI\Icons\Style4\Atlas\" />
     <Folder Include="Content\Textures\UI\Menu\Style3\Atlas\" />

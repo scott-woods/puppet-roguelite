@@ -4,6 +4,7 @@ using Nez.Sprites;
 using Nez.Textures;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             _collider = Entity.AddComponent(new BoxCollider());
             _collider.SetEnabled(true);
+            Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Environment);
 
             _renderer = Entity.AddComponent(new SpriteRenderer());
             _renderer.SetSprite(_closedSprite);

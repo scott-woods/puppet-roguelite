@@ -190,7 +190,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                     var effectHitbox = effectEntity.AddComponent(new CircleHitbox(_damage + _currentChain * _damageAddedPerChain, 1));
                     Flags.SetFlagExclusive(ref effectHitbox.PhysicsLayer, (int)PhysicsLayers.PlayerHitbox);
                     Flags.SetFlagExclusive(ref effectHitbox.CollidesWithLayers, (int)PhysicsLayers.EnemyHurtbox);
-                    effectComponent.PlayAnimation();
                 }
                 Log.Debug("ChainLightning: finished striking next entities");
 
@@ -314,7 +313,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                             var effectEntity = Scene.CreateEntity("lightning-effect");
                             effectEntity.SetPosition(Position + _hitbox.LocalOffset);
                             var effectComponent = effectEntity.AddComponent(new HitEffectComponent(HitEffects.Lightning1));
-                            effectComponent.PlayAnimation();
                         }
                     }
                 }

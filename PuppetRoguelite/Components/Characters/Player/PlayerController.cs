@@ -140,7 +140,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             hurtboxCollider.IsTrigger = true;
             Flags.SetFlagExclusive(ref hurtboxCollider.PhysicsLayer, (int)PhysicsLayers.PlayerHurtbox);
             Flags.SetFlagExclusive(ref hurtboxCollider.CollidesWithLayers, (int)PhysicsLayers.EnemyHitbox);
-            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 2f));
+            Hurtbox = Entity.AddComponent(new Hurtbox(hurtboxCollider, 1.25f));
             //Hurtbox.SetEnabled(false);
 
             //add collision box
@@ -187,7 +187,7 @@ namespace PuppetRoguelite.Components.Characters.Player
             _spriteTrail.DisableSpriteTrail();
 
             //knockback
-            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .75f, VelocityComponent, Hurtbox));
+            KnockbackComponent = Entity.AddComponent(new KnockbackComponent(110f, .5f, VelocityComponent, Hurtbox, "Idle"));
 
             //actions manager
             ActionsManager = Entity.AddComponent(new ActionsManager(PlayerData.Instance.AttackActions, PlayerData.Instance.UtilityActions,

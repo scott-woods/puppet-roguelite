@@ -24,49 +24,29 @@ namespace PuppetRoguelite.Components.Shared
 
         float _knockbackSpeed;
         float _knockbackDuration;
-        int _hitsUntilImmune = 0;
-        float _immunityDuration = 0f;
-        int _hitCounter = 0;
-        float _hitLifespan = 1.5f;
-        bool _isImmune;
+        bool _isSturdy;
 
         ITween<float> _speedTween;
         float _speed = 0f;
 
+        string _animationName;
+
         Status _status = new Status(Status.StatusType.Stunned, (int)StatusPriority.Stunned);
 
         /// <summary>
-        /// constructor with no immunity parameters
+        /// constructor
         /// </summary>
         /// <param name="knockbackSpeed"></param>
         /// <param name="knockbackDuration"></param>
         /// <param name="velocityComponent"></param>
         /// <param name="hurtbox"></param>
-        public KnockbackComponent(float knockbackSpeed, float knockbackDuration, VelocityComponent velocityComponent, Hurtbox hurtbox)
+        public KnockbackComponent(float knockbackSpeed, float knockbackDuration, VelocityComponent velocityComponent, Hurtbox hurtbox, string animationName)
         {
             _knockbackSpeed = knockbackSpeed;
             _knockbackDuration = knockbackDuration;
             _velocityComponent = velocityComponent;
             _hurtbox = hurtbox;
-        }
-
-        /// <summary>
-        /// constructor that allows immunity after a certain number of hits
-        /// </summary>
-        /// <param name="knockbackSpeed"></param>
-        /// <param name="knockbackDuration"></param>
-        /// <param name="hitsUntilImmune"></param>
-        /// <param name="immunityDuration"></param>
-        /// <param name="velocityComponent"></param>
-        /// <param name="hurtbox"></param>
-        public KnockbackComponent(float knockbackSpeed, float knockbackDuration, int hitsUntilImmune, float immunityDuration, VelocityComponent velocityComponent, Hurtbox hurtbox)
-        {
-            _knockbackSpeed = knockbackSpeed;
-            _knockbackDuration = knockbackDuration;
-            _hitsUntilImmune = hitsUntilImmune;
-            _immunityDuration = immunityDuration;
-            _velocityComponent = velocityComponent;
-            _hurtbox = hurtbox;
+            _animationName = animationName;
         }
 
         public override void OnAddedToEntity()
@@ -74,6 +54,12 @@ namespace PuppetRoguelite.Components.Shared
             base.OnAddedToEntity();
 
             _hurtbox.Emitter.AddObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
+
+            if (Entity.TryGetComponent<SturdyComponent>(out var sturdyComponent))
+            {
+                sturdyComponent.Emitter.AddObserver(SturdyComponentEvents.SturdyActivated, OnSturdyActivated);
+                sturdyComponent.Emitter.AddObserver(SturdyComponentEvents.SturdyDeactivated, OnSturdyDeactivated);
+            }
 
             _statusComponent = Entity.GetComponent<StatusComponent>();
         }
@@ -83,6 +69,12 @@ namespace PuppetRoguelite.Components.Shared
             base.OnRemovedFromEntity();
 
             _hurtbox.Emitter.RemoveObserver(HurtboxEventTypes.Hit, OnHurtboxHit);
+
+            if (Entity.TryGetComponent<SturdyComponent>(out var sturdyComponent))
+            {
+                sturdyComponent.Emitter.RemoveObserver(SturdyComponentEvents.SturdyActivated, OnSturdyActivated);
+                sturdyComponent.Emitter.RemoveObserver(SturdyComponentEvents.SturdyDeactivated, OnSturdyDeactivated);
+            }
 
             _speedTween?.Stop();
         }
@@ -104,35 +96,13 @@ namespace PuppetRoguelite.Components.Shared
                 //move at current speed
                 _velocityComponent.Move(_speed);
 
-                ////if speed tween is not null
-                //if (_speedTween != null)
-                //{
-                //    //if speed tween is still running, continue to move
-                //    if (_speedTween.IsRunning())
-                //    {
-                //        _velocityComponent.Move(_speed);
-                //    }
-                //    else //tween finished, end stun
-                //    {
-                //        _speedTween = null;
-                //        IsStunned = false;
-                //        if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
-                //        {
-                //            statusComponent.PopStatus(_status);
-                //        }
-                //        return;
-                //    }
-                //}
-
                 //play a hit animation if the entity has a sprite animator with one
                 if (Entity.TryGetComponent<SpriteAnimator> (out var animator))
                 {
-                    if (animator.Animations.ContainsKey("Hit"))
+                    if (animator.Animations.ContainsKey(_animationName))
                     {
-                        if (animator.CurrentAnimationName != "Hit")
-                        {
-                            animator.Play("Hit");
-                        }
+                        if (!animator.IsAnimationActive(_animationName))
+                            animator.Play(_animationName);
                     }
                 }
             }
@@ -148,24 +118,10 @@ namespace PuppetRoguelite.Components.Shared
                     return;
                 }
             }
-            if (!_isImmune)
+
+            //only get stunned if not sturdy
+            if (!_isSturdy)
             {
-                //if can become immune, increment hits
-                if (_hitsUntilImmune > 0)
-                {
-                    _hitCounter += 1;
-                    Game1.Schedule(_hitLifespan, timer => _hitCounter = Math.Max(0, _hitCounter - 1));
-
-                    //if hits are greater or equal to hits until immune, become immune
-                    if (_hitCounter >= _hitsUntilImmune)
-                    {
-                        _isImmune = true;
-                        _hitCounter = 0;
-                        Game1.Schedule(_immunityDuration, timer => _isImmune = false);
-                        return;
-                    }
-                }
-
                 //set stunned to true
                 IsStunned = true;
 
@@ -187,10 +143,6 @@ namespace PuppetRoguelite.Components.Shared
                 _velocityComponent.SetDirection(dir);
                 _speed = _knockbackSpeed * hurtboxHit.Hitbox.PushForce;
 
-                //var test = this.Tween("_speed", 0, _knockbackDuration);
-                //test.SetEaseType(EaseType.CubicOut);
-                //test.Start();
-
                 //if tween not null, one is already in progress. cancel that one and start over
                 if (_speedTween != null)
                 {
@@ -205,14 +157,39 @@ namespace PuppetRoguelite.Components.Shared
             }
         }
 
-        void OnTweenFinished(ITween<float> tween)
+        void EndStun()
         {
+            if (_speedTween != null)
+            {
+                if (_speedTween.IsRunning())
+                    _speedTween.Stop();
+            }
+
             _speedTween = null;
+
             IsStunned = false;
             if (Entity.TryGetComponent<StatusComponent>(out var statusComponent))
             {
                 statusComponent.PopStatus(_status);
             }
+        }
+
+        void OnTweenFinished(ITween<float> tween)
+        {
+            EndStun();
+        }
+
+        void OnSturdyActivated()
+        {
+            _isSturdy = true;
+
+            if (IsStunned)
+                EndStun();
+        }
+
+        void OnSturdyDeactivated()
+        {
+            _isSturdy = false;
         }
     }
 }
