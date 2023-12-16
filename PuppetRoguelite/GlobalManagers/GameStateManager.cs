@@ -151,6 +151,8 @@ namespace PuppetRoguelite.GlobalManagers
     {
         Exploration,
         Combat,
-        Paused
+        Paused,
+        Tutorial,
+        AttackTutorial
     }
 }

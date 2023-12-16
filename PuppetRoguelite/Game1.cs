@@ -27,6 +27,7 @@ namespace PuppetRoguelite
         public static GameStateManager GameStateManager = new GameStateManager();
         public static ResolutionManager ResolutionManager = new ResolutionManager();
         public static DebugSettings DebugSettings = new DebugSettings();
+        public static EventManager EventManager = new EventManager();
 
         public Game1() : base()
         {
@@ -77,6 +78,7 @@ namespace PuppetRoguelite
             RegisterGlobalManager(GameStateManager);
             RegisterGlobalManager(ResolutionManager);
             RegisterGlobalManager(DebugSettings);
+            RegisterGlobalManager(EventManager);
 
             //resolution and screen size
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);

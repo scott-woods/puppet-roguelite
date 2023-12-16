@@ -1,7 +1,9 @@
 ﻿using Nez;
 using Nez.Systems;
 using Nez.UI;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,8 +37,13 @@ namespace PuppetRoguelite.Components.Shared
 
                 var prevHealth = _health;
 
+                //set min value to 1 if on Player and in tutorial room, so player can't be killed
+                var minValue = 0;
+                if (Entity == PlayerController.Instance.Entity && Game1.Scene.GetType() == typeof(TutorialRoom))
+                    minValue = 1;
+
                 //update health value
-                _health = Math.Clamp(value, 0, MaxHealth);
+                _health = Math.Clamp(value, minValue, MaxHealth);
 
                 //emit health changed signal to update ui
                 if (prevHealth != _health)

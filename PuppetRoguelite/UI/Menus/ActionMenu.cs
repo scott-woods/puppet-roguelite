@@ -21,7 +21,7 @@ namespace PuppetRoguelite.UI.Menus
         string _dialogTitle;
         Action<Type> _actionSelectedHandler;
 
-        Dictionary<Button, Type> _buttonDictionary = new Dictionary<Button, Type>();
+        Dictionary<ListButton, Type> _buttonDictionary = new Dictionary<ListButton, Type>();
 
         public ActionMenu(List<PlayerActionType> options, string dialogTitle, Action<Type> actionSelectedHandler, Action cancelHandler) : base(cancelHandler)
         {
@@ -94,7 +94,8 @@ namespace PuppetRoguelite.UI.Menus
 
             if (button == null)
             {
-                button = _buttonDictionary.First().Key;
+                if (_buttonDictionary != null && _buttonDictionary.Count > 0)
+                    button = _buttonDictionary.First().Key;
             }
 
             return button;
@@ -120,7 +121,7 @@ namespace PuppetRoguelite.UI.Menus
 
         void OnButtonClicked(Button button)
         {
-            var type = _buttonDictionary[button];
+            var type = _buttonDictionary[button as ListButton];
             _actionSelectedHandler?.Invoke(type);
         }
 
@@ -140,6 +141,33 @@ namespace PuppetRoguelite.UI.Menus
                 }
 
                 button.SetDisabled(disabled);
+            }
+        }
+
+        public List<ListButton> GetButtons()
+        {
+            return _buttonDictionary.Keys.ToList();
+        }
+
+        public override void EnableButtons()
+        {
+            base.EnableButtons();
+
+            foreach (var button in _buttonDictionary.Keys)
+            {
+                button.SetDisabled(false);
+                button.SetMouseEnabled(true);
+            }
+        }
+
+        public override void DisableForTutorial()
+        {
+            base.DisableForTutorial();
+
+            foreach (var button in _buttonDictionary.Keys)
+            {
+                button.SetDisabled(true);
+                button.SetMouseEnabled(false);
             }
         }
     }

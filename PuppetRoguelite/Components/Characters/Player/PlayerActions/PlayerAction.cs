@@ -22,6 +22,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
         public PlayerActionState State = PlayerActionState.None;
         public Vector2 InitialPosition, FinalPosition;
 
+        bool _isTutorialMode = false;
+
         public PlayerAction(bool shouldDestroySelf = false)
         {
             ShouldDestroySelf = shouldDestroySelf;
@@ -50,7 +52,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
 
             if (State == PlayerActionState.Preparing)
             {
-                if (Input.IsKeyPressed(Keys.X))
+                if (Input.IsKeyPressed(Keys.X) && !_isTutorialMode)
                 {
                     HandlePreparationCanceled();
                 }
@@ -88,6 +90,11 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
             Reset();
             State = PlayerActionState.None;
             Emitter.Emit(PlayerActionEvent.ExecutionFinished, this);
+        }
+
+        public virtual void SetTutorialModeEnabled(bool enabled)
+        {
+            _isTutorialMode = enabled;
         }
 
         public abstract void Reset();

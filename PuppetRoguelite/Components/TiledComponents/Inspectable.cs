@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {
-    internal class Inspectable : TiledComponent
+    public class Inspectable : TiledComponent
     {
         public BoxCollider Collider;
         public Interactable Interactable;

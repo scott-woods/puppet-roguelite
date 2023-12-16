@@ -35,7 +35,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 {
                     case "Horizontal":
                         var hTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_horizontal);
-                        var hSprite = new NinePatchSprite(hTexture, 16, 16, 0, 0);
+                        var hSprite = new NinePatchSprite(hTexture, new Rectangle(0, 0, (int)TmxObject.Width, (int)TmxObject.Height), 16, 16, 0, 0);
                         var nineSliceRenderer = new NineSliceSpriteRenderer(hSprite);
                         _renderer = Entity.AddComponent(nineSliceRenderer);
                         nineSliceRenderer.Width = TmxObject.Width;
@@ -48,7 +48,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                         break;
                     case "Vertical":
                         var vTexture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Objects.Dungeon_prison_gate_vertical);
-                        var vSprite = new NinePatchSprite(vTexture, 0, 0, 16, 16);
+                        var vSprite = new NinePatchSprite(vTexture, new Rectangle(0, 0, (int)TmxObject.Width, (int)TmxObject.Height), 0, 0, 16, 16);
                         var hNineSliceRenderer = new NineSliceSpriteRenderer(vSprite);
                         _renderer = Entity.AddComponent(hNineSliceRenderer);
                         hNineSliceRenderer.Width = vTexture.Width;

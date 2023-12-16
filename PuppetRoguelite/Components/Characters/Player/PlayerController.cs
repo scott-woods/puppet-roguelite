@@ -62,6 +62,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public bool WaitingForSceneTransition = false;
         public Vector2 SpriteOffset = new Vector2(13, -2);
         Vector2 _collisionOffset = new Vector2(-4, 4);
+        public bool IsMeleeEnabled = true;
 
         //data
         //public PlayerData PlayerData;

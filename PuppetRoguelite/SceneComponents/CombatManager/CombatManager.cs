@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Characters.Enemies;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
+using PuppetRoguelite.Scenes;
 using PuppetRoguelite.UI;
 using System;
 using System.Collections;
@@ -67,11 +68,14 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
 
         public void EndCombat()
         {
-            //unlock gates
-            var gates = Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
-            foreach (var gate in gates)
+            //unlock gates (only if not in Tutorial)
+            if (Scene.GetType() != typeof(TutorialRoom))
             {
-                gate.Unlock();
+                var gates = Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
+                foreach (var gate in gates)
+                {
+                    gate.Unlock();
+                }
             }
 
             CombatState = CombatState.None;

@@ -14,6 +14,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\Audio\Music\babbulon_double.ogg" />
+    <None Remove="Content\Audio\Music\baby_mode.ogg" />
     <None Remove="Content\Audio\Sounds\002_Hover_02.wav" />
     <None Remove="Content\Audio\Sounds\021_Decline_01.wav" />
     <None Remove="Content\Audio\Sounds\094_Pause_06.wav" />

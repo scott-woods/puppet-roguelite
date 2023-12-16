@@ -33,6 +33,26 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 26,
+            "members": [
+            ],
+            "name": "AreaTrigger",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 6,
             "members": [
             ],
@@ -175,6 +195,26 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 24,
+            "members": [
+            ],
+            "name": "CutsceneTrigger",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 8,
             "members": [
             ],
@@ -293,6 +333,26 @@
             ]
         },
         {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 23,
+            "members": [
+            ],
+            "name": "NPC",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
             "color": "#ff0000ff",
             "drawFill": true,
             "id": 13,
@@ -370,6 +430,46 @@
             "members": [
             ],
             "name": "UpgradeShop",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 25,
+            "members": [
+            ],
+            "name": "TutorialChest",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 27,
+            "members": [
+            ],
+            "name": "InteractTrigger",
             "type": "class",
             "useAs": [
                 "property",

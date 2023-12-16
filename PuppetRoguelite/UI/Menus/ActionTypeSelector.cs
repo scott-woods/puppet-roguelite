@@ -19,9 +19,13 @@ namespace PuppetRoguelite.UI.Menus
         //elements
         Table _actionTable;
         ActionButton _attackButton;
+        public ActionButton AttackButton { get => _attackButton; }
         ActionButton _utilitiesButton;
+        public ActionButton UtilitiesButton { get => _utilitiesButton; }
         ActionButton _supportButton;
+        public ActionButton SupportButton { get => _supportButton; }
         ActionButton _executeButton;
+        public ActionButton ExecuteButton { get => _executeButton; }
 
         //misc
         Action<Button> _selectionHandler;
@@ -143,6 +147,20 @@ namespace PuppetRoguelite.UI.Menus
         public override void ValidateButtons()
         {
 
+        }
+
+        public override void DisableForTutorial()
+        {
+            base.DisableForTutorial();
+
+            _attackButton.SetMouseEnabled(false);
+            _attackButton.SetDisabled(true);
+            _utilitiesButton.SetMouseEnabled(false);
+            _utilitiesButton.SetDisabled(true);
+            _supportButton.SetMouseEnabled(false);
+            _supportButton.SetDisabled(true);
+            _executeButton.SetMouseEnabled(false);
+            _executeButton.SetDisabled(true);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Nez
 			public static class Music
 			{
 				public const string Babbulon_double = @"Content\Audio\Music\babbulon_double.ogg";
+				public const string Baby_mode = @"Content\Audio\Music\baby_mode.ogg";
 				public const string Galacta_knight = @"Content\Audio\Music\galacta_knight.ogg";
 				public const string Have_a_heart = @"Content\Audio\Music\have_a_heart.ogg";
 				public const string The_bay = @"Content\Audio\Music\the_bay.ogg";
@@ -156,6 +157,11 @@ namespace Nez
 					public const string Player_gun_projectile = @"Content\Textures\Characters\Player\player_gun_projectile.png";
 					public const string Sci_fi_player_no_sword = @"Content\Textures\Characters\Player\sci_fi_player_no_sword.png";
 					public const string Sci_fi_player_with_sword = @"Content\Textures\Characters\Player\sci_fi_player_with_sword.png";
+				}
+
+				public static class Proto
+				{
+					public const string Proto_spritesheet = @"Content\Textures\Characters\Proto\proto_spritesheet.png";
 				}
 
 				public static class Spitter
@@ -976,6 +982,7 @@ namespace Nez
 					public const string Dp_tl_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tl_1.tmx";
 					public const string Dp_tlr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tlr_1.tmx";
 					public const string Dp_tr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tr_1.tmx";
+					public const string Dp_tutorial = @"Content\Tiled\Tilemaps\DungeonPrison\dp_tutorial.tmx";
 					public const string Left_key_room = @"Content\Tiled\Tilemaps\DungeonPrison\left_key_room.tmx";
 					public const string Pre_boss_room = @"Content\Tiled\Tilemaps\DungeonPrison\pre_boss_room.tmx";
 					public const string Right_key_room = @"Content\Tiled\Tilemaps\DungeonPrison\right_key_room.tmx";

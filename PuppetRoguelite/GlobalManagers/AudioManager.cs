@@ -22,7 +22,7 @@ namespace PuppetRoguelite.GlobalManagers
 {
     public class AudioManager : GlobalManager
     {
-        const float _defaultMusicVolume = .1f;
+        const float _defaultMusicVolume = .15f;
         const float _defaultPitch = 0f;
         const float _defaultPan = 0;
         const float _defaultSoundVolume = .25f;
@@ -174,6 +174,8 @@ namespace PuppetRoguelite.GlobalManagers
         /// <param name="looping"></param>
         public unsafe void PlayMusic(string filePath, bool looping = true)
         {
+            StopMusic();
+
             var audioDataOgg = new AudioDataOgg(AudioDevice, filePath);
 
             _musicVoice = new StreamingVoice(AudioDevice, audioDataOgg.Format);
@@ -253,7 +255,7 @@ namespace PuppetRoguelite.GlobalManagers
 
         public void StopMusic()
         {
-            _musicVoice.Unload();
+            _musicVoice?.Unload();
             //FAudio.FAudioSourceVoice_Stop(_musicVoiceHandle, 0, FAudio.FAUDIO_COMMIT_NOW);
             //FAudio.FAudioSourceVoice_FlushSourceBuffers(_musicVoiceHandle);
             //MediaPlayer.Stop();

@@ -13,6 +13,7 @@ namespace PuppetRoguelite.UI.Elements
     {
         Label _label;
         public ActionButtonType Type;
+        bool _isMouseEnabled = true;
 
         public ActionButton(Skin skin, ActionButtonType type, string styleName = null, Label label = null) : base(skin, styleName)
         {
@@ -63,8 +64,11 @@ namespace PuppetRoguelite.UI.Elements
 
         void IInputListener.OnMouseEnter()
         {
-            GetStage().SetGamepadFocusElement(null);
-            GetStage().SetGamepadFocusElement(this);
+            if (_isMouseEnabled)
+            {
+                GetStage().SetGamepadFocusElement(null);
+                GetStage().SetGamepadFocusElement(this);
+            }
         }
 
         void IInputListener.OnMouseExit()
@@ -74,8 +78,17 @@ namespace PuppetRoguelite.UI.Elements
 
         bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
         {
-            OnActionButtonPressed();
+            if (_isMouseEnabled)
+            {
+                if (!_isDisabled)
+                    OnActionButtonPressed();
+            }
             return !_isDisabled;
+        }
+
+        public void SetMouseEnabled(bool enabled)
+        {
+            _isMouseEnabled = enabled;
         }
     }
 

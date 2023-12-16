@@ -38,7 +38,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public bool TryTriggerTurn()
         {
             var gameStateManager = Game1.GameStateManager;
-            if (gameStateManager.GameState == GameState.Combat && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > -1)
+            if ((gameStateManager.GameState == GameState.Combat || gameStateManager.GameState == GameState.AttackTutorial) && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > -1)
             {
                 _machine.ChangeState<TurnState>();
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
@@ -72,7 +72,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryMelee()
         {
-            if (Input.LeftMouseButtonPressed)
+            if (_context.IsMeleeEnabled && Input.LeftMouseButtonPressed)
             {
                 _machine.ChangeState<AttackState>();
                 return true;
@@ -95,7 +95,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public bool TryCheck()
         {
             var gameStateManager = Game1.GameStateManager;
-            if (gameStateManager.GameState == GameState.Exploration && _context.CheckInput.IsPressed)
+            if (gameStateManager.GameState != GameState.Combat && _context.CheckInput.IsPressed)
             {
                 var hitArray = new RaycastHit[10];
                 var raycastHits = Physics.LinecastAll(_context.OriginComponent.Origin, _context.OriginComponent.Origin + _context.VelocityComponent.Direction * _context.RaycastDistance, hitArray, 1 << (int)PhysicsLayers.Interactable);

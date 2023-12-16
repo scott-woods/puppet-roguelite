@@ -58,6 +58,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
                 _actionPoints = newApValue;
 
                 Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsChanged, this);
+                Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsProgressChanged, this);
             }
         }
 
@@ -153,11 +154,14 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
 
             if (_damageAccumulated >= _damageRequiredPerPoint && ActionPoints < MaxActionPoints)
             {
-                ActionPoints += 1;
                 _damageAccumulated -= _damageRequiredPerPoint;
+                ActionPoints += 1;
             }
-
-            Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsProgressChanged, this);
+            else
+            {
+                //only emit here if AP didn't change, otherwise it will be emit from the ActionPoints setter
+                Emitters.ActionPointEmitter.Emit(ActionPointEvents.ActionPointsProgressChanged, this);
+            }
         }
 
         #endregion

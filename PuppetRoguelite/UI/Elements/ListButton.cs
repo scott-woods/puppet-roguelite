@@ -11,6 +11,8 @@ namespace PuppetRoguelite.UI.Elements
 {
     public class ListButton : TextButton, IInputListener
     {
+        bool _isMouseEnabled = true;
+
         public ListButton(string text, Skin skin, string styleName = null) : base(text, skin, styleName)
         {
         }
@@ -27,8 +29,11 @@ namespace PuppetRoguelite.UI.Elements
 
         void IInputListener.OnMouseEnter()
         {
-            GetStage().SetGamepadFocusElement(null);
-            GetStage().SetGamepadFocusElement(this);
+            if (_isMouseEnabled)
+            {
+                GetStage().SetGamepadFocusElement(null);
+                GetStage().SetGamepadFocusElement(this);
+            }
         }
 
         void IInputListener.OnMouseExit()
@@ -38,7 +43,12 @@ namespace PuppetRoguelite.UI.Elements
 
         bool IInputListener.OnLeftMousePressed(Microsoft.Xna.Framework.Vector2 mousePos)
         {
-            OnActionButtonPressed();
+            if (_isMouseEnabled)
+            {
+                if (!_isDisabled)
+                    OnActionButtonPressed();
+            }
+
             return !_isDisabled;
         }
 
@@ -54,6 +64,11 @@ namespace PuppetRoguelite.UI.Elements
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
             }
+        }
+
+        public void SetMouseEnabled(bool enabled)
+        {
+            _isMouseEnabled = enabled;
         }
     }
 }

@@ -26,6 +26,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         bool _isAttacking = false;
         Vector2 _direction = Vector2.One;
         Vector2 _initialOriginPos;
+        bool _canConfirm = true;
 
         //components
         PlayerSim _playerSim;
@@ -115,9 +116,12 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 //handle confirm
                 if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
                 {
-                    Reset();
-                    HandlePreparationFinished(FinalPosition);
-                    return;
+                    if (_canConfirm)
+                    {
+                        Reset();
+                        HandlePreparationFinished(FinalPosition);
+                        return;
+                    }
                 }
 
                 //handle direction change
@@ -294,6 +298,11 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //animator
             _animator.Stop();
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
+        }
+
+        public void SetConfirmationEnabled(bool enabled)
+        {
+            _canConfirm = enabled;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Nez.Sprites;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
+using System;
 using System.Collections;
 
 namespace PuppetRoguelite.Components.TiledComponents

@@ -29,6 +29,7 @@ namespace PuppetRoguelite.UI.Menus
         protected IGamepadFocusable LastFocused;
         Action _cancelHandler;
         ICoroutine _waitCoroutine;
+        bool _isTutorialMode = false;
 
         public UIMenu(Action cancelHandler)
         {
@@ -58,7 +59,7 @@ namespace PuppetRoguelite.UI.Menus
             base.Update();
 
             //cancel if cancel key pressed
-            if (Input.IsKeyPressed(Keys.X))
+            if (Input.IsKeyPressed(Keys.X) && !_isTutorialMode)
             {
                 if (_waitCoroutine != null)
                 {
@@ -150,6 +151,21 @@ namespace PuppetRoguelite.UI.Menus
         protected void OnMenuButtonClicked(Button button)
         {
             LastFocused = button;
+        }
+
+        public virtual void EnableButtons()
+        {
+            Stage.KeyboardEmulatesGamepad = true;
+        }
+
+        public virtual void DisableForTutorial()
+        {
+            Stage.KeyboardEmulatesGamepad = false;
+        }
+
+        public virtual void SetTutorialModeEnabled(bool enabled)
+        {
+            _isTutorialMode = enabled;
         }
 
         public abstract Element ArrangeElements();
