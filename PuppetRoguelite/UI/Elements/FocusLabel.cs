@@ -54,8 +54,7 @@ namespace PuppetRoguelite.UI.Elements
         {
             SetText($"* {_givenText}");
 
-            if (OnLabelFocused != null)
-                OnLabelFocused();
+            OnLabelFocused?.Invoke();
             //unfocus other focus labels
             //var focusLabels = GetStage().FindAllElementsOfType<FocusLabel>();
             //focusLabels.Remove(this);

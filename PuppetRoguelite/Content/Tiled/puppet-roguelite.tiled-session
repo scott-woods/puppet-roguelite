@@ -5,12 +5,12 @@
     },
     "activeFile": "Tilemaps/DungeonPrison/dp_tutorial.tmx",
     "expandedProjectPaths": [
-        "Tilemaps/DungeonPrison",
         "Tilemaps/Hub",
-        "Tilemaps",
-        "RuleMaps",
+        "Tilesets",
         ".",
-        "Tilesets"
+        "Tilemaps",
+        "Tilemaps/DungeonPrison",
+        "RuleMaps"
     ],
     "fileStates": {
         ":/automap-tiles.tsx": {
@@ -228,8 +228,8 @@
             "scale": 0.75,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 429.99999999999994,
-                "y": 1057.3333333333333
+                "x": 478,
+                "y": 694
             }
         },
         "Tilemaps/DungeonPrison/left_key_room.tmx": {
@@ -269,8 +269,8 @@
             "scale": 1.5,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 711,
-                "y": 521.3333333333333
+                "x": 719.6666666666666,
+                "y": 407.66666666666663
             }
         },
         "Tilesets/dungeon_prison_props.tsx": {

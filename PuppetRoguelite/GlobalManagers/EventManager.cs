@@ -1,5 +1,6 @@
 ﻿using Nez;
 using PuppetRoguelite.Cutscenes;
+using PuppetRoguelite.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +22,8 @@ namespace PuppetRoguelite.GlobalManagers
                 { "AttackTutorial", TutorialCutscenes.AttackTutorial },
                 { "CombatTutorial", TutorialCutscenes.CombatTutorial },
                 { "TutorialFinal", TutorialCutscenes.TutorialFinal },
-                { "TutorialShelf", TutorialCutscenes.TutorialShelf }
+                { "TutorialShelf", TutorialCutscenes.TutorialShelf },
+                { "HubShelf", InspectableEvents.HubShelf }
             };
         }
 
