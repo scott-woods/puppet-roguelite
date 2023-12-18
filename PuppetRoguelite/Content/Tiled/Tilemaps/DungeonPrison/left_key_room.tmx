@@ -117,31 +117,28 @@
  <objectgroup id="53" name="Entities">
   <object id="34" type="Gate" x="368" y="160" width="16" height="64">
    <properties>
-    <property name="Flip" value="True"/>
+    <property name="Flip" value=""/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>
   <object id="37" type="Gate" x="176" y="144" width="48" height="48">
    <properties>
-    <property name="Flip" value="False"/>
     <property name="Orientation" value="Horizontal"/>
    </properties>
   </object>
   <object id="38" type="Gate" x="144" y="160" width="16" height="64">
    <properties>
-    <property name="Flip" value="True"/>
+    <property name="Flip" value=""/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>
   <object id="39" type="Gate" x="240" y="160" width="16" height="64">
    <properties>
-    <property name="Flip" value="False"/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>
   <object id="40" type="Gate" x="176" y="224" width="48" height="48">
    <properties>
-    <property name="Flip" value="False"/>
     <property name="Orientation" value="Horizontal"/>
    </properties>
   </object>

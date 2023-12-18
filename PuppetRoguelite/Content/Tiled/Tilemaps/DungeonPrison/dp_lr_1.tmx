@@ -137,7 +137,7 @@
   </object>
   <object id="33" type="Gate" x="352" y="160" width="16" height="64">
    <properties>
-    <property name="Flip" value="True"/>
+    <property name="Flip" value=""/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>

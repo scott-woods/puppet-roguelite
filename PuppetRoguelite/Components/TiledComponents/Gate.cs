@@ -5,6 +5,7 @@ using Nez.Textures;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                         nineSliceRenderer.SetLocalOffset(new Vector2(-TmxObject.Width / 2, -TmxObject.Height / 2));
                         _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, 16));
                         _collider.SetLocalOffset(new Vector2(0, (TmxObject.Height / 2) - 8));
-                        _origin = Entity.AddComponent(new OriginComponent(_collider));
+                        _origin = Entity.AddComponent(new OriginComponent(new Vector2(0, (TmxObject.Height / 2) - 8)));
                         _ySorter = Entity.AddComponent(new YSorter(_renderer, _origin));
                         break;
                     case "Vertical":
@@ -56,10 +57,8 @@ namespace PuppetRoguelite.Components.TiledComponents
                         hNineSliceRenderer.SetLocalOffset(new Vector2(-TmxObject.Width / 2, -TmxObject.Height / 2));
                         _collider = Entity.AddComponent(new BoxCollider(TmxObject.Width, TmxObject.Height));
                         if (TmxObject.Properties.TryGetValue("Flip", out var flip))
-                        {
-                            _renderer.FlipX = flip == "True";
-                        }
-                        _origin = Entity.AddComponent(new OriginComponent(_collider));
+                            _renderer.FlipX = true;
+                        _origin = Entity.AddComponent(new OriginComponent(new Vector2(0, (TmxObject.Height / 2) - 8)));
                         _ySorter = Entity.AddComponent(new YSorter(_renderer, _origin));
                         break;
                 }

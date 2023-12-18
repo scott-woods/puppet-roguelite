@@ -370,50 +370,44 @@
  <objectgroup id="89" name="Entities">
   <object id="1" name="CombatTutorialGate" type="Gate" x="880" y="400" width="96" height="48">
    <properties>
-    <property name="Flip" value=""/>
     <property name="KeyGate" value=""/>
     <property name="Orientation" value="Horizontal"/>
    </properties>
   </object>
   <object id="2" name="CombatTutorialGate" type="Gate" x="800" y="400" width="32" height="48">
    <properties>
-    <property name="Flip" value=""/>
     <property name="Orientation" value="Horizontal"/>
    </properties>
   </object>
   <object id="3" name="CombatTutorialGate" type="Gate" x="1024" y="400" width="32" height="48">
    <properties>
-    <property name="Flip" value=""/>
     <property name="Orientation" value="Horizontal"/>
    </properties>
   </object>
   <object id="4" name="CombatTutorialGate" type="Gate" x="912" y="688" width="32" height="48">
    <properties>
-    <property name="Flip" value=""/>
     <property name="Orientation" value="Horizontal"/>
    </properties>
   </object>
   <object id="5" name="AttackTutorialGate" type="Gate" x="768" y="816" width="16" height="64">
    <properties>
-    <property name="Flip" value="True"/>
+    <property name="Flip" value=""/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>
   <object id="6" name="AttackTutorialGate" type="Gate" x="384" y="816" width="16" height="64">
    <properties>
-    <property name="Flip" value=""/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>
   <object id="7" name="DashTutorialGate" type="Gate" x="112" y="960" width="32" height="48">
    <properties>
-    <property name="Flip" value=""/>
     <property name="Orientation" value="Horizontal"/>
    </properties>
   </object>
   <object id="8" name="DashTutorialGate" type="Gate" x="240" y="816" width="16" height="64">
    <properties>
-    <property name="Flip" value="True"/>
+    <property name="Flip" value=""/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>

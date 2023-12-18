@@ -117,7 +117,7 @@
  <objectgroup id="2" name="Entities">
   <object id="1" type="Gate" x="336" y="160" width="16" height="64">
    <properties>
-    <property name="Flip" value="True"/>
+    <property name="Flip" value=""/>
     <property name="Orientation" value="Vertical"/>
    </properties>
   </object>
