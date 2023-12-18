@@ -5,6 +5,7 @@ using Nez.Textures;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SceneComponents;
@@ -76,9 +77,6 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             _purchaseMade = false;
 
-            //get textbox manager
-            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-
             //pick dialogue lines
             List<DialogueLine> lines;
             if (PlayerData.Instance.Dollahs >= 400)
@@ -91,7 +89,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 lines = UpgradeShopDialogue.DefaultLines.RandomItem();
 
             //display text
-            yield return textboxManager.DisplayTextbox(lines);
+            yield return GlobalTextboxManager.DisplayText(lines);
 
             //_menu = Entity.Scene.Camera.AddComponent(new UpgradeShopMenu(OnShopClosed));
             _menu = Entity.Scene.CreateEntity("upgrade-shop-ui")
@@ -111,7 +109,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 lines = UpgradeShopDialogue.ExitNoPurchase;
 
             //show more lines
-            yield return textboxManager.DisplayTextbox(lines);
+            yield return GlobalTextboxManager.DisplayText(lines);
             Debug.Log("finished with shop");
         }
 

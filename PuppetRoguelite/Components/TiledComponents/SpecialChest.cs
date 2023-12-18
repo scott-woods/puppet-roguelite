@@ -6,6 +6,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SaveData.Unlocks;
 using PuppetRoguelite.SceneComponents;
@@ -49,19 +50,11 @@ namespace PuppetRoguelite.Components.TiledComponents
             _interactable.Active = false;
 
             //display text
-            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            //var lines = new List<DialogueLine>()
-            //{
-            //    new DialogueLine("You look inside the box.."),
-            //    new DialogueLine($"Huh, you wanted an item?"),
-            //    new DialogueLine($"SUCK"),
-            //    new DialogueLine($"ME")
-            //};
             var lines = new List<DialogueLine>()
             {
                 new DialogueLine("You look inside the box..."),
             };
-            yield return textboxManager.DisplayTextbox(lines);
+            yield return GlobalTextboxManager.DisplayText(lines);
 
             //if any unlocks left to get, get a new unlock
             var unlocks = ActionUnlockData.Instance.Unlocks.Where(u => !u.IsUnlocked).ToList();
@@ -75,7 +68,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 {
                     new DialogueLine($"You found the schematics for {PlayerActionUtils.GetName(unlock.Action.ToType())}!")
                 };
-                yield return textboxManager.DisplayTextbox(unlockLines);
+                yield return GlobalTextboxManager.DisplayText(unlockLines);
             }
             else
             {
@@ -88,7 +81,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 {
                     new DialogueLine("You found a bunch of dollahs!")
                 };
-                yield return textboxManager.DisplayTextbox(dollahLines);
+                yield return GlobalTextboxManager.DisplayText(dollahLines);
             }
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Space_ship_3);

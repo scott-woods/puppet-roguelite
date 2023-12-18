@@ -7,38 +7,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Nez.Tweens.Easing;
 
 namespace PuppetRoguelite.GlobalManagers
 {
-    public class GlobalTextboxManager : GlobalManager
+    public class GlobalTextboxManager
     {
-        Entity _textboxEntity;
-        DialogueBox _dialogueBox;
-
-        public void ShowTextbox()
+        public static IEnumerator DisplayText(List<DialogueLine> lines)
         {
-            if (_textboxEntity != null)
-                _textboxEntity.SetEnabled(true);
-            else
+            var dialogueBox = Game1.Scene.CreateEntity("textbox-ui").AddComponent(new DialogueBox());
+            yield return dialogueBox.DisplayText(lines);
+            Game1.Schedule(1 / 240, timer =>
             {
-                _textboxEntity = Game1.Scene.CreateEntity("textbox-ui");
-                _dialogueBox = _textboxEntity.AddComponent(new DialogueBox());
-            }
+                dialogueBox.Entity.Destroy();
+            });
         }
 
-        public IEnumerator DisplayText(List<DialogueLine> lines)
+        public static IEnumerator DisplayChoices(List<string> choices, Action<int> onChoiceSelected)
         {
-            yield return _dialogueBox.DisplayText(lines);
-        }
-
-        public IEnumerator DisplayChoices(List<string> choices, Action<int> onChoiceSelected)
-        {
-            yield return _dialogueBox.DisplayChoices(choices, onChoiceSelected);
-        }
-
-        public void HideTextbox()
-        {
-            _textboxEntity?.SetEnabled(false);
+            var dialogueBox = Game1.Scene.CreateEntity("textbox-ui").AddComponent(new DialogueBox());
+            yield return dialogueBox.DisplayChoices(choices, onChoiceSelected);
+            Game1.Schedule(1 / 240, timer =>
+            {
+                dialogueBox.Entity.Destroy();
+            });
         }
     }
 }

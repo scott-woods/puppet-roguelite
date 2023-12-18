@@ -1,6 +1,5 @@
 ﻿using Nez;
 using Nez.UI;
-using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Cameras;
 using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
 using PuppetRoguelite.Components.Characters.Enemies.Ghoul;
@@ -11,25 +10,21 @@ using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks;
 using PuppetRoguelite.Components.Characters.Player.PlayerActions.Support;
 using PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities;
-using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
 using PuppetRoguelite.Components.Characters.Player.States;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Entities;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SaveData;
-using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.SceneComponents.CombatManager;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.StaticData;
-using PuppetRoguelite.UI.Elements;
 using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Cutscenes
 {
@@ -52,8 +47,7 @@ namespace PuppetRoguelite.Cutscenes
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
             //read dialogue
-            var textboxManager = Game1.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Alright, congratulations on knowing enough to at least get yourself locked in this room!"),
                 new DialogueLine("First thing you'll want to know is how to Dash. Or is it a Dodge Roll? Something like that..."),
@@ -75,7 +69,7 @@ namespace PuppetRoguelite.Cutscenes
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
             //more text
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Nice! Dashing is a good way to move around a bit quicker."),
                 new DialogueLine("You'll also go right through enemy attacks during a Dash without a scratch!"),
@@ -128,8 +122,7 @@ namespace PuppetRoguelite.Cutscenes
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
             //read dialogue
-            var textboxManager = Game1.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Dashing is cool and all, but you won't survive in this place without a way to fight back."),
                 new DialogueLine("That sword you've got there is a bit of a relic, but looks like someone made a few modifications to it."),
@@ -152,16 +145,11 @@ namespace PuppetRoguelite.Cutscenes
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
             //successful attack dialogue
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Well done! If you didn't already notice, you can attack in a 3-hit combo if you keep clicking during the attack."),
                 new DialogueLine("You can even change direction mid-attack if you move your cursor!"),
-                new DialogueLine("...okay, maybe that's not actually that exciting. But good to know!")
-            });
-
-            //dialogue before spawning enemy
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
-            {
+                new DialogueLine("...okay, maybe that's not actually that exciting. But good to know!"),
                 new DialogueLine("Let's move on to a more practical application, shall we?"),
             });
 
@@ -194,9 +182,9 @@ namespace PuppetRoguelite.Cutscenes
                 yield return null;
 
             //read lines
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
-                new DialogueLine("See that guy? He's an old Chain Bot, and normally they'll wan to kill you."),
+                new DialogueLine("See that guy? He's an old Chain Bot, and normally they'll want to kill you."),
                 new DialogueLine("Don't worry though, this one has given up on its hopes and dreams. How fortunate!"),
                 new DialogueLine("His misery shall pave the way for your education. Go ahead, give him a wack.")
             });
@@ -224,7 +212,7 @@ namespace PuppetRoguelite.Cutscenes
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
             //lines
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("See? Doesn't bother him at all."),
                 new DialogueLine("Listen up now, this is where things get a bit more complex."),
@@ -236,14 +224,14 @@ namespace PuppetRoguelite.Cutscenes
             var apComp = PlayerController.Instance.ActionPointComponent;
             if (apComp.ActionPoints > 0)
             {
-                yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+                yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                 {
                     new DialogueLine("Looks like you've already got one AP there, nice job!")
                 });
             }
             else
             {
-                yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+                yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                 {
                     new DialogueLine("Give him a few more hits, and notice how your meter fills up.")
                 });
@@ -265,13 +253,13 @@ namespace PuppetRoguelite.Cutscenes
                 //stop player
                 Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
-                yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+                yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                 {
                     new DialogueLine("Nice work! Now you've got a single Action Point to work with.")
                 });
             }
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("You'll need a little bit more than that to do most things though."),
                 new DialogueLine("Luckily, we've got the power of Tutorial Cheats on our side. Here's an extra point.")
@@ -281,7 +269,7 @@ namespace PuppetRoguelite.Cutscenes
             apComp.ActionPoints += 1;
             yield return Coroutine.WaitForSeconds(1f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Isn't it nice to get things for free?"),
                 new DialogueLine("Now for the fun part. Stand near the Chain Bot, and try pressing 'E' to activate the Turn Phase.")
@@ -307,7 +295,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(1f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("This is the Turn State. As you can see, that Chain Bot has stopped moving."),
                 new DialogueLine("Above your head, you'll see a few buttons. Let's go over your options."),
@@ -319,7 +307,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(.5f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("This one is for Utility Actions."),
                 new DialogueLine("Utilities usually don't deal damage directly, but offer useful ways to improve your combos.")
@@ -329,7 +317,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(.5f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("This is for Support Actions."),
                 new DialogueLine("Support Actions can heal you, or provide temporary buffs to your Stats.")
@@ -339,7 +327,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(.5f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Finally, this is the Execute Button."),
                 new DialogueLine("Whenever you're ready to execute your Actions and resume normal combat, you'll hit this."),
@@ -372,7 +360,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(1f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("This is the Action Menu. It will display your equipped Actions for the category you selected."),
                 new DialogueLine("On the left is the name of the Action, and the right shows the AP cost."),
@@ -403,7 +391,7 @@ namespace PuppetRoguelite.Cutscenes
             var dashAttack = Game1.Scene.EntitiesOfType<DashAttack>().FirstOrDefault();
             dashAttack.SetConfirmationEnabled(false);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Most Actions require some kind of setup."),
                 new DialogueLine("Generally, you'll aim with the mouse, and Left Click or press E to confirm."),
@@ -433,7 +421,7 @@ namespace PuppetRoguelite.Cutscenes
             actionTypeSelector.DisableForTutorial();
             actionTypeSelector.SetTutorialModeEnabled(true);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Well, I have no way of knowing whether or not you're going to actually hit him..."),
                 new DialogueLine("But rest assured, I'll be sure to mock you relentlessly if you somehow miss."),
@@ -512,7 +500,7 @@ namespace PuppetRoguelite.Cutscenes
 
                     if (attempts < 3)
                     {
-                        yield return textboxManager.DisplayTextbox(missLines[attempts]);
+                        yield return GlobalTextboxManager.DisplayText(missLines[attempts]);
 
                         //add more ap
                         apComp.ActionPoints += 2;
@@ -525,7 +513,7 @@ namespace PuppetRoguelite.Cutscenes
                     }
                     else
                     {
-                        yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+                        yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                         {
                             new DialogueLine("This poor Chain Bot just wants to be put out of his misery, and yet you deny him."),
                             new DialogueLine("You truly are a monster."),
@@ -540,7 +528,7 @@ namespace PuppetRoguelite.Cutscenes
                 {
                     Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
-                    yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+                    yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                     {
                         new DialogueLine("Nicely done.")
                     });
@@ -556,7 +544,7 @@ namespace PuppetRoguelite.Cutscenes
             //stop player
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Lucky you! Looks like the Chain Bot had a few Dollahs on him."),
                 new DialogueLine("Whoever made you hooked you up with a Dollah Magnet, it seems."),
@@ -575,7 +563,7 @@ namespace PuppetRoguelite.Cutscenes
             //stop player
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Your overall goal is simple: defeat enemies, and find the two Chests in the dungeon."),
                 new DialogueLine("The Chests contain keys that you can use to unlock the Boss Gate."),
@@ -602,8 +590,6 @@ namespace PuppetRoguelite.Cutscenes
             //give player util and support actions
             PlayerController.Instance.ActionsManager.UtilityActions.Add(PlayerActionType.FromType(typeof(Teleport)));
             PlayerController.Instance.ActionsManager.SupportActions.Add(PlayerActionType.FromType(typeof(HealingAura)));
-
-            var textboxManager = Game1.Scene.GetOrCreateSceneComponent<TextboxManager>();
 
             //lock gates
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
@@ -674,7 +660,7 @@ namespace PuppetRoguelite.Cutscenes
             //stop player
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Excellent work! You managed to defeat a group of enemies without dying!"),
                 new DialogueLine("Of course, I modified those ones so they couldn't actually kill you..."),
@@ -708,12 +694,10 @@ namespace PuppetRoguelite.Cutscenes
 
         public static IEnumerator TutorialFinal()
         {
-            var textboxManager = Game1.Scene.GetOrCreateSceneComponent<TextboxManager>();
-
             //stop player
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Welp, that's pretty much all I can teach you."),
                 new DialogueLine("You see that Shelf over there?")
@@ -729,7 +713,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(.5f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("It's exactly what you'll find next to the Boss Gate in the real dungeon."),
                 new DialogueLine("You can unlock it by interacting with it once you've opened a Key Chest.")
@@ -744,7 +728,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(.5f);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Oh, and one more thing before you go."),
                 new DialogueLine("There's two shopowners back in the Hub, the Action Shop and Upgrade Shop."),
@@ -764,9 +748,7 @@ namespace PuppetRoguelite.Cutscenes
             PlayerController.Instance.ActionsManager.UtilityActions = PlayerData.Instance.UtilityActions;
             PlayerController.Instance.ActionsManager.SupportActions = PlayerData.Instance.SupportActions;
 
-            var textboxManager = Game1.Scene.GetOrCreateSceneComponent<TextboxManager>();
-
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("The slots on the Shelf look perfectly sized to fit that Cereal Box."),
                 new DialogueLine("Your hands quiver as you sheepishly line it up...")
@@ -774,7 +756,7 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Game1.AudioManager.PlaySoundCoroutine(Nez.Content.Audio.Sounds.Cereal_slot_1);
 
-            yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("The fit is perfect, down to the last nanometer."),
                 new DialogueLine("Suddenly, satisfied with your efforts, you find yourself falling into a deep sleep...")

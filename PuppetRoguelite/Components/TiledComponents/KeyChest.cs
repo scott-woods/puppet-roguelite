@@ -5,6 +5,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.Models.Items;
 using PuppetRoguelite.SceneComponents;
@@ -76,14 +77,13 @@ namespace PuppetRoguelite.Components.TiledComponents
                 }
 
                 //display text
-                var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
                 var lines = new List<DialogueLine>()
             {
                 new DialogueLine("You found a key!"),
                 new DialogueLine($"...what's this? Looks like there's something else in there..."),
                 new DialogueLine(cerealName.Value)
             };
-                yield return textboxManager.DisplayTextbox(lines);
+                yield return GlobalTextboxManager.DisplayText(lines);
             }
         }
     }

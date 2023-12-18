@@ -5,6 +5,7 @@ using Nez.Textures;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.StaticData;
@@ -72,15 +73,12 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         IEnumerator OnInteracted()
         {
-            //get textbox manager
-            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-
             //pick lines
             List<DialogueLine> lines;
             lines = ActionShopDialogue.DefaultLines.RandomItem();
 
             //display text
-            yield return textboxManager.DisplayTextbox(lines);
+            yield return GlobalTextboxManager.DisplayText(lines);
 
             _menu = Entity.Scene.CreateEntity("menu-ui").AddComponent(new ActionShopMenu(OnShopClosed));
             //_menu = Entity.Scene.Camera.AddComponent(new ActionShopMenu(OnShopClosed));
@@ -94,7 +92,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
             //show more lines
             lines = ActionShopDialogue.ExitLines.RandomItem();
-            yield return textboxManager.DisplayTextbox(lines);
+            yield return GlobalTextboxManager.DisplayText(lines);
             Debug.Log("finished with shop");
         }
 

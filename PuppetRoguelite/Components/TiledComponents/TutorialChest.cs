@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PuppetRoguelite.SaveData;
+using PuppetRoguelite.GlobalManagers;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {
@@ -60,8 +61,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 _renderer.SetSprite(_openSprite);
                 _interactable.Active = false;
 
-                var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-                yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+                yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                 {
                     new DialogueLine("You open up the chest, and find a Key inside!"),
                     new DialogueLine("...but you throw it aside, and grab the Cereal box inside, like the feral cryptid you are.")

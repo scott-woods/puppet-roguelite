@@ -1,5 +1,6 @@
 ﻿using Nez;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.SceneComponents;
 using System;
 using System.Collections;
@@ -24,8 +25,7 @@ namespace PuppetRoguelite.Models
             //get which list of lines to display
             var linesIndex = Math.Min(_dialogueTree.Count - 1, interactionCount);
             var lines = _dialogueTree[linesIndex];
-            var textboxManager = Game1.Scene.GetOrCreateSceneComponent<TextboxManager>();
-            yield return textboxManager.DisplayTextbox(lines);
+            yield return GlobalTextboxManager.DisplayText(lines);
         }
     }
 }

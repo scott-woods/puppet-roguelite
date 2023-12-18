@@ -4,6 +4,7 @@ using Nez.Sprites;
 using Nez.Textures;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Scenes;
@@ -59,14 +60,12 @@ namespace PuppetRoguelite.Components.Characters.NPCs.Proto
 
         IEnumerator HandleInteraction()
         {
-            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
-
             var lines = new List<DialogueLine>()
             {
                 new DialogueLine("aborignal taste")
             };
 
-            yield return textboxManager.DisplayTextbox(lines);
+            yield return GlobalTextboxManager.DisplayText(lines);
 
             Game1.SceneManager.ChangeScene(typeof(TutorialRoom), "0");
         }

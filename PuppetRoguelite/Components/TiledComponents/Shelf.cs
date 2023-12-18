@@ -7,6 +7,7 @@ using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.Characters.Player.PlayerComponents;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.Models.Items;
 using PuppetRoguelite.SceneComponents;
@@ -52,7 +53,6 @@ namespace PuppetRoguelite.Components.TiledComponents
 
         IEnumerator OnInteracted()
         {
-            var textboxManager = Entity.Scene.GetOrCreateSceneComponent<TextboxManager>();
             var player = PlayerController.Instance;
 
             if (!_slotted)
@@ -62,7 +62,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                     var keys = inventory.GetItems().Where(i => i.Type == ItemType.Key).ToList();
                     if (!keys.Any())
                     {
-                        yield return textboxManager.DisplayTextbox(_noKeyLines);
+                        yield return GlobalTextboxManager.DisplayText(_noKeyLines);
                     }
                     else
                     {
@@ -72,7 +72,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                         {
                             new DialogueLine($"You try slotting the {key.Name} box into the shelf...")
                         };
-                        yield return textboxManager.DisplayTextbox(tryLines);
+                        yield return GlobalTextboxManager.DisplayText(tryLines);
 
                         //remove key
                         inventory.RemoveItem(key);
@@ -99,7 +99,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                         {
                             new DialogueLine($"Perfect fit! So, so satisfying.")
                         };
-                        yield return textboxManager.DisplayTextbox(successLines);
+                        yield return GlobalTextboxManager.DisplayText(successLines);
 
                         //handle boss gate
                         var bossGate = Entity.Scene.FindComponentOfType<BossGate>();
@@ -112,7 +112,7 @@ namespace PuppetRoguelite.Components.TiledComponents
             }
             else
             {
-                yield return textboxManager.DisplayTextbox(new List<DialogueLine>()
+                yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                 {
                     new DialogueLine($"The box of {_slottedBox.Name} is resting just where you left it.")
                 });
