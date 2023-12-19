@@ -19,6 +19,7 @@ namespace Nez
 				public const string Baby_mode = @"Content\Audio\Music\baby_mode.ogg";
 				public const string Galacta_knight = @"Content\Audio\Music\galacta_knight.ogg";
 				public const string Have_a_heart = @"Content\Audio\Music\have_a_heart.ogg";
+				public const string Logo_sound = @"Content\Audio\Music\logo_sound.wav";
 				public const string The_bay = @"Content\Audio\Music\the_bay.ogg";
 			}
 
@@ -79,6 +80,7 @@ namespace Nez
 				public const string Small_lightning = @"Content\Audio\Sounds\small_lightning.wav";
 				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.wav";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
+				public const string Start_sound = @"Content\Audio\Sounds\start_sound.wav";
 				public const string Unfreeze = @"Content\Audio\Sounds\unfreeze.wav";
 				public const string Whirlwind_speen = @"Content\Audio\Sounds\whirlwind_speen.wav";
 			}
@@ -929,8 +931,13 @@ namespace Nez
 
 				public const string Borders_and_hp = @"Content\Textures\UI\borders_and_hp.png";
 				public const string Borders_and_hp_no_glow = @"Content\Textures\UI\borders_and_hp_no_glow.png";
+				public const string Cat = @"Content\Textures\UI\cat.png";
+				public const string Continue_button = @"Content\Textures\UI\continue_button.png";
+				public const string Continue_button_over = @"Content\Textures\UI\continue_button_over.png";
+				public const string Continue_no_bg = @"Content\Textures\UI\continue_no_bg.png";
 				public const string Crosshair005 = @"Content\Textures\UI\crosshair005.png";
 				public const string Crosshair038 = @"Content\Textures\UI\crosshair038.png";
+				public const string Cursedtylersmall = @"Content\Textures\UI\cursed tyler small.png";
 				public const string Glow_sliders = @"Content\Textures\UI\glow_sliders.png";
 				public const string Healthbar = @"Content\Textures\UI\healthbar.png";
 				public const string Hearthealthsprite3 = @"Content\Textures\UI\heart-health-sprite-3.png";
@@ -938,9 +945,19 @@ namespace Nez
 				public const string Heartspritefullhealth = @"Content\Textures\UI\heart-sprite-full-health.png";
 				public const string Heartspritehealth1 = @"Content\Textures\UI\heart-sprite-health-1.png";
 				public const string Heartspritehealth2 = @"Content\Textures\UI\heart-sprite-health-2.png";
+				public const string New_game_button = @"Content\Textures\UI\new_game_button.png";
+				public const string New_game_button_over = @"Content\Textures\UI\new_game_button_over.png";
+				public const string New_game_no_bg = @"Content\Textures\UI\new_game_no_bg.png";
 				public const string ProgressBar = @"Content\Textures\UI\progressBar.png";
 				public const string ProgressBarGlow = @"Content\Textures\UI\progressBarGlow.png";
+				public const string Quit_button = @"Content\Textures\UI\quit_button.png";
+				public const string Quit_button_over = @"Content\Textures\UI\quit_button_over.png";
+				public const string Quit_no_bg = @"Content\Textures\UI\quit_no_bg.png";
 				public const string Sliders = @"Content\Textures\UI\sliders.png";
+				public const string Smile = @"Content\Textures\UI\smile.JPG";
+				public const string Start_button = @"Content\Textures\UI\start_button.png";
+				public const string Susbo = @"Content\Textures\UI\susbo.png";
+				public const string Title = @"Content\Textures\UI\title.png";
 			}
 
 		}

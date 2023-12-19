@@ -60,6 +60,7 @@ namespace PuppetRoguelite
         RespawningAtHub,
         StartingDungeonRun,
         Paused,
-        Unpaused
+        Unpaused,
+        ExitingToMainMenu
     }
 }

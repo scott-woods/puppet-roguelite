@@ -73,7 +73,16 @@ namespace PuppetRoguelite.Scenes
         {
             base.OnStart();
 
-            Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
+            if (Game1.SceneManager.State == GlobalManagers.SceneManagerState.Transitioning)
+                Game1.SceneManager.Emitter.AddObserver(GlobalManagers.SceneEvents.TransitionEnded, OnSceneTransitionEnded);
+            else
+                Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
+
+            void OnSceneTransitionEnded()
+            {
+                Game1.SceneManager.Emitter.RemoveObserver(GlobalManagers.SceneEvents.TransitionEnded, OnSceneTransitionEnded);
+                Game1.AudioManager.PlayMusic(Nez.Content.Audio.Music.The_bay);
+            }
 
             //if (!Game1.AudioManager.IsPlayingMusic(Nez.Content.Audio.Music.The_bay))
             //{

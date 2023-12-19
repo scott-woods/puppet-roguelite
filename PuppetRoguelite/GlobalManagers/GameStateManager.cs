@@ -37,7 +37,7 @@ namespace PuppetRoguelite.GlobalManagers
         {
             base.Update();
 
-            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Escape) && !_pauseDisabled)
+            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Escape) && !_pauseDisabled && Game1.Scene.GetType() != typeof(MainMenu))
             {
                 if (GameState == GameState.Paused)
                 {

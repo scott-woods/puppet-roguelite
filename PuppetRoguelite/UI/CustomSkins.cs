@@ -240,6 +240,27 @@ namespace PuppetRoguelite.UI
                 Background = skin.GetNinePatchDrawable("np_inventory_01")
             });
 
+            skin.Add("newGameButton", new ButtonStyle()
+            {
+                Up = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.New_game_button)),
+                Down = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.New_game_button)),
+                Over = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.New_game_button)),
+            });
+
+            skin.Add("continueButton", new ButtonStyle()
+            {
+                Up = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Continue_button)),
+                Down = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Continue_button)),
+                Over = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Continue_button)),
+            });
+
+            skin.Add("quitButton", new ButtonStyle()
+            {
+                Up = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Quit_button)),
+                Down = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Quit_button)),
+                Over = new SpriteDrawable(Game1.Content.LoadTexture(Nez.Content.Textures.UI.Quit_button)),
+            });
+
             //skin.Add("progressBar", new ProgressBarStyle()
             //{
             //    Background = new PrimitiveDrawable(1, 16, Color.LightGray),

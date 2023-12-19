@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Textures;
 using Nez.UI;
+using PuppetRoguelite.Scenes;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Elements;
 using System;
@@ -75,6 +76,12 @@ namespace PuppetRoguelite.UI.Menus
 
             _pauseWindow.Row();
 
+            var quitToMenuButton = new ListButton("Quit to Main Menu", _basicSkin, "listButton_xxl");
+            quitToMenuButton.OnClicked += OnQuitToMenuClicked;
+            _pauseWindow.Add(quitToMenuButton);
+
+            _pauseWindow.Row();
+
             var quitButton = new ListButton("Quit to Desktop", _basicSkin, "listButton_xxl");
             quitButton.OnClicked += OnQuitClicked;
             _pauseWindow.Add(quitButton);
@@ -88,6 +95,14 @@ namespace PuppetRoguelite.UI.Menus
         void OnQuitClicked(Button button)
         {
             Core.Exit();
+        }
+
+        void OnQuitToMenuClicked(Button button)
+        {
+            Game1.GameStateManager.Unpause();
+            Game1.AudioManager.StopMusic();
+            Game1.SceneManager.ChangeScene(typeof(MainMenu));
+            Emitters.GameEventsEmitter.Emit(GameEvents.ExitingToMainMenu);
         }
 
         void OnUnpaused()

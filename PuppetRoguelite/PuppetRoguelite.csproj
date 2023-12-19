@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="Content\Audio\Music\babbulon_double.ogg" />
     <None Remove="Content\Audio\Music\baby_mode.ogg" />
+    <None Remove="Content\Audio\Music\logo_sound.wav" />
     <None Remove="Content\Audio\Sounds\002_Hover_02.wav" />
     <None Remove="Content\Audio\Sounds\021_Decline_01.wav" />
     <None Remove="Content\Audio\Sounds\094_Pause_06.wav" />
@@ -63,6 +64,7 @@
     <None Remove="Content\Audio\Sounds\purchase.wav" />
     <None Remove="Content\Audio\Sounds\space_ship_3.mp3" />
     <None Remove="Content\Audio\Sounds\spitter_fire.wav" />
+    <None Remove="Content\Audio\Sounds\start_sound.wav" />
     <None Remove="Content\Audio\Sounds\unfreeze.wav" />
     <None Remove="Content\Audio\Sounds\whirlwind_speen.wav" />
     <None Remove="Content\Fonts\abaddon_light.fnt" />
@@ -96,7 +98,9 @@
     <None Remove="Content\Textures\Shops\tech_shop.png" />
     <None Remove="Content\Textures\UI\borders_and_hp.png" />
     <None Remove="Content\Textures\UI\borders_and_hp_no_glow.png" />
+    <None Remove="Content\Textures\UI\cat.png" />
     <None Remove="Content\Textures\UI\crosshair038.png" />
+    <None Remove="Content\Textures\UI\cursed tyler small.png" />
     <None Remove="Content\Textures\UI\glow_sliders.png" />
     <None Remove="Content\Textures\UI\healthbar.png" />
     <None Remove="Content\Textures\UI\heart-health-sprite-3.png" />
@@ -450,6 +454,9 @@
     <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_05.png" />
     <None Remove="Content\Textures\UI\Menu\Style3\Inventory_Slot_06.png" />
     <None Remove="Content\Textures\UI\sliders.png" />
+    <None Remove="Content\Textures\UI\smile.JPG" />
+    <None Remove="Content\Textures\UI\start_button.png" />
+    <None Remove="Content\Textures\UI\susbo.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\**">
