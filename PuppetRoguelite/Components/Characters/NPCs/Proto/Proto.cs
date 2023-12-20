@@ -6,6 +6,9 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.SaveData;
+using PuppetRoguelite.SaveData.Unlocks;
+using PuppetRoguelite.SaveData.Upgrades;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.Tools;
@@ -15,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Nez.Tweens.Easing;
 
 namespace PuppetRoguelite.Components.Characters.NPCs.Proto
 {
@@ -25,6 +29,9 @@ namespace PuppetRoguelite.Components.Characters.NPCs.Proto
         BoxCollider _collider;
         YSorter _ySorter;
         OriginComponent _originComponent;
+
+        //misc
+        bool _hasMentionedNewSchematic = false;
 
         public override void Initialize()
         {
@@ -60,7 +67,39 @@ namespace PuppetRoguelite.Components.Characters.NPCs.Proto
 
         IEnumerator HandleInteraction()
         {
-            yield break;
+            Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
+
+            yield return GlobalTextboxManager.DisplayText(GetDialogueLines());
+
+            Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
+        }
+
+        List<DialogueLine> GetDialogueLines()
+        {
+            //check for anything contextual
+            if (!_hasMentionedNewSchematic)
+            {
+                if (DungeonRuns.Instance.Runs.Count > 0)
+                {
+                    var unlock = DungeonRuns.Instance.Runs.Last().UnlockedAction;
+                    if (unlock != null)
+                    {
+                        _hasMentionedNewSchematic = true;
+                        return ProtoDialogue.GetLinesForUnlock(unlock);
+                    }
+                }
+            }
+
+            //try upgrade suggestions
+            if (PlayerUpgradeData.Instance.MaxHpUpgrade.CurrentLevel == 0 || PlayerUpgradeData.Instance.MaxApUpgrade.CurrentLevel == 0 ||
+                PlayerUpgradeData.Instance.AttackSlotsUpgrade.CurrentLevel == 0 || PlayerUpgradeData.Instance.UtilitySlotsUpgrade.CurrentLevel == 0 ||
+                PlayerUpgradeData.Instance.SupportSlotsUpgrade.CurrentLevel == 0)
+            {
+                if (Nez.Random.Chance(.1f))
+                    return ProtoDialogue.GetUpgradeRecommendation();
+            }
+
+            return ProtoDialogue.DefaultLines.RandomItem();
         }
     }
 }

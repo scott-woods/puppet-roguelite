@@ -2,6 +2,7 @@
 using Nez;
 using PuppetRoguelite.Components;
 using PuppetRoguelite.Components.Cameras;
+using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.SceneComponents.CombatManager;
 using PuppetRoguelite.StaticData;
@@ -63,6 +64,8 @@ namespace PuppetRoguelite.Scenes
             _playerEntity.SetPosition(spawn);
 
             Game1.AudioManager.PlayMusic(Songs.Babbulon, true);
+
+            DungeonRuns.Instance.StartNewRun();
         }
 
         public override void End()

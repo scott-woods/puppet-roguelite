@@ -34,6 +34,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
         public void AddDollahs(int amount)
         {
             Dollahs += amount;
+            DungeonRuns.Instance.AddDollahsToRun(amount);
         }
     }
 

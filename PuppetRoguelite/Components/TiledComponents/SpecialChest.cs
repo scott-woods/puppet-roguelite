@@ -8,6 +8,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SaveData.Unlocks;
 using PuppetRoguelite.SceneComponents;
 using PuppetRoguelite.Scenes;
@@ -62,6 +63,8 @@ namespace PuppetRoguelite.Components.TiledComponents
             {
                 var unlock = unlocks.RandomItem();
                 ActionUnlockData.Instance.UnlockAction(unlock.Action);
+
+                DungeonRuns.Instance.SetRunUnlockedAction(unlock.Action);
 
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Loot_get);
                 var unlockLines = new List<DialogueLine>()

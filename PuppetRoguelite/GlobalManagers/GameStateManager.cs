@@ -2,6 +2,7 @@
 using Nez;
 using Nez.Systems;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.SaveData;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI.HUDs;
@@ -93,12 +94,14 @@ namespace PuppetRoguelite.GlobalManagers
 
         public void ReturnToHubAfterSuccess()
         {
+            DungeonRuns.Instance.EndRun();
             Game1.SceneManager.ChangeScene(typeof(NewHub), "0", Color.White, 4f, 4f, 1f);
             Game1.SceneManager.Emitter.AddObserver(SceneEvents.ScreenObscured, OnScreenObscured);
         }
 
         public void ReturnToHubAfterDeath()
         {
+            DungeonRuns.Instance.EndRun();
             Game1.SceneManager.ChangeScene(typeof(NewHub), "0");
             Game1.SceneManager.Emitter.AddObserver(SceneEvents.ScreenObscured, OnScreenObscured);
         }
