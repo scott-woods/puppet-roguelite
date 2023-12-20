@@ -181,6 +181,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
         void OnAttackAnimationCompleted(string animationName)
         {
             _animator.OnAnimationCompletedEvent -= OnAttackAnimationCompleted;
+            _animator.SetSprite(_animator.CurrentAnimation.Sprites.Last());
             _isAttacking = false;
         }
 

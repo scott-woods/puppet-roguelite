@@ -51,11 +51,6 @@ namespace PuppetRoguelite.Components.Shared
 
             Game1.AudioManager.PlaySound(_sound);
 
-            var chainBot = Entity.GetComponent<ChainBot>();
-            if (chainBot != null )
-            {
-                Debug.Log($"{chainBot.Id}: starting death animation");
-            }
             _animator.Play(_deathAnimName, SpriteAnimator.LoopMode.Once);
             _animator.OnAnimationCompletedEvent += OnDeathAnimationCompleted;
         }
