@@ -66,29 +66,29 @@ namespace PuppetRoguelite.Components.TiledComponents
             var enemySpawns = Entity.Scene.FindComponentsOfType<EnemySpawnPoint>().Where(e => e.MapEntity == MapEntity).ToList();
             int i = 0;
             var typesPicked = new List<Type>();
-            while (i < enemySpawns.Count)
-            {
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
-                var spawn = enemySpawns[i];
+            //while (i < enemySpawns.Count)
+            //{
+            //    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Enemy_spawn);
+            //    var spawn = enemySpawns[i];
 
-                Type enemyType;
+            //    Type enemyType;
 
-                //get enemy types that have been picked less than 3 times
-                var possibleTypes = _enemyTypes.Where(t => typesPicked.Where(x => x == t).Count() < 3).ToList();
+            //    //get enemy types that have been picked less than 3 times
+            //    var possibleTypes = _enemyTypes.Where(t => typesPicked.Where(x => x == t).Count() < 3).ToList();
 
-                //if any possible types, get a random from that list
-                if (possibleTypes.Any())
-                    enemyType = possibleTypes.RandomItem();
-                else //if all types are already at max, just pick another random one
-                    enemyType = _enemyTypes.RandomItem();
+            //    //if any possible types, get a random from that list
+            //    if (possibleTypes.Any())
+            //        enemyType = possibleTypes.RandomItem();
+            //    else //if all types are already at max, just pick another random one
+            //        enemyType = _enemyTypes.RandomItem();
 
-                typesPicked.Add(enemyType);
+            //    typesPicked.Add(enemyType);
 
-                combatManager.AddEnemy(spawn.SpawnEnemy(enemyType));
-                i++;
-                yield return Coroutine.WaitForSeconds(.2f);
-            }
-            //combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(OrbMage)));
+            //    combatManager.AddEnemy(spawn.SpawnEnemy(enemyType));
+            //    i++;
+            //    yield return Coroutine.WaitForSeconds(.2f);
+            //}
+            combatManager.AddEnemy(enemySpawns[0].SpawnEnemy(typeof(Spitter)));
             //combatManager.AddEnemy(enemySpawns[1].SpawnEnemy(typeof(ChainBot)));
 
             //destroy entity

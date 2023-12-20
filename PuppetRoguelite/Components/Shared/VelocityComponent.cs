@@ -3,6 +3,7 @@ using Nez;
 using Nez.Tweens;
 using Nez.UI;
 using PuppetRoguelite.Enums;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace PuppetRoguelite.Components.Shared
 
         public void SetDirection(Vector2 direction)
         {
+            if (float.IsNaN(direction.X) || float.IsNaN(direction.Y))
+                return;
             Direction = direction;
         }
 
@@ -66,8 +69,13 @@ namespace PuppetRoguelite.Components.Shared
 
             //move
             var movement = Direction * (float)speed * Time.DeltaTime;
+            Log.Debug("Velocity Component calculated Movement as: " + movement);
             _mover.CalculateMovement(ref movement, out var result);
+            Log.Debug("Movement after Mover Calculation: " + movement);
             _subPixelV2.Update(ref movement);
+            Log.Debug("Movement after SubPixelV2 Calculation: " + movement);
+
+            Log.Debug("Velocitiy Component applying Movement: " + movement);
             _mover.ApplyMovement(movement);
         }
 

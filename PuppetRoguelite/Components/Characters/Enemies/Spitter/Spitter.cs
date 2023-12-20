@@ -9,6 +9,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using PuppetRoguelite.Tools;
+using Serilog;
 using System;
 using TaskStatus = Nez.AI.BehaviorTrees.TaskStatus;
 
@@ -87,7 +88,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             Flags.SetFlagExclusive(ref Collider.PhysicsLayer, (int)PhysicsLayers.EnemyCollider);
             Collider.CollidesWithLayers = 0;
             Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.Environment);
-            Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
+            //Flags.SetFlag(ref Collider.CollidesWithLayers, (int)PhysicsLayers.EnemyCollider);
 
             OriginComponent = Entity.AddComponent(new OriginComponent(Collider));
 
@@ -142,18 +143,16 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
         {
             var tree = BehaviorTreeBuilder<Spitter>.Begin(this)
                 .Selector(AbortTypes.Self)
-                    .ConditionalDecorator(s => !s.HasLineOfSight() || !s.CanAttack(), true)
+                    .ConditionalDecorator(s => !s.HasLineOfSight() || !s.CanAttack(), false)
                         .Sequence()
                             .Action(s => s.Move())
+                            .ParallelSelector()
+                                .WaitAction(1f)
+                                .Action(s => s.Idle())
+                            .EndComposite()
+                            .Action(s => s.ExecuteAction(SpitAttack))
+                            .Action(s => s.ResetTimer())
                         .EndComposite()
-                    .Sequence()
-                        .ParallelSelector()
-                            .WaitAction(1f)
-                            .Action(s => s.Idle())
-                        .EndComposite()
-                        .Action(s => s.ExecuteAction(SpitAttack))
-                        .Action(s => s.ResetTimer())
-                    .EndComposite()
                 .EndComposite()
                 .Build();
 
@@ -192,12 +191,25 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
         TaskStatus Move()
         {
+            Log.Debug("Spitter starting Move Task");
+
+            if (CanAttack())
+            {
+                return TaskStatus.Success;
+            }
+
             //handle cooldown timer
             if (HasLineOfSight())
+            {
+                Log.Debug("Spitter has Line of Sight, decrementing cooldown timer");
                 _cooldownTimer -= Time.DeltaTime;
+            }
             else
             {
+                Log.Debug("Spitter does not have Line of Sight.");
+                Log.Debug("Spitter following Path towards " + PlayerController.Instance.Entity.Position);
                 Pathfinder.FollowPath(PlayerController.Instance.Entity.Position);
+                Log.Debug("Spitter moving at " + _fastMoveSpeed + " to get Line of Sight");
                 VelocityComponent.Move(_fastMoveSpeed);
                 if (!Animator.IsAnimationActive("Move"))
                     Animator.Play("Move");
@@ -211,30 +223,38 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             //determine where to move and how fast
             float speed = 0;
             Vector2 direction;
+            Log.Debug("Spitter distance to Player: " + dist);
             if (dist <= 64) //player too close
             {
+                Log.Debug("Player too close to Spitter");
                 speed = _fastMoveSpeed;
                 direction = Entity.Position - PlayerController.Instance.Entity.Position;
             }
             else if (dist >= 96 && dist <= 128)
             {
+                Log.Debug("Player slight far from Spitter, moving slowly towards Player");
                 speed = _slowMoveSpeed;
                 direction = PlayerController.Instance.Entity.Position - Entity.Position;
             }
             else if (dist >= 192)
             {
+                Log.Debug("Player too far from Spitter");
                 speed = _moveSpeed;
                 direction = PlayerController.Instance.Entity.Position - Entity.Position;
             }
             else
             {
+                Log.Debug("Player at right distance from Spitter, Spitter not moving.");
                 speed = 0;
                 direction = PlayerController.Instance.Entity.Position - Entity.Position;
             }
 
             //normalize and set direction
-            direction.Normalize();
-            VelocityComponent.SetDirection(direction);
+            if (direction != Vector2.Zero)
+            {
+                direction.Normalize();
+                VelocityComponent.SetDirection(direction);
+            }
 
             //play idle or move animation
             var anim = speed == 0 ? "Idle" : "Move";
@@ -246,6 +266,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             //move
             if (speed != 0)
             {
+                Log.Debug("Spitter moving at speed " + speed);
                 VelocityComponent.Move(speed);
             }
 

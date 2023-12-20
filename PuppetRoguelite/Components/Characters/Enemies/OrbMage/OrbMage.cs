@@ -185,8 +185,11 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
 
         void MoveInDirection(Vector2 direction, float speed)
         {
-            //velocity component
-            VelocityComponent.SetDirection(direction);
+            if (direction != Vector2.Zero)
+            {
+                direction.Normalize();
+                VelocityComponent.SetDirection(direction);
+            }
             VelocityComponent.Move(speed);
 
             //animation
@@ -265,7 +268,6 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
 
             //get direction
             var dir = PlayerController.Instance.OriginComponent.Origin - OriginComponent.Origin;
-            dir.Normalize();
 
             //move away from player
             MoveInDirection(dir * -1, _fastMoveSpeed);
@@ -306,10 +308,12 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             //get distance and direction to player
             var distToPlayer = Vector2.Distance(OriginComponent.Origin, PlayerController.Instance.OriginComponent.Origin);
             var dir = PlayerController.Instance.OriginComponent.Origin - OriginComponent.Origin;
-            dir.Normalize();
 
-            //set direction
-            VelocityComponent.SetDirection(dir);
+            if (dir != Vector2.Zero)
+            {
+                dir.Normalize();
+                VelocityComponent.SetDirection(dir);
+            }
 
             //slowly move towards player if not at preferred distance
             if (distToPlayer > _preferredDistanceToPlayer)
