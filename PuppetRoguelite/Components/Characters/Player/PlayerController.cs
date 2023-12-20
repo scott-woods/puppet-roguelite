@@ -55,6 +55,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         public DeathComponent DeathComponent;
         public ActionsManager ActionsManager;
         public SpriteFlipper SpriteFlipper;
+        public StatusComponent StatusComponent;
 
         //misc
         public Vector2 Direction = new Vector2(1, 0);
@@ -63,6 +64,9 @@ namespace PuppetRoguelite.Components.Characters.Player
         public Vector2 SpriteOffset = new Vector2(13, -2);
         Vector2 _collisionOffset = new Vector2(-4, 4);
         public bool IsMeleeEnabled = true;
+
+        //default status
+        Status _defaultStatus = new Status(Status.StatusType.Normal, (int)StatusPriority.Normal);
 
         //data
         //public PlayerData PlayerData;
@@ -208,6 +212,8 @@ namespace PuppetRoguelite.Components.Characters.Player
                 otherRenderableComponents: new List<RenderableComponent> { shadow }));
 
             Entity.AddComponent(new Shadow(SpriteAnimator, new Vector2(0, 6), Vector2.One));
+
+            StatusComponent = Entity.AddComponent(new StatusComponent(_defaultStatus));
         }
 
         void SetupInput()
