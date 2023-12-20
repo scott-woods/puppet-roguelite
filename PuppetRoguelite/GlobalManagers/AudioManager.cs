@@ -22,7 +22,7 @@ namespace PuppetRoguelite.GlobalManagers
 {
     public class AudioManager : GlobalManager
     {
-        const float _defaultMusicVolume = .15f;
+        const float _defaultMusicVolume = .18f;
         const float _defaultPitch = 0f;
         const float _defaultPan = 0;
         const float _defaultSoundVolume = .25f;

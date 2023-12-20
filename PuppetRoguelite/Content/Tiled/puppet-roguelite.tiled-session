@@ -133,6 +133,14 @@
                 "y": 253.90841725251758
             }
         },
+        "Tilemaps/DungeonPrison/dp_intro.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 124.99999999999999,
+                "y": -12
+            }
+        },
         "Tilemaps/DungeonPrison/dp_l_1.tmx": {
             "scale": 1.3705729166666665,
             "selectedLayer": 4,
@@ -255,11 +263,14 @@
             }
         },
         "Tilemaps/DungeonPrison/right_key_room.tmx": {
+            "expandedObjectLayers": [
+                53
+            ],
             "scale": 5.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 147.72727272727272,
-                "y": 174.54545454545456
+                "x": 147.54545454545456,
+                "y": 174.36363636363637
             }
         },
         "Tilemaps/Hub/hub_2.tmx": {
@@ -269,8 +280,16 @@
             "scale": 1.5,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 727,
-                "y": 642
+                "x": 724.3333333333333,
+                "y": 638
+            }
+        },
+        "Tilemaps/Hub/hub_intro.tmx": {
+            "scale": 1,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 127.5,
+                "y": 23
             }
         },
         "Tilesets/dungeon_prison_props.tsx": {
@@ -303,6 +322,7 @@
     ],
     "project": "puppet-roguelite.tiled-project",
     "recentFiles": [
+        "Tilemaps/DungeonPrison/dp_intro.tmx",
         "Tilemaps/DungeonPrison/dp_tutorial.tmx",
         "Tilemaps/DungeonPrison/left_key_room.tmx",
         "RuleMaps/prison_floor_rules_one_overlap.tmx",
@@ -313,8 +333,7 @@
         "Tilemaps/DungeonPrison/boss_room.tmx",
         "Tilesets/dungeon_prison_tileset_short_walls.tsx",
         "Tilemaps/DungeonPrison/dp_blr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_bl_1.tmx",
-        "Tilemaps/DungeonPrison/right_key_room.tmx"
+        "Tilemaps/DungeonPrison/dp_bl_1.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

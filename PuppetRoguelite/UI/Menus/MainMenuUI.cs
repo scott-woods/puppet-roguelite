@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Nez.UI;
+using PuppetRoguelite.SaveData;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Elements;
@@ -81,6 +82,9 @@ namespace PuppetRoguelite.UI.Menus
             _quitButton = new GrowButton(new SpriteDrawable(quitNoBgTexture), 2.5f, 1.15f);
             _quitButton.OnPressed += OnQuitButtonPressed;
             buttonTable.Add(_quitButton);
+
+            _startButton.EnableExplicitFocusableControl(null, _quitButton, null, null);
+            _quitButton.EnableExplicitFocusableControl(_startButton, null, null, null);
         }
 
         void OnStartButtonPressed()
@@ -91,7 +95,12 @@ namespace PuppetRoguelite.UI.Menus
 
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Start_sound);
 
-            Game1.SceneManager.ChangeScene(typeof(NewHub), "0", Color.White, fadeOutDuration: 2f, delayBeforeFadeInDuration: .5f, fadeInDuration: 1f);
+            Type sceneType = null;
+            if (!GameContextData.Instance.HasCompletedIntro)
+                sceneType = typeof(IntroArea);
+            else sceneType = typeof(NewHub);
+
+            Game1.SceneManager.ChangeScene(sceneType, "0", Color.White, fadeOutDuration: 2f, delayBeforeFadeInDuration: .5f, fadeInDuration: 1f);
         }
 
         void OnQuitButtonPressed()

@@ -12,6 +12,8 @@ namespace PuppetRoguelite.Components.TiledComponents
 {
     public class AreaTrigger : TiledComponent, IUpdatable
     {
+        public event Action OnTriggered;
+
         //components
         Collider _collider;
 
@@ -62,6 +64,8 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             if (!string.IsNullOrWhiteSpace(_eventName))
                 Game1.StartCoroutine(Game1.EventManager.PlayEvent(_eventName));
+
+            OnTriggered?.Invoke();
         }
     }
 }

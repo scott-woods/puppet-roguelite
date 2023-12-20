@@ -176,7 +176,7 @@ namespace PuppetRoguelite.UI.Elements
             {
                 var selector = new BulletPointSelector(choice, _basicSkin, "default_xxxl");
                 selector.OnSelected += OnChoiceSelected;
-                _innerTable.Add(selector).Expand();
+                _innerTable.Add(selector).Grow();
                 selectors.Add(selector);
             }
 

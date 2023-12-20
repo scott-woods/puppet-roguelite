@@ -19,7 +19,8 @@ namespace PuppetRoguelite.UI.Elements
             _asteriskLabel = new Label("*", skin, styleName);
             Add(_asteriskLabel).SetSpaceRight(10f);
             _choiceLabel = new Label(choiceText, skin, styleName);
-            Add(_choiceLabel);
+            _choiceLabel.SetWrap(true);
+            Add(_choiceLabel).Grow();
 
             _asteriskLabel.SetVisible(false);
         }

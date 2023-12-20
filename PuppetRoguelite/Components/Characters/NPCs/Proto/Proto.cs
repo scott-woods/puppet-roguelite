@@ -60,14 +60,7 @@ namespace PuppetRoguelite.Components.Characters.NPCs.Proto
 
         IEnumerator HandleInteraction()
         {
-            var lines = new List<DialogueLine>()
-            {
-                new DialogueLine("aborignal taste")
-            };
-
-            yield return GlobalTextboxManager.DisplayText(lines);
-
-            Game1.SceneManager.ChangeScene(typeof(TutorialRoom), "0");
+            yield break;
         }
     }
 }

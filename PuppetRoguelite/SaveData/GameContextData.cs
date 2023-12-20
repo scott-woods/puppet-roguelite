@@ -12,7 +12,7 @@ namespace PuppetRoguelite.SaveData
     {
         private static GameContextData _instance;
 
-        public bool HasSeenProtoIntro = false;
+        public bool HasCompletedIntro = false;
 
         private GameContextData()
         {

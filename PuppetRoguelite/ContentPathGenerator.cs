@@ -1009,6 +1009,7 @@ namespace Nez
 				public static class Hub
 				{
 					public const string Hub_2 = @"Content\Tiled\Tilemaps\Hub\hub_2.tmx";
+					public const string Hub_intro = @"Content\Tiled\Tilemaps\Hub\hub_intro.tmx";
 					public const string Rules = @"Content\Tiled\Tilemaps\Hub\rules.txt";
 				}
 

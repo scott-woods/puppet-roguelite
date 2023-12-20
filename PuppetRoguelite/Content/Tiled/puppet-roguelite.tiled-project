@@ -315,6 +315,26 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 27,
+            "members": [
+            ],
+            "name": "InteractTrigger",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 16,
             "members": [
             ],
@@ -426,26 +446,6 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
-            "id": 19,
-            "members": [
-            ],
-            "name": "UpgradeShop",
-            "type": "class",
-            "useAs": [
-                "property",
-                "map",
-                "layer",
-                "object",
-                "tile",
-                "tileset",
-                "wangcolor",
-                "wangset",
-                "project"
-            ]
-        },
-        {
-            "color": "#ffa0a0a4",
-            "drawFill": true,
             "id": 25,
             "members": [
             ],
@@ -466,10 +466,30 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
-            "id": 27,
+            "id": 19,
             "members": [
             ],
-            "name": "InteractTrigger",
+            "name": "UpgradeShop",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 28,
+            "members": [
+            ],
+            "name": "WallLever",
             "type": "class",
             "useAs": [
                 "property",
