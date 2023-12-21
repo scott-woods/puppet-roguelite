@@ -80,6 +80,7 @@ namespace Nez
 				public const string Quickshot_fire = @"Content\Audio\Sounds\quickshot_fire.wav";
 				public const string Small_lightning = @"Content\Audio\Sounds\small_lightning.wav";
 				public const string Space_ship_3 = @"Content\Audio\Sounds\space_ship_3.wav";
+				public const string Special_chest_sound = @"Content\Audio\Sounds\special_chest_sound.wav";
 				public const string Spitter_fire = @"Content\Audio\Sounds\spitter_fire.wav";
 				public const string Start_sound = @"Content\Audio\Sounds\start_sound.wav";
 				public const string Unfreeze = @"Content\Audio\Sounds\unfreeze.wav";

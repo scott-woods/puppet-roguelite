@@ -63,6 +63,7 @@
     <None Remove="Content\Audio\Sounds\player_teleport.wav" />
     <None Remove="Content\Audio\Sounds\purchase.wav" />
     <None Remove="Content\Audio\Sounds\space_ship_3.mp3" />
+    <None Remove="Content\Audio\Sounds\special_chest_sound.wav" />
     <None Remove="Content\Audio\Sounds\spitter_fire.wav" />
     <None Remove="Content\Audio\Sounds\start_sound.wav" />
     <None Remove="Content\Audio\Sounds\unfreeze.wav" />

@@ -311,11 +311,11 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             //handle animation
             var animation = "IdleDown";
-            if (VelocityComponent.Direction.X != 0)
+            if (Math.Abs(VelocityComponent.Direction.X) >= Math.Abs(VelocityComponent.Direction.Y))
             {
                 animation = "Idle";
             }
-            else if (VelocityComponent.Direction.Y != 0)
+            else
             {
                 animation = VelocityComponent.Direction.Y >= 0 ? "IdleDown" : "IdleUp";
             }

@@ -66,7 +66,7 @@ namespace PuppetRoguelite.Components.TiledComponents
 
                 DungeonRuns.Instance.SetRunUnlockedAction(unlock.Action);
 
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Loot_get);
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Special_chest_sound);
                 var unlockLines = new List<DialogueLine>()
                 {
                     new DialogueLine($"You found the schematics for {PlayerActionUtils.GetName(unlock.Action.ToType())}!")
@@ -79,7 +79,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 var dropper = Entity.AddComponent(new DollahDropper(75, 0));
                 dropper.DropDollahs();
 
-                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Loot_get);
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Special_chest_sound);
                 var dollahLines = new List<DialogueLine>()
                 {
                     new DialogueLine("You found a bunch of dollahs!")
@@ -87,7 +87,7 @@ namespace PuppetRoguelite.Components.TiledComponents
                 yield return GlobalTextboxManager.DisplayText(dollahLines);
             }
 
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Space_ship_3);
+            //Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Space_ship_3);
 
             Game1.GameStateManager.ReturnToHubAfterSuccess();
         }
