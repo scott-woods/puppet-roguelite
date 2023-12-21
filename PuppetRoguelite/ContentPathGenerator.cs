@@ -21,6 +21,7 @@ namespace Nez
 				public const string Have_a_heart = @"Content\Audio\Music\have_a_heart.ogg";
 				public const string Logo_sound = @"Content\Audio\Music\logo_sound.wav";
 				public const string The_bay = @"Content\Audio\Music\the_bay.ogg";
+				public const string Threadlock_menu = @"Content\Audio\Music\threadlock_menu.ogg";
 			}
 
 			public static class Sounds

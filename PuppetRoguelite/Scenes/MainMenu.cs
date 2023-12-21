@@ -3,6 +3,7 @@ using Nez;
 using Nez.Sprites;
 using Nez.Textures;
 using PuppetRoguelite.Components;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections;
@@ -75,6 +76,8 @@ namespace PuppetRoguelite.Scenes
 
             splash.Entity.Destroy();
             susboRenderer.Entity.Destroy();
+
+            Game1.AudioManager.PlayMusic(Songs.Menu);
 
             _uiEntity = CreateEntity("ui");
             _uiEntity.AddComponent(new MainMenuUI());

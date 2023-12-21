@@ -15,7 +15,6 @@ namespace PuppetRoguelite.GlobalManagers
         const float _defaultSoundVolume = .25f;
         const float _volumeReductionFactor = .01f;
 
-
         StreamingVoice _musicVoice;
 
         public AudioDevice AudioDevice { get; }

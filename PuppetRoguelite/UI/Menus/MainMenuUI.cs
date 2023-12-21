@@ -93,6 +93,8 @@ namespace PuppetRoguelite.UI.Menus
             _startButton.Remove();
             _quitButton.Remove();
 
+            Game1.AudioManager.StopMusic();
+
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Start_sound);
 
             Type sceneType = null;
@@ -106,6 +108,7 @@ namespace PuppetRoguelite.UI.Menus
         void OnQuitButtonPressed()
         {
             _quitButton.OnPressed -= OnQuitButtonPressed;
+            Game1.AudioManager.StopMusic();
             Game1.Exit();
         }
     }
