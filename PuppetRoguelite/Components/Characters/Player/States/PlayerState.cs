@@ -38,7 +38,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public bool TryTriggerTurn()
         {
             var gameStateManager = Game1.GameStateManager;
-            if ((gameStateManager.GameState == GameState.Combat || gameStateManager.GameState == GameState.AttackTutorial) && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > -1)
+            if ((gameStateManager.GameState == GameState.Combat || gameStateManager.GameState == GameState.AttackTutorial) && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
             {
                 _machine.ChangeState<TurnState>();
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
