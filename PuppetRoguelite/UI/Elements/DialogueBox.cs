@@ -20,6 +20,7 @@ namespace PuppetRoguelite.UI.Elements
         Table _mainTable;
         WindowTable _windowTable;
         Table _innerTable;
+        Label _tipLabel;
 
         //skin
         Skin _basicSkin;
@@ -53,12 +54,21 @@ namespace PuppetRoguelite.UI.Elements
 
         void ArrangeElements()
         {
+            var lowerTable = new Table();
+            _mainTable.Add(lowerTable).Expand().Bottom();
+
+            _tipLabel = new Label("Press 'E' to Continue", _basicSkin, "default_lg");
+            lowerTable.Add( _tipLabel ).SetUniformX().SetExpandX().Left();
+            _tipLabel.SetVisible(false);
+
+            lowerTable.Row();
+
             //textbox table
             _windowTable = new WindowTable(_basicSkin);
             _windowTable.SetSize(_mainTable.GetWidth() * .7f, 216 + (_windowTablePad * 2));
             _windowTable.Pad(_windowTablePad);
             var vPad = Game1.UIResolution.Y * .05f;
-            _mainTable.Add(_windowTable).Expand().Bottom().SetPadBottom(vPad).Width(Value.PercentWidth(1f)).Height(Value.PercentHeight(1f));
+            lowerTable.Add(_windowTable).Expand().Bottom().SetPadBottom(vPad).Width(Value.PercentWidth(1f)).Height(Value.PercentHeight(1f)).SetUniformX();
 
             //inner table
             _innerTable = new Table();
@@ -106,8 +116,23 @@ namespace PuppetRoguelite.UI.Elements
 
                 yield return null;
 
+                var timer = 0f;
+                bool timerReached = false;
                 while (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
+                {
+                    if (timer > 3f && !timerReached)
+                    {
+                        timerReached = true;
+                        timer = 0f;
+                        _tipLabel.SetVisible(true);
+                    }
+                    else
+                        timer += Time.DeltaTime;
+
                     yield return null;
+                }
+
+                _tipLabel.SetVisible(false);
             }
 
             //clear everything
