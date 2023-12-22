@@ -58,7 +58,7 @@ namespace PuppetRoguelite.UI.Menus
             _basicSkin = CustomSkins.CreateBasicSkin();
 
             //set stage action key
-            Stage.KeyboardActionKey = Keys.E;
+            Stage.KeyboardActionKey = Keys.None;
 
             TooltipManager.GetInstance().InitialTime = 1;
 
@@ -176,6 +176,7 @@ namespace PuppetRoguelite.UI.Menus
             if (!_canActivateButton && !Input.IsKeyDown(Keys.E))
             {
                 _canActivateButton = true;
+                Stage.KeyboardActionKey = Keys.E;
             }
 
             if (Input.IsKeyPressed(Keys.X))

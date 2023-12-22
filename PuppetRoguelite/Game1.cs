@@ -84,6 +84,8 @@ namespace PuppetRoguelite
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
             Screen.SetSize(1920, 1080);
 
+            Window.Title = "Threadlock";
+
             //start scene
             Log.Information("Starting initial Scene");
             SceneManager.TargetEntranceId = "0";

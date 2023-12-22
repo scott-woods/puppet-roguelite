@@ -50,6 +50,10 @@ namespace PuppetRoguelite.Cutscenes
             yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Alright, congratulations on knowing enough to at least get yourself locked in this room!"),
+                new DialogueLine("Let's start with the basics. You see those Hearts at the top of your view? That's your HP."),
+                new DialogueLine("Each Heart represents 4 HP. And when you get down to 0... you'll die."),
+                new DialogueLine("Don't worry though, we can always fix you."),
+                new DialogueLine("Below that is your Dollahs, but I'll explain that in more detail later."),
                 new DialogueLine("First thing you'll want to know is how to Dash. Or is it a Dodge Roll? Something like that..."),
                 new DialogueLine("Just press Space while you're moving in any direction, and you'll see what I mean.")
             });
@@ -281,6 +285,9 @@ namespace PuppetRoguelite.Cutscenes
             //disable player melee
             PlayerController.Instance.IsMeleeEnabled = false;
 
+            //wait a moment so turn isn't instantly triggered
+            yield return Coroutine.WaitForSeconds(1f);
+
             //change to AttackTutorial state so turn can be triggered
             Game1.GameStateManager.GameState = GlobalManagers.GameState.AttackTutorial;
 
@@ -366,6 +373,8 @@ namespace PuppetRoguelite.Cutscenes
                 new DialogueLine("On the left is the name of the Action, and the right shows the AP cost."),
                 new DialogueLine("Please select your 'Dash' Action.")
             });
+
+            yield return Coroutine.WaitForSeconds(.5f);
 
             //enable menu nav
             actionMenu.Stage.KeyboardEmulatesGamepad = true;
@@ -505,6 +514,8 @@ namespace PuppetRoguelite.Cutscenes
                         //add more ap
                         apComp.ActionPoints += 2;
 
+                        yield return Coroutine.WaitForSeconds(1f);
+
                         //allow player to move
                         Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
 
@@ -563,6 +574,10 @@ namespace PuppetRoguelite.Cutscenes
             //stop player
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
 
+            //give player util and support actions
+            PlayerController.Instance.ActionsManager.UtilityActions.Add(PlayerActionType.FromType(typeof(Teleport)));
+            PlayerController.Instance.ActionsManager.SupportActions.Add(PlayerActionType.FromType(typeof(HealingAura)));
+
             yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
             {
                 new DialogueLine("Your overall goal is simple: defeat enemies, and find the two Chests in the dungeon."),
@@ -570,6 +585,25 @@ namespace PuppetRoguelite.Cutscenes
                 new DialogueLine("The gate has two bookcases on either side. Use the keys on those shelves to unlock the Gate."),
                 new DialogueLine("Once you go through the Boss Gate, you can't return to the main Dungeon."),
                 new DialogueLine("Defeating the Boss will grant you the schematics for a new Action, plus a nice sum of Dollahs!"),
+                new DialogueLine("Speaking of Actions, if you're ever not sure what one does, you can press 'Tab' to open your Stats menu."),
+                new DialogueLine("Give it a try, and you'll see your HP, AP, and a bit more info about your equipped Actions.")
+            });
+
+            Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
+
+            //wait until player has opened and closed stats menu
+            while (Game1.Scene.FindComponentOfType<StatsMenu>() == null)
+                yield return null;
+
+            while (Game1.Scene.FindComponentOfType<StatsMenu>() != null)
+                yield return null;
+
+            yield return Coroutine.WaitForSeconds(.5f);
+
+            Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
+
+            yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
+            {
                 new DialogueLine("Now, you ready for a real fight? The room ahead contains an example Key Chest, but several enemies, too."),
                 new DialogueLine("Don't forget to experiment with your Utility and Support Actions! Good luck!")
             });
@@ -587,10 +621,6 @@ namespace PuppetRoguelite.Cutscenes
 
         public static IEnumerator CombatTutorial()
         {
-            //give player util and support actions
-            PlayerController.Instance.ActionsManager.UtilityActions.Add(PlayerActionType.FromType(typeof(Teleport)));
-            PlayerController.Instance.ActionsManager.SupportActions.Add(PlayerActionType.FromType(typeof(HealingAura)));
-
             //lock gates
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
             var gates = Game1.Scene.FindComponentsOfType<Gate>().Where(g => g.TmxObject.Name == "CombatTutorialGate").ToList();

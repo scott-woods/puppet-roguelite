@@ -3,14 +3,14 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilemaps/DungeonPrison/boss_room.tmx",
+    "activeFile": "Tilemaps/DungeonPrison/dp_tutorial.tmx",
     "expandedProjectPaths": [
+        ".",
+        "RuleMaps",
+        "Tilemaps/DungeonPrison",
         "Tilesets",
         "Tilemaps",
-        "RuleMaps",
-        "Tilemaps/Hub",
-        ".",
-        "Tilemaps/DungeonPrison"
+        "Tilemaps/Hub"
     ],
     "fileStates": {
         ":/automap-tiles.tsx": {
@@ -281,11 +281,11 @@
             "expandedObjectLayers": [
                 89
             ],
-            "scale": 0.75,
-            "selectedLayer": 2,
+            "scale": 0.5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 543.3333333333333,
-                "y": 695.3333333333333
+                "x": 445,
+                "y": 693
             }
         },
         "Tilemaps/DungeonPrison/left_key_room.tmx": {
@@ -393,18 +393,18 @@
     ],
     "project": "puppet-roguelite.tiled-project",
     "recentFiles": [
-        "Tilemaps/DungeonPrison/dp_tutorial.tmx",
-        "Tilemaps/Hub/hub_2.tmx",
-        "RuleMaps/prison_walls_rules_one_overlap_3.tmx",
-        "RuleMaps/prison_floor_rules_one_overlap.tmx",
-        "Tilemaps/DungeonPrison/left_key_room.tmx",
         "Tilemaps/Hub/hub_intro.tmx",
         "Tilemaps/DungeonPrison/right_key_room.tmx",
         "Tilemaps/DungeonPrison/pre_boss_room.tmx",
         "Tilemaps/DungeonPrison/dp_tr_1.tmx",
         "Tilemaps/DungeonPrison/dp_tlr_1.tmx",
         "Tilemaps/DungeonPrison/dp_tl_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tbr_1.tmx"
+        "Tilemaps/DungeonPrison/dp_tbr_1.tmx",
+        "Tilemaps/DungeonPrison/dp_tblr_1.tmx",
+        "Tilemaps/DungeonPrison/dp_tbl_1.tmx",
+        "Tilemaps/DungeonPrison/dp_tb_1.tmx",
+        "Tilemaps/DungeonPrison/dp_t_1.tmx",
+        "Tilemaps/DungeonPrison/dp_r_1.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
