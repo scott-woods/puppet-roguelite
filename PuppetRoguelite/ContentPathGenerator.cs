@@ -16,6 +16,7 @@ namespace Nez
 			public static class Music
 			{
 				public const string Babbulon_double = @"Content\Audio\Music\babbulon_double.ogg";
+				public const string Baby_fight = @"Content\Audio\Music\baby_fight.ogg";
 				public const string Baby_mode = @"Content\Audio\Music\baby_mode.ogg";
 				public const string Galacta_knight = @"Content\Audio\Music\galacta_knight.ogg";
 				public const string Have_a_heart = @"Content\Audio\Music\have_a_heart.ogg";

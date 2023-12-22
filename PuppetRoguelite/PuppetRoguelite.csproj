@@ -12,6 +12,11 @@
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\Audio\Music\babbulon_double.ogg" />
     <None Remove="Content\Audio\Music\baby_mode.ogg" />
@@ -477,7 +482,9 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FNA\FNA.Core.csproj" />
+    <ProjectReference Include="..\FNA\FNA.Core.csproj">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </ProjectReference>
     <ProjectReference Include="..\Nez\Nez.Persistence\Nez.FNA.Persistence.csproj" />
     <ProjectReference Include="..\Nez\Nez.Portable\Nez.FNA.csproj" />
   </ItemGroup>
@@ -506,6 +513,6 @@
   </Target>
   <Import Project="..\Fmod.SharedLibrary\Fmod.SharedLibrary.projitems" Label="Shared" />
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /y /d &quot;$(SolutionDir)fnalibs\x64\*.dll&quot; &quot;$(ProjectDir)$(OutDir)&quot;" />
+    <Exec Command="xcopy /y /d &quot;$(ProjectDir)fnalibs\x64\*.dll&quot; &quot;$(ProjectDir)$(OutDir)&quot;" />
   </Target>
 </Project>

@@ -602,11 +602,11 @@ namespace PuppetRoguelite.Cutscenes
             //stop music
             Game1.AudioManager.StopMusic();
 
-            //play
-            Game1.AudioManager.PlayMusic(Songs.GalactaKnight);
-
             //wait 1 second before spawning enemies
             yield return Coroutine.WaitForSeconds(1f);
+
+            //play music
+            Game1.AudioManager.PlayMusic(Songs.BabyFight);
 
             //emit combat started
             Emitters.CombatEventsEmitter.Emit(CombatEvents.EncounterStarted);

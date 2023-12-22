@@ -15,5 +15,6 @@ namespace PuppetRoguelite.StaticData
         public static SongModel BabyMode = new SongModel(Nez.Content.Audio.Music.Baby_mode, 0);
         public static SongModel GalactaKnight = new SongModel(Nez.Content.Audio.Music.Galacta_knight, 0);
         public static SongModel Menu = new SongModel(Nez.Content.Audio.Music.Threadlock_menu, 0);
+        public static SongModel BabyFight = new SongModel(Nez.Content.Audio.Music.Baby_fight, 0);
     }
 }
