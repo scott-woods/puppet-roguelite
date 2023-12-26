@@ -156,19 +156,19 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
 
         bool IsInAttackRange()
         {
-            var distToPlayer = Vector2.Distance(OriginComponent.Origin, PlayerController.Instance.OriginComponent.Origin);
+            var distToPlayer = Vector2.Distance(OriginComponent.Origin, GetTargetPosition());
             return distToPlayer <= _attackRange;
         }
 
         bool IsInSweepAttackRange()
         {
-            var distToPlayer = Vector2.Distance(OriginComponent.Origin, PlayerController.Instance.OriginComponent.Origin);
+            var distToPlayer = Vector2.Distance(OriginComponent.Origin, GetTargetPosition());
             return distToPlayer <= _sweepAttackRange;
         }
 
         bool IsTooCloseToPlayer()
         {
-            var distToPlayer = Vector2.Distance(OriginComponent.Origin, PlayerController.Instance.OriginComponent.Origin);
+            var distToPlayer = Vector2.Distance(OriginComponent.Origin, GetTargetPosition());
             return distToPlayer < _minDistanceToPlayer;
         }
 
@@ -267,7 +267,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             _attackPrepTimer += Time.DeltaTime;
 
             //get direction
-            var dir = PlayerController.Instance.OriginComponent.Origin - OriginComponent.Origin;
+            var dir = GetTargetPosition() - OriginComponent.Origin;
 
             //move away from player
             MoveInDirection(dir * -1, _fastMoveSpeed);
@@ -278,7 +278,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
         TaskStatus MoveTowardsAttackRange()
         {
             //move towards player
-            MoveToTarget(PlayerController.Instance.OriginComponent.Origin, _normalMoveSpeed);
+            MoveToTarget(GetTargetPosition(), _normalMoveSpeed);
 
             return TaskStatus.Running;
         }
@@ -306,8 +306,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             }
 
             //get distance and direction to player
-            var distToPlayer = Vector2.Distance(OriginComponent.Origin, PlayerController.Instance.OriginComponent.Origin);
-            var dir = PlayerController.Instance.OriginComponent.Origin - OriginComponent.Origin;
+            var distToPlayer = Vector2.Distance(OriginComponent.Origin, GetTargetPosition());
+            var dir = GetTargetPosition() - OriginComponent.Origin;
 
             if (dir != Vector2.Zero)
             {
@@ -318,7 +318,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             //slowly move towards player if not at preferred distance
             if (distToPlayer > _preferredDistanceToPlayer)
             {
-                MoveToTarget(PlayerController.Instance.OriginComponent.Origin, _normalMoveSpeed);
+                MoveToTarget(GetTargetPosition(), _normalMoveSpeed);
             }
             else
             {

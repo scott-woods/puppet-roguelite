@@ -41,7 +41,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
                         Game1.AudioManager.PlaySound(Content.Audio.Sounds.Spitter_fire);
 
                         //get direction to player
-                        var dir = PlayerController.Instance.Entity.Position - _enemy.Entity.Position;
+                        var dir = _enemy.GetTargetPosition() - _enemy.Entity.Position;
                         dir.Normalize();
 
                         CreateProjectile(dir);

@@ -162,7 +162,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
         bool HasLineOfSight()
         {
-            var cast = Physics.Linecast(Entity.Position, PlayerController.Instance.Entity.Position, 1 << (int)PhysicsLayers.Environment);
+            var cast = Physics.Linecast(Entity.Position, GetTargetPosition(), 1 << (int)PhysicsLayers.Environment);
             return cast.Collider == null;
         }
 
@@ -206,9 +206,10 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             }
             else
             {
+                var targetPos = GetTargetPosition();
                 Log.Debug("Spitter does not have Line of Sight.");
-                Log.Debug("Spitter following Path towards " + PlayerController.Instance.Entity.Position);
-                Pathfinder.FollowPath(PlayerController.Instance.Entity.Position);
+                Log.Debug("Spitter following Path towards " + targetPos);
+                Pathfinder.FollowPath(targetPos);
                 Log.Debug("Spitter moving at " + _fastMoveSpeed + " to get Line of Sight");
                 VelocityComponent.Move(_fastMoveSpeed);
                 if (!Animator.IsAnimationActive("Move"))
@@ -218,7 +219,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
 
             //get dist to player
             if (PlayerController.Instance.Entity == null) return TaskStatus.Failure;
-            var dist = Math.Abs(Vector2.Distance(PlayerController.Instance.Entity.Position, Entity.Position));
+            var dist = Math.Abs(Vector2.Distance(GetTargetPosition(), Entity.Position));
 
             //determine where to move and how fast
             float speed = 0;
@@ -228,25 +229,25 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Spitter
             {
                 Log.Debug("Player too close to Spitter");
                 speed = _fastMoveSpeed;
-                direction = Entity.Position - PlayerController.Instance.Entity.Position;
+                direction = Entity.Position - GetTargetPosition();
             }
             else if (dist >= 96 && dist <= 128)
             {
                 Log.Debug("Player slight far from Spitter, moving slowly towards Player");
                 speed = _slowMoveSpeed;
-                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+                direction = GetTargetPosition() - Entity.Position;
             }
             else if (dist >= 192)
             {
                 Log.Debug("Player too far from Spitter");
                 speed = _moveSpeed;
-                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+                direction = GetTargetPosition() - Entity.Position;
             }
             else
             {
                 Log.Debug("Player at right distance from Spitter, Spitter not moving.");
                 speed = 0;
-                direction = PlayerController.Instance.Entity.Position - Entity.Position;
+                direction = GetTargetPosition() - Entity.Position;
             }
 
             //normalize and set direction

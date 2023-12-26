@@ -32,7 +32,7 @@ namespace PuppetRoguelite.SaveData
             PlayerActionType.FromType(typeof(HealingAura)),
         };
         public int MaxDashes = 1;
-        public float MovementSpeed = 150f;
+        public float MovementSpeed = 130f;
 
         private PlayerData()
         {

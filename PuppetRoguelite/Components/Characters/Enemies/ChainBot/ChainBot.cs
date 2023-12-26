@@ -191,8 +191,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
 
         bool IsInAttackRange()
         {
-            var xDist = Math.Abs(OriginComponent.Origin.X - PlayerController.Instance.OriginComponent.Origin.X);
-            var yDist = Math.Abs(OriginComponent.Origin.Y - PlayerController.Instance.OriginComponent.Origin.Y);
+            var targetPos = GetTargetPosition();
+            var xDist = Math.Abs(OriginComponent.Origin.X - targetPos.X);
+            var yDist = Math.Abs(OriginComponent.Origin.Y - targetPos.Y);
             if (xDist <= 16 && yDist <= 8)
             {
                 return true;
@@ -214,15 +215,16 @@ namespace PuppetRoguelite.Components.Characters.Enemies.ChainBot
             //follow path
             var gridGraphManager = MapEntity.GetComponent<GridGraphManager>();
 
-            var leftTarget = PlayerController.Instance.OriginComponent.Origin + new Vector2(-10, 0);
-            var rightTarget = PlayerController.Instance.OriginComponent.Origin + new Vector2(10, 0);
+            var targetPos = GetTargetPosition();
+            var leftTarget = targetPos + new Vector2(-10, 0);
+            var rightTarget = targetPos + new Vector2(10, 0);
             var leftDistance = Vector2.Distance(OriginComponent.Origin, leftTarget);
             var rightDistance = Vector2.Distance(OriginComponent.Origin, rightTarget);
 
             var target = leftDistance > rightDistance ? rightTarget : leftTarget;
             var altTarget = target == rightTarget ? leftTarget : rightTarget;
 
-            Vector2 finalTarget = PlayerController.Instance.OriginComponent.Origin;
+            Vector2 finalTarget = targetPos;
 
             if (!gridGraphManager.IsPositionInWall(target))
             {

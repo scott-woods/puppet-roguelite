@@ -13,7 +13,7 @@ namespace PuppetRoguelite.SaveData.Unlocks
     public class ActionUnlockData
     {
         private static ActionUnlockData _instance;
-        private const string _currentVersion = "1.0";
+        private const string _currentVersion = "1.1";
 
         private static readonly List<Unlock> _defaultUnlocks = new List<Unlock>
         {
@@ -23,6 +23,7 @@ namespace PuppetRoguelite.SaveData.Unlocks
             new Unlock { Action = PlayerActionType.FromType(typeof(Quickshot)), IsUnlocked = false },
             new Unlock { Action = PlayerActionType.FromType(typeof(Teleport)), IsUnlocked = true },
             new Unlock { Action = PlayerActionType.FromType(typeof(StasisField)), IsUnlocked = false },
+            new Unlock { Action = PlayerActionType.FromType(typeof(Decoy)), IsUnlocked = false },
             new Unlock { Action = PlayerActionType.FromType(typeof(HealingAura)), IsUnlocked = true },
             new Unlock { Action = PlayerActionType.FromType(typeof(MoveSpeedBoost)), IsUnlocked = false },
             new Unlock { Action = PlayerActionType.FromType(typeof(AttackSpeedBoost)), IsUnlocked = false },

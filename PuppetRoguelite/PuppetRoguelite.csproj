@@ -46,6 +46,7 @@
     <None Remove="Content\Audio\Sounds\cereal_slot_2.wav" />
     <None Remove="Content\Audio\Sounds\cereal_slot_3.wav" />
     <None Remove="Content\Audio\Sounds\chain_bot_damaged.wav" />
+    <None Remove="Content\Audio\Sounds\decoy_appear.wav" />
     <None Remove="Content\Audio\Sounds\default_text.wav" />
     <None Remove="Content\Audio\Sounds\dollah_pickup.wav" />
     <None Remove="Content\Audio\Sounds\enemy_death_1.wav" />

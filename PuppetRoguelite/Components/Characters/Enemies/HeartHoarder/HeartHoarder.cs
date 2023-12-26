@@ -91,7 +91,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
             KnockbackComponent = Entity.AddComponent(new KnockbackComponent(65f, .5f, VelocityComponent, Hurtbox, "Hit"));
 
             //sturdy
-            Entity.AddComponent(new SturdyComponent(8, 4f, 4));
+            Entity.AddComponent(new SturdyComponent(6, 4f, 4));
 
             YSorter = Entity.AddComponent(new YSorter(Animator, OriginComponent));
 
@@ -223,8 +223,9 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
 
         bool IsInMeleeRange()
         {
-            var xDist = Math.Abs(Entity.Position.X - PlayerController.Instance.Entity.Position.X);
-            var yDist = Math.Abs(Entity.Position.Y - PlayerController.Instance.Entity.Position.Y);
+            var targetPos = GetTargetPosition();
+            var xDist = Math.Abs(Entity.Position.X - targetPos.X);
+            var yDist = Math.Abs(Entity.Position.Y - targetPos.Y);
             if (yDist <= 32 && xDist <= 48) return true;
             else return false;
         }
@@ -295,7 +296,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
                                     .ParallelSelector()
                                         .WaitAction(4f)
                                         .Action(h => h.IsInMeleeRange())
-                                        .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _vanishedMoveSpeed))
+                                        .Action(h => h.MoveTowardsPosition(GetTargetPosition(), _vanishedMoveSpeed))
                                     .EndComposite()
                                     .Action(h => h.Emerge())
                                     .Action(h => h.StationaryAttack())
@@ -306,14 +307,14 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
                         .Sequence(AbortTypes.LowerPriority) //if neither attack possible, move towards player
                             .Action(h => h.WaitForAnimation("StartMovingRight"))
                             .ParallelSelector()
-                                .Action(h => h.MoveTowardsPosition(PlayerController.Instance.Entity.Position, _normalMoveSpeed))
+                                .Action(h => h.MoveTowardsPosition(GetTargetPosition(), _normalMoveSpeed))
                                 .Action(h => h.PlayAnimationLoop("MoveRight"))
                             .EndComposite()
                         .EndComposite()
                     .EndComposite()
                     .ParallelSelector() //idle for a moment after attack sequence
                         .Action(h => h.Idle())
-                        .WaitAction(1.5f)
+                        .WaitAction(1f)
                     .EndComposite()
                 .EndComposite()
             .Build();
@@ -423,7 +424,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.HeartHoarder
 
         TaskStatus MovingAttack()
         {
-            MoveTowardsPosition(PlayerController.Instance.Entity.Position, _attackingMoveSpeed);
+            MoveTowardsPosition(GetTargetPosition(), _attackingMoveSpeed);
 
             if (!Animator.IsAnimationActive("MoveAttackRight"))
             {

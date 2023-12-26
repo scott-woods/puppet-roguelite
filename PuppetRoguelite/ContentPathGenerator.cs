@@ -55,6 +55,8 @@ namespace Nez
 				public const string Cereal_slot_3 = @"Content\Audio\Sounds\cereal_slot_3.wav";
 				public const string Chain_bot_damaged = @"Content\Audio\Sounds\chain_bot_damaged.wav";
 				public const string Close_stats_menu = @"Content\Audio\Sounds\close_stats_menu.wav";
+				public const string Decoy_appear = @"Content\Audio\Sounds\decoy_appear.wav";
+				public const string Decoy_fade = @"Content\Audio\Sounds\decoy_fade.wav";
 				public const string Default_text = @"Content\Audio\Sounds\default_text.wav";
 				public const string Dollah_pickup = @"Content\Audio\Sounds\dollah_pickup.wav";
 				public const string Enemy_death_1 = @"Content\Audio\Sounds\enemy_death_1.wav";

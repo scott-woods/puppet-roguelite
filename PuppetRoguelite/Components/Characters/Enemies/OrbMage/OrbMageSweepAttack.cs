@@ -51,7 +51,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
                 yield return null;
 
             //get direction to player
-            var dir = PlayerController.Instance.Entity.Position - Entity.Position;
+            var dir = _enemy.GetTargetPosition() - Entity.Position;
             dir.Normalize();
 
             //wait for start frame

@@ -38,7 +38,7 @@ namespace PuppetRoguelite.SceneComponents.CombatManager
         {
             Debug.Log("turn handler beginning turn");
             //create sim player
-            _playerSimEntity = Core.Scene.CreateEntity("player-sim");
+            _playerSimEntity = Core.Scene.CreateEntity("turn-player-sim");
             _playerSimEntity.AddComponent(new PlayerSim(Vector2.One));
             var animator = _playerSimEntity.GetComponent<SpriteAnimator>();
             animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));

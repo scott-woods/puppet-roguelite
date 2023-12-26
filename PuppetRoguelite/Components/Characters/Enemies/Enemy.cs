@@ -1,8 +1,11 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.AI.BehaviorTrees;
 using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
+using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.Components.EnemyActions;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
 using Serilog;
 using System;
@@ -77,6 +80,44 @@ namespace PuppetRoguelite.Components.Characters.Enemies
             tree.UpdatePeriod = 0;
 
             return tree;
+        }
+
+        /// <summary>
+        /// returns the position of the origin component of the nearest enemy target
+        /// </summary>
+        /// <returns></returns>
+        public virtual Vector2 GetTargetPosition(bool useEnemyOrigin = true)
+        {
+            //determine enemy position
+            var enemyPosition = Entity.Position;
+            if (useEnemyOrigin)
+            {
+                if (Entity.TryGetComponent<OriginComponent>(out var enemyOrigin))
+                    enemyPosition = enemyOrigin.Origin;
+            }
+
+            //get all entities with the enemy target tag
+            var targets = Entity.Scene.FindEntitiesWithTag((int)EntityTags.EnemyTarget);
+
+            //loop through potential targets and determine the closest one
+            var minDistance = float.MaxValue;
+            Vector2 targetPos = PlayerController.Instance.OriginComponent.Origin;
+            foreach (var target in targets)
+            {
+                //get position at origin if possible
+                Vector2 pos = target.Position;
+                if (target.TryGetComponent<OriginComponent>(out var originComponent))
+                    pos = originComponent.Origin;
+
+                var dist = Vector2.Distance(enemyPosition, target.Position);
+                if (dist < minDistance)
+                {
+                    minDistance = dist;
+                    targetPos = pos;
+                }
+            }
+
+            return targetPos;
         }
 
         public abstract BehaviorTree<T> CreateSubTree();

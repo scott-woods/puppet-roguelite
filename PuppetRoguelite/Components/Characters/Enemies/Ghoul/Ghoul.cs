@@ -185,7 +185,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
 
         bool IsInAttackRange()
         {
-            var distance = PlayerController.Instance.Entity.Position - Entity.Position;
+            var targetPos = GetTargetPosition();
+            var distance = targetPos - OriginComponent.Origin;
             if (Math.Abs(distance.X) <= 16 && Math.Abs(distance.Y) <= 8)
             {
                 return true;
@@ -203,8 +204,8 @@ namespace PuppetRoguelite.Components.Characters.Enemies.Ghoul
                 Animator.Play("Walk");
             }
 
-            Vector2 target = PlayerController.Instance.Entity.Position;
-            if (Entity.Position.X - PlayerController.Instance.Entity.Position.X >= 0)
+            Vector2 target = GetTargetPosition();
+            if (OriginComponent.Origin.X - target.X >= 0)
             {
                 target.X += 8;
             }

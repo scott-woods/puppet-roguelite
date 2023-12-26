@@ -53,7 +53,7 @@ namespace PuppetRoguelite.Components.Characters.Enemies.OrbMage
             //create vfx entity
             _attackVfxEntity = Entity.Scene.AddEntity(new PausableEntity("orb-mage-attack-vfx"));
             _attackVfxEntity.AddComponent(new OrbMageAttackVfx());
-            var targetPos = PlayerController.Instance.OriginComponent.Origin + new Vector2(0, -17);
+            var targetPos =  _enemy.GetTargetPosition() + new Vector2(0, -17);
             _attackVfxEntity.SetPosition(targetPos);
 
             //wait for attack vfx to be finished

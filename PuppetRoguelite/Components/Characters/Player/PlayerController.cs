@@ -100,6 +100,8 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             base.OnAddedToEntity();
 
+            Entity.SetTag((int)EntityTags.EnemyTarget);
+
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseTriggered, OnTurnPhaseTriggered);
             Emitters.CombatEventsEmitter.AddObserver(CombatEvents.TurnPhaseCompleted, OnTurnPhaseCompleted);
             Emitters.CutsceneEmitter.AddObserver(CutsceneEvents.CutsceneStarted, OnCutsceneStarted);
