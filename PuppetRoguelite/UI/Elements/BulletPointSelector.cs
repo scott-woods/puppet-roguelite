@@ -1,4 +1,7 @@
-﻿using Nez.UI;
+﻿using Microsoft.Xna.Framework;
+using Nez;
+using Nez.Analysis;
+using Nez.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +10,47 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class BulletPointSelector : Table, IGamepadFocusable
+    public class BulletPointSelector<T> : Table, IGamepadFocusable, IInputListener
     {
         Label _asteriskLabel;
         Label _choiceLabel;
 
-        public event Action<string> OnSelected;
+        public event Action<T> OnSelected;
+        public event Action OnPointFocused;
 
-        public BulletPointSelector(string choiceText, Skin skin, string styleName = null)
+        bool _isDisabled;
+
+        T _returnValue;
+
+        public BulletPointSelector(string choiceText, T value, bool wrapChoiceText, Skin skin, string styleName = null)
         {
+            _returnValue = value;
+
             _asteriskLabel = new Label("*", skin, styleName);
             Add(_asteriskLabel).SetSpaceRight(10f);
             _choiceLabel = new Label(choiceText, skin, styleName);
-            _choiceLabel.SetWrap(true);
+            _choiceLabel.SetWrap(wrapChoiceText);
             Add(_choiceLabel).Grow();
 
+            DebugAll();
+
             _asteriskLabel.SetVisible(false);
+
+            SetTouchable(Touchable.Enabled);
         }
+
+        public void SetDisabled(bool disabled)
+        {
+            _isDisabled = disabled;
+
+            var color = disabled ? Color.Gray : Color.White;
+            var style = _asteriskLabel.GetStyle();
+            var newStyle = style.Clone();
+            newStyle.FontColor = color;
+            _asteriskLabel.SetStyle(newStyle);
+            _choiceLabel.SetStyle(newStyle);
+        }
+        public bool GetDisabled() => _isDisabled;
 
         #region IGamepadFocusable
 
@@ -44,9 +71,16 @@ namespace PuppetRoguelite.UI.Elements
 
         public void OnActionButtonPressed()
         {
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select);
-            OnSelected?.Invoke(_choiceLabel.GetText());
-            GetStage().SetGamepadFocusElement(null);
+            if (_isDisabled)
+            {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
+            }
+            else
+            {
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Menu_select);
+                OnSelected?.Invoke(_returnValue);
+                //GetStage().SetGamepadFocusElement(null);
+            }
         }
 
         public void OnActionButtonReleased()
@@ -56,19 +90,12 @@ namespace PuppetRoguelite.UI.Elements
 
         public void OnFocused()
         {
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02);
-            _asteriskLabel.SetVisible(true);
-            //SetText($"* {_givenText}");
+            if (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02);
 
-            //if (OnLabelFocused != null)
-            //    OnLabelFocused();
-            //unfocus other focus labels
-            //var focusLabels = GetStage().FindAllElementsOfType<FocusLabel>();
-            //focusLabels.Remove(this);
-            //foreach(var focusLabel in focusLabels)
-            //{
-            //    focusLabel.OnUnfocused();
-            //}
+            _asteriskLabel.SetVisible(true);
+
+            OnPointFocused?.Invoke();
         }
 
         public void OnUnfocused()
@@ -77,9 +104,77 @@ namespace PuppetRoguelite.UI.Elements
             //SetText($"  {_givenText}");
         }
 
-        public void OnUnhandledDirectionPressed(Direction direction)
+        public void OnUnhandledDirectionPressed(Nez.UI.Direction direction)
         {
             //throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region IInputListener
+
+        bool _mouseOver;
+        bool _mouseDown;
+
+        void IInputListener.OnMouseEnter()
+        {
+            _mouseOver = true;
+            GetStage().SetGamepadFocusElement(null);
+            GetStage().SetGamepadFocusElement(this);
+        }
+
+
+        void IInputListener.OnMouseExit()
+        {
+            _mouseOver = _mouseDown = false;
+        }
+
+
+        bool IInputListener.OnLeftMousePressed(Vector2 mousePos)
+        {
+            if (_isDisabled)
+                return false;
+
+            _mouseDown = true;
+            OnActionButtonPressed();
+            return true;
+        }
+
+        bool IInputListener.OnRightMousePressed(Vector2 mousePos)
+        {
+            if (_isDisabled)
+                return false;
+
+            _mouseDown = true;
+            return true;
+        }
+
+
+        void IInputListener.OnMouseMoved(Vector2 mousePos)
+        {
+            //if we get too far outside the label cancel future events
+            if (DistanceOutsideBoundsToPoint(mousePos) > 50f)
+            {
+                _mouseDown = _mouseOver = false;
+                GetStage().RemoveInputFocusListener(this);
+            }
+        }
+
+
+        void IInputListener.OnLeftMouseUp(Vector2 mousePos)
+        {
+            _mouseDown = false;
+        }
+
+        void IInputListener.OnRightMouseUp(Vector2 mousePos)
+        {
+            _mouseDown = false;
+        }
+
+
+        bool IInputListener.OnMouseScrolled(int mouseWheelDelta)
+        {
+            return false;
         }
 
         #endregion

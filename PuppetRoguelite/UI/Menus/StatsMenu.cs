@@ -100,7 +100,6 @@ namespace PuppetRoguelite.UI.Menus
 
             //stats table
             _statsTable = new Table();
-            _statsTable.DebugAll();
             _statsAndActionsWindowTable.Add(_statsTable)
                 .GrowX()
                 .Top().Left();
@@ -128,7 +127,6 @@ namespace PuppetRoguelite.UI.Menus
 
             //actions table
             _actionsTable = new Table();
-            _actionsTable.DebugAll();
             _statsAndActionsWindowTable.Add(_actionsTable)
                 .Grow()
                 .Left();
@@ -231,7 +229,6 @@ namespace PuppetRoguelite.UI.Menus
 
             //info window table
             _infoTable = new WindowTable(_basicSkin);
-            _infoTable.DebugAll();
             _infoTable.Pad(50f);
             _mainTable.Add(_infoTable)
                 .Expand(1, 2)

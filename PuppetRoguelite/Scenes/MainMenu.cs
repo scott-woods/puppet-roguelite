@@ -34,17 +34,17 @@ namespace PuppetRoguelite.Scenes
 
         IEnumerator SplashScreen()
         {
-            var texture = Content.LoadTexture(Nez.Content.Textures.UI.Cat);
+            var texture = Content.LoadTexture(Nez.Content.Textures.UI.Smile);
             var sprite = new Sprite(texture);
             var splash = CreateEntity("splash").AddComponent(new SpriteRenderer(texture));
-            splash.Entity.SetScale(.2f);
+            splash.Entity.SetScale(.1f);
             splash.Entity.SetPosition(Game1.DesignResolution.X / 2, Game1.DesignResolution.Y / 2);
             splash.SetColor(Color.Transparent);
 
             var susboTexture = Content.LoadTexture(Nez.Content.Textures.UI.Susbo);
             var susboRenderer = CreateEntity("susbo").AddComponent(new SpriteRenderer(susboTexture));
             susboRenderer.Entity.SetScale(.2f);
-            var offset = new Vector2(0, ((texture.Height / 2) * .2f) + ((susboTexture.Height / 2) * .2f) + 10f);
+            var offset = new Vector2(0, ((texture.Height / 2) * .1f) + ((susboTexture.Height / 2) * .1f) + 10f);
             susboRenderer.Entity.SetPosition(splash.Entity.Position + offset);
             susboRenderer.SetColor(Color.Transparent);
 

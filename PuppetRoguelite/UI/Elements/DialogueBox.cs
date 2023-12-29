@@ -196,10 +196,10 @@ namespace PuppetRoguelite.UI.Elements
             //yield one frame so we don't immediatley select
             yield return null;
 
-            List<BulletPointSelector> selectors = new List<BulletPointSelector>();
+            List<BulletPointSelector<string>> selectors = new List<BulletPointSelector<string>>();
             foreach (var choice in choices)
             {
-                var selector = new BulletPointSelector(choice, _basicSkin, "default_xxxl");
+                var selector = new BulletPointSelector<string>(choice, choice, true, _basicSkin, "default_xxxl");
                 selector.OnSelected += OnChoiceSelected;
                 _innerTable.Add(selector).Grow();
                 selectors.Add(selector);

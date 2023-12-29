@@ -284,8 +284,8 @@
             "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 445,
-                "y": 693
+                "x": 543,
+                "y": 695
             }
         },
         "Tilemaps/DungeonPrison/left_key_room.tmx": {
@@ -328,8 +328,8 @@
             "scale": 0.75,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 558,
-                "y": 592
+                "x": 719.3333333333333,
+                "y": 407.3333333333333
             }
         },
         "Tilemaps/Hub/hub_intro.tmx": {

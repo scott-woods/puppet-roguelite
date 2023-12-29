@@ -959,7 +959,7 @@ namespace Nez
 				public const string Quit_button_over = @"Content\Textures\UI\quit_button_over.png";
 				public const string Quit_no_bg = @"Content\Textures\UI\quit_no_bg.png";
 				public const string Sliders = @"Content\Textures\UI\sliders.png";
-				public const string Smile = @"Content\Textures\UI\smile.JPG";
+				public const string Smile = @"Content\Textures\UI\smile.png";
 				public const string Start_button = @"Content\Textures\UI\start_button.png";
 				public const string Susbo = @"Content\Textures\UI\susbo.png";
 				public const string Title = @"Content\Textures\UI\title.png";

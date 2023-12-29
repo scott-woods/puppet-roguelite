@@ -58,7 +58,7 @@ namespace PuppetRoguelite.UI.Menus
             _basicSkin = CustomSkins.CreateBasicSkin();
 
             //set stage action key
-            Stage.KeyboardActionKey = Keys.E;
+            Stage.KeyboardActionKey = Keys.None;
 
             //load dollah sprite
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Tilesets.Dungeon_prison_props);
@@ -68,25 +68,9 @@ namespace PuppetRoguelite.UI.Menus
 
             //arrange elements
             ArrangeElements();
+
+            Stage.SetGamepadFocusElement(_addButtons.First());
         }
-
-        //public override void OnAddedToEntity()
-        //{
-        //    base.OnAddedToEntity();
-
-        //    Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
-        //}
-        //public override void OnRemovedFromEntity()
-        //{
-        //    base.OnRemovedFromEntity();
-
-        //    Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
-        //}
-
-        //void OnGraphicsDeviceReset()
-        //{
-        //    //_table.GetCell(_dialog).Width(Game1.UIResolution.X * .6f).Height(Game1.UIResolution.Y * .75f);
-        //}
 
         public override void OnEnabled()
         {
@@ -98,9 +82,13 @@ namespace PuppetRoguelite.UI.Menus
 
         void ArrangeElements()
         {
+            //container table
+            var containerTable = new Table();
+            _table.Add(containerTable).Expand();
+
             //textbox table
             _box = new WindowTable(_basicSkin);
-            _table.Add(_box).Expand().Width(Game1.UIResolution.X * .75f).Height(Game1.UIResolution.Y * .75f);
+            containerTable.Add(_box).Expand().Width(Game1.UIResolution.X * .75f).Height(Game1.UIResolution.Y * .75f).SetUniformX();
 
             //set padding of dialog
             _box.PadTop(50).PadBottom(50).PadLeft(30).PadRight(30);
@@ -127,6 +115,11 @@ namespace PuppetRoguelite.UI.Menus
             AddRow(upgradeTable, PlayerUpgradeData.Instance.AttackSlotsUpgrade);
             AddRow(upgradeTable, PlayerUpgradeData.Instance.UtilitySlotsUpgrade);
             AddRow(upgradeTable, PlayerUpgradeData.Instance.SupportSlotsUpgrade);
+
+            //tip label
+            containerTable.Row();
+            var tipLabel = new Label("X: Go Back", _basicSkin, "default_lg");
+            containerTable.Add(tipLabel).SetUniformX().SetExpandX().Left().Top();
         }
 
         void AddRow(Table table, Upgrade upgrade)
@@ -154,22 +147,6 @@ namespace PuppetRoguelite.UI.Menus
             dollahImage.SetScaleY(Game1.ResolutionScale.Y);
             table.Add(dollahImage);
 
-            //upgrade cost and purchase button
-            //var purchaseTable = new Table();
-            //table.Add(purchaseTable).Grow().Right();
-            //var button = new UpgradeButton(upgrade, cell.GetRow(), _basicSkin, "plusButton");
-            //var canAfford = PlayerData.Instance.Dollahs >= upgrade.GetCurrentCost();
-            //button.SetDisabled(!canAfford);
-            //button.OnClicked += OnPlusButtonClicked;
-            //_addButtons.Add(button);
-            //purchaseTable.Add(button).SetSpaceRight(4).Expand();
-            //var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin, "default_xxl");
-            //_upgradeCostLabels.Add(cell.GetRow(), costLabel);
-            //purchaseTable.Add(costLabel).SetPadTop(4);
-            //var dollahImage = new Image(_dollahSprite);
-            //dollahImage.SetScale(2f);
-            //purchaseTable.Add(dollahImage);
-
             table.Row();
         }
 
@@ -180,6 +157,7 @@ namespace PuppetRoguelite.UI.Menus
             if (!_canActivateButton && !Input.IsKeyDown(Keys.E))
             {
                 _canActivateButton = true;
+                Stage.KeyboardActionKey = Keys.E;
             }
 
             if (Input.IsKeyPressed(Keys.X))
