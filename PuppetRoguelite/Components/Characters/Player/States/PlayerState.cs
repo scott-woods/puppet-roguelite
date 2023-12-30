@@ -72,7 +72,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryMelee()
         {
-            if (_context.IsMeleeEnabled && Input.LeftMouseButtonPressed)
+            if (_context.IsMeleeEnabled && Input.LeftMouseButtonPressed && Game1.GameStateManager.GameState != GameState.Paused)
             {
                 _machine.ChangeState<AttackState>();
                 return true;

@@ -16,8 +16,8 @@ namespace PuppetRoguelite.SaveData
     {
         private static Settings _instance;
 
-        public float MusicVolume = 1f;
-        public float SoundVolume = 1f;
+        public float MusicVolume = .7f;
+        public float SoundVolume = .7f;
 
         private Settings()
         {
@@ -48,6 +48,7 @@ namespace PuppetRoguelite.SaveData
         public void UpdateAndSave()
         {
             SaveData();
+            Game1.AudioManager.UpdateMusicVolume();
         }
 
         private static Settings LoadData()

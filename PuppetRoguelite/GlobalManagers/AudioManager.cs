@@ -12,8 +12,8 @@ namespace PuppetRoguelite.GlobalManagers
 {
     public class AudioManager : GlobalManager
     {
-        const float _defaultMusicVolume = .25f;
-        const float _defaultSoundVolume = .25f;
+        const float _defaultMusicVolume = .28f;
+        const float _defaultSoundVolume = .28f;
         const float _volumeReductionFactor = .01f;
 
         StreamingVoice _musicVoice;
@@ -128,6 +128,11 @@ namespace PuppetRoguelite.GlobalManagers
             //FAudio.FAudioSourceVoice_Stop(_musicVoiceHandle, 0, FAudio.FAUDIO_COMMIT_NOW);
             //FAudio.FAudioSourceVoice_FlushSourceBuffers(_musicVoiceHandle);
             //MediaPlayer.Stop();
+        }
+
+        public void UpdateMusicVolume()
+        {
+            _musicVoice?.SetVolume(_defaultMusicVolume * Settings.Instance.MusicVolume);
         }
     }
 }
