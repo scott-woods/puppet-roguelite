@@ -112,7 +112,7 @@ namespace PuppetRoguelite.UI.Menus
             _statsTable.Row();
 
             //ap label
-            var apLabel = new Label($"Max AP: {PlayerUpgradeData.Instance.MaxApUpgrade.GetCurrentMaxAp()}", _basicSkin, "default_lg");
+            var apLabel = new Label($"Max AP: {PlayerUpgradeData.Instance.MaxApUpgrade.GetCurrentValue()}", _basicSkin, "default_lg");
             apLabel.SetAlignment(Align.Left);
             _statsTable.Add(apLabel).Expand().Left();
 
@@ -235,7 +235,6 @@ namespace PuppetRoguelite.UI.Menus
                 .Top().Left()
                 .SetUniformX()
                 .SetPadLeft(Game1.UIResolution.Y * .05f)
-                .SetPadBottom(Game1.UIResolution.Y * .05f)
                 .SetFillY()
                 .Width(Game1.UIResolution.X * .4f);
 
@@ -254,10 +253,20 @@ namespace PuppetRoguelite.UI.Menus
 
             _infoTable.Row();
 
-            _infoTableDescriptionLabel = new Label("", _basicSkin, "default_md");
+            _infoTableDescriptionLabel = new Label("", _basicSkin, "default_lg");
             _infoTableDescriptionLabel.SetWrap(true).SetAlignment(Align.Center);
             _infoTable.Add(_infoTableDescriptionLabel)
                 .Grow();
+
+            _mainTable.Row();
+
+            _mainTable.Add(new Label("Tab: Close", _basicSkin, "default_lg"))
+                .Top().Left()
+                .SetUniformX()
+                .SetPadTop(10)
+                .SetPadLeft((Game1.UIResolution.Y * .05f) + 10)
+                .SetPadBottom(Game1.UIResolution.Y * .05f)
+                .Width(Game1.UIResolution.X * .4f);
         }
 
         void UpdateInfoTable(PlayerActionType actionType)

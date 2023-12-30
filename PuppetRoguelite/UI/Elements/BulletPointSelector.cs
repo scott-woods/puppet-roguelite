@@ -22,21 +22,27 @@ namespace PuppetRoguelite.UI.Elements
 
         T _returnValue;
 
+        bool _shouldShake = true;
+        ElementJitter _jitter;
+
         public BulletPointSelector(string choiceText, T value, bool wrapChoiceText, Skin skin, string styleName = null)
         {
             _returnValue = value;
 
             _asteriskLabel = new Label("*", skin, styleName);
+            _asteriskLabel.SetAlignment(Nez.UI.Align.Center);
             Add(_asteriskLabel).SetSpaceRight(10f);
             _choiceLabel = new Label(choiceText, skin, styleName);
+            _choiceLabel.SetAlignment(Nez.UI.Align.Center);
             _choiceLabel.SetWrap(wrapChoiceText);
             Add(_choiceLabel).Grow();
-
-            DebugAll();
 
             _asteriskLabel.SetVisible(false);
 
             SetTouchable(Touchable.Enabled);
+
+            _jitter = new ElementJitter(_choiceLabel, .25f, .08f);
+            _jitter.SetEnabled(false);
         }
 
         public void SetDisabled(bool disabled)
@@ -50,6 +56,12 @@ namespace PuppetRoguelite.UI.Elements
             _asteriskLabel.SetStyle(newStyle);
             _choiceLabel.SetStyle(newStyle);
         }
+
+        public T GetValue()
+        {
+            return _returnValue;
+        }
+
         public bool GetDisabled() => _isDisabled;
 
         #region IGamepadFocusable
@@ -93,6 +105,11 @@ namespace PuppetRoguelite.UI.Elements
             if (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02);
 
+            if (_shouldShake)
+            {
+                _jitter.SetEnabled(true);
+            }
+
             _asteriskLabel.SetVisible(true);
 
             OnPointFocused?.Invoke();
@@ -101,6 +118,11 @@ namespace PuppetRoguelite.UI.Elements
         public void OnUnfocused()
         {
             _asteriskLabel.SetVisible(false);
+
+            if (_shouldShake)
+            {
+                _jitter.SetEnabled(false);
+            }
             //SetText($"  {_givenText}");
         }
 

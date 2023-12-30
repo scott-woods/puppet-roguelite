@@ -9,30 +9,18 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.SaveData.Upgrades
 {
-    public class AttackSlotsUpgrade : Upgrade
+    public class AttackSlotsUpgrade : Upgrade<int>
     {
-        public Dictionary<int, int> Values = new Dictionary<int, int>()
-        {
-            {0, 1 },
-            {1, 2 },
-            {2, 3 }
-        };
-
         public AttackSlotsUpgrade() : base("Attack Slots")
         {
 
         }
 
-        public int GetCurrentValue()
-        {
-            return Values[CurrentLevel];
-        }
-
         protected override void DefineLevels()
         {
-            Levels.Add(0, 150);
-            Levels.Add(1, 300);
-            Levels.Add(2, 500);
+            Levels.Add(new UpgradeLevel<int>(1, 0, 1));
+            Levels.Add(new UpgradeLevel<int>(2, 150, 2));
+            Levels.Add(new UpgradeLevel<int>(3, 300, 3));
         }
 
         public override void ApplyUpgrade()
@@ -43,11 +31,6 @@ namespace PuppetRoguelite.SaveData.Upgrades
             {
                 manager.MaxAttackSlots = GetCurrentValue();
             }
-        }
-
-        public override string GetValueString()
-        {
-            return GetCurrentValue().ToString();
         }
     }
 }

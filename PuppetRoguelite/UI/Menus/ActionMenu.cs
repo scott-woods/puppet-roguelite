@@ -15,13 +15,13 @@ namespace PuppetRoguelite.UI.Menus
     public class ActionMenu : UIMenu
     {
         //elements
-        SelectionDialog _dialog;
+        SelectionDialog<PlayerActionType> _dialog;
 
         List<PlayerActionType> _options;
         string _dialogTitle;
         Action<Type> _actionSelectedHandler;
 
-        Dictionary<ListButton, Type> _buttonDictionary = new Dictionary<ListButton, Type>();
+        Dictionary<BulletPointSelector<PlayerActionType>, Type> _buttonDictionary = new Dictionary<BulletPointSelector<PlayerActionType>, Type>();
 
         public ActionMenu(List<PlayerActionType> options, string dialogTitle, Action<Type> actionSelectedHandler, Action cancelHandler) : base(cancelHandler)
         {
@@ -42,7 +42,7 @@ namespace PuppetRoguelite.UI.Menus
             var skin = CustomSkins.CreateBasicSkin();
 
             //dialog content
-            Dictionary<ListButton, Label> dialogContent = new Dictionary<ListButton, Label>();
+            Dictionary<BulletPointSelector<PlayerActionType>, Label> dialogContent = new Dictionary<BulletPointSelector<PlayerActionType>, Label>();
             foreach (var option in _options)
             {
                 var type = option.ToType();
@@ -61,7 +61,7 @@ namespace PuppetRoguelite.UI.Menus
                 }
 
                 //create button
-                var button = new ListButton(PlayerActionUtils.GetName(type), skin, "listButton_lg");
+                var button = new BulletPointSelector<PlayerActionType>(PlayerActionUtils.GetName(type), option, false, skin, "default_lg");
                 button.SetDisabled(disabled);
                 _buttonDictionary.Add(button, type);
 
@@ -73,7 +73,7 @@ namespace PuppetRoguelite.UI.Menus
             }
 
             //create dialog box
-            _dialog = new SelectionDialog(dialogContent, skin, labelHeader: "AP Cost");
+            _dialog = new SelectionDialog<PlayerActionType>(dialogContent, skin, labelHeader: "AP Cost");
 
             ScreenSpaceOffset = new Vector2(-_dialog.PreferredWidth, -_dialog.PreferredHeight);
 
@@ -84,13 +84,13 @@ namespace PuppetRoguelite.UI.Menus
         {
             var button = _dialog.GetCells().FirstOrDefault((c) =>
             {
-                var button = c.GetElement<Button>();
+                var button = c.GetElement<BulletPointSelector<PlayerActionType>>();
                 if (button == null || button.GetDisabled())
                 {
                     return false;
                 }
                 return true;
-            })?.GetElement<Button>();
+            })?.GetElement<BulletPointSelector<PlayerActionType>>();
 
             if (button == null)
             {
@@ -105,8 +105,7 @@ namespace PuppetRoguelite.UI.Menus
         {
             foreach (var button in _buttonDictionary)
             {
-                button.Key.OnClicked += OnButtonClicked;
-                button.Key.OnClicked += OnMenuButtonClicked;
+                button.Key.OnSelected += OnButtonClicked;
             }
         }
 
@@ -114,15 +113,13 @@ namespace PuppetRoguelite.UI.Menus
         {
             foreach (var button in _buttonDictionary)
             {
-                button.Key.OnClicked -= OnButtonClicked;
-                button.Key.OnClicked -= OnMenuButtonClicked;
+                button.Key.OnSelected -= OnButtonClicked;
             }
         }
 
-        void OnButtonClicked(Button button)
+        void OnButtonClicked(PlayerActionType actionType)
         {
-            var type = _buttonDictionary[button as ListButton];
-            _actionSelectedHandler?.Invoke(type);
+            _actionSelectedHandler?.Invoke(actionType.ToType());
         }
 
         public override void ValidateButtons()
@@ -144,7 +141,7 @@ namespace PuppetRoguelite.UI.Menus
             }
         }
 
-        public List<ListButton> GetButtons()
+        public List<BulletPointSelector<PlayerActionType>> GetButtons()
         {
             return _buttonDictionary.Keys.ToList();
         }
@@ -156,7 +153,7 @@ namespace PuppetRoguelite.UI.Menus
             foreach (var button in _buttonDictionary.Keys)
             {
                 button.SetDisabled(false);
-                button.SetMouseEnabled(true);
+                //button.SetMouseEnabled(true);
             }
         }
 
@@ -167,7 +164,7 @@ namespace PuppetRoguelite.UI.Menus
             foreach (var button in _buttonDictionary.Keys)
             {
                 button.SetDisabled(true);
-                button.SetMouseEnabled(false);
+                //button.SetMouseEnabled(false);
             }
         }
     }

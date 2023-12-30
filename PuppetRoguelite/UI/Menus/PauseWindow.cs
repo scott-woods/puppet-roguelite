@@ -18,6 +18,7 @@ namespace PuppetRoguelite.UI.Menus
         //elements
         Table _table;
         WindowTable _pauseWindow;
+        BulletPointSelector<string> _resumeButton;
 
         Skin _basicSkin;
 
@@ -34,6 +35,9 @@ namespace PuppetRoguelite.UI.Menus
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
 
             CreateUI();
+
+            Stage.KeyboardActionKey = Microsoft.Xna.Framework.Input.Keys.E;
+            Stage.SetGamepadFocusElement(_resumeButton);
         }
 
         public override void OnAddedToEntity()
@@ -70,39 +74,27 @@ namespace PuppetRoguelite.UI.Menus
 
             _pauseWindow.Pad(Game1.UIResolution.X * .03f);
 
-            var resumeButton = new ListButton("Resume", _basicSkin, "listButton_xxl");
-            resumeButton.OnClicked += OnResumeClicked;
-            _pauseWindow.Add(resumeButton);
+            _resumeButton = new BulletPointSelector<string>("Resume", "", false, _basicSkin, "default_xxl");
+            _resumeButton.OnSelected += (res) => Game1.GameStateManager.Unpause();
+            _pauseWindow.Add(_resumeButton);
 
             _pauseWindow.Row();
 
-            var quitToMenuButton = new ListButton("Quit to Main Menu", _basicSkin, "listButton_xxl");
-            quitToMenuButton.OnClicked += OnQuitToMenuClicked;
+            var quitToMenuButton = new BulletPointSelector<string>("Quit to Main Menu", "", false, _basicSkin, "default_xxl");
+            quitToMenuButton.OnSelected += (res) =>
+            {
+                Game1.GameStateManager.Unpause();
+                Game1.AudioManager.StopMusic();
+                Game1.SceneManager.ChangeScene(typeof(MainMenu));
+                Emitters.GameEventsEmitter.Emit(GameEvents.ExitingToMainMenu);
+            };
             _pauseWindow.Add(quitToMenuButton);
 
             _pauseWindow.Row();
 
-            var quitButton = new ListButton("Quit to Desktop", _basicSkin, "listButton_xxl");
-            quitButton.OnClicked += OnQuitClicked;
+            var quitButton = new BulletPointSelector<string>("Quit to Desktop", "", false, _basicSkin, "default_xxl");
+            quitButton.OnSelected += (res) => Core.Exit();
             _pauseWindow.Add(quitButton);
-        }
-
-        void OnResumeClicked(Button button)
-        {
-            Game1.GameStateManager.Unpause();
-        }
-
-        void OnQuitClicked(Button button)
-        {
-            Core.Exit();
-        }
-
-        void OnQuitToMenuClicked(Button button)
-        {
-            Game1.GameStateManager.Unpause();
-            Game1.AudioManager.StopMusic();
-            Game1.SceneManager.ChangeScene(typeof(MainMenu));
-            Emitters.GameEventsEmitter.Emit(GameEvents.ExitingToMainMenu);
         }
 
         void OnUnpaused()

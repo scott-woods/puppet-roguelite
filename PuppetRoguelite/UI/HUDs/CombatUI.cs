@@ -25,6 +25,7 @@ namespace PuppetRoguelite.UI.HUDs
         List<BasicApProgressBar> _apProgressBars = new List<BasicApProgressBar>();
         Table _heartsTable;
         List<HeartElement> _hearts = new List<HeartElement>();
+        Label _messageLabel;
 
         //skins
         Skin _basicSkin;
@@ -164,6 +165,11 @@ namespace PuppetRoguelite.UI.HUDs
             _table.Add(_heartsTable)
                 .Top().Left();
 
+            //messages
+            _messageLabel = new Label("", _basicSkin, "default_xl");
+            _table.Add(_messageLabel).Top().Right();
+            _messageLabel.SetVisible(false);
+
             _table.Row();
 
             //dollahs table
@@ -179,26 +185,37 @@ namespace PuppetRoguelite.UI.HUDs
             _table.Row();
 
             var bottomTable = new Table();
-            _table.Add(bottomTable).Grow();
+            _table.Add(bottomTable).Grow().SetColspan(2);
 
             //var bottomLeftTable = new Table();
             //bottomTable.Add(bottomLeftTable).Width(Game1.UIResolution.X * .75f).Expand().Bottom();
 
             _apTable = new Table();
-            _apTable.Defaults().Space(50);
+            _apTable.Defaults().Space(25);
             _apTable.SetVisible(_shouldApTableBeVisible);
             bottomTable.Add(_apTable)
                 .Bottom()
                 .Expand()
                 .SetFillX()
-                .SetPadLeft(Game1.UIResolution.X * .1f)
-                .SetPadRight(Game1.UIResolution.X * .1f)
+                //.SetPadLeft(Game1.UIResolution.X * .1f)
+                //.SetPadRight(Game1.UIResolution.X * .1f)
                 .SetPadBottom(Game1.UIResolution.Y * .05f);
 
             //_simTipLabel = new Label("* Press 'C' to view Action Sequence", _basicSkin);
             //_simTipLabel.SetWrap(true);
             //_simTipLabel.SetVisible(false);
             //bottomTable.Add(_simTipLabel).SetPadLeft(Game1.DesignResolution.X * .025f).SetPadRight(Game1.DesignResolution.X * .025f).Width(Game1.DesignResolution.X * .2f).Expand().Bottom().Right();
+        }
+
+        public void DisplayMessage(string message)
+        {
+            _messageLabel.SetText(message);
+            _messageLabel.SetVisible(true);
+        }
+
+        public void HideMessage()
+        {
+            _messageLabel.SetVisible(false);
         }
 
         public void SetShowSimTipLabel(bool show)

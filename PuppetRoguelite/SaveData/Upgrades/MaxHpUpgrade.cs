@@ -8,36 +8,21 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.SaveData.Upgrades
 {
-    public class MaxHpUpgrade : Upgrade
+    public class MaxHpUpgrade : Upgrade<int>
     {
-        public Dictionary<int, int> MaxHpValues = new Dictionary<int, int>()
-        {
-            {0, 8 },
-            {1, 10 },
-            {2, 12 },
-            {3, 15 },
-            {4, 18 },
-            {5, 20 },
-        };
-
         public MaxHpUpgrade() : base("Max HP")
         {
 
         }
 
-        public int GetCurrentMaxHp()
-        {
-            return MaxHpValues[CurrentLevel];
-        }
-
         protected override void DefineLevels()
         {
-            Levels.Add(0, 50);
-            Levels.Add(1, 100);
-            Levels.Add(2, 175);
-            Levels.Add(3, 250);
-            Levels.Add(4, 350);
-            Levels.Add(5, 500);
+            Levels.Add(new UpgradeLevel<int>(1, 0, 8));
+            Levels.Add(new UpgradeLevel<int>(2, 50, 10));
+            Levels.Add(new UpgradeLevel<int>(3, 100, 12));
+            Levels.Add(new UpgradeLevel<int>(4, 175, 15));
+            Levels.Add(new UpgradeLevel<int>(5, 250, 18));
+            Levels.Add(new UpgradeLevel<int>(6, 350, 20));
         }
 
         public override void ApplyUpgrade()
@@ -46,13 +31,8 @@ namespace PuppetRoguelite.SaveData.Upgrades
 
             if (PlayerController.Instance.Entity.TryGetComponent<HealthComponent>(out var hc))
             {
-                hc.SetMaxHealth(GetCurrentMaxHp(), true);
+                hc.SetMaxHealth(GetCurrentValue(), true);
             }
-        }
-
-        public override string GetValueString()
-        {
-            return GetCurrentMaxHp().ToString();
         }
     }
 }

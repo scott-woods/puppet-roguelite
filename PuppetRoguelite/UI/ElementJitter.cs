@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.UI;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,40 @@ namespace PuppetRoguelite.UI
 
         Vector2 _totalOffset = Vector2.Zero;
 
-        public ElementJitter(Element element, float maxOffset, float jitterRate)
+        ITimer _timer;
+
+        bool _enabled = true;
+
+        public ElementJitter(Element element, float maxOffset = 1f, float jitterRate = .05f)
         {
             _element = element;
             _maxOffset = maxOffset;
             _jitterRate = jitterRate;
 
-            Game1.Schedule(_jitterRate, true, timer =>
+            StartTimer();
+        }
+
+        public void SetEnabled(bool enabled)
+        {
+            _enabled = enabled;
+
+            if (!enabled)
+            {
+                _timer?.Stop();
+                _timer = null;
+            }
+            else
+            {
+                if (_timer == null)
+                {
+                    StartTimer();
+                }
+            }
+        }
+
+        void StartTimer()
+        {
+            _timer = Game1.Schedule(_jitterRate, true, timer =>
             {
                 float jitterX = Nez.Random.Range(-_maxOffset, _maxOffset) - _totalOffset.X;
                 float jitterY = Nez.Random.Range(-_maxOffset, _maxOffset) - _totalOffset.Y;

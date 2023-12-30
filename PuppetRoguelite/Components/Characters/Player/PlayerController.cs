@@ -163,10 +163,10 @@ namespace PuppetRoguelite.Components.Characters.Player
             OriginComponent = Entity.AddComponent(new OriginComponent(Collider));
 
             //Add health component
-            HealthComponent = Entity.AddComponent(new HealthComponent(PlayerUpgradeData.Instance.MaxHpUpgrade.GetCurrentMaxHp()));
+            HealthComponent = Entity.AddComponent(new HealthComponent(PlayerUpgradeData.Instance.MaxHpUpgrade.GetCurrentValue()));
 
             //action points
-            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(PlayerUpgradeData.Instance.MaxApUpgrade.GetCurrentMaxAp(), HealthComponent));
+            ActionPointComponent = Entity.AddComponent(new ActionPointComponent(PlayerUpgradeData.Instance.MaxApUpgrade.GetCurrentValue(), HealthComponent));
 
             //inventory
             _inventory = Entity.AddComponent(new Inventory());

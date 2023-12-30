@@ -20,6 +20,7 @@ using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SceneComponents.CombatManager;
 using PuppetRoguelite.Scenes;
 using PuppetRoguelite.StaticData;
+using PuppetRoguelite.UI.HUDs;
 using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections;
@@ -32,6 +33,9 @@ namespace PuppetRoguelite.Cutscenes
     {
         public static IEnumerator DashTutorial()
         {
+            //get combat ui
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+
             //lock gates
             Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
             var gates = Game1.Scene.FindComponentsOfType<Gate>().Where(g => g.TmxObject.Name == "DashTutorialGate");
@@ -58,6 +62,9 @@ namespace PuppetRoguelite.Cutscenes
                 new DialogueLine("Just press Space while you're moving in any direction, and you'll see what I mean.")
             });
 
+            //display message
+            ui.DisplayMessage("Press 'Space' to Dash.");
+
             //allow player to move
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
 
@@ -71,6 +78,9 @@ namespace PuppetRoguelite.Cutscenes
 
             //stop player movement again
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
+
+            //hide message
+            ui.HideMessage();
 
             //more text
             yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
@@ -93,6 +103,9 @@ namespace PuppetRoguelite.Cutscenes
 
         public static IEnumerator AttackTutorial()
         {
+            //get ui
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+
             //set player actions
             PlayerController.Instance.ActionsManager.AttackActions = new List<PlayerActionType>()
             {
@@ -134,6 +147,9 @@ namespace PuppetRoguelite.Cutscenes
                 new DialogueLine("Just aim your Cursor in the direction you want to attack, and Left Click to attack.")
             });
 
+            //display message
+            ui.DisplayMessage("Perform an Attack with Left Click");
+
             //let player move
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
 
@@ -144,6 +160,9 @@ namespace PuppetRoguelite.Cutscenes
             //wait for melee to finish
             while (PlayerController.Instance.StateMachine.CurrentState.GetType() == typeof(AttackState))
                 yield return null;
+
+            //hide message
+            ui.HideMessage();
 
             //stop player
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
@@ -200,6 +219,9 @@ namespace PuppetRoguelite.Cutscenes
                 yield return null;
             camera.SetFollowTarget(PlayerController.Instance.Entity);
 
+            //display message
+            ui.DisplayMessage("Attack the ChainBot");
+
             //allow player to move
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
 
@@ -211,6 +233,9 @@ namespace PuppetRoguelite.Cutscenes
             //wait for player to finish their attack
             while (PlayerController.Instance.StateMachine.CurrentState.GetType() == typeof(AttackState))
                 yield return null;
+
+            //hide message
+            ui.HideMessage();
 
             //stop player
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
@@ -240,6 +265,9 @@ namespace PuppetRoguelite.Cutscenes
                     new DialogueLine("Give him a few more hits, and notice how your meter fills up.")
                 });
 
+                //display message
+                ui.DisplayMessage("Fill your AP Bar by Attacking the ChainBot");
+
                 //allow player to move
                 Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
 
@@ -256,6 +284,9 @@ namespace PuppetRoguelite.Cutscenes
 
                 //stop player
                 Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneStarted);
+
+                //hide message
+                ui.HideMessage();
 
                 yield return GlobalTextboxManager.DisplayText(new List<DialogueLine>()
                 {
@@ -285,6 +316,9 @@ namespace PuppetRoguelite.Cutscenes
             //disable player melee
             PlayerController.Instance.IsMeleeEnabled = false;
 
+            //show message
+            ui.DisplayMessage("Activate Turn by pressing 'E'");
+
             //wait a moment so turn isn't instantly triggered
             yield return Coroutine.WaitForSeconds(1f);
 
@@ -294,6 +328,8 @@ namespace PuppetRoguelite.Cutscenes
             //wait for turn to be triggered
             while (combatManager.CombatState != CombatState.Turn)
                 yield return null;
+
+            ui.HideMessage();
 
             //disable menu
             var actionTypeSelector = Game1.Scene.FindComponentOfType<ActionTypeSelector>();
@@ -345,6 +381,9 @@ namespace PuppetRoguelite.Cutscenes
                 new DialogueLine("Go ahead and open up the Attacks menu.")
             });
 
+            //show message
+            ui.DisplayMessage("Navigate to the Attacks Menu");
+
             //enable ui control
             actionTypeSelector.Stage.KeyboardEmulatesGamepad = true;
             actionTypeSelector.AttackButton.SetDisabled(false);
@@ -359,6 +398,8 @@ namespace PuppetRoguelite.Cutscenes
             }
             while (!buttonClicked)
                 yield return null;
+
+            ui.HideMessage();
 
             //get action menu
             var actionMenu = Game1.Scene.FindComponentOfType<ActionMenu>();
@@ -376,25 +417,30 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(.5f);
 
+            //message
+            ui.DisplayMessage("Select the Dash Action");
+
             //enable menu nav
             actionMenu.Stage.KeyboardEmulatesGamepad = true;
 
             //enable dash button
             var listButtons = actionMenu.GetButtons();
-            var dashButton = listButtons.FirstOrDefault(b => b.GetText() == PlayerActionUtils.GetName(typeof(DashAttack)));
+            var dashButton = listButtons.FirstOrDefault(b => b.GetValue().ToType() == typeof(DashAttack));
             dashButton.SetDisabled(false);
-            dashButton.SetMouseEnabled(true);
+            //dashButton.SetMouseEnabled(true);
 
             //wait for dash button clicked
-            dashButton.OnClicked += DashButtonClickedHandler;
+            dashButton.OnSelected += DashButtonClickedHandler;
             bool dashButtonClicked = false;
-            void DashButtonClickedHandler(Button button)
+            void DashButtonClickedHandler(PlayerActionType actionType)
             {
                 dashButtonClicked = true;
-                dashButton.OnClicked -= DashButtonClickedHandler;
+                dashButton.OnSelected -= DashButtonClickedHandler;
             }
             while (!dashButtonClicked)
                 yield return null;
+
+            ui.HideMessage();
 
             //get dash attack component and disable confirmation
             var dashAttack = Game1.Scene.EntitiesOfType<DashAttack>().FirstOrDefault();
@@ -413,6 +459,9 @@ namespace PuppetRoguelite.Cutscenes
 
             yield return Coroutine.WaitForSeconds(.5f);
 
+            //message
+            ui.DisplayMessage("Aim your Dash through the ChainBot");
+
             //enable confirmation and wait for prep to finish
             dashAttack.SetConfirmationEnabled(true);
             bool dashAttackPrepFinished = false;
@@ -424,6 +473,8 @@ namespace PuppetRoguelite.Cutscenes
             }
             while (!dashAttackPrepFinished)
                 yield return null;
+
+            ui.HideMessage();
 
             //disable action type selector again
             actionTypeSelector = Game1.Scene.FindComponentOfType<ActionTypeSelector>();
@@ -445,6 +496,9 @@ namespace PuppetRoguelite.Cutscenes
             //set enemy health to 1
             enemyHealthComponent.Health = 1;
 
+            //message
+            ui.DisplayMessage("Execute your Action Sequence");
+
             //enable execute button and wait for click
             actionTypeSelector.Stage.KeyboardEmulatesGamepad = true;
             actionTypeSelector.ExecuteButton.SetDisabled(false);
@@ -458,6 +512,8 @@ namespace PuppetRoguelite.Cutscenes
             }
             while (!executeClicked)
                 yield return null;
+
+            ui.HideMessage();
 
             int attempts = 0;
             while (attempts < 4)
@@ -516,6 +572,8 @@ namespace PuppetRoguelite.Cutscenes
 
                         yield return Coroutine.WaitForSeconds(1f);
 
+                        ui.DisplayMessage("Defeat the ChainBot using your Dash Action");
+
                         //allow player to move
                         Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
 
@@ -546,6 +604,8 @@ namespace PuppetRoguelite.Cutscenes
                     break;
                 }
             }
+
+            ui.HideMessage();
 
             //allow player to move
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
@@ -591,9 +651,13 @@ namespace PuppetRoguelite.Cutscenes
 
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
 
+            ui.DisplayMessage("Open your Stats Menu by pressing 'Tab'");
+
             //wait until player has opened and closed stats menu
             while (Game1.Scene.FindComponentOfType<StatsMenu>() == null)
                 yield return null;
+
+            ui.HideMessage();
 
             while (Game1.Scene.FindComponentOfType<StatsMenu>() != null)
                 yield return null;
@@ -769,10 +833,16 @@ namespace PuppetRoguelite.Cutscenes
             });
 
             Emitters.CutsceneEmitter.Emit(CutsceneEvents.CutsceneEnded);
+
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+            ui.DisplayMessage("Slot the Cereal Box in the Shelf");
         }
 
         public static IEnumerator TutorialShelf()
         {
+            var ui = Game1.Scene.FindComponentOfType<CombatUI>();
+            ui.HideMessage();
+
             //return player actions to normal
             PlayerController.Instance.ActionsManager.AttackActions = PlayerData.Instance.AttackActions;
             PlayerController.Instance.ActionsManager.UtilityActions = PlayerData.Instance.UtilityActions;

@@ -136,7 +136,7 @@ namespace PuppetRoguelite.UI.Menus
             var tipTable = new Table();
             _table.Add(tipTable).SetUniformX().Left();
             var backLabel = new Label("X: Go Back", _basicSkin, "default_lg");
-            tipTable.Add(backLabel);
+            tipTable.Add(backLabel).SetPadLeft(10);
         }
 
         void DisplayCurrentActions()
@@ -174,7 +174,7 @@ namespace PuppetRoguelite.UI.Menus
             _currentAttacksCol.Add(attackIconImage).SetSpaceBottom(25f);
             _currentAttacksCol.Row();
             var attackButtonsTable = new Table();
-            _currentAttacksCol.Add(attackButtonsTable).Grow();
+            _currentAttacksCol.Add(attackButtonsTable).Grow().SetMaxWidth(Value.PercentWidth(1f, _currentAttacksCol));
             for (int i = 0; i < PlayerUpgradeData.Instance.AttackSlotsUpgrade.Levels.Count; i++)
             {
                 string name;
@@ -199,9 +199,15 @@ namespace PuppetRoguelite.UI.Menus
                 {
                     OnCurrentActionSelected(actionType, PlayerActionCategory.Attack);
                 };
-                attackButtonsTable.Add(button).Grow();
+                attackButtonsTable.Add(button).Expand().SetFillX();
                 attackButtonsTable.Row();
                 _currentActionButtons.Add(button);
+
+                if (PlayerUpgradeData.Instance.AttackSlotsUpgrade.CurrentLevel < i + 1)
+                {
+                    button.SetVisible(false);
+                    button.SetDisabled(true);
+                }
             }
 
             //current utils column
@@ -213,7 +219,7 @@ namespace PuppetRoguelite.UI.Menus
             _currentUtilsCol.Add(utilsIconImage).SetSpaceBottom(25f);
             _currentUtilsCol.Row();
             var utilButtonsTable = new Table();
-            _currentUtilsCol.Add(utilButtonsTable).Grow();
+            _currentUtilsCol.Add(utilButtonsTable).Grow().SetMaxWidth(Value.PercentWidth(1f, _currentUtilsCol));
             for (int i = 0; i < PlayerUpgradeData.Instance.UtilitySlotsUpgrade.Levels.Count; i++)
             {
                 string name;
@@ -238,9 +244,15 @@ namespace PuppetRoguelite.UI.Menus
                 {
                     OnCurrentActionSelected(actionType, PlayerActionCategory.Utility);
                 };
-                utilButtonsTable.Add(button).Grow();
+                utilButtonsTable.Add(button).Expand().SetFillX();
                 utilButtonsTable.Row();
                 _currentActionButtons.Add(button);
+
+                if (PlayerUpgradeData.Instance.UtilitySlotsUpgrade.CurrentLevel < i + 1)
+                {
+                    button.SetVisible(false);
+                    button.SetDisabled(true);
+                }
             }
 
             //current support column
@@ -252,7 +264,7 @@ namespace PuppetRoguelite.UI.Menus
             _currentSupportCol.Add(supportIconImage).SetSpaceBottom(25f);
             _currentSupportCol.Row();
             var supportButtonsTable = new Table();
-            _currentSupportCol.Add(supportButtonsTable).Grow();
+            _currentSupportCol.Add(supportButtonsTable).Grow().SetMaxWidth(Value.PercentWidth(1f, _currentSupportCol));
             for (int i = 0; i < PlayerUpgradeData.Instance.SupportSlotsUpgrade.Levels.Count; i++)
             {
                 string name;
@@ -277,9 +289,15 @@ namespace PuppetRoguelite.UI.Menus
                 {
                     OnCurrentActionSelected(actionType, PlayerActionCategory.Support);
                 };
-                supportButtonsTable.Add(button).Grow();
+                supportButtonsTable.Add(button).Expand().SetFillX();
                 supportButtonsTable.Row();
                 _currentActionButtons.Add(button);
+
+                if (PlayerUpgradeData.Instance.SupportSlotsUpgrade.CurrentLevel < i + 1)
+                {
+                    button.SetVisible(false);
+                    button.SetDisabled(true);
+                }
             }
 
             //add selection handlers to each button

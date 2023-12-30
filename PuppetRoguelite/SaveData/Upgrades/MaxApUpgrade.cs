@@ -9,36 +9,21 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.SaveData.Upgrades
 {
-    public class MaxApUpgrade : Upgrade
+    public class MaxApUpgrade : Upgrade<int>
     {
-        public Dictionary<int, int> MaxApValues = new Dictionary<int, int>()
-        {
-            {0, 5 },
-            {1, 6 },
-            {2, 7 },
-            {3, 8 },
-            {4, 9 },
-            {5, 10 },
-        };
-
         public MaxApUpgrade() : base("Max AP")
         {
 
         }
 
-        public int GetCurrentMaxAp()
-        {
-            return MaxApValues[CurrentLevel];
-        }
-
         protected override void DefineLevels()
         {
-            Levels.Add(0, 75);
-            Levels.Add(1, 150);
-            Levels.Add(2, 225);
-            Levels.Add(3, 300);
-            Levels.Add(4, 400);
-            Levels.Add(5, 500);
+            Levels.Add(new UpgradeLevel<int>(1, 0, 5));
+            Levels.Add(new UpgradeLevel<int>(2, 75, 6));
+            Levels.Add(new UpgradeLevel<int>(3, 150, 7));
+            Levels.Add(new UpgradeLevel<int>(4, 225, 8));
+            Levels.Add(new UpgradeLevel<int>(5, 300, 9));
+            Levels.Add(new UpgradeLevel<int>(6, 400, 10));
         }
 
         public override void ApplyUpgrade()
@@ -47,13 +32,8 @@ namespace PuppetRoguelite.SaveData.Upgrades
 
             if (PlayerController.Instance.Entity.TryGetComponent<ActionPointComponent>(out var ac))
             {
-                ac.MaxActionPoints = GetCurrentMaxAp();
+                ac.MaxActionPoints = GetCurrentValue();
             }
-        }
-
-        public override string GetValueString()
-        {
-            return GetCurrentMaxAp().ToString();
         }
     }
 }

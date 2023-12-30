@@ -22,7 +22,7 @@ namespace PuppetRoguelite.UI.Menus
     {
         //elements
         Table _table;
-        List<Button> _addButtons = new List<Button>();
+        List<UpgradeButton> _upgradeButtons = new List<UpgradeButton>();
         Label _totalDollahsLabel;
         WindowTable _box;
 
@@ -31,11 +31,12 @@ namespace PuppetRoguelite.UI.Menus
         Sprite _dollahSprite;
         Dictionary<int, Label> _upgradeValueLabels = new Dictionary<int, Label>();
         Dictionary<int, Label> _upgradeCostLabels = new Dictionary<int, Label>();
+        Dictionary<UpgradeBase, Label> _nextLevelLabels = new Dictionary<UpgradeBase, Label>();
 
         Action<bool> _closedCallback;
         bool _purchaseMade = false;
 
-        bool _canActivateButton = true;
+        bool _canActivateButton = false;
 
         public UpgradeShopMenu(Action<bool> closedCallback)
         {
@@ -69,15 +70,8 @@ namespace PuppetRoguelite.UI.Menus
             //arrange elements
             ArrangeElements();
 
-            Stage.SetGamepadFocusElement(_addButtons.First());
-        }
-
-        public override void OnEnabled()
-        {
-            base.OnEnabled();
-
-            _canActivateButton = false;
-            //Stage.SetGamepadFocusElement(_addButtons.First());
+            //focus the first button
+            Stage.SetGamepadFocusElement(_upgradeButtons.First());
         }
 
         void ArrangeElements()
@@ -92,6 +86,12 @@ namespace PuppetRoguelite.UI.Menus
 
             //set padding of dialog
             _box.PadTop(50).PadBottom(50).PadLeft(30).PadRight(30);
+
+            //header
+            var headerLabel = new Label("Upgrade Shop", _basicSkin, "default_xxxl");
+            _box.Add(headerLabel).Top().SetSpaceBottom(25f);
+
+            _box.Row();
 
             //total dollahs
             var topRightTable = new Table();
@@ -116,32 +116,56 @@ namespace PuppetRoguelite.UI.Menus
             AddRow(upgradeTable, PlayerUpgradeData.Instance.UtilitySlotsUpgrade);
             AddRow(upgradeTable, PlayerUpgradeData.Instance.SupportSlotsUpgrade);
 
+            ValidateButtons();
+
             //tip label
             containerTable.Row();
             var tipLabel = new Label("X: Go Back", _basicSkin, "default_lg");
-            containerTable.Add(tipLabel).SetUniformX().SetExpandX().Left().Top();
+            containerTable.Add(tipLabel).SetUniformX().SetExpandX().Left().Top().SetPadLeft(10);
         }
 
-        void AddRow(Table table, Upgrade upgrade)
+        void AddRow(Table table, UpgradeBase upgrade)
         {
             //upgrade label
             var cell = table.Add(new Label(upgrade.Name, _basicSkin, "default_xxxl")).SetExpandX().Left().SetPadTop(4);
 
+            //value table
+            var valueTable = new Table();
+            table.Add(valueTable).SetExpandX().Left().SetPadTop(4);
+
             //upgrade value
             var valueLabel = new Label(upgrade.GetValueString(), _basicSkin, "default_xxxl");
             _upgradeValueLabels.Add(cell.GetRow(), valueLabel);
-            table.Add(valueLabel).SetExpandX().Left().SetPadTop(4);
+            valueTable.Add(valueLabel);
 
+            //add label for next upgrade
+            if (!upgrade.IsMaxLevel())
+            {
+                var nextValueLabel = new Label(" -> " + upgrade.GetValueString(upgrade.CurrentLevel + 1), _basicSkin, "default_xxl");
+                valueTable.Add(nextValueLabel);
+                nextValueLabel.SetVisible(false);
+                _nextLevelLabels.Add(upgrade, nextValueLabel);
+            }
+
+            //upgrade button
             var button = new UpgradeButton(upgrade, cell.GetRow(), _basicSkin, "plusButton");
-            var canAfford = PlayerData.Instance.Dollahs >= upgrade.GetCurrentCost();
-            //button.SetDisabled(!canAfford);
-            button.OnClicked += OnPlusButtonClicked;
-            _addButtons.Add(button);
             table.Add(button).SetExpandX().Right().SetSpaceRight(10);
 
-            var costLabel = new Label(upgrade.GetCurrentCost().ToString(), _basicSkin, "default_xxl");
+            //button focus handlers
+            button.OnButtonFocused += OnPlusButtonFocused;
+            button.OnButtonUnfocused += OnPlusButtonUnfocused;
+
+            //button clicked handler
+            button.OnClicked += OnPlusButtonClicked;
+            _upgradeButtons.Add(button);
+
+            //cost label
+            var costText = upgrade.IsMaxLevel() ? "MAX" : upgrade.GetCostToUpgrade().ToString();
+            var costLabel = new Label(costText, _basicSkin, "default_xxl");
             _upgradeCostLabels.Add(cell.GetRow(), costLabel);
             table.Add(costLabel).SetPadTop(4).Right();
+            
+            //dollah image next to cost
             var dollahImage = new Image(_dollahSprite);
             dollahImage.SetScaleX(Game1.ResolutionScale.X);
             dollahImage.SetScaleY(Game1.ResolutionScale.Y);
@@ -154,12 +178,14 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.Update();
 
+            //wait until e is released so button isn't instantly clicked
             if (!_canActivateButton && !Input.IsKeyDown(Keys.E))
             {
                 _canActivateButton = true;
                 Stage.KeyboardActionKey = Keys.E;
             }
 
+            //handle going back
             if (Input.IsKeyPressed(Keys.X))
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
@@ -174,34 +200,95 @@ namespace PuppetRoguelite.UI.Menus
                 var upgradeButton = button as UpgradeButton;
 
                 //if can't afford
-                if (PlayerData.Instance.Dollahs < upgradeButton.Upgrade.GetCurrentCost())
+                if (PlayerData.Instance.Dollahs < upgradeButton.Upgrade.GetCostToUpgrade())
                 {
                     Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
                     return;
                 }
 
                 //if at max level
-                if (upgradeButton.Upgrade.CurrentLevel >= upgradeButton.Upgrade.Levels.Count - 1)
+                if (upgradeButton.Upgrade.IsMaxLevel())
                 {
                     Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
                     return;
                 }
 
+                //play purchase sound
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Purchase);
 
+                //set purchase made to true (so shopowner knows to thank you)
                 _purchaseMade = true;
-
-                PlayerController.Instance.DollahInventory.Dollahs -= upgradeButton.Upgrade.GetCurrentCost();
-                //PlayerData.Instance.Dollahs -= upgradeButton.Upgrade.GetCurrentCost();
-                _totalDollahsLabel.SetText(PlayerData.Instance.Dollahs.ToString());
-
+                
+                //apply upgrade
                 upgradeButton.Upgrade.ApplyUpgrade();
 
+                //update total dollahs label
+                _totalDollahsLabel.SetText(PlayerData.Instance.Dollahs.ToString());
+
+                //update value display
                 var valueLabel = _upgradeValueLabels[upgradeButton.RowIndex];
                 valueLabel.SetText(upgradeButton.Upgrade.GetValueString());
 
+                //update next level label
+                var nextLevelLabel = _nextLevelLabels[upgradeButton.Upgrade];
+                if (upgradeButton.Upgrade.IsMaxLevel())
+                {
+                    nextLevelLabel.Remove();
+                    _nextLevelLabels.Remove(upgradeButton.Upgrade);
+                }
+                else
+                {
+                    nextLevelLabel.SetText($" -> {upgradeButton.Upgrade.GetValueString(upgradeButton.Upgrade.CurrentLevel + 1)}");
+                }
+
+                //update cost display
                 var costLabel = _upgradeCostLabels[upgradeButton.RowIndex];
-                costLabel.SetText(upgradeButton.Upgrade.GetCurrentCost().ToString());
+                if (upgradeButton.Upgrade.IsMaxLevel())
+                {
+                    costLabel.SetText("MAX");
+                }
+                else
+                {
+                    costLabel.SetText(upgradeButton.Upgrade.GetCostToUpgrade().ToString());
+                }
+
+                //update enabled/disabled for all buttons
+                ValidateButtons();
+            }
+        }
+
+        void ValidateButtons()
+        {
+            foreach(var button in _upgradeButtons)
+            {
+                var cost = button.Upgrade.GetCostToUpgrade();
+                if (cost > PlayerData.Instance.Dollahs)
+                {
+                    button.SetDisabled(true);
+                    continue;
+                }
+
+                if (button.Upgrade.IsMaxLevel())
+                {
+                    button.SetDisabled(true);
+                    continue;
+                }
+            }
+        }
+
+        void OnPlusButtonFocused(UpgradeBase upgrade)
+        {
+            if (_nextLevelLabels.ContainsKey(upgrade))
+            {
+                _nextLevelLabels[upgrade].SetVisible(true);
+            }
+        }
+
+        void OnPlusButtonUnfocused(UpgradeBase upgrade)
+        {
+            if (_nextLevelLabels.ContainsKey(upgrade))
+            {
+                _nextLevelLabels[upgrade].SetVisible(false);
             }
         }
     }

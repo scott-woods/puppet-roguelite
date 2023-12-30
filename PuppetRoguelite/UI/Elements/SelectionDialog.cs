@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.UI.Elements
 {
-    public class SelectionDialog : Table
+    public class SelectionDialog<T> : Table
     {
         const int _maxPerPage = 4;
 
-        Dictionary<ListButton, Label> _content;
+        Dictionary<BulletPointSelector<T>, Label> _content;
         string _buttonHeader, _labelHeader;
         Skin _skin;
 
-        public SelectionDialog(Dictionary<ListButton, Label> content, Skin skin,
+        public SelectionDialog(Dictionary<BulletPointSelector<T>, Label> content, Skin skin,
             string buttonHeader = null, string labelHeader = null)
         {
             _content = content;

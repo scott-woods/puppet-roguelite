@@ -197,11 +197,12 @@ namespace PuppetRoguelite.UI.Elements
             yield return null;
 
             List<BulletPointSelector<string>> selectors = new List<BulletPointSelector<string>>();
+            var percent = (1f / choices.Count) * .75f;
             foreach (var choice in choices)
             {
                 var selector = new BulletPointSelector<string>(choice, choice, true, _basicSkin, "default_xxxl");
                 selector.OnSelected += OnChoiceSelected;
-                _innerTable.Add(selector).Grow();
+                _innerTable.Add(selector).Grow().SetMaxWidth(Value.PercentWidth(percent, _innerTable));
                 selectors.Add(selector);
             }
 

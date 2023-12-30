@@ -13,15 +13,26 @@ namespace PuppetRoguelite.UI.Elements
 {
     public class UpgradeButton : ImageButton, IInputListener
     {
-        public Upgrade Upgrade;
+        public UpgradeBase Upgrade;
         public int RowIndex;
 
-        public UpgradeButton(Upgrade upgrade, int rowIndex, Skin skin, string styleName = null) : base(skin, styleName)
+        public event Action<UpgradeBase> OnButtonFocused;
+        public event Action<UpgradeBase> OnButtonUnfocused;
+
+        public UpgradeButton(UpgradeBase upgrade, int rowIndex, Skin skin, string styleName = null) : base(skin, styleName)
         {
             Upgrade = upgrade;
             RowIndex = rowIndex;
             GetImage().SetScaleX(Game1.ResolutionScale.X);
             GetImage().SetScaleY(Game1.ResolutionScale.Y);
+        }
+
+        protected override void OnActionButtonPressed()
+        {
+            base.OnActionButtonPressed();
+
+            if (_isDisabled)
+                Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
         }
 
         protected override void OnFocused()
@@ -32,6 +43,15 @@ namespace PuppetRoguelite.UI.Elements
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02);
             }
+
+            OnButtonFocused?.Invoke(Upgrade);
+        }
+
+        protected override void OnUnfocused()
+        {
+            base.OnUnfocused();
+
+            OnButtonUnfocused?.Invoke(Upgrade);
         }
 
         void IInputListener.OnMouseEnter()
