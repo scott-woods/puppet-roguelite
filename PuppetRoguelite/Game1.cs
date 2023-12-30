@@ -89,7 +89,7 @@ namespace PuppetRoguelite
             //start scene
             Log.Information("Starting initial Scene");
             SceneManager.TargetEntranceId = "0";
-            Scene = new MainMenu();
+            Scene = new NewHub();
         }
 
         protected override void Update(GameTime gameTime)

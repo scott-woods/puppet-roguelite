@@ -5,12 +5,12 @@
     },
     "activeFile": "Tilemaps/Hub/hub_2.tmx",
     "expandedProjectPaths": [
+        ".",
         "Tilesets",
         "Tilemaps",
-        ".",
+        "RuleMaps",
         "Tilemaps/DungeonPrison",
-        "Tilemaps/Hub",
-        "RuleMaps"
+        "Tilemaps/Hub"
     ],
     "fileStates": {
         ":/automap-tiles.tsx": {
@@ -328,8 +328,8 @@
             "scale": 0.75,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 719.3333333333333,
-                "y": 407.3333333333333
+                "x": 634,
+                "y": 524
             }
         },
         "Tilemaps/Hub/hub_intro.tmx": {

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Media;
 using Nez;
 using PuppetRoguelite.Audio;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.SaveData;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace PuppetRoguelite.GlobalManagers
 {
     public class AudioManager : GlobalManager
     {
-        const float _defaultMusicVolume = .33f;
+        const float _defaultMusicVolume = .25f;
         const float _defaultSoundVolume = .25f;
         const float _volumeReductionFactor = .01f;
 
@@ -62,7 +63,7 @@ namespace PuppetRoguelite.GlobalManagers
             var soundInstance = sound.CreateInstance();
             int instanceCount = _soundInstances[sound].Count;
 
-            float volume = Math.Max(0, _defaultSoundVolume * (1 - (instanceCount * _volumeReductionFactor)));
+            float volume = Math.Max(0, (_defaultSoundVolume * Settings.Instance.SoundVolume) * (1 - (instanceCount * _volumeReductionFactor)));
             soundInstance.Volume = volume;
 
             soundInstance.Play();
@@ -104,7 +105,7 @@ namespace PuppetRoguelite.GlobalManagers
 
             _musicVoice.Load(audioDataOgg);
 
-            _musicVoice.SetVolume(_defaultMusicVolume);
+            _musicVoice.SetVolume(_defaultMusicVolume * Settings.Instance.MusicVolume);
 
             _musicVoice.Loop = looping;
 
