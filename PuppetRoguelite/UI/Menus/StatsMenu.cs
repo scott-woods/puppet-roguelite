@@ -76,7 +76,7 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.Update();
 
-            if (Input.IsKeyPressed(Keys.Tab))
+            if (Controls.Instance.ShowStats.IsPressed)
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Close_stats_menu);
                 _closedCallback?.Invoke();

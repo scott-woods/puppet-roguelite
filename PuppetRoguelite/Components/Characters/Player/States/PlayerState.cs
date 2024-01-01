@@ -4,6 +4,7 @@ using Nez.AI.FSM;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.GlobalManagers;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.UI.Menus;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryShowStats()
         {
-            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Tab))
+            if (Controls.Instance.ShowStats.IsPressed)
             {
                 _machine.ChangeState<CutsceneState>();
 
@@ -38,7 +39,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public bool TryTriggerTurn()
         {
             var gameStateManager = Game1.GameStateManager;
-            if ((gameStateManager.GameState == GameState.Combat || gameStateManager.GameState == GameState.AttackTutorial) && _context.ActionInput.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
+            if ((gameStateManager.GameState == GameState.Combat || gameStateManager.GameState == GameState.AttackTutorial) && Controls.Instance.TriggerTurn.IsPressed && _context.ActionPointComponent.ActionPoints > 0)
             {
                 _machine.ChangeState<TurnState>();
                 Emitters.CombatEventsEmitter.Emit(CombatEvents.TurnPhaseTriggered);
@@ -50,7 +51,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryDash()
         {
-            if (!_context.Dash.IsOnCooldown && _context.DashInput.IsPressed)
+            if (!_context.Dash.IsOnCooldown && Controls.Instance.Dodge.IsPressed)
             {
                 _machine.ChangeState<DashState>();
                 return true;
@@ -61,7 +62,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryMove()
         {
-            if (_context.XAxisInput.Value != 0 || _context.YAxisInput.Value != 0)
+            if (Controls.Instance.XAxisInput.Value != 0 || Controls.Instance.YAxisInput.Value != 0)
             {
                 _machine.ChangeState<MoveState>();
                 return true;
@@ -72,7 +73,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryMelee()
         {
-            if (_context.IsMeleeEnabled && Input.LeftMouseButtonPressed && Game1.GameStateManager.GameState != GameState.Paused)
+            if (_context.IsMeleeEnabled && Controls.Instance.Melee.IsPressed && Game1.GameStateManager.GameState != GameState.Paused)
             {
                 _machine.ChangeState<AttackState>();
                 return true;
@@ -83,7 +84,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryIdle()
         {
-            if (_context.XAxisInput.Value == 0 && _context.YAxisInput.Value == 0)
+            if (Controls.Instance.XAxisInput.Value == 0 && Controls.Instance.YAxisInput.Value == 0)
             {
                 _machine.ChangeState<IdleState>();
                 return true;
@@ -95,7 +96,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public bool TryCheck()
         {
             var gameStateManager = Game1.GameStateManager;
-            if (gameStateManager.GameState != GameState.Combat && _context.CheckInput.IsPressed)
+            if (gameStateManager.GameState != GameState.Combat && Controls.Instance.Check.IsPressed)
             {
                 var hitArray = new RaycastHit[10];
                 var raycastHits = Physics.LinecastAll(_context.OriginComponent.Origin, _context.OriginComponent.Origin + _context.VelocityComponent.Direction * _context.RaycastDistance, hitArray, 1 << (int)PhysicsLayers.Interactable);

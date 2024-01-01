@@ -59,7 +59,7 @@ namespace PuppetRoguelite.UI.Menus
             base.Update();
 
             //cancel if cancel key pressed
-            if (Input.IsKeyPressed(Keys.X) && !_isTutorialMode)
+            if (Controls.Instance.Cancel.IsPressed && !_isTutorialMode)
             {
                 if (_waitCoroutine != null)
                 {
@@ -115,7 +115,7 @@ namespace PuppetRoguelite.UI.Menus
 
         IEnumerator WaitForActionKeyReleased()
         {
-            while (Input.IsKeyDown(Keys.E) || Input.IsKeyReleased(Keys.E))
+            while (Controls.Instance.Confirm.IsDown || Controls.Instance.Confirm.IsReleased)
             {
                 yield return null;
             }

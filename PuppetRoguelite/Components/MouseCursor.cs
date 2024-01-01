@@ -37,6 +37,7 @@ namespace PuppetRoguelite.Components
             base.OnAddedToEntity();
 
             Game1.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+            Game1.InputStateManager.Emitter.AddObserver(GlobalManagers.InputStateEvents.InputStateChanged, OnInputStateChanged);
         }
 
         public override void OnRemovedFromEntity()
@@ -44,6 +45,7 @@ namespace PuppetRoguelite.Components
             base.OnRemovedFromEntity();
 
             Game1.Emitter.RemoveObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+            Game1.InputStateManager.Emitter.RemoveObserver(GlobalManagers.InputStateEvents.InputStateChanged, OnInputStateChanged);
         }
 
         public void Update()
@@ -62,5 +64,11 @@ namespace PuppetRoguelite.Components
         //    var pos = ResolutionHelper.GameToUiPoint(Entity, _anchorPosition);
         //    _baseElement.SetPosition(pos.X + _screenSpaceOffset.X, pos.Y + _screenSpaceOffset.Y);
         //}
+
+        void OnInputStateChanged(bool isUsingGamepad)
+        {
+            SetEnabled(!isUsingGamepad);
+            SpriteRenderer.SetEnabled(!isUsingGamepad);
+        }
     }
 }

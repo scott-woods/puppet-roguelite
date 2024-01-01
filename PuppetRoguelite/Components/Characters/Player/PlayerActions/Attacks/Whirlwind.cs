@@ -8,6 +8,7 @@ using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using Serilog;
 using System;
@@ -128,7 +129,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             if (State == PlayerActionState.Preparing)
             {
                 //handle confirm
-                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
+                if (Controls.Instance.Confirm.IsPressed)
                 {
                     Reset();
                     HandlePreparationFinished(Position);

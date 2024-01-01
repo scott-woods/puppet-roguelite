@@ -179,14 +179,14 @@ namespace PuppetRoguelite.UI.Menus
             base.Update();
 
             //wait until e is released so button isn't instantly clicked
-            if (!_canActivateButton && !Input.IsKeyDown(Keys.E))
+            if (!_canActivateButton && !Controls.Instance.Confirm.IsDown)
             {
                 _canActivateButton = true;
                 Stage.KeyboardActionKey = Keys.E;
             }
 
             //handle going back
-            if (Input.IsKeyPressed(Keys.X))
+            if (Controls.Instance.Cancel.IsPressed)
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._021_Decline_01);
                 _closedCallback?.Invoke(_purchaseMade);

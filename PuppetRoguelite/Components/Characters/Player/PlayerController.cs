@@ -11,6 +11,7 @@ using PuppetRoguelite.Enums;
 using PuppetRoguelite.Models.Items;
 using PuppetRoguelite.SaveData;
 using PuppetRoguelite.SaveData.Upgrades;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using System;
 using System.Collections.Generic;
@@ -23,13 +24,6 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         //state machine
         public StateMachine<PlayerController> StateMachine;
-
-        //input
-        public VirtualIntegerAxis XAxisInput;
-        public VirtualIntegerAxis YAxisInput;
-        public VirtualButton ActionInput;
-        public VirtualButton CheckInput;
-        public VirtualButton DashInput;
 
         //stats
         public float RaycastDistance = 10f;
@@ -84,7 +78,6 @@ namespace PuppetRoguelite.Components.Characters.Player
             base.Initialize();
 
             AddComponents();
-            SetupInput();
 
             StateMachine = new StateMachine<PlayerController>(this, new IdleState());
             StateMachine.AddState(new AttackState());
@@ -218,28 +211,6 @@ namespace PuppetRoguelite.Components.Characters.Player
             StatusComponent = Entity.AddComponent(new StatusComponent(_defaultStatus));
         }
 
-        void SetupInput()
-        {
-            XAxisInput = new VirtualIntegerAxis();
-            XAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
-            XAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
-            XAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D));
-
-            YAxisInput = new VirtualIntegerAxis();
-            YAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
-            YAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
-            YAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S));
-
-            ActionInput = new VirtualButton();
-            ActionInput.AddKeyboardKey(Keys.E);
-
-            CheckInput = new VirtualButton();
-            CheckInput.AddKeyboardKey(Keys.E);
-
-            DashInput = new VirtualButton();
-            DashInput.AddKeyboardKey(Keys.Space);
-        }
-
         void AddAnimations()
         {
             var texture = Game1.Content.LoadTexture(Nez.Content.Textures.Characters.Player.Sci_fi_player_with_sword);
@@ -335,6 +306,21 @@ namespace PuppetRoguelite.Components.Characters.Player
         public void ExecuteDash(Action dashCompleteCallback)
         {
             Dash.ExecuteDash(dashCompleteCallback, SpriteAnimator, VelocityComponent, _spriteTrail);
+        }
+
+        /// <summary>
+        /// if using keyboard/mouse, returns direction from player to mouse
+        /// if using gamepad, returns direction left joystick is facing
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetFacingDirection()
+        {
+            if (Game1.InputStateManager.IsUsingGamepad)
+            {
+                return new Vector2(Controls.Instance.XAxisInput.Value, Controls.Instance.YAxisInput.Value);
+            }
+            else
+                return Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;
         }
 
         #region OBSERVERS

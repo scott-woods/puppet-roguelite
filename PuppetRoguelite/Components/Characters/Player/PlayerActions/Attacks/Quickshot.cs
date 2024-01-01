@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Nez.UI;
 using Serilog;
+using PuppetRoguelite.StaticData;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
@@ -66,7 +67,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             if (State == PlayerActionState.Preparing)
             {
                 //handle confirm
-                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E) || Input.LeftMouseButtonPressed)
+                if (Controls.Instance.Confirm.IsPressed)
                 {
                     Reset();
                     HandlePreparationFinished(FinalPosition);

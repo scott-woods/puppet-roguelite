@@ -416,13 +416,13 @@ namespace PuppetRoguelite.UI.Menus
             base.Update();
 
             //wait until action key is released before allowing it to be pressed
-            if (!_canActivateButton && !Input.IsKeyDown(Keys.E))
+            if (!_canActivateButton && !Controls.Instance.Confirm.IsDown)
             {
                 _canActivateButton = true;
                 Stage.KeyboardActionKey = Keys.E;
             }
 
-            if (Input.IsKeyPressed(Keys.X))
+            if (Controls.Instance.Cancel.IsPressed)
             {
                 if (_isSelectingNewAction)
                 {

@@ -118,7 +118,7 @@ namespace PuppetRoguelite.UI.Elements
 
                 var timer = 0f;
                 bool timerReached = false;
-                while (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
+                while (!Controls.Instance.Confirm.IsPressed)
                 {
                     if (timer > 3f && !timerReached)
                     {
@@ -153,7 +153,7 @@ namespace PuppetRoguelite.UI.Elements
             while (count <= text.Length)
             {
                 //check if we should skip text
-                if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
+                if (Controls.Instance.Confirm.IsPressed)
                 {
                     textLabel.SetText(text);
                     break;

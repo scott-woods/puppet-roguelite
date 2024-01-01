@@ -239,7 +239,7 @@ namespace PuppetRoguelite.UI.Menus
         {
             base.Update();
 
-            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+            if (Controls.Instance.Cancel.IsPressed)
             {
                 if (_isInSettingsWindow)
                 {

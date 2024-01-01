@@ -6,6 +6,7 @@ using Nez.Tweens;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,10 +84,10 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
                     if (_comboCounter < 3)
                     {
                         //if left click
-                        if (Input.LeftMouseButtonPressed)
+                        if (Controls.Instance.Melee.IsPressed)
                         {
                             //get direction
-                            var dir = Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;
+                            var dir = PlayerController.Instance.GetFacingDirection();
                             dir.Normalize();
                             _direction = dir;
 
@@ -199,7 +200,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             _animator.Speed *= Speed;
 
             //attack in direction of mouse
-            var dir = Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;
+            var dir = PlayerController.Instance.GetFacingDirection();
             dir.Normalize();
             _direction = dir;
 

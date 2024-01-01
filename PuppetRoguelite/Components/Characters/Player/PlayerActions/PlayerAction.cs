@@ -5,6 +5,7 @@ using Nez.Systems;
 using Nez.UI;
 using PuppetRoguelite.Components.Characters;
 using PuppetRoguelite.Components.Characters.Player;
+using PuppetRoguelite.StaticData;
 using Serilog;
 using System;
 using System.Collections;
@@ -52,7 +53,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions
 
             if (State == PlayerActionState.Preparing)
             {
-                if (Input.IsKeyPressed(Keys.X) && !_isTutorialMode)
+                if (Controls.Instance.Cancel.IsPressed && !_isTutorialMode)
                 {
                     HandlePreparationCanceled();
                 }

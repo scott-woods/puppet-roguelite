@@ -28,6 +28,7 @@ namespace PuppetRoguelite
         public static ResolutionManager ResolutionManager = new ResolutionManager();
         public static DebugSettings DebugSettings = new DebugSettings();
         public static EventManager EventManager = new EventManager();
+        public static InputStateManager InputStateManager = new InputStateManager();
 
         public Game1() : base()
         {
@@ -79,6 +80,7 @@ namespace PuppetRoguelite
             RegisterGlobalManager(ResolutionManager);
             RegisterGlobalManager(DebugSettings);
             RegisterGlobalManager(EventManager);
+            RegisterGlobalManager(InputStateManager);
 
             //resolution and screen size
             Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
@@ -89,7 +91,7 @@ namespace PuppetRoguelite
             //start scene
             Log.Information("Starting initial Scene");
             SceneManager.TargetEntranceId = "0";
-            Scene = new MainMenu();
+            Scene = new NewHub();
         }
 
         protected override void Update(GameTime gameTime)

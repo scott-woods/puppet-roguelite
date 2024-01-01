@@ -4,6 +4,7 @@ using Nez.AI.FSM;
 using Nez.Sprites;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Models;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public override void Update(float deltaTime)
         {
             //set movement direction
-            var dir = new Vector2(_context.XAxisInput.Value, _context.YAxisInput.Value);
+            var dir = new Vector2(Controls.Instance.XAxisInput.Value, Controls.Instance.YAxisInput.Value);
             dir.Normalize();
             _context.VelocityComponent.SetDirection(dir);
 

@@ -2,6 +2,7 @@
 using Nez;
 using Nez.UI;
 using PuppetRoguelite.SaveData.Upgrades;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace PuppetRoguelite.UI.Elements
         {
             base.OnFocused();
 
-            if (!Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.X))
+            if (!Controls.Instance.Cancel.IsPressed)
             {
                 Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds._002_Hover_02);
             }

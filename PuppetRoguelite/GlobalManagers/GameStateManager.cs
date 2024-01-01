@@ -4,6 +4,7 @@ using Nez.Systems;
 using PuppetRoguelite.Components.Characters.Player;
 using PuppetRoguelite.SaveData;
 using PuppetRoguelite.Scenes;
+using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using PuppetRoguelite.UI.HUDs;
 using PuppetRoguelite.UI.Menus;
@@ -38,7 +39,7 @@ namespace PuppetRoguelite.GlobalManagers
         {
             base.Update();
 
-            if (Input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Escape) && !_pauseDisabled && Game1.Scene.GetType() != typeof(MainMenu))
+            if (Controls.Instance.Pause.IsPressed && !_pauseDisabled && Game1.Scene.GetType() != typeof(MainMenu))
             {
                 if (GameState == GameState.Paused)
                 {
