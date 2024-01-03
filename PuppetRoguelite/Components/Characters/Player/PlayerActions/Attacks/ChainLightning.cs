@@ -8,6 +8,7 @@ using PuppetRoguelite.Components.Effects;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Helpers;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using Serilog;
@@ -34,7 +35,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         PlayerSim _playerSim;
         SpriteAnimator _animator;
         CircleHitbox _hitbox;
-        DirectionByMouse _dirByMouse;
 
         //coroutines
         CoroutineManager _coroutineManager = new CoroutineManager();
@@ -68,8 +68,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _animator.AddAnimation("ChainLightningLeft", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 14, 15, 16, 16 }, true));
             _animator.AddAnimation("ChainLightningRight", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 5, 6, 7, 7 }, true));
 
-            _dirByMouse = AddComponent(new DirectionByMouse());
-
             Log.Debug("Starting ChainLightning SimulationLoop");
             _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
         }
@@ -80,8 +78,8 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             {
                 //idle for a moment
                 _animator.Speed = 1f;
-                _playerSim.Idle(_dirByMouse.CurrentDirection);
-                _playerSim.VelocityComponent.SetDirection(_dirByMouse.CurrentDirection);
+                _playerSim.Idle(_direction);
+                _playerSim.VelocityComponent.SetDirection(_direction);
                 yield return Coroutine.WaitForSeconds(.2f);
 
                 //attack
@@ -94,7 +92,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
                 //idle again
                 _animator.Speed = 1f;
-                _playerSim.Idle(_dirByMouse.CurrentDirection);
+                _playerSim.Idle(_direction);
                 yield return Coroutine.WaitForSeconds(.1f);
             }
         }
@@ -209,7 +207,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             if (State == PlayerActionState.Preparing)
             {
                 //handle confirm
-                if (Input.LeftMouseButtonPressed)
+                if (Controls.Instance.Confirm.IsPressed)
                 {
                     Log.Debug("stopping chain lightning because confirm button clicked");
                     Reset();
@@ -217,17 +215,19 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 }
 
                 //restart loop if changed direction
-                if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
+                var newDirection = CalculateDirection();
+                if (newDirection != _direction)
                 {
+                    _direction = newDirection;
+
                     Log.Debug("stopping chain lightning because changed direction");
                     Reset();
                     _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
                 }
 
                 //handle hitbox offset based on direction
-                _direction = _dirByMouse.CurrentDirection;
                 Vector2 offset = Vector2.Zero;
-                switch (_dirByMouse.CurrentDirection)
+                switch (_direction)
                 {
                     case Direction.Up:
                         offset = new Vector2(0, -1);
@@ -354,6 +354,27 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //animator
             _animator.Stop();
             _animator.OnAnimationCompletedEvent -= OnAnimationFinished;
+        }
+
+        Direction CalculateDirection()
+        {
+            if (!Game1.InputStateManager.IsUsingGamepad)
+            {
+                return DirectionHelper.GetDirectionToMouse(Position);
+            }
+            else
+            {
+                if (Controls.Instance.XAxisIntegerInput.Value > 0)
+                    return Direction.Right;
+                if (Controls.Instance.XAxisIntegerInput.Value < 0)
+                    return Direction.Left;
+                if (Controls.Instance.YAxisIntegerInput.Value > 0)
+                    return Direction.Down;
+                if (Controls.Instance.YAxisIntegerInput.Value < 0)
+                    return Direction.Up;
+
+                return _direction;
+            }
         }
     }
 }

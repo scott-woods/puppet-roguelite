@@ -11,6 +11,7 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Enums;
 using PuppetRoguelite.SceneComponents;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
     public class Teleport : PlayerAction
     {
         const float _maxRadius = 100f;
+        const float _speed = 250f;
 
         //components
         PlayerSim _playerSim;
@@ -85,33 +87,31 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
 
             if (State == PlayerActionState.Preparing)
             {
-                //get mouse position
-                var mousePos = Scene.Camera.MouseToWorldPoint();
+                //get desired position
+                var desiredPos = GetDesiredPosition();
 
                 //first, distance to mouse must be within radius
-                var dist = Vector2.Distance(mousePos, InitialPosition);
+                var dist = Vector2.Distance(desiredPos, InitialPosition);
                 if (dist < _maxRadius)
                 {
-                    //next, check that we are in a combat area
-                    if (CombatArea.IsPointInCombatArea(mousePos))
+                    //get relative position by origin if possible
+                    var relativePosition = desiredPos;
+                    if (TryGetComponent<OriginComponent>(out var originComponent))
                     {
-                        //mouse is within radius and in a combat area
-                        var targetPos = mousePos;
+                        var diff = Position - originComponent.Origin;
+                        relativePosition -= diff;
+                    }
 
-                        //position player at their origin instead of by entity
-                        if (TryGetComponent<OriginComponent>(out var originComponent))
-                        {
-                            var diff = Position - originComponent.Origin;
-                            targetPos += diff;
-                        }
-
+                    //next, check that we are in a combat area
+                    if (CombatArea.IsPointInCombatArea(relativePosition))
+                    {
                         //set position
-                        Position = targetPos;
+                        Position = desiredPos;
                     }
                 }
 
                 //if left click at any point, continue using last valid position
-                if (Input.LeftMouseButtonPressed)
+                if (Controls.Instance.Confirm.IsPressed)
                 {
                     FinalPosition = Position;
                     HandlePreparationFinished(Position);
@@ -122,6 +122,24 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
         public override void Reset()
         {
 
+        }
+
+        Vector2 GetDesiredPosition()
+        {
+            if (!Game1.InputStateManager.IsUsingGamepad)
+            {
+                return Scene.Camera.MouseToWorldPoint();
+            }
+            else
+            {
+                var movement = Controls.Instance.DirectionalInput.Value;
+                if (movement != Vector2.Zero)
+                {
+                    movement.Normalize();
+                    return Position + (movement * Time.DeltaTime * _speed);
+                }
+                else return Position;
+            }
         }
     }
 }

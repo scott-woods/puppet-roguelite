@@ -62,7 +62,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryMove()
         {
-            if (Controls.Instance.XAxisInput.Value != 0 || Controls.Instance.YAxisInput.Value != 0)
+            if (Controls.Instance.XAxisIntegerInput.Value != 0 || Controls.Instance.YAxisIntegerInput.Value != 0)
             {
                 _machine.ChangeState<MoveState>();
                 return true;
@@ -84,7 +84,7 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
         public bool TryIdle()
         {
-            if (Controls.Instance.XAxisInput.Value == 0 && Controls.Instance.YAxisInput.Value == 0)
+            if (Controls.Instance.DirectionalInput.Value == Vector2.Zero)
             {
                 _machine.ChangeState<IdleState>();
                 return true;

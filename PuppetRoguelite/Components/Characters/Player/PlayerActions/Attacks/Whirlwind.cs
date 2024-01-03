@@ -8,6 +8,7 @@ using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Helpers;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using Serilog;
@@ -32,7 +33,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         PlayerSim _playerSim;
         CircleHitbox _hitbox;
         SpriteAnimator _animator;
-        DirectionByMouse _dirByMouse;
 
         //misc
         List<int> _hitboxActiveFrames = new List<int>() { 0, 1, 2, 3, 4 };
@@ -66,8 +66,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _animator.AddAnimation("WhirlwindRight", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 143, 54, 143, 210, 143, 144 }, true));
             _animator.AddAnimation("WhirlwindUp", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 210, 143, 54, 143, 210, 211 }, true));
             _animator.AddAnimation("WhirlwindDown", AnimatedSpriteHelper.GetSpriteArray(sprites, new List<int> { 54, 143, 210, 143, 54, 55 }, true));
-
-            _dirByMouse = AddComponent(new DirectionByMouse());
 
             //start sim loop
             _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
@@ -136,16 +134,18 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                     return;
                 }
 
-                _direction = _dirByMouse.CurrentDirection;
+                var newDirection = CalculateDirection();
 
                 if (_spin == null)
                 {
-                    _playerSim.VelocityComponent.SetDirection(_direction);
+                    _playerSim.VelocityComponent.SetDirection(newDirection);
                 }
 
                 //handle direction change
-                if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
+                if (newDirection != _direction)
                 {
+                    _direction = newDirection;
+
                     Reset();
 
                     //restart sim loop
@@ -228,7 +228,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             {
                 //idle for a moment
                 _animator.Speed = 1f;
-                _playerSim.Idle(_dirByMouse.CurrentDirection);
+                _playerSim.Idle(_direction);
                 yield return Coroutine.WaitForSeconds(.2f);
 
                 //spin
@@ -256,6 +256,27 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
             //hitbox
             _hitbox.SetEnabled(false);
+        }
+
+        Direction CalculateDirection()
+        {
+            if (!Game1.InputStateManager.IsUsingGamepad)
+            {
+                return DirectionHelper.GetDirectionToMouse(Position);
+            }
+            else
+            {
+                if (Controls.Instance.XAxisIntegerInput.Value > 0)
+                    return Direction.Right;
+                if (Controls.Instance.XAxisIntegerInput.Value < 0)
+                    return Direction.Left;
+                if (Controls.Instance.YAxisIntegerInput.Value > 0)
+                    return Direction.Down;
+                if (Controls.Instance.YAxisIntegerInput.Value < 0)
+                    return Direction.Up;
+
+                return _direction;
+            }
         }
     }
 }

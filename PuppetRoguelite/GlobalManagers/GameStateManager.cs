@@ -31,6 +31,8 @@ namespace PuppetRoguelite.GlobalManagers
 
             Emitters.PlayerEventsEmitter.AddObserver(PlayerEvents.PlayerDied, OnPlayerDied);
 
+            Emitters.GameEventsEmitter.AddObserver(GameEvents.ExitingToMainMenu, OnExitingToMainMenu);
+
             Game1.SceneManager.Emitter.AddObserver(SceneEvents.TransitionStarted, OnSceneTransitionStarted);
             Game1.SceneManager.Emitter.AddObserver(SceneEvents.TransitionEnded, OnSceneTransitionEnded);
         }
@@ -148,6 +150,11 @@ namespace PuppetRoguelite.GlobalManagers
         void OnSceneTransitionEnded()
         {
             _pauseDisabled = false;
+        }
+
+        void OnExitingToMainMenu()
+        {
+            GameState = GameState.Exploration;
         }
     }
 

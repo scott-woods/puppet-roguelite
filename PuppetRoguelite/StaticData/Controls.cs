@@ -23,6 +23,9 @@ namespace PuppetRoguelite.StaticData
             }
         }
 
+        public Keys UIActionKey = Keys.E;
+        public Buttons UIActionButton = Buttons.A;
+
         public VirtualButton Confirm = new VirtualButton(
             new VirtualButton.KeyboardKey(Keys.E),
             new VirtualButton.GamePadButton(0, Buttons.A),
@@ -64,16 +67,23 @@ namespace PuppetRoguelite.StaticData
             new VirtualButton.GamePadButton(0, Buttons.B)
             );
 
-        public VirtualIntegerAxis XAxisInput = new VirtualIntegerAxis(
+        public VirtualIntegerAxis XAxisIntegerInput = new VirtualIntegerAxis(
             new VirtualAxis.GamePadDpadLeftRight(),
             new VirtualAxis.GamePadLeftStickX(),
             new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D)
             );
 
-        public VirtualIntegerAxis YAxisInput = new VirtualIntegerAxis(
+        public VirtualIntegerAxis YAxisIntegerInput = new VirtualIntegerAxis(
             new VirtualAxis.GamePadDpadUpDown(),
             new VirtualAxis.GamePadLeftStickY(),
             new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S)
+            );
+
+        public VirtualJoystick DirectionalInput = new VirtualJoystick(
+            false,
+            new VirtualJoystick.GamePadDpad(),
+            new VirtualJoystick.GamePadLeftStick(),
+            new VirtualJoystick.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D, Keys.W, Keys.S)
             );
     }
 }

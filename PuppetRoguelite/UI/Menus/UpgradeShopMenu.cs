@@ -59,7 +59,9 @@ namespace PuppetRoguelite.UI.Menus
             _basicSkin = CustomSkins.CreateBasicSkin();
 
             //set stage action key
-            Stage.KeyboardActionKey = Keys.None;
+            Stage.KeyboardActionKey = Controls.Instance.UIActionKey;
+            Stage.GamepadActionButton = Controls.Instance.UIActionButton;
+            Stage.IsSelectionEnabled = false;
 
             //load dollah sprite
             var texture = Entity.Scene.Content.LoadTexture(Nez.Content.Textures.Tilesets.Dungeon_prison_props);
@@ -182,7 +184,7 @@ namespace PuppetRoguelite.UI.Menus
             if (!_canActivateButton && !Controls.Instance.Confirm.IsDown)
             {
                 _canActivateButton = true;
-                Stage.KeyboardActionKey = Keys.E;
+                Stage.IsSelectionEnabled = true;
             }
 
             //handle going back

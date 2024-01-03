@@ -6,11 +6,13 @@ using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.Shared.Hitboxes;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.Helpers;
 using PuppetRoguelite.StaticData;
 using Serilog;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection.Metadata;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
@@ -22,12 +24,14 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         const int _range = 48;
         const int _startFrame = 0;
         int[] _hitboxActiveFrames = new int[] { 0 };
+        const float _rotationSpeed = .025f;
 
         //misc
         bool _isAttacking = false;
         Vector2 _direction = Vector2.One;
         Vector2 _initialOriginPos;
         bool _canConfirm = true;
+        Direction _animationDirection;
 
         //components
         PlayerSim _playerSim;
@@ -35,7 +39,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         SpriteRenderer _target;
         SpriteTrail _trail;
         SpriteAnimator _animator;
-        DirectionByMouse _dirByMouse;
 
         //coroutines
         CoroutineManager _coroutineManager = new CoroutineManager();
@@ -77,9 +80,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             _trail.FadeDuration = .2f;
             _trail.MinDistanceBetweenInstances = 12;
 
-            //dir by mouse
-            _dirByMouse = AddComponent(new DirectionByMouse(_initialOriginPos));
-
             //start sim loop
             _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
         }
@@ -99,7 +99,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //animator adjustments
             _animator.Speed = 2;
             _animator.SetColor(Color.White);
-            //_animator.OnAnimationCompletedEvent += OnAnimationFinished;
 
             //execute
             Log.Debug("Starting DashAttackExecutionCoroutine");
@@ -126,8 +125,11 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 }
 
                 //handle direction change
-                if (_dirByMouse.CurrentDirection != _dirByMouse.PreviousDirection)
+                var newAnimationDirection = DirectionHelper.GetDirectionByVector2(_direction);
+                if (newAnimationDirection != _animationDirection)
                 {
+                    _animationDirection = newAnimationDirection;
+
                     Log.Debug("DashAttack: direction change");
                     Reset();
 
@@ -137,7 +139,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 }
 
                 //calculate direction by mouse position
-                _direction = Core.Scene.Camera.MouseToWorldPoint() - _initialOriginPos;
+                _direction = CalculateDirection();
                 _direction.Normalize();
                 _playerSim.VelocityComponent.SetDirection(_direction);
 
@@ -180,7 +182,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             {
                 //idle for a moment
                 _animator.Speed = 1f;
-                _playerSim.Idle(_dirByMouse.CurrentDirection);
+                _playerSim.Idle(_animationDirection);
                 yield return Coroutine.WaitForSeconds(.5f);
 
                 //dash
@@ -191,7 +193,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
                 //idle at end point for a moment
                 _animator.Speed = 1f;
-                _playerSim.Idle(_dirByMouse.CurrentDirection);
+                _playerSim.Idle(_animationDirection);
                 yield return Coroutine.WaitForSeconds(.25f);
 
                 //reset position
@@ -203,7 +205,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         {
             //idle for a moment
             _animator.Speed = 1f;
-            _playerSim.Idle(_dirByMouse.CurrentDirection);
+            _playerSim.Idle(_animationDirection);
             yield return Coroutine.WaitForSeconds(.2f);
 
             Log.Debug("Starting ExecuteDash Coroutine");
@@ -304,6 +306,27 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         public void SetConfirmationEnabled(bool enabled)
         {
             _canConfirm = enabled;
+        }
+
+        Vector2 CalculateDirection()
+        {
+            if (!Game1.InputStateManager.IsUsingGamepad)
+            {
+                return Core.Scene.Camera.MouseToWorldPoint() - _initialOriginPos;
+            }
+            else
+            {
+                float currentAngle = (float)Math.Atan2(_direction.Y, _direction.X);
+
+                if (Controls.Instance.XAxisIntegerInput.Value > 0)
+                    currentAngle += _rotationSpeed;
+                else if (Controls.Instance.XAxisIntegerInput.Value < 0)
+                    currentAngle -= _rotationSpeed;
+
+                Vector2 newDirection = new Vector2((float)Math.Cos(currentAngle), (float)Math.Sin(currentAngle));
+
+                return newDirection;
+            }
         }
     }
 }

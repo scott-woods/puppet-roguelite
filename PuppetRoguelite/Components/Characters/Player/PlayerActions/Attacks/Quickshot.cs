@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework;
 using Nez.UI;
 using Serilog;
 using PuppetRoguelite.StaticData;
+using PuppetRoguelite.Helpers;
 
 namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 {
@@ -27,7 +28,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
         //components
         PlayerSim _playerSim;
         SpriteAnimator _animator;
-        DirectionByMouse _dirByMouse;
 
         //gun
         Entity _gunEntity;
@@ -35,6 +35,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
 
         //misc
         Vector2 _direction = Vector2.One;
+        float _rotationSpeed = .025f;
 
         public override void Prepare()
         {
@@ -45,8 +46,6 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //get animator from player sim
             _animator = _playerSim.GetComponent<SpriteAnimator>();
             _animator.SetColor(new Color(Color.White.R, Color.White.G, Color.White.B, 128));
-
-            _dirByMouse = AddComponent(new DirectionByMouse());
 
             _simulationLoop = _coroutineManager.StartCoroutine(SimulationLoop());
         }
@@ -75,10 +74,10 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
                 }
 
                 //idle in direction of mouse
-                _playerSim.Idle(_dirByMouse.CurrentDirection);
+                _playerSim.Idle(DirectionHelper.GetDirectionByVector2(_direction));
 
                 //calculate direction by mouse position
-                var dir = Core.Scene.Camera.MouseToWorldPoint() - _playerSim.OriginComponent.Origin;
+                var dir = CalculateDirection();
                 dir.Normalize();
 
                 _gun.SetDirection(dir);
@@ -154,6 +153,27 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             //gun
             _gunEntity?.Destroy();
             _gunEntity = null;
+        }
+
+        Vector2 CalculateDirection()
+        {
+            if (!Game1.InputStateManager.IsUsingGamepad)
+            {
+                return Core.Scene.Camera.MouseToWorldPoint() - _playerSim.OriginComponent.Origin;
+            }
+            else
+            {
+                float currentAngle = (float)Math.Atan2(_direction.Y, _direction.X);
+
+                if (Controls.Instance.XAxisIntegerInput.Value > 0)
+                    currentAngle += _rotationSpeed;
+                else if (Controls.Instance.XAxisIntegerInput.Value < 0)
+                    currentAngle -= _rotationSpeed;
+
+                Vector2 newDirection = new Vector2((float)Math.Cos(currentAngle), (float)Math.Sin(currentAngle));
+
+                return newDirection;
+            }
         }
     }
 }

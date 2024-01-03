@@ -65,7 +65,11 @@ namespace PuppetRoguelite.UI.Menus
             _basicSkin = CustomSkins.CreateBasicSkin();
 
             //set stage action key
-            Stage.KeyboardActionKey = Keys.None;
+            Stage.KeyboardActionKey = Controls.Instance.UIActionKey;
+            Stage.GamepadActionButton = Controls.Instance.UIActionButton;
+
+            //disable selection for now
+            Stage.IsSelectionEnabled = false;
 
             //render layer
             SetRenderLayer((int)RenderLayers.ScreenSpaceRenderLayer);
@@ -419,7 +423,7 @@ namespace PuppetRoguelite.UI.Menus
             if (!_canActivateButton && !Controls.Instance.Confirm.IsDown)
             {
                 _canActivateButton = true;
-                Stage.KeyboardActionKey = Keys.E;
+                Stage.IsSelectionEnabled = true;
             }
 
             if (Controls.Instance.Cancel.IsPressed)

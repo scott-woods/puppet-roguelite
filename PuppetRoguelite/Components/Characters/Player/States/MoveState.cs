@@ -3,6 +3,7 @@ using Nez;
 using Nez.AI.FSM;
 using Nez.Sprites;
 using PuppetRoguelite.Components.Shared;
+using PuppetRoguelite.Helpers;
 using PuppetRoguelite.Models;
 using PuppetRoguelite.StaticData;
 using System;
@@ -18,19 +19,26 @@ namespace PuppetRoguelite.Components.Characters.Player.States
         public override void Update(float deltaTime)
         {
             //set movement direction
-            var dir = new Vector2(Controls.Instance.XAxisInput.Value, Controls.Instance.YAxisInput.Value);
+            var dir = Controls.Instance.DirectionalInput.Value;
+            //var dir = new Vector2(Controls.Instance.XAxisInput.Value, Controls.Instance.YAxisInput.Value);
             dir.Normalize();
             _context.VelocityComponent.SetDirection(dir);
 
             //animation
-            var animation = "RunDown";
-            if (_context.VelocityComponent.Direction.X != 0)
+            string animation = "";
+            var direction = DirectionHelper.GetDirectionByVector2(dir);
+            switch (direction)
             {
-                animation = "Run";
-            }
-            else if (_context.VelocityComponent.Direction.Y != 0)
-            {
-                animation = _context.VelocityComponent.Direction.Y >= 0 ? "RunDown" : "RunUp";
+                case Direction.Up:
+                    animation = "RunUp";
+                    break;
+                case Direction.Down:
+                    animation = "RunDown";
+                    break;
+                case Direction.Left:
+                case Direction.Right:
+                    animation = "Run";
+                    break;
             }
             if (!_context.SpriteAnimator.IsAnimationActive(animation))
             {

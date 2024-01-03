@@ -317,7 +317,7 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             if (Game1.InputStateManager.IsUsingGamepad)
             {
-                return new Vector2(Controls.Instance.XAxisInput.Value, Controls.Instance.YAxisInput.Value);
+                return new Vector2(Controls.Instance.XAxisIntegerInput.Value, Controls.Instance.YAxisIntegerInput.Value);
             }
             else
                 return Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;

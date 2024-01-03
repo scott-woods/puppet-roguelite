@@ -8,6 +8,7 @@ using PuppetRoguelite.Components.Characters.Player.PlayerActions;
 using PuppetRoguelite.Components.Shared;
 using PuppetRoguelite.Components.TiledComponents;
 using PuppetRoguelite.Enums;
+using PuppetRoguelite.StaticData;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
         const int _targetRadius = 80;
         const int _fieldRadius = 64;
         const float _freezeDuration = 3f;
+        const float _speed = 250f;
 
         //entities
         Entity _targetEntity;
@@ -42,6 +44,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
 
             var targetTexture = Scene.Content.LoadTexture(Nez.Content.Textures.UI.Crosshair005);
             _targetEntity = Scene.CreateEntity("stasis-field-target");
+            _targetEntity.Position = Position;
             _targetRenderer = _targetEntity.AddComponent(new SpriteRenderer(targetTexture));
 
             _playerSim = AddComponent(new PlayerSim());
@@ -79,18 +82,32 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
 
             if (State == PlayerActionState.Preparing)
             {
-                var mousePos = Scene.Camera.MouseToWorldPoint();
-                if (Vector2.Distance(mousePos, InitialPosition) <= _targetRadius)
+                //get desired position
+                var desiredPos = GetDesiredPosition();
+
+                //first, distance to mouse must be within radius
+                var dist = Vector2.Distance(desiredPos, InitialPosition);
+                if (dist < _targetRadius)
                 {
-                    if (CombatArea.IsPointInCombatArea(mousePos))
+                    //get relative position by origin if possible
+                    var relativePosition = desiredPos;
+                    if (_targetEntity.TryGetComponent<OriginComponent>(out var originComponent))
                     {
-                        _targetEntity.Position = mousePos;
+                        var diff = _targetEntity.Position - originComponent.Origin;
+                        relativePosition -= diff;
                     }
 
-                    if (Input.LeftMouseButtonPressed)
+                    //next, check that we are in a combat area
+                    if (CombatArea.IsPointInCombatArea(relativePosition))
                     {
-                        HandlePreparationFinished(Position);
+                        //set position
+                        _targetEntity.Position = desiredPos;
                     }
+                }
+
+                if (Controls.Instance.Confirm.IsPressed)
+                {
+                    HandlePreparationFinished(Position);
                 }
             }
         }
@@ -98,6 +115,24 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Utilities
         public override void Reset()
         {
             _targetEntity?.Destroy();
+        }
+
+        Vector2 GetDesiredPosition()
+        {
+            if (!Game1.InputStateManager.IsUsingGamepad)
+            {
+                return Scene.Camera.MouseToWorldPoint();
+            }
+            else
+            {
+                var movement = Controls.Instance.DirectionalInput.Value;
+                if (movement != Vector2.Zero)
+                {
+                    movement.Normalize();
+                    return _targetEntity.Position + (movement * Time.DeltaTime * _speed);
+                }
+                else return _targetEntity.Position;
+            }
         }
     }
 }
