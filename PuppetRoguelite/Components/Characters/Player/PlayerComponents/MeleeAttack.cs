@@ -203,7 +203,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
             _animator.Speed *= Speed;
 
             //attack in direction of mouse
-            var dir = PlayerController.Instance.VelocityComponent.Direction;
+            var dir = PlayerController.Instance.GetFacingDirection();
             dir.Normalize();
             _direction = dir;
 

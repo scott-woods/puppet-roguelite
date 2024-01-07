@@ -317,7 +317,13 @@ namespace PuppetRoguelite.Components.Characters.Player
         {
             if (Game1.InputStateManager.IsUsingGamepad)
             {
-                return new Vector2(Controls.Instance.XAxisIntegerInput.Value, Controls.Instance.YAxisIntegerInput.Value);
+                var dir = new Vector2(Controls.Instance.XAxisIntegerInput.Value, Controls.Instance.YAxisIntegerInput.Value);
+                if (dir == Vector2.Zero)
+                {
+                    dir = VelocityComponent.Direction;
+                }
+
+                return dir;
             }
             else
                 return Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position;

@@ -11,5 +11,6 @@ namespace PuppetRoguelite.StaticData
         public const int ScreenSpaceRenderLayer = -999999;
         public const int AboveDetails = -10000;
         public const int Cursor = -999999999;
+        public const int LightLayer = -11000;
     }
 }

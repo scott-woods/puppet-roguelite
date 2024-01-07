@@ -113,6 +113,36 @@ namespace Nez
 			public const string M57_12_0 = @"Content\Fonts\m57_12_0.png";
 		}
 
+		public static class Nez
+		{
+			public static class Effects
+			{
+				public static class Transitions
+				{
+				}
+
+			}
+
+			public static class Textures
+			{
+				public static class TextureWipeTransition
+				{
+					public const string Angular = @"Content\nez\textures\textureWipeTransition\angular.xnb";
+					public const string CrissCross = @"Content\nez\textures\textureWipeTransition\crissCross.xnb";
+					public const string DiagonalDistort = @"Content\nez\textures\textureWipeTransition\diagonalDistort.xnb";
+					public const string Horizontal = @"Content\nez\textures\textureWipeTransition\horizontal.xnb";
+					public const string Noise = @"Content\nez\textures\textureWipeTransition\noise.xnb";
+					public const string Pokemon = @"Content\nez\textures\textureWipeTransition\pokemon.xnb";
+					public const string SawTooth = @"Content\nez\textures\textureWipeTransition\sawTooth.xnb";
+					public const string Spiral = @"Content\nez\textures\textureWipeTransition\spiral.xnb";
+					public const string Wink = @"Content\nez\textures\textureWipeTransition\wink.xnb";
+				}
+
+				public const string HeatDistortionNoise = @"Content\nez\textures\heatDistortionNoise.xnb";
+			}
+
+		}
+
 		public static class Textures
 		{
 			public static class Characters
@@ -188,6 +218,7 @@ namespace Nez
 				public const string Hit3 = @"Content\Textures\Effects\hit 3.png";
 				public const string Hit4 = @"Content\Textures\Effects\hit 4.png";
 				public const string Shadow = @"Content\Textures\Effects\shadow.png";
+				public const string Spritelight = @"Content\Textures\Effects\sprite-light.png";
 			}
 
 			public static class Objects
