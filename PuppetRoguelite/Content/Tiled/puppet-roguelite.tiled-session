@@ -3,17 +3,118 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tilemaps/DungeonPrison/dp_tutorial.tmx",
+    "activeFile": "Tilemaps/Forge/forge_pre_boss.tmx",
     "expandedProjectPaths": [
-        "Tilemaps/DungeonPrison",
-        "Tilesets",
+        "Tilemaps/Forge",
         ".",
-        "RuleMaps",
-        "Tilemaps",
-        "Tilemaps/Hub"
+        "Tilemaps"
     ],
     "fileStates": {
         ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/AdventureGuild.tmx": {
+            "scale": 1.6446874999999999,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 132.8519855595668,
+                "y": 190.91772753182596
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/AdventureGuild.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/AnimalShop.tmx": {
+            "scale": 2,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 175.25,
+                "y": 215
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/AnimalShop.tmx#1": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/AnimalShop.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods.tmx": {
+            "scale": 0.7873125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 343.573866793681,
+                "y": 379.7729618163055
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods.tmx#monsterGraveTiles": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods.tmx#outdoor": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_GraveSite.tmx": {
+            "scale": 0.7873125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.7303326188775,
+                "y": 320.07620862110025
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_GraveSite.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_GraveSite.tmx#monsterGraveTiles": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_GraveSite.tmx#outdoor": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_Staircase.tmx": {
+            "scale": 0.7873125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.7303326188775,
+                "y": 320.07620862110025
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_Staircase.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_Staircase.tmx#monsterGraveTiles": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Backwoods_Staircase.tmx#outdoor": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Barn.tmx": {
+            "scale": 2.1869791666666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 144.26291974279593,
+                "y": 120.25720409621339
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Barn.tmx#barn": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Barn.tmx#p": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Barn2.tmx": {
+            "scale": 1.7893465909090909,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 176.32134635230614,
+                "y": 120.15559260141305
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Barn2.tmx#barn": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Barn2.tmx#p": {
             "scaleInDock": 1
         },
         "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/BathHouse_Entry.tmx": {
@@ -47,6 +148,536 @@
         "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/BathHouse_MensLocker.tmx#untitled tile sheet": {
             "scaleInDock": 1
         },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/BugLand.tmx": {
+            "scale": 3,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 769.1666666666666,
+                "y": 315.3333333333333
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/BugLand.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/BugLand.tmx#bugTiles": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Caldera.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 393.5,
+                "y": 378
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Caldera.tmx#P": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Caldera.tmx#dungeon": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Caldera.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Caldera.tmx#untitled tile sheet2": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse.tmx": {
+            "scale": 2.741145833333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 96.12768383051491,
+                "y": 95.94527835835076
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse.tmx#indoor": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse.tmx#walls_and_floors": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2.tmx": {
+            "scale": 0.9137152777777777,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.1216036481095,
+                "y": 288.9302679080373
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2.tmx#indoor": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2.tmx#walls_and_floors": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2_marriage.tmx": {
+            "scale": 0.9137152777777777,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 344.19912597377925,
+                "y": 288.9302679080373
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2_marriage.tmx#indoor": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2_marriage.tmx#sewer": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2_marriage.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse2_marriage.tmx#walls_and_floors": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse_Bedroom_Open.tmx": {
+            "scale": 1.0934895833333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 288.52583948559186,
+                "y": 208.50678733031677
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse_Bedroom_Open.tmx#indoor": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse_Bedroom_Open.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/FarmHouse_Bedroom_Open.tmx#walls_and_floors": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/HarveyBalloon.tmx": {
+            "scale": 0.7873125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.7303326188775,
+                "y": 320.07620862110025
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/HarveyBalloon.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Hospital.tmx": {
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 243.83333333333331,
+                "y": 146
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Hospital.tmx#1": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Hospital.tmx#p": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/JoshHouse.tmx": {
+            "scale": 1.31575,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 200.2660079802394,
+                "y": 199.8859965798974
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/JoshHouse.tmx#1": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/JoshHouse.tmx#p": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/ManorHouse.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 164.25,
+                "y": 151
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/ManorHouse.tmx#1": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/ManorHouse.tmx#p": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/ManorHouse.tmx#untitled tile sheet2": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/MermaidHouse.tmx": {
+            "scale": 2.741145833333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 72.05016150484515,
+                "y": 96.31008930267909
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/MermaidHouse.tmx#mermaid_tiles": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/1.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 192.99999999999997,
+                "y": 150.66666666666663
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/1.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/120.tmx": {
+            "scale": 1.9682812499999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 160.292133047551,
+                "y": 128.03048344844012
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/120.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/19.tmx": {
+            "scale": 0.657875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.5320159604788,
+                "y": 401.2920387611628
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/19.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/33.tmx": {
+            "scale": 1.096458333333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 242.143264297929,
+                "y": 173.28519855595673
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/33.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/34.tmx": {
+            "scale": 0.8747916666666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 360.6572993569899,
+                "y": 240.05715646582524
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/34.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/36.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 284.25,
+                "y": 179.5
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/36.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/37.tmx": {
+            "scale": 0.7873125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.7303326188775,
+                "y": 200.6827022306898
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/37.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/38.tmx": {
+            "scale": 0.9841406249999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.584266095102,
+                "y": 240.8192426768278
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/38.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/39.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 240.5,
+                "y": 305
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/39.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/77377.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 433,
+                "y": 542
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mines/77377.tmx#mine": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mountain.tmx": {
+            "scale": 0.29159722222222223,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1081.9718980709692,
+                "y": 329.2212431531317
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mountain.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mountain.tmx#outdoors": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Mountain.tmx#untitled tile sheet2": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Railroad.tmx": {
+            "scale": 0.5305443548387097,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 547.5508265247959,
+                "y": 770.9063271898158
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Railroad.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Railroad.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Railroad.tmx#untitled tile sheet2": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Stadium.tmx": {
+            "scale": 0.7873125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 342.30372310867665,
+                "y": 234.97658172580776
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Stadium.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/TargetGame.tmx": {
+            "scale": 2.055859375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 133.034391031731,
+                "y": 143.9787193615809
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/TargetGame.tmx#fest": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Fair.tmx": {
+            "scale": 0.2990340909090909,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 961.4288428652861,
+                "y": 882.8424852745584
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Fair.tmx#Landscape": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Fair.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Fair.tmx#Town": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Fair.tmx#characters": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Fair.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Halloween.tmx": {
+            "scale": 0.2990340909090909,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 961.4288428652861,
+                "y": 882.8424852745584
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Halloween.tmx#Fest": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Halloween.tmx#Landscape": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Halloween.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Halloween.tmx#Town": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Halloween.tmx#characters": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Theater.tmx": {
+            "scale": 0.2990340909090909,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 961.4288428652861,
+                "y": 882.8424852745584
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Theater.tmx#Landscape": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Theater.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-Theater.tmx#Town": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TheaterCC.tmx": {
+            "scale": 0.2990340909090909,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 961.4288428652861,
+                "y": 882.8424852745584
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TheaterCC.tmx#Landscape": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TheaterCC.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TheaterCC.tmx#Town": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TrashGone.tmx": {
+            "scale": 2.1869791666666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 144.26291974279593,
+                "y": 40.23815194093832
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TrashGone.tmx#Landscape": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TrashGone.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Town-TrashGone.tmx#Town": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Trailer.tmx": {
+            "scale": 1.9682812499999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 160.292133047551,
+                "y": 96.02286258633006
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Trailer.tmx#1": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Trailer.tmx#p": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Trailer_big.tmx": {
+            "scale": 1.2651442307692307,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 240.68402052061566,
+                "y": 208.6718601558047
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Trailer_big.tmx#1": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Trailer_big.tmx#p": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Tunnel.tmx": {
+            "scale": 0.9841406249999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.584266095102,
+                "y": 120.91767881241569
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Tunnel.tmx#out": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Tunnel.tmx#paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchHut.tmx": {
+            "scale": 2.055859375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 120.38761162834885,
+                "y": 128.41345240357214
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchHut.tmx#paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchHut.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchSwamp.tmx": {
+            "scale": 0.657875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 319.9695990879726,
+                "y": 399.7719931597948
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchSwamp.tmx#wt": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchWarpCave.tmx": {
+            "scale": 3.2893749999999997,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 80.10640319209577,
+                "y": 80.25840775223257
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchWarpCave.tmx#paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/WitchWarpCave.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Woods.tmx": {
+            "scale": 0.65609375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 480.876399142653,
+                "y": 256.0609668968802
+            }
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Woods.tmx#Paths": {
+            "scaleInDock": 1
+        },
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/Woods.tmx#untitled tile sheet": {
+            "scaleInDock": 1
+        },
         "RuleMaps/collision_rules.tmx": {
             "scale": 1.3121875,
             "selectedLayer": 0,
@@ -55,20 +686,60 @@
                 "y": 160.03810431055012
             }
         },
-        "RuleMaps/prison_floor_rules_one_overlap.tmx": {
+        "RuleMaps/forge_clutter_rules.tmx": {
             "scale": 2,
-            "selectedLayer": 4,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 239.75,
-                "y": 159.75
+                "x": 50.25,
+                "y": 73
+            }
+        },
+        "RuleMaps/forge_floor_rules.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 98.33333333333331,
+                "y": 52
+            }
+        },
+        "RuleMaps/forge_lava_rules.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 160.33333333333331,
+                "y": 133.33333333333334
+            }
+        },
+        "RuleMaps/forge_trim_rules.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 108.33333333333331,
+                "y": 170.66666666666663
+            }
+        },
+        "RuleMaps/forge_walls_rules.tmx": {
+            "scale": 1.5,
+            "selectedLayer": -1,
+            "viewCenter": {
+                "x": 137.66666666666666,
+                "y": 211.33333333333334
+            }
+        },
+        "RuleMaps/prison_floor_rules_one_overlap.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 102.33333333333331,
+                "y": 126
             }
         },
         "RuleMaps/prison_walls_rules_one_overlap_3.tmx": {
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 239.66666666666666,
-                "y": 295.66666666666663
+                "x": 176.33333333333331,
+                "y": 171.33333333333334
             }
         },
         "RuleMaps/wooden_floor_rules_2.tmx": {
@@ -270,11 +941,11 @@
             "expandedObjectLayers": [
                 97
             ],
-            "scale": 1.3705729166666665,
+            "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 191.52574577237317,
-                "y": 192.25536766102985
+                "x": 191.83333333333331,
+                "y": 191.83333333333331
             }
         },
         "Tilemaps/DungeonPrison/dp_tutorial.tmx": {
@@ -284,8 +955,8 @@
             "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 415,
-                "y": 966
+                "x": 543,
+                "y": 695
             }
         },
         "Tilemaps/DungeonPrison/left_key_room.tmx": {
@@ -306,8 +977,8 @@
             "scale": 1.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 191.66666666666669,
-                "y": 191.66666666666666
+                "x": 87,
+                "y": 189.33333333333334
             }
         },
         "Tilemaps/DungeonPrison/right_key_room.tmx": {
@@ -317,8 +988,32 @@
             "scale": 5.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 191.90909090909093,
-                "y": 191.9090909090909
+                "x": 191.72727272727275,
+                "y": 191.63636363636365
+            }
+        },
+        "Tilemaps/Forge/forge_pre_boss.tmx": {
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 266.5,
+                "y": 239
+            }
+        },
+        "Tilemaps/Forge/forge_test.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 287.3333333333333,
+                "y": 342.6666666666667
+            }
+        },
+        "Tilemaps/Forge/forge_test_2.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 291.5,
+                "y": 289
             }
         },
         "Tilemaps/Hub/hub_2.tmx": {
@@ -326,10 +1021,10 @@
                 14
             ],
             "scale": 0.75,
-            "selectedLayer": 6,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 654,
-                "y": 406
+                "x": 712.6666666666666,
+                "y": 397.33333333333326
             }
         },
         "Tilemaps/Hub/hub_intro.tmx": {
@@ -339,16 +1034,20 @@
             "scale": 1,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 247.5,
-                "y": 184.5
+                "x": 246.5,
+                "y": 184
             }
         },
         "Tilesets/dungeon_prison_props.tsx": {
             "scaleInDock": 1
         },
         "Tilesets/dungeon_prison_tileset_short_walls.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 1.5,
             "scaleInEditor": 3
+        },
+        "Tilesets/forge_tileset.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1.5
         },
         "Tilesets/prototype_tileset.tsx": {
             "scaleInDock": 1
@@ -358,58 +1057,44 @@
             "scaleInEditor": 1.5
         }
     },
+    "frame.defaultDuration": 200,
     "last.externalTilesetPath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRogueliteFNA/puppet-roguelite/PuppetRoguelite/Content/Tiled/Tilesets",
-    "last.imagePath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRogueliteFNA/puppet-roguelite/PuppetRoguelite/Content/Textures/Shops",
-    "map.fixedSize": false,
+    "last.imagePath": "C:/Users/scott/Desktop/Game-Dev/MonoGame/Personal-Projects/PuppetRogueliteFNA/puppet-roguelite/PuppetRoguelite/Content/Textures/Tilesets",
+    "map.fixedSize": true,
+    "map.height": 32,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
+    "map.width": 32,
     "openFiles": [
-        "Tilemaps/DungeonPrison/dp_tutorial.tmx",
-        "Tilemaps/Hub/hub_2.tmx",
-        "RuleMaps/prison_walls_rules_one_overlap_3.tmx",
-        "RuleMaps/prison_floor_rules_one_overlap.tmx",
-        "Tilemaps/DungeonPrison/left_key_room.tmx",
-        "Tilemaps/DungeonPrison/boss_room.tmx",
-        "Tilemaps/DungeonPrison/dp_b_1.tmx",
-        "Tilemaps/DungeonPrison/dp_b_2.tmx",
-        "Tilemaps/DungeonPrison/dp_bl_1.tmx",
-        "Tilemaps/DungeonPrison/dp_blr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_br_1.tmx",
-        "Tilemaps/DungeonPrison/dp_l_1.tmx",
-        "Tilemaps/DungeonPrison/dp_lr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_r_1.tmx",
-        "Tilemaps/DungeonPrison/dp_t_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tb_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tbl_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tblr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tbr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tl_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tlr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tr_1.tmx",
-        "Tilemaps/DungeonPrison/pre_boss_room.tmx",
-        "Tilemaps/DungeonPrison/right_key_room.tmx",
-        "Tilemaps/Hub/hub_intro.tmx"
+        "Tilesets/forge_tileset.tsx",
+        "RuleMaps/forge_floor_rules.tmx",
+        "Tilemaps/Forge/forge_pre_boss.tmx",
+        "RuleMaps/forge_clutter_rules.tmx",
+        "RuleMaps/forge_trim_rules.tmx",
+        "RuleMaps/forge_lava_rules.tmx",
+        "RuleMaps/forge_walls_rules.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "recentFiles": [
-        "Tilemaps/Hub/hub_intro.tmx",
-        "Tilemaps/DungeonPrison/right_key_room.tmx",
+        "Tilesets/forge_tileset.tsx",
+        "RuleMaps/forge_floor_rules.tmx",
+        "RuleMaps/forge_walls_rules.tmx",
+        "RuleMaps/forge_lava_rules.tmx",
+        "RuleMaps/forge_trim_rules.tmx",
+        "RuleMaps/forge_clutter_rules.tmx",
+        "Tilemaps/Forge/forge_pre_boss.tmx",
+        "RuleMaps/prison_floor_rules_one_overlap.tmx",
+        "C:/Steam/steamapps/common/Stardew Valley/Content (unpacked)/Maps/BugLand.tmx",
+        "Tilemaps/Forge/forge_test.tmx",
         "Tilemaps/DungeonPrison/pre_boss_room.tmx",
-        "Tilemaps/DungeonPrison/dp_tr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tlr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tl_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tbr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tblr_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tbl_1.tmx",
-        "Tilemaps/DungeonPrison/dp_tb_1.tmx",
-        "Tilemaps/DungeonPrison/dp_t_1.tmx",
-        "Tilemaps/DungeonPrison/dp_r_1.tmx"
+        "RuleMaps/prison_walls_rules_one_overlap_3.tmx"
     ],
+    "resizeMap.removeObjects": false,
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
-        "height": 18,
-        "width": 18
+        "height": 16,
+        "width": 16
     }
 }

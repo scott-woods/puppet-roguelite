@@ -242,6 +242,7 @@ namespace Nez
 				public const string Blood_temple_tileset = @"Content\Textures\Tilesets\blood_temple_tileset.png";
 				public const string Dungeon_prison_props = @"Content\Textures\Tilesets\dungeon_prison_props.png";
 				public const string Dungeon_prison_tileset_short_walls = @"Content\Textures\Tilesets\dungeon_prison_tileset_short_walls.png";
+				public const string Forge_tileset = @"Content\Textures\Tilesets\forge_tileset.png";
 				public const string Prototype_tileset = @"Content\Textures\Tilesets\prototype_tileset.png";
 			}
 

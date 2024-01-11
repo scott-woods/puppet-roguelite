@@ -104,6 +104,7 @@
     <None Remove="Content\Textures\Objects\shelf.png" />
     <None Remove="Content\Textures\Shops\herb_shop.png" />
     <None Remove="Content\Textures\Shops\tech_shop.png" />
+    <None Remove="Content\Textures\Tilesets\forge_tileset.png" />
     <None Remove="Content\Textures\UI\borders_and_hp.png" />
     <None Remove="Content\Textures\UI\borders_and_hp_no_glow.png" />
     <None Remove="Content\Textures\UI\cat.png" />
