@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="32" nextobjectid="9">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="32" nextobjectid="10">
  <tileset firstgid="1" source="../../Tilesets/prototype_tileset.tsx"/>
  <tileset firstgid="5" source="../../Tilesets/dungeon_prison_tileset_short_walls.tsx"/>
  <layer id="1" name="Prototype" width="24" height="24">

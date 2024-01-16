@@ -215,6 +215,26 @@
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
+            "id": 29,
+            "members": [
+            ],
+            "name": "DungeonDoorway",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
             "id": 8,
             "members": [
             ],
@@ -490,6 +510,26 @@
             "members": [
             ],
             "name": "WallLever",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 30,
+            "members": [
+            ],
+            "name": "Dungeon",
             "type": "class",
             "useAs": [
                 "property",

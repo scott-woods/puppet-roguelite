@@ -1004,6 +1004,11 @@ namespace Nez
 			public static class RuleMaps
 			{
 				public const string Collision_rules = @"Content\Tiled\RuleMaps\collision_rules.tmx";
+				public const string Forge_clutter_rules = @"Content\Tiled\RuleMaps\forge_clutter_rules.tmx";
+				public const string Forge_floor_rules = @"Content\Tiled\RuleMaps\forge_floor_rules.tmx";
+				public const string Forge_lava_rules = @"Content\Tiled\RuleMaps\forge_lava_rules.tmx";
+				public const string Forge_trim_rules = @"Content\Tiled\RuleMaps\forge_trim_rules.tmx";
+				public const string Forge_walls_rules = @"Content\Tiled\RuleMaps\forge_walls_rules.tmx";
 				public const string Prison_floor_rules_one_overlap = @"Content\Tiled\RuleMaps\prison_floor_rules_one_overlap.tmx";
 				public const string Prison_walls_rules_one_overlap_3 = @"Content\Tiled\RuleMaps\prison_walls_rules_one_overlap_3.tmx";
 				public const string Wooden_floor_rules_2 = @"Content\Tiled\RuleMaps\wooden_floor_rules_2.tmx";
@@ -1025,6 +1030,7 @@ namespace Nez
 					public const string Dp_bl_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_bl_1.tmx";
 					public const string Dp_blr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_blr_1.tmx";
 					public const string Dp_br_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_br_1.tmx";
+					public const string Dp_hallway = @"Content\Tiled\Tilemaps\DungeonPrison\dp_hallway.tmx";
 					public const string Dp_l_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_l_1.tmx";
 					public const string Dp_lr_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_lr_1.tmx";
 					public const string Dp_r_1 = @"Content\Tiled\Tilemaps\DungeonPrison\dp_r_1.tmx";
@@ -1043,6 +1049,37 @@ namespace Nez
 					public const string Rules = @"Content\Tiled\Tilemaps\DungeonPrison\rules.txt";
 				}
 
+				public static class Forge
+				{
+					public static class Doorways
+					{
+						public const string Forge_bottom_closed = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_bottom_closed.tmx";
+						public const string Forge_bottom_open = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_bottom_open.tmx";
+						public const string Forge_left_closed = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_left_closed.tmx";
+						public const string Forge_left_open = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_left_open.tmx";
+						public const string Forge_right_closed = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_right_closed.tmx";
+						public const string Forge_right_open = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_right_open.tmx";
+						public const string Forge_top_closed = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_top_closed.tmx";
+						public const string Forge_top_open = @"Content\Tiled\Tilemaps\Forge\Doorways\forge_top_open.tmx";
+					}
+
+					public static class Halls
+					{
+						public const string Forge_bottom_left_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_left_corner.tmx";
+						public const string Forge_bottom_right_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_right_corner.tmx";
+						public const string Forge_horizontal = @"Content\Tiled\Tilemaps\Forge\Halls\forge_horizontal.tmx";
+						public const string Forge_top_left_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_top_left_corner.tmx";
+						public const string Forge_top_right_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_top_right_corner.tmx";
+						public const string Forge_vertical = @"Content\Tiled\Tilemaps\Forge\Halls\forge_vertical.tmx";
+					}
+
+					public const string Forge_pre_boss = @"Content\Tiled\Tilemaps\Forge\forge_pre_boss.tmx";
+					public const string Forge_simple = @"Content\Tiled\Tilemaps\Forge\forge_simple.tmx";
+					public const string Forge_test = @"Content\Tiled\Tilemaps\Forge\forge_test.tmx";
+					public const string Forge_test_2 = @"Content\Tiled\Tilemaps\Forge\forge_test_2.tmx";
+					public const string Rules = @"Content\Tiled\Tilemaps\Forge\rules.txt";
+				}
+
 				public static class Hub
 				{
 					public const string Hub_2 = @"Content\Tiled\Tilemaps\Hub\hub_2.tmx";
@@ -1057,6 +1094,7 @@ namespace Nez
 				public const string Blood_temple_tileset = @"Content\Tiled\Tilesets\blood_temple_tileset.tsx";
 				public const string Dungeon_prison_props = @"Content\Tiled\Tilesets\dungeon_prison_props.tsx";
 				public const string Dungeon_prison_tileset_short_walls = @"Content\Tiled\Tilesets\dungeon_prison_tileset_short_walls.tsx";
+				public const string Forge_tileset = @"Content\Tiled\Tilesets\forge_tileset.tsx";
 				public const string Prototype_tileset = @"Content\Tiled\Tilesets\prototype_tileset.tsx";
 			}
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nez.Tiled;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,10 @@ namespace PuppetRoguelite.Models
         public bool HasBottom { get; set; }
         public bool HasLeft { get; set; }
         public bool HasRight { get; set; }
+        public TmxMap TmxMap
+        {
+            get => Game1.Scene.Content.LoadTiledMap(Name);
+        }
 
         public Map(string name, bool hasTop, bool hasBottom, bool hasLeft, bool hasRight)
         {
@@ -21,6 +26,11 @@ namespace PuppetRoguelite.Models
             HasBottom = hasBottom;
             HasLeft = hasLeft;
             HasRight = hasRight;
+        }
+
+        public Map(string name)
+        {
+            Name = name;
         }
     }
 }
