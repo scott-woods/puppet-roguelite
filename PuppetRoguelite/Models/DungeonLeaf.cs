@@ -90,7 +90,7 @@ namespace PuppetRoguelite.Models
                 var possibleMaps = Maps.ForgeMaps.Where((m) =>
                 {
                     //determine if map will fit in leaf
-                    var fits = m.TmxMap.Width <= Size.X + 10 && m.TmxMap.Height <= Size.Y + 12;
+                    var fits = m.TmxMap.Width <= Size.X + 10 && m.TmxMap.Height <= Size.Y + 14;
 
                     //if doesn't fit, unload
                     if (!fits)
@@ -104,7 +104,7 @@ namespace PuppetRoguelite.Models
                     return;
 
                 var map = possibleMaps.RandomItem();
-                var pos = new Vector2(Nez.Random.Range(1, Size.X - map.TmxMap.Width - 1) + Position.X, Nez.Random.Range(1, Size.Y - map.TmxMap.Height - 1) + Position.Y);
+                var pos = new Vector2(Nez.Random.Range(5, (int)(Size.X - map.TmxMap.Width - 5)) + Position.X, Nez.Random.Range(7, (int)(Size.Y - map.TmxMap.Height - 7)) + Position.Y);
 
                 Room = new DungeonRoom(map, pos);
             }

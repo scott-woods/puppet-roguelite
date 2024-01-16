@@ -188,6 +188,9 @@ namespace PuppetRoguelite.SceneComponents
                     }
                 }
 
+                selectedDoorway1.SetOpen(true);
+                selectedDoorway2.SetOpen(true);
+
                 //add padding
                 Vector2 room1ExitPositionPadded = new Vector2(room1ExitPosition.X, room1ExitPosition.Y);
                 switch (selectedDoorway1.Direction)
@@ -348,7 +351,7 @@ namespace PuppetRoguelite.SceneComponents
                                 nextDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
                             }
 
-                            if (direction1.Y == 1)
+                            if (direction1.Y == -1)
                             {
                                 prevDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
                                 nextDirectionValue = Convert.ToInt32(offsetValues[0]);
