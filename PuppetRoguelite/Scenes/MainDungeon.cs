@@ -42,7 +42,7 @@ namespace PuppetRoguelite.Scenes
             //camera
             Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
             Camera.Entity.SetUpdateOrder(int.MaxValue);
-            //Camera.Zoom = -1;
+            Camera.Zoom = -1;
 
             //add combat manager
             _combatManager = AddSceneComponent(new CombatManager());

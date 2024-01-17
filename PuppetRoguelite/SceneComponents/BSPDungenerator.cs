@@ -25,14 +25,13 @@ namespace PuppetRoguelite.SceneComponents
         /// </summary>
         Vector2 _dungeonArea = new Vector2(160, 160);
         Vector2 _tileSize = new Vector2(16, 16);
-        const int _maxSplits = 3;
-        const int _maxLeafSize = 48;
+        const int _maxLeafSize = 45;
 
         List<DungeonLeaf> _leafs = new List<DungeonLeaf>();
 
         public void Generate()
         {
-            var root = new DungeonLeaf(0, 0, (int)_dungeonArea.X, (int)_dungeonArea.Y);
+            var root = new DungeonLeaf(0, 0, 0, (int)_dungeonArea.X, (int)_dungeonArea.Y);
             _leafs.Add(root);
 
             //recursively loop through and split leafs until we can't continue
@@ -90,7 +89,7 @@ namespace PuppetRoguelite.SceneComponents
                 var possibleMaps = Maps.ForgeMaps.Where((m) =>
                 {
                     //determine if map will fit in leaf
-                    var fits = m.TmxMap.Width <= leaf.Size.X + 5 && m.TmxMap.Height <= leaf.Size.Y + 6;
+                    var fits = m.TmxMap.Width <= leaf.Size.X + 10 && m.TmxMap.Height <= leaf.Size.Y + 10;
 
                     //if doesn't fit, unload
                     if (!fits)
@@ -103,10 +102,25 @@ namespace PuppetRoguelite.SceneComponents
                 if (possibleMaps.Count == 0)
                     return;
 
+                //pick a random map
                 var map = possibleMaps.RandomItem();
-                var pos = new Vector2(Nez.Random.Range(1, (int)(leaf.Size.X - map.TmxMap.Width - 1)) + leaf.Position.X, Nez.Random.Range(1, (int)(leaf.Size.Y - map.TmxMap.Height - 1)) + leaf.Position.Y);
 
-                leaf.Room = new DungeonRoom(map, pos);
+                var minX = 5;
+                var maxX = (int)leaf.Size.X - map.TmxMap.Width - 5;
+                int adjustedMinX = (minX + 4) / 5;
+                int adjustedMaxX = Math.Max((int)maxX / 5, adjustedMinX);
+
+                var minY = 5;
+                var maxY = (int)leaf.Size.Y - map.TmxMap.Height - 5;
+                int adjustedMinY = (minY + 4) / 5;
+                int adjustedMaxY = Math.Max((int)maxY / 5, adjustedMinY);
+
+                var posX = Nez.Random.Range(adjustedMinX, adjustedMaxX) * 5;
+                var posY = Nez.Random.Range(adjustedMinY, adjustedMaxY) * 5;
+
+                var pos = new Vector2(posX + leaf.Position.X, posY + leaf.Position.Y);
+
+                leaf.Room = new DungeonRoom(map, pos, leaf);
             }
 
             //loop through each leaf that has a room in it and instantiate the room entity
@@ -158,452 +172,681 @@ namespace PuppetRoguelite.SceneComponents
                 }
             }
 
-            //loop through leafs that have left and right children that both have rooms, and connect those rooms
-            foreach (var leaf in _leafs.Where(l => l.LeftChild != null && l.RightChild != null && l.LeftChild.Room != null && l.RightChild.Room != null))
+            //loop through leaf generations, starting from the youngest (highest value)
+            for (int i = _leafs.Select(l => l.Generation).Max(); i >= 0; i--)
             {
-                var room1 = leaf.LeftChild.Room;
-                var room2 = leaf.RightChild.Room;
+                //get leafs in this generation
+                var leafsInGeneration = _leafs.Where(l => l.Generation == i).ToList();
 
-                //get the positions of the closest two exits
-                var minDistance = float.MaxValue;
-                DungeonDoorway selectedDoorway1 = null;
-                DungeonDoorway selectedDoorway2 = null;
-                Vector2 room1ExitPosition = new Vector2();
-                Vector2 room2ExitPosition = new Vector2();
-                foreach (var doorway1 in room1.Doorways)
+                //loop through each leaf in this generation
+                foreach (var leaf in leafsInGeneration)
                 {
-                    foreach (var doorway2 in room2.Doorways)
+                    //don't do anything if either child is null
+                    if (leaf.LeftChild == null || leaf.RightChild == null)
+                        continue;
+
+                    //get potential rooms for both sides of leaf
+                    List<DungeonRoom> leftChildRooms = new List<DungeonRoom>();
+                    leaf.LeftChild.GetRooms(ref leftChildRooms);
+                    List<DungeonRoom> rightChildRooms = new List<DungeonRoom>();
+                    leaf.RightChild.GetRooms(ref rightChildRooms);
+
+                    //get list of potential doorways
+                    var leftChildDoorways = leftChildRooms.SelectMany(r => r.Doorways).Where(d => d.HasConnection == false).ToList();
+                    var rightChildDoorways = rightChildRooms.SelectMany(r => r.Doorways).Where(d => d.HasConnection == false).ToList();
+
+                    //get the positions of the closest two exits
+                    var minDistance = float.MaxValue;
+                    DungeonDoorway selectedDoorway1 = null;
+                    DungeonDoorway selectedDoorway2 = null;
+                    Vector2 room1ExitPosition = new Vector2();
+                    Vector2 room2ExitPosition = new Vector2();
+                    foreach (var doorway1 in leftChildDoorways)
                     {
-                        var pos1 = (doorway1.Entity.Position / 16) + doorway1.PathfindingOffset;
-                        var pos2 = (doorway2.Entity.Position / 16) + doorway2.PathfindingOffset;
-                        var dist = Vector2.Distance(pos1, pos2);
-                        if (dist < minDistance)
+                        foreach (var doorway2 in rightChildDoorways)
                         {
-                            minDistance = dist;
-                            room1ExitPosition = pos1;
-                            room2ExitPosition = pos2;
-                            selectedDoorway1 = doorway1;
-                            selectedDoorway2 = doorway2;
+                            var pos1 = (doorway1.Entity.Position / 16) + doorway1.PathfindingOffset;
+                            var pos2 = (doorway2.Entity.Position / 16) + doorway2.PathfindingOffset;
+                            var dist = Vector2.Distance(pos1, pos2);
+                            if (dist < minDistance)
+                            {
+                                minDistance = dist;
+                                room1ExitPosition = pos1;
+                                room2ExitPosition = pos2;
+                                selectedDoorway1 = doorway1;
+                                selectedDoorway2 = doorway2;
+                            }
                         }
                     }
-                }
 
-                selectedDoorway1.SetOpen(true);
-                selectedDoorway2.SetOpen(true);
+                    //set the selected doorways to open
+                    selectedDoorway1.SetOpen(true);
+                    selectedDoorway2.SetOpen(true);
 
-                //add padding
-                Vector2 room1ExitPositionPadded = new Vector2(room1ExitPosition.X, room1ExitPosition.Y);
-                switch (selectedDoorway1.Direction)
-                {
-                    case "Top":
-                        room1ExitPositionPadded.Y -= 2;
-                        break;
-                    case "Bottom":
-                        room1ExitPositionPadded.Y += 5;
-                        break;
-                    case "Left":
-                        room1ExitPositionPadded.X -= 3;
-                        break;
-                    case "Right":
-                        room1ExitPositionPadded.X += 3;
-                        break;
-                }
-                Vector2 room2ExitPositionPadded = new Vector2(room2ExitPosition.X, room2ExitPosition.Y);
-                switch (selectedDoorway2.Direction)
-                {
-                    case "Top":
-                        room2ExitPositionPadded.Y -= 2;
-                        break;
-                    case "Bottom":
-                        room2ExitPositionPadded.Y += 5;
-                        break;
-                    case "Left":
-                        room2ExitPositionPadded.X -= 3;
-                        break;
-                    case "Right":
-                        room2ExitPositionPadded.X += 3;
-                        break;
-                }
-
-                //remove walls from the exit positions
-                graph.Walls.Remove(room1ExitPosition.ToPoint());
-                graph.Walls.Remove(room2ExitPosition.ToPoint());
-
-                //assemble final path
-                List<Point> finalPath = new List<Point>();
-                var path1 = graph.Search(room1ExitPosition.ToPoint(), room1ExitPositionPadded.ToPoint());
-                if (path1 != null)
-                    finalPath.AddRange(path1);
-                var path2 = graph.Search(room1ExitPositionPadded.ToPoint(), room2ExitPositionPadded.ToPoint());
-                if (path2 != null)
-                    finalPath.AddRange(path2);
-                var path3 = graph.Search(room2ExitPositionPadded.ToPoint(), room2ExitPosition.ToPoint());
-                if (path3 != null)
-                    finalPath.AddRange(path3);
-
-                finalPath = finalPath.Distinct().ToList();
-
-                List<HallwayModel> hallwayModels = new List<HallwayModel>();
-
-                for (int i = 1; i < finalPath.Count - 1; i++)
-                {
-                    var previousPoint = finalPath[i - 1];
-                    var point = finalPath[i];
-                    var nextPoint = finalPath[i + 1];
-
-                    Vector2 direction1 = new Vector2(point.X - previousPoint.X, point.Y - previousPoint.Y);
-                    Vector2 direction2 = new Vector2(nextPoint.X - point.X, nextPoint.Y - point.Y);
-                    direction1.Normalize();
-                    direction2.Normalize();
-
-                    //horizontal
-                    if (direction1.X == direction2.X && direction1.Y == 0 && direction2.Y == 0)
+                    //add padding so hallway can't turn immediately
+                    Vector2 room1ExitPositionPadded = new Vector2(room1ExitPosition.X, room1ExitPosition.Y);
+                    switch (selectedDoorway1.Direction)
                     {
-                        var hallway = new HallwayModel(HallwayMaps.ForgeHorizontal, point, false);
-                        hallwayModels.Add(hallway);
+                        case "Top":
+                            room1ExitPositionPadded.Y = selectedDoorway1.DungeonRoom.DungeonLeaf.Position.Y;
+                            //room1ExitPositionPadded.Y -= 2;
+                            break;
+                        case "Bottom":
+                            room1ExitPositionPadded.Y = selectedDoorway1.DungeonRoom.DungeonLeaf.Position.Y + selectedDoorway1.DungeonRoom.DungeonLeaf.Size.Y;
+                            //room1ExitPositionPadded.Y += 5;
+                            break;
+                        case "Left":
+                            room1ExitPositionPadded.X = selectedDoorway1.DungeonRoom.DungeonLeaf.Position.X;
+                            //room1ExitPositionPadded.X -= 3;
+                            break;
+                        case "Right":
+                            room1ExitPositionPadded.X = selectedDoorway1.DungeonRoom.DungeonLeaf.Position.X + selectedDoorway1.DungeonRoom.DungeonLeaf.Size.X;
+                            //room1ExitPositionPadded.X += 3;
+                            break;
                     }
-                    //vertical
-                    if (direction1.Y == direction2.Y && direction1.X == 0 && direction2.X == 0)
+                    Vector2 room2ExitPositionPadded = new Vector2(room2ExitPosition.X, room2ExitPosition.Y);
+                    switch (selectedDoorway2.Direction)
                     {
-                        var hallway = new HallwayModel(HallwayMaps.ForgeVertical, point, false);
-                        hallwayModels.Add(hallway);
+                        case "Top":
+                            room2ExitPositionPadded.Y = selectedDoorway2.DungeonRoom.DungeonLeaf.Position.Y;
+                            //room2ExitPositionPadded.Y -= 2;
+                            break;
+                        case "Bottom":
+                            room2ExitPositionPadded.Y = selectedDoorway2.DungeonRoom.DungeonLeaf.Position.Y + selectedDoorway2.DungeonRoom.DungeonLeaf.Size.Y;
+                            //room2ExitPositionPadded.Y += 5;
+                            break;
+                        case "Left":
+                            room2ExitPositionPadded.X = selectedDoorway2.DungeonRoom.DungeonLeaf.Position.X;
+                            //room2ExitPositionPadded.X -= 3;
+                            break;
+                        case "Right":
+                            room2ExitPositionPadded.X = selectedDoorway2.DungeonRoom.DungeonLeaf.Position.X + selectedDoorway2.DungeonRoom.DungeonLeaf.Size.X;
+                            //room2ExitPositionPadded.X += 3;
+                            break;
                     }
-                    //bottom right corner
-                    if ((direction1.Y == 1 && direction2.X == -1) || (direction1.X == 1 && direction2.Y == -1))
-                    {
-                        var hallway = new HallwayModel(HallwayMaps.ForgeBottomRight, point);
-                        hallwayModels.Add(hallway);
 
-                        var tmxMap = hallway.Map.TmxMap;
-                        if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+                    //remove walls from the exit positions
+                    graph.Walls.Remove(room1ExitPosition.ToPoint());
+                    graph.Walls.Remove(room2ExitPosition.ToPoint());
+
+                    //assemble final path
+                    List<Point> finalPath = new List<Point>();
+                    var path1 = graph.Search(room1ExitPosition.ToPoint(), room1ExitPositionPadded.ToPoint());
+                    if (path1 != null)
+                        finalPath.AddRange(path1);
+                    var path2 = graph.Search(room1ExitPositionPadded.ToPoint(), room2ExitPositionPadded.ToPoint());
+                    if (path2 != null)
+                        finalPath.AddRange(path2);
+                    var path3 = graph.Search(room2ExitPositionPadded.ToPoint(), room2ExitPosition.ToPoint());
+                    if (path3 != null)
+                        finalPath.AddRange(path3);
+
+                    //remove duplicate points
+                    finalPath = finalPath.Distinct().ToList();
+
+                    //init list of hallways
+                    List<HallwayModel> hallwayModels = new List<HallwayModel>();
+
+                    //loop through path
+                    for (int j = 1; j < finalPath.Count - 1; j++)
+                    {
+                        //get previous, current, and next points on path
+                        var previousPoint = finalPath[j - 1];
+                        var point = finalPath[j];
+                        var nextPoint = finalPath[j + 1];
+
+                        //get normalized incoming and outgoing directions
+                        Vector2 incomingDirection = new Vector2(point.X - previousPoint.X, point.Y - previousPoint.Y);
+                        Vector2 outgoingDirection = new Vector2(nextPoint.X - point.X, nextPoint.Y - point.Y);
+                        incomingDirection.Normalize();
+                        outgoingDirection.Normalize();
+
+                        //horizontal
+                        if (incomingDirection.X == outgoingDirection.X && incomingDirection.Y == 0 && outgoingDirection.Y == 0)
                         {
-                            var offsetValues = offsetString.Split(' ');
+                            var hallway = new HallwayModel(HallwayMaps.ForgeHorizontal, point, false);
+                            hallwayModels.Add(hallway);
+                        }
+                        //vertical
+                        if (incomingDirection.Y == outgoingDirection.Y && incomingDirection.X == 0 && outgoingDirection.X == 0)
+                        {
+                            var hallway = new HallwayModel(HallwayMaps.ForgeVertical, point, false);
+                            hallwayModels.Add(hallway);
+                        }
+                        //bottom right corner
+                        if ((incomingDirection.Y == 1 && outgoingDirection.X == -1) || (incomingDirection.X == 1 && outgoingDirection.Y == -1))
+                        {
+                            var hallway = new HallwayModel(HallwayMaps.ForgeBottomRight, point);
+                            hallwayModels.Add(hallway);
 
-                            var prevDirectionValue = 0;
-                            var nextDirectionValue = 0;
-                            if (direction1.X == 1)
+                            var tmxMap = hallway.Map.TmxMap;
+                            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
                             {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[0]);
-                                nextDirectionValue = Convert.ToInt32(offsetValues[1]);
-                            }
+                                var offsetValues = offsetString.Split(' ');
 
-                            if (direction1.Y == 1)
-                            {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[1]);
-                                nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                var prevDirectionValue = 0;
+                                var nextDirectionValue = 0;
+                                if (incomingDirection.X == 1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[1]);
+                                }
+
+                                if (incomingDirection.Y == 1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[1]);
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+
+                                }
+
+                                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+                                List<HallwayModel> hallwaysToRemove = new List<HallwayModel>();
+                                for (int k = hallwayModels.Count - 2; k >= startIndex; k--)
+                                {
+                                    var hallwayToRemove = hallwayModels[k];
+                                    if (hallwayToRemove.IsCorner)
+                                        break;
+                                    else
+                                        hallwaysToRemove.Add(hallwayToRemove);
+                                }
+
+                                foreach (var hallwayToRemove in hallwaysToRemove)
+                                {
+                                    hallwayModels.Remove(hallwayToRemove);
+                                }
                                 
-                            }
+                                //var countToRemove = hallwayModels.Count - 1 - startIndex;
+                                //hallwayModels.RemoveRange(startIndex, countToRemove);
 
-                            var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
-                            var countToRemove = hallwayModels.Count - 1 - startIndex;
-                            hallwayModels.RemoveRange(startIndex, countToRemove);
-                            i += nextDirectionValue;
+                                j += nextDirectionValue;
+                            }
+                        }
+                        //bottom left corner
+                        else if ((incomingDirection.Y == 1 && outgoingDirection.X == 1) || (incomingDirection.X == -1 && outgoingDirection.Y == -1))
+                        {
+                            var hallway = new HallwayModel(HallwayMaps.ForgeBottomLeft, point);
+                            hallwayModels.Add(hallway);
+
+                            var tmxMap = hallway.Map.TmxMap;
+                            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+                            {
+                                var offsetValues = offsetString.Split(' ');
+
+                                var prevDirectionValue = 0;
+                                var nextDirectionValue = 0;
+                                if (incomingDirection.X == -1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[1]);
+                                }
+
+                                if (incomingDirection.Y == 1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[1]);
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+
+                                }
+
+                                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+                                List<HallwayModel> hallwaysToRemove = new List<HallwayModel>();
+                                for (int k = hallwayModels.Count - 2; k >= startIndex; k--)
+                                {
+                                    var hallwayToRemove = hallwayModels[k];
+                                    if (hallwayToRemove.IsCorner)
+                                        break;
+                                    else
+                                        hallwaysToRemove.Add(hallwayToRemove);
+                                }
+
+                                foreach (var hallwayToRemove in hallwaysToRemove)
+                                {
+                                    hallwayModels.Remove(hallwayToRemove);
+                                }
+
+                                //var countToRemove = hallwayModels.Count - 1 - startIndex;
+                                //hallwayModels.RemoveRange(startIndex, countToRemove);
+
+                                j += nextDirectionValue;
+                            }
+                        }
+                        //top left corner
+                        else if ((incomingDirection.Y == -1 && outgoingDirection.X == 1) || (incomingDirection.X == -1 && outgoingDirection.Y == 1))
+                        {
+                            var hallway = new HallwayModel(HallwayMaps.ForgeTopLeft, point);
+                            hallwayModels.Add(hallway);
+
+                            var tmxMap = hallway.Map.TmxMap;
+                            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+                            {
+                                var offsetValues = offsetString.Split(' ');
+
+                                var prevDirectionValue = 0;
+                                var nextDirectionValue = 0;
+                                if (incomingDirection.X == -1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+                                }
+
+                                if (incomingDirection.Y == -1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                }
+
+                                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+                                List<HallwayModel> hallwaysToRemove = new List<HallwayModel>();
+                                for (int k = hallwayModels.Count - 2; k >= startIndex; k--)
+                                {
+                                    var hallwayToRemove = hallwayModels[k];
+                                    if (hallwayToRemove.IsCorner)
+                                        break;
+                                    else
+                                        hallwaysToRemove.Add(hallwayToRemove);
+                                }
+
+                                foreach (var hallwayToRemove in hallwaysToRemove)
+                                {
+                                    hallwayModels.Remove(hallwayToRemove);
+                                }
+
+                                //var countToRemove = hallwayModels.Count - 1 - startIndex;
+                                //hallwayModels.RemoveRange(startIndex, countToRemove);
+
+                                j += nextDirectionValue;
+                            }
+                        }
+                        //top right corner
+                        else if ((incomingDirection.Y == -1 && outgoingDirection.X == -1) || (incomingDirection.X == 1) && (outgoingDirection.Y == 1))
+                        {
+                            var hallway = new HallwayModel(HallwayMaps.ForgeTopRight, point);
+                            hallwayModels.Add(hallway);
+
+                            var tmxMap = hallway.Map.TmxMap;
+                            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+                            {
+                                var offsetValues = offsetString.Split(' ');
+
+                                var prevDirectionValue = 0;
+                                var nextDirectionValue = 0;
+                                if (incomingDirection.X == 1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+                                }
+
+                                if (incomingDirection.Y == -1)
+                                {
+                                    prevDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+                                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                }
+
+                                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+                                List<HallwayModel> hallwaysToRemove = new List<HallwayModel>();
+                                for (int k = hallwayModels.Count - 2; k >= startIndex; k--)
+                                {
+                                    var hallwayToRemove = hallwayModels[k];
+                                    if (hallwayToRemove.IsCorner)
+                                        break;
+                                    else
+                                        hallwaysToRemove.Add(hallwayToRemove);
+                                }
+
+                                foreach (var hallwayToRemove in hallwaysToRemove)
+                                {
+                                    hallwayModels.Remove(hallwayToRemove);
+                                }
+
+                                //var countToRemove = hallwayModels.Count - 1 - startIndex;
+                                //hallwayModels.RemoveRange(startIndex, countToRemove);
+
+                                j += nextDirectionValue;
+                            }
                         }
                     }
-                    //bottom left corner
-                    else if ((direction1.Y == 1 && direction2.X == 1) || (direction1.X == -1 && direction2.Y == -1))
-                    {
-                        var hallway = new HallwayModel(HallwayMaps.ForgeBottomLeft, point);
-                        hallwayModels.Add(hallway);
 
+                    foreach (var point in finalPath)
+                    {
+                        var ent = Scene.CreateEntity("pathfinding-test");
+                        ent.SetPosition(point.X * 16, point.Y * 16);
+                        var prototypeSpriteRenderer = ent.AddComponent(new PrototypeSpriteRenderer(4, 4));
+                        prototypeSpriteRenderer.RenderLayer = int.MinValue;
+                    }
+
+                    //loop through selected hallways and generate their maps
+                    foreach (var hallway in hallwayModels)
+                    {
+                        //load map
                         var tmxMap = hallway.Map.TmxMap;
+
+                        //determine position
+                        var hallwayPos = new Vector2(hallway.PathPoint.X, hallway.PathPoint.Y);
                         if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
                         {
                             var offsetValues = offsetString.Split(' ');
-
-                            var prevDirectionValue = 0;
-                            var nextDirectionValue = 0;
-                            if (direction1.X == -1)
-                            {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[0]);
-                                nextDirectionValue = Convert.ToInt32(offsetValues[1]);
-                            }
-
-                            if (direction1.Y == 1)
-                            {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[1]);
-                                nextDirectionValue = Convert.ToInt32(offsetValues[0]);
-
-                            }
-
-                            var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
-                            var countToRemove = hallwayModels.Count - 1 - startIndex;
-                            hallwayModels.RemoveRange(startIndex, countToRemove);
-                            i += nextDirectionValue;
+                            hallwayPos.X -= Convert.ToInt32(offsetValues[0]);
+                            hallwayPos.Y -= Convert.ToInt32(offsetValues[1]);
                         }
-                    }
-                    //top left corner
-                    else if ((direction1.Y == -1 && direction2.X == 1) || (direction1.X == -1 && direction2.Y == 1))
-                    {
-                        var hallway = new HallwayModel(HallwayMaps.ForgeTopLeft, point);
-                        hallwayModels.Add(hallway);
 
-                        var tmxMap = hallway.Map.TmxMap;
-                        if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
-                        {
-                            var offsetValues = offsetString.Split(' ');
+                        //create hallway entity and set position
+                        var ent = Scene.CreateEntity("hallway");
+                        ent.SetPosition(hallwayPos.X * 16, hallwayPos.Y * 16);
 
-                            var prevDirectionValue = 0;
-                            var nextDirectionValue = 0;
-                            if (direction1.X == -1)
-                            {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[0]);
-                                nextDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
-                            }
+                        //create main map renderer
+                        var mapRenderer = ent.AddComponent(new TiledMapRenderer(tmxMap, "Walls"));
+                        mapRenderer.SetLayersToRender(new[] { "Back", "Walls" });
+                        mapRenderer.RenderLayer = 10;
+                        ent.AddComponent(new GridGraphManager(mapRenderer));
+                        ent.AddComponent(new TiledObjectHandler(mapRenderer));
+                        Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
 
-                            if (direction1.Y == -1)
-                            {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
-                                nextDirectionValue = Convert.ToInt32(offsetValues[0]);
-                            }
-
-                            var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
-                            var countToRemove = hallwayModels.Count - 1 - startIndex;
-                            hallwayModels.RemoveRange(startIndex, countToRemove);
-                            i += nextDirectionValue;
-                        }
-                    }
-                    //top right corner
-                    else if ((direction1.Y == -1 && direction2.X == -1) || (direction1.X == 1) && (direction2.Y == 1))
-                    {
-                        var hallway = new HallwayModel(HallwayMaps.ForgeTopRight, point);
-                        hallwayModels.Add(hallway);
-
-                        var tmxMap = hallway.Map.TmxMap;
-                        if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
-                        {
-                            var offsetValues = offsetString.Split(' ');
-
-                            var prevDirectionValue = 0;
-                            var nextDirectionValue = 0;
-                            if (direction1.X == 1)
-                            {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[0]);
-                                nextDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
-                            }
-
-                            if (direction1.Y == -1)
-                            {
-                                prevDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
-                                nextDirectionValue = Convert.ToInt32(offsetValues[0]);
-                            }
-
-                            var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
-                            var countToRemove = hallwayModels.Count - 1 - startIndex;
-                            hallwayModels.RemoveRange(startIndex, countToRemove);
-                            i += nextDirectionValue;
-                        }
+                        //create above map renderer
+                        var tiledMapDetailsRenderer = ent.AddComponent(new TiledMapRenderer(tmxMap));
+                        var layersToRender = new List<string>();
+                        if (tmxMap.Layers.Contains("Front"))
+                            layersToRender.Add("Front");
+                        if (tmxMap.Layers.Contains("AboveFront"))
+                            layersToRender.Add("AboveFront");
+                        tiledMapDetailsRenderer.SetLayersToRender(layersToRender.ToArray());
+                        tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
+                        tiledMapDetailsRenderer.Material = Material.StencilWrite();
+                        //tiledMapDetailsRenderer.Material.Effect = Scene.Content.LoadNezEffect<SpriteAlphaTestEffect>();
                     }
                 }
-
-                foreach (var point in finalPath)
-                {
-                    var ent = Scene.CreateEntity("pathfinding-test");
-                    ent.SetPosition(point.X * 16, point.Y * 16);
-                    var prototypeSpriteRenderer = ent.AddComponent(new PrototypeSpriteRenderer(4, 4));
-                    prototypeSpriteRenderer.RenderLayer = int.MinValue;
-                }
-
-                foreach (var hallway in hallwayModels)
-                {
-                    //load map
-                    var tmxMap = hallway.Map.TmxMap;
-                    var hallwayPos = new Vector2(hallway.PathPoint.X, hallway.PathPoint.Y);
-                    if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
-                    {
-                        var offsetValues = offsetString.Split(' ');
-                        hallwayPos.X -= Convert.ToInt32(offsetValues[0]);
-                        hallwayPos.Y -= Convert.ToInt32(offsetValues[1]);
-                    }
-
-                    var ent = Scene.CreateEntity("hallway");
-                    ent.SetPosition(hallwayPos.X * 16, hallwayPos.Y * 16);
-
-                    //create main map renderer
-                    var mapRenderer = ent.AddComponent(new TiledMapRenderer(tmxMap, "Walls"));
-                    mapRenderer.SetLayersToRender(new[] { "Back", "Walls" });
-                    mapRenderer.RenderLayer = 10;
-                    ent.AddComponent(new GridGraphManager(mapRenderer));
-                    ent.AddComponent(new TiledObjectHandler(mapRenderer));
-                    Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
-
-                    //create above map renderer
-                    var tiledMapDetailsRenderer = ent.AddComponent(new TiledMapRenderer(tmxMap));
-                    var layersToRender = new List<string>();
-                    if (tmxMap.Layers.Contains("Front"))
-                        layersToRender.Add("Front");
-                    if (tmxMap.Layers.Contains("AboveFront"))
-                        layersToRender.Add("AboveFront");
-                    tiledMapDetailsRenderer.SetLayersToRender(layersToRender.ToArray());
-                    tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
-                    tiledMapDetailsRenderer.Material = Material.StencilWrite();
-                    //tiledMapDetailsRenderer.Material.Effect = Scene.Content.LoadNezEffect<SpriteAlphaTestEffect>();
-                }
-
-                //var path = graph.Search(room1ExitPosition.ToPoint(), room2ExitPosition.ToPoint());
-
-                //if (path != null)
-                //{
-                //    List<Point> corners = new List<Point>();
-                //    bool isPathValid = false;
-                //    int attempts = 0;
-                //    while (!isPathValid && attempts < 10000)
-                //    {
-                //        attempts++;
-
-                //        bool pathAdjusted = false;
-                //        for (int i = 1; i < path.Count - 1; i++)
-                //        {
-                //            var previousPoint = path[i - 1];
-                //            var point = path[i];
-                //            var nextPoint = path[i + 1];
-
-                //            Vector2 direction1 = new Vector2(point.X - previousPoint.X, point.Y - previousPoint.Y);
-                //            Vector2 direction2 = new Vector2(nextPoint.X - point.X, nextPoint.Y - point.Y);
-                //            direction1.Normalize();
-                //            direction2.Normalize();
-
-                //            var isTurn = direction1 != direction2;
-
-                //            if (isTurn)
-                //            {
-                //                //bottom right corner
-                //                if ((direction1.Y == -1 && direction2.X == 1) || (direction1.X == 1 && direction2.Y == -1))
-                //                {
-                //                    var pointsAbove = CountPointsInDirection(point, new Point(0, -1), path, 4);
-                //                    var pointsLeft = CountPointsInDirection(point, new Point(-1, 0), path, 2);
-                //                    var offset = new Point(pointsLeft < 2 ? 2 - pointsLeft : 0, pointsAbove < 4 ? 4 - pointsAbove : 0);
-                //                    var adjustedCornerPoint = point + offset;
-                //                    //corners.Clear();
-                //                    //corners.Add(adjustedCornerPoint);
-                //                    //path.Clear();
-                //                    //var startPoint = room1ExitPosition.ToPoint();
-                //                    //foreach (var corner in corners)
-                //                    //{
-                //                    //    var pathToCorner = graph.Search(startPoint, corner);
-                //                    //    if (pathToCorner != null)
-                //                    //        path.AddRange(pathToCorner);
-                //                    //    startPoint = corner;
-                //                    //}
-                //                    //var pathToExit = graph.Search(startPoint, room2ExitPosition.ToPoint());
-                //                    //if (pathToExit != null)
-                //                    //    path.AddRange(pathToExit);
-                //                    //pathAdjusted = true;
-                //                    //break;
-                //                }
-                //                //bottom left corner
-                //                else if ((direction1.Y == 1 && direction2.X == 1) || (direction1.X == -1 && direction2.Y == -1))
-                //                {
-                //                    var pointsAbove = CountPointsInDirection(point, new Point(0, -1), path, 4);
-                //                    var pointsRight = CountPointsInDirection(point, new Point(1, 0), path, 2);
-                //                    var offset = new Point(pointsRight < 2 ? pointsRight - 2 : 0, pointsAbove < 4 ? 4 - pointsAbove : 0);
-                //                    var adjustedCornerPoint = point + offset;
-                //                    //corners.Clear();
-                //                    //corners.Add(adjustedCornerPoint);
-                //                    //path.Clear();
-                //                    //var startPoint = room1ExitPosition.ToPoint();
-                //                    //foreach (var corner in corners)
-                //                    //{
-                //                    //    var pathToCorner = graph.Search(startPoint, corner);
-                //                    //    if (pathToCorner != null)
-                //                    //        path.AddRange(pathToCorner);
-                //                    //    startPoint = corner;
-                //                    //}
-                //                    //var pathToExit = graph.Search(startPoint, room2ExitPosition.ToPoint());
-                //                    //if (pathToExit != null)
-                //                    //    path.AddRange(pathToExit);
-                //                    //pathAdjusted = true;
-                //                    //break;
-                //                }
-                //                //top left corner
-                //                else if ((direction1.Y == -1 && direction2.X == 1) || (direction1.X == -1 && direction2.Y == 1))
-                //                {
-                //                    var pointsBelow = CountPointsInDirection(point, new Point(0, 1), path, 1);
-                //                    var pointsRight = CountPointsInDirection(point, new Point(1, 0), path, 2);
-                //                    var offset = new Point(pointsRight < 2 ? pointsRight - 2 : 0, pointsBelow < 4 ? pointsBelow - 4 : 0);
-                //                    var adjustedCornerPoint = point + offset;
-                //                    //corners.Clear();
-                //                    //corners.Add(adjustedCornerPoint);
-                //                    //path.Clear();
-                //                    //var startPoint = room1ExitPosition.ToPoint();
-                //                    //foreach (var corner in corners)
-                //                    //{
-                //                    //    var pathToCorner = graph.Search(startPoint, corner);
-                //                    //    if (pathToCorner != null)
-                //                    //        path.AddRange(pathToCorner);
-                //                    //    startPoint = corner;
-                //                    //}
-                //                    //var pathToExit = graph.Search(startPoint, room2ExitPosition.ToPoint());
-                //                    //if (pathToExit != null)
-                //                    //    path.AddRange(pathToExit);
-                //                    //pathAdjusted = true;
-                //                    //break;
-                //                }
-                //                //top right corner
-                //                else if ((direction1.Y == -1 && direction2.X == -1) || (direction1.X == 1) && (direction2.Y == 1))
-                //                {
-                //                    var pointsBelow = CountPointsInDirection(point, new Point(0, 1), path, 1);
-                //                    var pointsLeft = CountPointsInDirection(point, new Point(-1, 0), path, 2);
-                //                    var offset = new Point(pointsLeft < 2 ? 2 - pointsLeft : 0, pointsBelow < 4 ? pointsBelow - 4 : 0);
-                //                    var adjustedCornerPoint = point + offset;
-                //                    //corners.Clear();
-                //                    //corners.Add(adjustedCornerPoint);
-                //                    //path.Clear();
-                //                    //var startPoint = room1ExitPosition.ToPoint();
-                //                    //foreach (var corner in corners)
-                //                    //{
-                //                    //    var pathToCorner = graph.Search(startPoint, corner);
-                //                    //    if (pathToCorner != null)
-                //                    //        path.AddRange(pathToCorner);
-                //                    //    startPoint = corner;
-                //                    //}
-                //                    //var pathToExit = graph.Search(startPoint, room2ExitPosition.ToPoint());
-                //                    //if (pathToExit != null)
-                //                    //    path.AddRange(pathToExit);
-                //                    //pathAdjusted = true;
-                //                    //break;
-                //                }
-                //            }
-                //        }
-
-                //        if (!pathAdjusted)
-                //            isPathValid = true;
-                //    }
-
-                //    foreach (var point in path)
-                //    {
-                //        var ent = Scene.CreateEntity("pathfinding-test");
-                //        ent.SetPosition(point.X * 16, point.Y * 16);
-                //        var prototypeSpriteRenderer = ent.AddComponent(new PrototypeSpriteRenderer(4, 4));
-                //        prototypeSpriteRenderer.RenderLayer = int.MinValue;
-                //    }
-                //}
-            }
-        }
-
-        int CountPointsInDirection(Point start, Point direction, List<Point> path, int requiredCount)
-        {
-            Point current = start;
-            int count = 0;
-
-            for (int i = 0; i < requiredCount; i++)
-            {
-                current = new Point(current.X + direction.X, current.Y + direction.Y);
-
-                if (path.Contains(current))
-                {
-                    count++;
-                }
-                else
-                    break;
             }
 
-            return count;
-        }
+            //loop through leafs that have left and right children that both have rooms, and connect those rooms
+            //foreach (var leaf in _leafs.Where(l => l.LeftChild != null && l.RightChild != null && l.LeftChild.Room != null && l.RightChild.Room != null))
+            //{
+            //    var room1 = leaf.LeftChild.Room;
+            //    var room2 = leaf.RightChild.Room;
 
-        public void CreateHall(DungeonRoom leftRoom, DungeonRoom rightRoom)
-        {
+            //    //get the positions of the closest two exits
+            //    var minDistance = float.MaxValue;
+            //    DungeonDoorway selectedDoorway1 = null;
+            //    DungeonDoorway selectedDoorway2 = null;
+            //    Vector2 room1ExitPosition = new Vector2();
+            //    Vector2 room2ExitPosition = new Vector2();
+            //    foreach (var doorway1 in room1.Doorways)
+            //    {
+            //        foreach (var doorway2 in room2.Doorways)
+            //        {
+            //            var pos1 = (doorway1.Entity.Position / 16) + doorway1.PathfindingOffset;
+            //            var pos2 = (doorway2.Entity.Position / 16) + doorway2.PathfindingOffset;
+            //            var dist = Vector2.Distance(pos1, pos2);
+            //            if (dist < minDistance)
+            //            {
+            //                minDistance = dist;
+            //                room1ExitPosition = pos1;
+            //                room2ExitPosition = pos2;
+            //                selectedDoorway1 = doorway1;
+            //                selectedDoorway2 = doorway2;
+            //            }
+            //        }
+            //    }
 
+            //    //set the selected doorways to open
+            //    selectedDoorway1.SetOpen(true);
+            //    selectedDoorway2.SetOpen(true);
+
+            //    //add padding so hallway can't turn immediately
+            //    Vector2 room1ExitPositionPadded = new Vector2(room1ExitPosition.X, room1ExitPosition.Y);
+            //    switch (selectedDoorway1.Direction)
+            //    {
+            //        case "Top":
+            //            room1ExitPositionPadded.Y -= 2;
+            //            break;
+            //        case "Bottom":
+            //            room1ExitPositionPadded.Y += 5;
+            //            break;
+            //        case "Left":
+            //            room1ExitPositionPadded.X -= 3;
+            //            break;
+            //        case "Right":
+            //            room1ExitPositionPadded.X += 3;
+            //            break;
+            //    }
+            //    Vector2 room2ExitPositionPadded = new Vector2(room2ExitPosition.X, room2ExitPosition.Y);
+            //    switch (selectedDoorway2.Direction)
+            //    {
+            //        case "Top":
+            //            room2ExitPositionPadded.Y -= 2;
+            //            break;
+            //        case "Bottom":
+            //            room2ExitPositionPadded.Y += 5;
+            //            break;
+            //        case "Left":
+            //            room2ExitPositionPadded.X -= 3;
+            //            break;
+            //        case "Right":
+            //            room2ExitPositionPadded.X += 3;
+            //            break;
+            //    }
+
+            //    //remove walls from the exit positions
+            //    graph.Walls.Remove(room1ExitPosition.ToPoint());
+            //    graph.Walls.Remove(room2ExitPosition.ToPoint());
+
+            //    //assemble final path
+            //    List<Point> finalPath = new List<Point>();
+            //    var path1 = graph.Search(room1ExitPosition.ToPoint(), room1ExitPositionPadded.ToPoint());
+            //    if (path1 != null)
+            //        finalPath.AddRange(path1);
+            //    var path2 = graph.Search(room1ExitPositionPadded.ToPoint(), room2ExitPositionPadded.ToPoint());
+            //    if (path2 != null)
+            //        finalPath.AddRange(path2);
+            //    var path3 = graph.Search(room2ExitPositionPadded.ToPoint(), room2ExitPosition.ToPoint());
+            //    if (path3 != null)
+            //        finalPath.AddRange(path3);
+
+            //    //remove duplicate points
+            //    finalPath = finalPath.Distinct().ToList();
+
+            //    //init list of hallways
+            //    List<HallwayModel> hallwayModels = new List<HallwayModel>();
+
+            //    //loop through path
+            //    for (int i = 1; i < finalPath.Count - 1; i++)
+            //    {
+            //        //get previous, current, and next points on path
+            //        var previousPoint = finalPath[i - 1];
+            //        var point = finalPath[i];
+            //        var nextPoint = finalPath[i + 1];
+
+            //        //get normalized incoming and outgoing directions
+            //        Vector2 incomingDirection = new Vector2(point.X - previousPoint.X, point.Y - previousPoint.Y);
+            //        Vector2 outgoingDirection = new Vector2(nextPoint.X - point.X, nextPoint.Y - point.Y);
+            //        incomingDirection.Normalize();
+            //        outgoingDirection.Normalize();
+
+            //        //horizontal
+            //        if (incomingDirection.X == outgoingDirection.X && incomingDirection.Y == 0 && outgoingDirection.Y == 0)
+            //        {
+            //            var hallway = new HallwayModel(HallwayMaps.ForgeHorizontal, point, false);
+            //            hallwayModels.Add(hallway);
+            //        }
+            //        //vertical
+            //        if (incomingDirection.Y == outgoingDirection.Y && incomingDirection.X == 0 && outgoingDirection.X == 0)
+            //        {
+            //            var hallway = new HallwayModel(HallwayMaps.ForgeVertical, point, false);
+            //            hallwayModels.Add(hallway);
+            //        }
+            //        //bottom right corner
+            //        if ((incomingDirection.Y == 1 && outgoingDirection.X == -1) || (incomingDirection.X == 1 && outgoingDirection.Y == -1))
+            //        {
+            //            var hallway = new HallwayModel(HallwayMaps.ForgeBottomRight, point);
+            //            hallwayModels.Add(hallway);
+
+            //            var tmxMap = hallway.Map.TmxMap;
+            //            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+            //            {
+            //                var offsetValues = offsetString.Split(' ');
+
+            //                var prevDirectionValue = 0;
+            //                var nextDirectionValue = 0;
+            //                if (incomingDirection.X == 1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[1]);
+            //                }
+
+            //                if (incomingDirection.Y == 1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[1]);
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+                                
+            //                }
+
+            //                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+            //                var countToRemove = hallwayModels.Count - 1 - startIndex;
+            //                hallwayModels.RemoveRange(startIndex, countToRemove);
+            //                i += nextDirectionValue;
+            //            }
+            //        }
+            //        //bottom left corner
+            //        else if ((incomingDirection.Y == 1 && outgoingDirection.X == 1) || (incomingDirection.X == -1 && outgoingDirection.Y == -1))
+            //        {
+            //            var hallway = new HallwayModel(HallwayMaps.ForgeBottomLeft, point);
+            //            hallwayModels.Add(hallway);
+
+            //            var tmxMap = hallway.Map.TmxMap;
+            //            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+            //            {
+            //                var offsetValues = offsetString.Split(' ');
+
+            //                var prevDirectionValue = 0;
+            //                var nextDirectionValue = 0;
+            //                if (incomingDirection.X == -1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[1]);
+            //                }
+
+            //                if (incomingDirection.Y == 1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[1]);
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+
+            //                }
+
+            //                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+            //                var countToRemove = hallwayModels.Count - 1 - startIndex;
+            //                hallwayModels.RemoveRange(startIndex, countToRemove);
+            //                i += nextDirectionValue;
+            //            }
+            //        }
+            //        //top left corner
+            //        else if ((incomingDirection.Y == -1 && outgoingDirection.X == 1) || (incomingDirection.X == -1 && outgoingDirection.Y == 1))
+            //        {
+            //            var hallway = new HallwayModel(HallwayMaps.ForgeTopLeft, point);
+            //            hallwayModels.Add(hallway);
+
+            //            var tmxMap = hallway.Map.TmxMap;
+            //            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+            //            {
+            //                var offsetValues = offsetString.Split(' ');
+
+            //                var prevDirectionValue = 0;
+            //                var nextDirectionValue = 0;
+            //                if (incomingDirection.X == -1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+            //                }
+
+            //                if (incomingDirection.Y == -1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+            //                }
+
+            //                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+            //                var countToRemove = hallwayModels.Count - 1 - startIndex;
+            //                hallwayModels.RemoveRange(startIndex, countToRemove);
+            //                i += nextDirectionValue;
+            //            }
+            //        }
+            //        //top right corner
+            //        else if ((incomingDirection.Y == -1 && outgoingDirection.X == -1) || (incomingDirection.X == 1) && (outgoingDirection.Y == 1))
+            //        {
+            //            var hallway = new HallwayModel(HallwayMaps.ForgeTopRight, point);
+            //            hallwayModels.Add(hallway);
+
+            //            var tmxMap = hallway.Map.TmxMap;
+            //            if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+            //            {
+            //                var offsetValues = offsetString.Split(' ');
+
+            //                var prevDirectionValue = 0;
+            //                var nextDirectionValue = 0;
+            //                if (incomingDirection.X == 1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[0]);
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+            //                }
+
+            //                if (incomingDirection.Y == -1)
+            //                {
+            //                    prevDirectionValue = Convert.ToInt32(offsetValues[1]) - 3;
+            //                    nextDirectionValue = Convert.ToInt32(offsetValues[0]);
+            //                }
+
+            //                var startIndex = Math.Max(hallwayModels.Count - 1 - prevDirectionValue, 0);
+            //                var countToRemove = hallwayModels.Count - 1 - startIndex;
+            //                hallwayModels.RemoveRange(startIndex, countToRemove);
+            //                i += nextDirectionValue;
+            //            }
+            //        }
+            //    }
+
+            //    //foreach (var point in finalPath)
+            //    //{
+            //    //    var ent = Scene.CreateEntity("pathfinding-test");
+            //    //    ent.SetPosition(point.X * 16, point.Y * 16);
+            //    //    var prototypeSpriteRenderer = ent.AddComponent(new PrototypeSpriteRenderer(4, 4));
+            //    //    prototypeSpriteRenderer.RenderLayer = int.MinValue;
+            //    //}
+
+            //    //loop through selected hallways and generate their maps
+            //    foreach (var hallway in hallwayModels)
+            //    {
+            //        //load map
+            //        var tmxMap = hallway.Map.TmxMap;
+
+            //        //determine position
+            //        var hallwayPos = new Vector2(hallway.PathPoint.X, hallway.PathPoint.Y);
+            //        if (tmxMap.Properties.TryGetValue("PathfindingOffset", out var offsetString))
+            //        {
+            //            var offsetValues = offsetString.Split(' ');
+            //            hallwayPos.X -= Convert.ToInt32(offsetValues[0]);
+            //            hallwayPos.Y -= Convert.ToInt32(offsetValues[1]);
+            //        }
+
+            //        //create hallway entity and set position
+            //        var ent = Scene.CreateEntity("hallway");
+            //        ent.SetPosition(hallwayPos.X * 16, hallwayPos.Y * 16);
+
+            //        //create main map renderer
+            //        var mapRenderer = ent.AddComponent(new TiledMapRenderer(tmxMap, "Walls"));
+            //        mapRenderer.SetLayersToRender(new[] { "Back", "Walls" });
+            //        mapRenderer.RenderLayer = 10;
+            //        ent.AddComponent(new GridGraphManager(mapRenderer));
+            //        ent.AddComponent(new TiledObjectHandler(mapRenderer));
+            //        Flags.SetFlagExclusive(ref mapRenderer.PhysicsLayer, (int)PhysicsLayers.Environment);
+
+            //        //create above map renderer
+            //        var tiledMapDetailsRenderer = ent.AddComponent(new TiledMapRenderer(tmxMap));
+            //        var layersToRender = new List<string>();
+            //        if (tmxMap.Layers.Contains("Front"))
+            //            layersToRender.Add("Front");
+            //        if (tmxMap.Layers.Contains("AboveFront"))
+            //            layersToRender.Add("AboveFront");
+            //        tiledMapDetailsRenderer.SetLayersToRender(layersToRender.ToArray());
+            //        tiledMapDetailsRenderer.RenderLayer = (int)RenderLayers.AboveDetails;
+            //        tiledMapDetailsRenderer.Material = Material.StencilWrite();
+            //        //tiledMapDetailsRenderer.Material.Effect = Scene.Content.LoadNezEffect<SpriteAlphaTestEffect>();
+            //    }
+            //}
         }
     }
 }

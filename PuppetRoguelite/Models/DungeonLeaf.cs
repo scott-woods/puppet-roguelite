@@ -15,7 +15,7 @@ namespace PuppetRoguelite.Models
     /// </summary>
     public class DungeonLeaf
     {
-        const int _minSize = 37;
+        const int _minSize = 35;
 
         public DungeonLeaf LeftChild;
         public DungeonLeaf RightChild;
@@ -24,14 +24,18 @@ namespace PuppetRoguelite.Models
         public Vector2 Position;
         public Vector2 Size;
 
-        public DungeonLeaf(Vector2 position, Vector2 size)
+        public int Generation;
+
+        public DungeonLeaf(int generation, Vector2 position, Vector2 size)
         {
+            Generation = generation;
             Position = position;
             Size = size;
         }
 
-        public DungeonLeaf(int x, int y, int width, int height)
+        public DungeonLeaf(int generation, int x, int y, int width, int height)
         {
+            Generation = generation;
             Position = new Vector2(x, y);
             Size = new Vector2(width, height);
         }
@@ -57,83 +61,68 @@ namespace PuppetRoguelite.Models
             //determine if area is too small to split
             var max = splitH ? Size.Y : Size.X;
             max -= _minSize;
-            if (max <= _minSize)
+
+            //adjust min and max to be in factors of 5
+            int adjustedMin = (_minSize + 4) / 5;
+            int adjustedMax = (int)max / 5;
+            if (adjustedMax <= adjustedMin)
                 return false;
 
-            var split = Nez.Random.Range(_minSize, (int)max);
+            var split = Nez.Random.Range(adjustedMin, adjustedMax + 1) * 5;
 
             //create children from the split
             if (splitH)
             {
-                LeftChild = new DungeonLeaf(Position, new Vector2(Size.X, split));
-                RightChild = new DungeonLeaf(new Vector2(Position.X, Position.Y + split), new Vector2(Size.X, Size.Y - split));
+                LeftChild = new DungeonLeaf(Generation + 1, Position, new Vector2(Size.X, split));
+                RightChild = new DungeonLeaf(Generation + 1, new Vector2(Position.X, Position.Y + split), new Vector2(Size.X, Size.Y - split));
             }
             else
             {
-                LeftChild = new DungeonLeaf(Position, new Vector2(split, Size.Y));
-                RightChild = new DungeonLeaf(new Vector2(Position.X + split, Position.Y), new Vector2(Size.X - split, Size.Y));
+                LeftChild = new DungeonLeaf(Generation + 1, Position, new Vector2(split, Size.Y));
+                RightChild = new DungeonLeaf(Generation + 1, new Vector2(Position.X + split, Position.Y), new Vector2(Size.X - split, Size.Y));
             }
 
             return true;
         }
 
-        public void CreateRooms()
-        {
-            if (LeftChild != null || RightChild != null)
-            {
-                LeftChild?.CreateRooms();
-                RightChild?.CreateRooms();
-            }
-            else
-            {
-                //get all possible maps that will fit in this partition
-                var possibleMaps = Maps.ForgeMaps.Where((m) =>
-                {
-                    //determine if map will fit in leaf
-                    var fits = m.TmxMap.Width <= Size.X + 10 && m.TmxMap.Height <= Size.Y + 14;
-
-                    //if doesn't fit, unload
-                    if (!fits)
-                        Game1.Scene.Content.UnloadAsset<TmxMap>(m.Name);
-
-                    return fits;
-                }).ToList();
-
-                //if no possible maps, don't do anything i guess
-                if (possibleMaps.Count == 0)
-                    return;
-
-                var map = possibleMaps.RandomItem();
-                var pos = new Vector2(Nez.Random.Range(5, (int)(Size.X - map.TmxMap.Width - 5)) + Position.X, Nez.Random.Range(7, (int)(Size.Y - map.TmxMap.Height - 7)) + Position.Y);
-
-                Room = new DungeonRoom(map, pos);
-            }
-        }
-
-        public DungeonRoom GetRoom()
+        public void GetRooms(ref List<DungeonRoom> rooms)
         {
             if (Room != null)
-                return Room;
+            {
+                rooms.Add(Room);
+                return;
+            }
             else
             {
-                DungeonRoom leftRoom = null;
-                DungeonRoom rightRoom = null;
-                if (LeftChild != null)
-                    leftRoom = LeftChild.GetRoom();
-                if (RightChild != null)
-                    rightRoom = RightChild.GetRoom();
-
-                if (leftRoom == null && rightRoom == null)
-                    return null;
-                else if (rightRoom == null)
-                    return leftRoom;
-                else if (leftRoom == null)
-                    return rightRoom;
-                else if (Nez.Random.Chance(.5f))
-                    return leftRoom;
-                else
-                    return rightRoom;
+                LeftChild?.GetRooms(ref rooms);
+                RightChild?.GetRooms(ref rooms);
             }
         }
+
+        //public DungeonRoom GetRoom()
+        //{
+        //    if (Room != null)
+        //        return Room;
+        //    else
+        //    {
+        //        DungeonRoom leftRoom = null;
+        //        DungeonRoom rightRoom = null;
+        //        if (LeftChild != null)
+        //            leftRoom = LeftChild.GetRoom();
+        //        if (RightChild != null)
+        //            rightRoom = RightChild.GetRoom();
+
+        //        if (leftRoom == null && rightRoom == null)
+        //            return null;
+        //        else if (rightRoom == null)
+        //            return leftRoom;
+        //        else if (leftRoom == null)
+        //            return rightRoom;
+        //        else if (Nez.Random.Chance(.5f))
+        //            return leftRoom;
+        //        else
+        //            return rightRoom;
+        //    }
+        //}
     }
 }
