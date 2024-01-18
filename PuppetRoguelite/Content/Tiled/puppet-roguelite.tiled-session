@@ -3,15 +3,14 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "RuleMaps/forge_floor_rules.tmx",
+    "activeFile": "Tilemaps/Forge/Halls/testing gak.tmx",
     "expandedProjectPaths": [
-        "Tilemaps",
         ".",
-        "Tilemaps/Forge",
-        "Tilemaps/Forge/Halls",
         "Tilemaps/Forge/Doorways",
-        "Tilemaps/DungeonPrison",
-        "RuleMaps"
+        "RuleMaps",
+        "Tilemaps/Forge",
+        "Tilemaps",
+        "Tilemaps/Forge/Halls"
     ],
     "fileStates": {
         ":/automap-tiles.tsx": {
@@ -1028,7 +1027,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 43.18181818181819,
-                "y": 7.0909090909090935
+                "y": 21.636363636363637
             }
         },
         "Tilemaps/Forge/Doorways/forge_left_closed.tmx": {
@@ -1201,10 +1200,10 @@
         },
         "Tilemaps/Forge/Halls/testing gak.tmx": {
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 365,
-                "y": 394.66666666666663
+                "x": 117,
+                "y": 163.33333333333334
             }
         },
         "Tilemaps/Forge/forge_pre_boss.tmx": {
@@ -1215,18 +1214,18 @@
             "selectedLayer": 6,
             "viewCenter": {
                 "x": 100.5,
-                "y": 252
+                "y": 251
             }
         },
         "Tilemaps/Forge/forge_simple.tmx": {
             "expandedObjectLayers": [
                 45
             ],
-            "scale": 1,
+            "scale": 2,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 233.5,
-                "y": 262
+                "x": 157.75,
+                "y": 274.5
             }
         },
         "Tilemaps/Forge/forge_test.tmx": {
@@ -1297,22 +1296,44 @@
     "map.width": 32,
     "openFiles": [
         "Tilemaps/Forge/forge_pre_boss.tmx",
-        "RuleMaps/forge_floor_rules.tmx"
+        "RuleMaps/forge_floor_rules.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_left_corner.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_right_corner.tmx",
+        "Tilemaps/Forge/Halls/forge_top_left_corner.tmx",
+        "Tilemaps/Forge/Halls/forge_top_right_corner.tmx",
+        "Tilemaps/Forge/forge_simple.tmx",
+        "Tilemaps/Forge/Halls/forge_horizontal.tmx",
+        "Tilemaps/Forge/Halls/forge_vertical.tmx",
+        "Tilemaps/Forge/Doorways/forge_top_open.tmx",
+        "Tilemaps/Forge/Doorways/forge_bottom_open.tmx",
+        "Tilemaps/Forge/Doorways/forge_bottom_closed.tmx",
+        "Tilemaps/Forge/Doorways/forge_right_closed.tmx",
+        "Tilemaps/Forge/Doorways/forge_right_open.tmx",
+        "Tilemaps/Forge/Doorways/forge_left_open.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_left_corner - Copy.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_left_corner - Copy - Copy.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_left_corner - Copy - Copy - Copy.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_right_corner - Copy.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_right_corner - Copy - Copy.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_right_corner - Copy - Copy - Copy.tmx",
+        "Tilemaps/Forge/Halls/forge_top_left_corner - Copy.tmx",
+        "Tilemaps/Forge/Halls/forge_top_left_corner - Copy - Copy.tmx",
+        "Tilemaps/Forge/Halls/testing gak.tmx"
     ],
     "project": "puppet-roguelite.tiled-project",
     "recentFiles": [
-        "Tilemaps/Forge/Halls/forge_bottom_right_corner.tmx",
-        "Tilemaps/Forge/Halls/forge_bottom_right_corner - Copy (2).tmx",
-        "Tilemaps/Forge/Halls/forge_top_left_corner - Copy - Copy.tmx",
-        "Tilemaps/Forge/Doorways/forge_left_closed.tmx",
-        "RuleMaps/forge_floor_rules - Copy.tmx",
         "Tilemaps/Forge/forge_pre_boss.tmx",
         "RuleMaps/forge_floor_rules.tmx",
-        "Tilemaps/DungeonPrison/boss_room.tmx",
-        "Tilemaps/DungeonPrison/dp_hallway.tmx",
-        "Tilemaps/DungeonPrison/dp_b_1.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_left_corner.tmx",
+        "Tilemaps/Forge/Halls/forge_bottom_right_corner.tmx",
         "Tilemaps/Forge/Halls/forge_top_left_corner.tmx",
-        "Tilemaps/Forge/Halls/forge_bottom_left_corner.tmx"
+        "Tilemaps/Forge/Halls/forge_top_right_corner.tmx",
+        "Tilemaps/Forge/forge_simple.tmx",
+        "Tilemaps/Forge/Halls/forge_horizontal.tmx",
+        "Tilemaps/Forge/Halls/forge_vertical.tmx",
+        "Tilemaps/Forge/Doorways/forge_top_open.tmx",
+        "Tilemaps/Forge/Doorways/forge_bottom_open.tmx",
+        "Tilemaps/Forge/Doorways/forge_bottom_closed.tmx"
     ],
     "resizeMap.removeObjects": true,
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
