@@ -27,7 +27,7 @@ namespace PuppetRoguelite.Components.Characters.Player
 
         //stats
         public float RaycastDistance = 10f;
-        public float MoveSpeed = PlayerData.Instance.MovementSpeed * 5f;
+        public float MoveSpeed = PlayerData.Instance.MovementSpeed;
 
         //components
         Mover _mover;
