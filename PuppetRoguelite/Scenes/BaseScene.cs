@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using PuppetRoguelite.Components.Cameras;
 using PuppetRoguelite.StaticData;
 using PuppetRoguelite.Tools;
 using System;
@@ -74,6 +75,16 @@ namespace PuppetRoguelite.Scenes
         {
             Core.GraphicsDevice.SetRenderTarget(null);
             Core.GraphicsDevice.Clear(letterboxColor);
+
+            Vector2 offset = Vector2.Zero;
+            if (Camera.Entity.TryGetComponent<DeadzoneFollowCamera>(out var cam))
+            {
+                var scale = new Vector2(finalRenderDestinationRect.Width, finalRenderDestinationRect.Height) / Game1.DesignResolution.ToVector2();
+                offset = scale * (cam.ActualPosition - cam.RoundedPosition - (Game1.BleedArea.ToVector2() / 2));
+            }
+
+            finalRenderDestinationRect.X -= (int)offset.X;
+            finalRenderDestinationRect.Y -= (int)offset.Y;
 
             Graphics.Instance.Batcher.Begin(BlendState.AlphaBlend, samplerState, DepthStencilState.None, RasterizerState.CullNone, null);
 

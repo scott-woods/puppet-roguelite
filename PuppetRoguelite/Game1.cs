@@ -16,10 +16,12 @@ namespace PuppetRoguelite
     {
         public static Point LowerResolution = new Point(480, 270);
         public static Point DesignResolution = new Point(480, 270);
+        public static Point BleedArea = new Point(4, 4);
         //public static Point UIResolution { get => Screen.Size.ToPoint(); }
         //public static Point UIResolution = new Point(480, 270);
         public static Point UIResolution = new Point(1920, 1080);
         public static Vector2 ResolutionScale { get => MonoGameCompat.ToVector2(UIResolution) / MonoGameCompat.ToVector2(DesignResolution); }
+        public static Point DesignResolutionWithBleed { get => DesignResolution + BleedArea; }
 
         //global managers
         public static SceneManager SceneManager = new SceneManager();
@@ -56,7 +58,9 @@ namespace PuppetRoguelite
             DebugRenderEnabled = false;
             Window.AllowUserResizing = false;
             IsFixedTimeStep = true;
-            TargetElapsedTime = System.TimeSpan.FromSeconds((double)1 / 240);
+            SDL.SDL_GetCurrentDisplayMode(SDL.SDL_GetWindowDisplayIndex(Game1.Instance.Window.Handle), out var mode);
+            var refreshRate = mode.refresh_rate == 0 ? 60 : mode.refresh_rate;
+            TargetElapsedTime = System.TimeSpan.FromSeconds((double)1 / refreshRate);
             IsMouseVisible = false;
             PauseOnFocusLost = true;
             ExitOnEscapeKeypress = false;
@@ -83,7 +87,7 @@ namespace PuppetRoguelite
             RegisterGlobalManager(InputStateManager);
 
             //resolution and screen size
-            Scene.SetDefaultDesignResolution(DesignResolution.X, DesignResolution.Y, Scene.SceneResolutionPolicy.BestFit);
+            Scene.SetDefaultDesignResolution(DesignResolutionWithBleed.X, DesignResolutionWithBleed.Y, Scene.SceneResolutionPolicy.LinearBleed, BleedArea.X, BleedArea.Y);
             Screen.SetSize(1920, 1080);
 
             Window.Title = "Threadlock";

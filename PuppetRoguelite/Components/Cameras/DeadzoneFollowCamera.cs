@@ -16,6 +16,11 @@ namespace PuppetRoguelite.Components.Cameras
         Entity _targetEntity;
         public RectangleF Deadzone = new RectangleF(0, 0, 64, 64);
         CameraHandler _cameraHandler;
+        float _lerpFactor = 10;
+        float _minDistance = .05f;
+        public Vector2 ActualPosition;
+        public Vector2 RoundedPosition;
+        Camera _camera;
 
         //components
         CameraShake _shake;
@@ -23,6 +28,8 @@ namespace PuppetRoguelite.Components.Cameras
         public DeadzoneFollowCamera(Entity target, Vector2 deadzoneSize)
         {
             _targetEntity = target;
+            ActualPosition = _targetEntity.Position;
+            RoundedPosition = _targetEntity.Position;
             Deadzone = new RectangleF(0, 0, deadzoneSize.X, deadzoneSize.Y);
         }
 
@@ -36,6 +43,9 @@ namespace PuppetRoguelite.Components.Cameras
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
+
+            if (_camera == null)
+                _camera = Entity.Scene.Camera;
 
             Log.Information("Creating Deadzone Follow Camera");
             _cameraHandler = Entity.Scene.GetOrCreateSceneComponent<CameraHandler>();
@@ -66,7 +76,18 @@ namespace PuppetRoguelite.Components.Cameras
                     pos.Y = _cameraHandler.BottomRight.Y - camBounds.Height / 2;
                 }
 
-                Entity.Position = pos;
+                if (Vector2.Distance(ActualPosition, pos) < _minDistance)
+                {
+                    _camera.Position = pos;
+                    ActualPosition = pos;
+                    RoundedPosition = pos;
+                    return;
+                }
+
+                ActualPosition = Vector2.Lerp(ActualPosition, _targetEntity.Position, Time.DeltaTime * _lerpFactor);
+                RoundedPosition = new Vector2((int)ActualPosition.X, (int)ActualPosition.Y);
+
+                _camera.Position = RoundedPosition;
             }
         }
 
