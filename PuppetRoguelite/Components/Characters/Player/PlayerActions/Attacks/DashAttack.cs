@@ -232,7 +232,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerActions.Attacks
             }
 
             //determine total amount of time needed to move to target 
-            var secondsPerFrame = 1 / (_animator.CurrentAnimation.FrameRate * _animator.Speed);
+            var secondsPerFrame = 1 / (_animator.CurrentAnimation.FrameRates[0] * _animator.Speed);
             var movementFrames = 1;
             var totalMovementTime = movementFrames * secondsPerFrame;
             var movementTimeRemaining = movementFrames * secondsPerFrame;

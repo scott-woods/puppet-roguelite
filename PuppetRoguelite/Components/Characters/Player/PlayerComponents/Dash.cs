@@ -87,7 +87,7 @@ namespace PuppetRoguelite.Components.Characters.Player.PlayerComponents
 
                 //get animation duration
                 //var animationDuration = _animator.CurrentAnimation.Sprites.Count() / _animator.CurrentAnimation.FrameRate;
-                var animationDuration = 8 / _spriteAnimator.CurrentAnimation.FrameRate;
+                var animationDuration = 8 / _spriteAnimator.CurrentAnimation.FrameRates[0];
 
                 //if elapsed time is less than duration, we are still attacking
                 if (_elapsedTime < animationDuration)
