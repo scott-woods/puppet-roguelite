@@ -16,7 +16,7 @@ namespace PuppetRoguelite.Components.Cameras
         Entity _targetEntity;
         public RectangleF Deadzone = new RectangleF(0, 0, 64, 64);
         CameraHandler _cameraHandler;
-        float _lerpFactor = 10;
+        float _lerpFactor = 15;
         float _minDistance = .05f;
         public Vector2 ActualPosition;
         public Vector2 RoundedPosition;
@@ -87,7 +87,7 @@ namespace PuppetRoguelite.Components.Cameras
                 ActualPosition = Vector2.Lerp(ActualPosition, _targetEntity.Position, Time.DeltaTime * _lerpFactor);
                 RoundedPosition = new Vector2((int)ActualPosition.X, (int)ActualPosition.Y);
 
-                _camera.Position = RoundedPosition;
+                _camera.Position = ActualPosition;
             }
         }
 

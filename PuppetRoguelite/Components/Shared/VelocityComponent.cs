@@ -16,7 +16,7 @@ namespace PuppetRoguelite.Components.Shared
     {
         public Vector2 Direction = new Vector2(1, 0);
         public float Speed;
-        SubpixelVector2 _subPixelV2 = new SubpixelVector2();
+        //SubpixelVector2 _subPixelV2 = new SubpixelVector2();
 
         Mover _mover;
 
@@ -72,8 +72,8 @@ namespace PuppetRoguelite.Components.Shared
             Log.Debug("Velocity Component calculated Movement as: " + movement);
             _mover.CalculateMovement(ref movement, out var result);
             Log.Debug("Movement after Mover Calculation: " + movement);
-            _subPixelV2.Update(ref movement);
-            Log.Debug("Movement after SubPixelV2 Calculation: " + movement);
+            //_subPixelV2.Update(ref movement);
+            //Log.Debug("Movement after SubPixelV2 Calculation: " + movement);
 
             Log.Debug("Velocitiy Component applying Movement: " + movement);
             _mover.ApplyMovement(movement);

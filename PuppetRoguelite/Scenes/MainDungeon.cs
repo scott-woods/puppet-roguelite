@@ -39,11 +39,6 @@ namespace PuppetRoguelite.Scenes
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();
 
-            //camera
-            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
-            Camera.Entity.SetUpdateOrder(int.MaxValue);
-            //Camera.Zoom = -1;
-
             //add combat manager
             _combatManager = AddSceneComponent(new CombatManager());
 
@@ -68,6 +63,11 @@ namespace PuppetRoguelite.Scenes
             //var spawn = new Vector2(0, 0);
             _playerSpawner.SpawnPlayer(spawn);
             _playerEntity.SetPosition(spawn);
+            Camera.Position = _playerEntity.Position;
+
+            //camera
+            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
+            Camera.Entity.SetUpdateOrder(int.MaxValue);
 
             Game1.AudioManager.PlayMusic(Songs.Babbulon, true);
 

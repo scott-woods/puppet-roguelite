@@ -278,6 +278,8 @@ namespace PuppetRoguelite.Components.Characters.Player
             {
                 StateMachine.Update(Time.DeltaTime);
             }
+
+            Debug.Log(Entity.Position);
         }
 
         public void Idle()

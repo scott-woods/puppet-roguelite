@@ -62,10 +62,6 @@ namespace PuppetRoguelite.Scenes
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();
 
-            //camera
-            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
-            Camera.Entity.SetUpdateOrder(int.MaxValue);
-
             //mouse cursor
             var mouseEntity = CreateEntity("mouse-cursor");
             mouseEntity.AddComponent(new MouseCursor());
@@ -80,6 +76,11 @@ namespace PuppetRoguelite.Scenes
             Game1.AudioManager.PlayMusic(Songs.BabyMode);
 
             _playerSpawner.SpawnPlayer(_mapEntity);
+            Camera.Position = _playerEntity.Position;
+
+            //camera
+            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
+            Camera.Entity.SetUpdateOrder(int.MaxValue);
         }
     }
 }

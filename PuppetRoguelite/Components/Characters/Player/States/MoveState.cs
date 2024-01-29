@@ -26,20 +26,13 @@ namespace PuppetRoguelite.Components.Characters.Player.States
 
             //animation
             string animation = "";
-            var direction = DirectionHelper.GetDirectionByVector2(dir);
-            switch (direction)
-            {
-                case Direction.Up:
-                    animation = "RunUp";
-                    break;
-                case Direction.Down:
-                    animation = "RunDown";
-                    break;
-                case Direction.Left:
-                case Direction.Right:
-                    animation = "Run";
-                    break;
-            }
+            if (dir.Y < 0 && Math.Abs(dir.X) < .1f)
+                animation = "RunUp";
+            else if (dir.Y > 0 && Math.Abs(dir.X) < .1f)
+                animation = "RunDown";
+            else
+                animation = "Run";
+
             if (!_context.SpriteAnimator.IsAnimationActive(animation))
             {
                 _context.SpriteAnimator.Play(animation);

@@ -64,18 +64,16 @@ namespace PuppetRoguelite.Scenes
             //add player
             _playerEntity = _playerSpawner.CreatePlayerEntity();
 
-            //camera
-            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
-            Camera.Entity.SetUpdateOrder(int.MaxValue);
+            Camera.SetPosition(_playerEntity.Position);
 
             //mouse cursor
             var mouseEntity = CreateEntity("mouse-cursor");
             mouseEntity.AddComponent(new MouseCursor());
         }
 
-        public override void OnStart()
+        public override void Begin()
         {
-            base.OnStart();
+            base.Begin();
 
             //configure observer for exit to dungeon
             var exitToDungeon = FindComponentsOfType<ExitArea>().FirstOrDefault(e => e.MapEntity == _mapEntity && e.TargetSceneType == typeof(MainDungeon));
@@ -86,6 +84,11 @@ namespace PuppetRoguelite.Scenes
 
             //spawn player
             _playerSpawner.SpawnPlayer(_mapEntity);
+            Camera.Position = _playerEntity.Position;
+
+            //camera
+            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
+            Camera.Entity.SetUpdateOrder(int.MaxValue);
 
             //if haven't completed intro, enable cutscene trigger
             var sceneTrigger = FindComponentsOfType<AreaTrigger>().FirstOrDefault(t => t.TmxObject.Name == "HubIntro");

@@ -30,9 +30,11 @@ namespace PuppetRoguelite.Scenes
             //Camera.SetMinimumZoom(1f);
             //Camera.SetMaximumZoom(Game1.ResolutionScale + diff);
             //Camera.Zoom = 0.5f;
+            Camera.MaximumZoom = 7;
+            Camera.Zoom = .5f;
 
             _gameRenderer = new RenderLayerExcludeRenderer(0, (int)RenderLayers.ScreenSpaceRenderLayer, (int)RenderLayers.Cursor);
-            var mainRenderTarget = new RenderTexture(Game1.DesignResolution.X, Game1.DesignResolution.Y);
+            var mainRenderTarget = new RenderTexture(Game1.UIResolution.X, Game1.UIResolution.Y);
             _gameRenderer.RenderTexture = mainRenderTarget;
             AddRenderer(_gameRenderer);
 
@@ -95,7 +97,7 @@ namespace PuppetRoguelite.Scenes
 
             //render ui
             //Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, finalRenderDestinationRect, Color.White);
-            var uiRect = new Rectangle(0, 0, finalRenderDestinationRect.Width, finalRenderDestinationRect.Height);
+            var uiRect = new Rectangle(0, 0, Screen.Width, Screen.Height);
             //var uiRect = finalRenderDestinationRect;
             Graphics.Instance.Batcher.Draw(_uiRenderer.RenderTexture, uiRect, Color.White);
 

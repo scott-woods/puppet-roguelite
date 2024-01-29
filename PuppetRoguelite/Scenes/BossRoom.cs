@@ -89,10 +89,6 @@ namespace PuppetRoguelite.Scenes
             //add player
             _playerEntity = PlayerSpawner.CreatePlayerEntity();
 
-            //camera
-            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
-            Camera.Entity.SetUpdateOrder(int.MaxValue);
-
             var mouseEntity = CreateEntity("mouse");
             mouseEntity.AddComponent(new MouseCursor());
         }
@@ -136,6 +132,11 @@ namespace PuppetRoguelite.Scenes
 
             //spawn player
             PlayerSpawner.SpawnPlayer(_mapEntity);
+            Camera.Position = _playerEntity.Position;
+
+            //camera
+            Camera.Entity.AddComponent(new DeadzoneFollowCamera(_playerEntity, new Vector2(0, 0)));
+            Camera.Entity.SetUpdateOrder(int.MaxValue);
 
             //spawn boss
             //var bossSpawn = FindComponentOfType<BossSpawnPoint>();

@@ -15,12 +15,13 @@ namespace PuppetRoguelite
     public class Game1 : Core
     {
         public static Point LowerResolution = new Point(480, 270);
-        public static Point DesignResolution = new Point(480, 270);
+        public static Point DesignResolution = new Point(1920, 1080);
         public static Point BleedArea = new Point(4, 4);
         //public static Point UIResolution { get => Screen.Size.ToPoint(); }
         //public static Point UIResolution = new Point(480, 270);
         public static Point UIResolution = new Point(1920, 1080);
-        public static Vector2 ResolutionScale { get => MonoGameCompat.ToVector2(UIResolution) / MonoGameCompat.ToVector2(DesignResolution); }
+        //public static Vector2 ResolutionScale { get => MonoGameCompat.ToVector2(UIResolution) / MonoGameCompat.ToVector2(DesignResolution); }
+        public static Vector2 ResolutionScale { get => new Vector2(4, 4); }
         public static Point DesignResolutionWithBleed { get => DesignResolution + BleedArea; }
 
         //global managers
@@ -64,6 +65,7 @@ namespace PuppetRoguelite
             IsMouseVisible = false;
             PauseOnFocusLost = true;
             ExitOnEscapeKeypress = false;
+            Graphics.Instance.Batcher.ShouldRoundDestinations = false;
 
             //init data directory
             if (!Directory.Exists("Data")) Directory.CreateDirectory("Data");

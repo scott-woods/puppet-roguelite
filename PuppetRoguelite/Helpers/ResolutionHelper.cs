@@ -22,7 +22,7 @@ namespace PuppetRoguelite.Tools
 
         public static Vector2 GameToUiPoint(Vector2 gamePoint)
         {
-            var screenPos = Game1.Scene.Camera.WorldToScreenPoint(gamePoint) * Game1.ResolutionScale;
+            var screenPos = Game1.Scene.Camera.WorldToScreenPoint(gamePoint);
             return screenPos;
             
             //return screenPos * Game1.ResolutionScale;
