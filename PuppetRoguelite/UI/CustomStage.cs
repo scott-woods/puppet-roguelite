@@ -13,7 +13,7 @@ namespace PuppetRoguelite.UI
     {
         public override Vector2 GetMousePosition()
         {
-            return Entity != null && !IsFullScreen ? Input.ScaledMousePosition : Input.ScaledMousePosition * Game1.ResolutionScale;
+            return Entity != null && !IsFullScreen ? Input.ScaledMousePosition : Input.ScaledMousePosition;
         }
     }
 }
