@@ -115,12 +115,49 @@ namespace Nez
 
 		public static class Nez
 		{
-			public static class Effects
+			public static class FNAEffects
 			{
 				public static class Transitions
 				{
+					public const string Squares = @"Content\nez\FNAEffects\transitions\Squares.fxb";
+					public const string TextureWipe = @"Content\nez\FNAEffects\transitions\TextureWipe.fxb";
+					public const string Wind = @"Content\nez\FNAEffects\transitions\Wind.fxb";
 				}
 
+				public const string Bevels = @"Content\nez\FNAEffects\Bevels.fxb";
+				public const string BloomCombine = @"Content\nez\FNAEffects\BloomCombine.fxb";
+				public const string BloomExtract = @"Content\nez\FNAEffects\BloomExtract.fxb";
+				public const string Crosshatch = @"Content\nez\FNAEffects\Crosshatch.fxb";
+				public const string DeferredLighting = @"Content\nez\FNAEffects\DeferredLighting.fxb";
+				public const string DeferredSprite = @"Content\nez\FNAEffects\DeferredSprite.fxb";
+				public const string Dissolve = @"Content\nez\FNAEffects\Dissolve.fxb";
+				public const string Dots = @"Content\nez\FNAEffects\Dots.fxb";
+				public const string ForwardLighting = @"Content\nez\FNAEffects\ForwardLighting.fxb";
+				public const string GaussianBlur = @"Content\nez\FNAEffects\GaussianBlur.fxb";
+				public const string Grayscale = @"Content\nez\FNAEffects\Grayscale.fxb";
+				public const string HeatDistortion = @"Content\nez\FNAEffects\HeatDistortion.fxb";
+				public const string Invert = @"Content\nez\FNAEffects\Invert.fxb";
+				public const string Letterbox = @"Content\nez\FNAEffects\Letterbox.fxb";
+				public const string MultiTexture = @"Content\nez\FNAEffects\MultiTexture.fxb";
+				public const string MultiTextureOverlay = @"Content\nez\FNAEffects\MultiTextureOverlay.fxb";
+				public const string Noise = @"Content\nez\FNAEffects\Noise.fxb";
+				public const string PaletteCycler = @"Content\nez\FNAEffects\PaletteCycler.fxb";
+				public const string PixelGlitch = @"Content\nez\FNAEffects\PixelGlitch.fxb";
+				public const string PolygonLight = @"Content\nez\FNAEffects\PolygonLight.fxb";
+				public const string Reflection = @"Content\nez\FNAEffects\Reflection.fxb";
+				public const string Scanlines = @"Content\nez\FNAEffects\Scanlines.fxb";
+				public const string Sepia = @"Content\nez\FNAEffects\Sepia.fxb";
+				public const string SpriteAlphaTest = @"Content\nez\FNAEffects\SpriteAlphaTest.fxb";
+				public const string SpriteBlinkEffect = @"Content\nez\FNAEffects\SpriteBlinkEffect.fxb";
+				public const string SpriteEffect = @"Content\nez\FNAEffects\SpriteEffect.fxb";
+				public const string SpriteLightMultiply = @"Content\nez\FNAEffects\SpriteLightMultiply.fxb";
+				public const string SpriteLines = @"Content\nez\FNAEffects\SpriteLines.fxb";
+				public const string Squares = @"Content\nez\FNAEffects\Squares.fxb";
+				public const string StencilLight = @"Content\nez\FNAEffects\StencilLight.fxb";
+				public const string TextureWipe = @"Content\nez\FNAEffects\TextureWipe.fxb";
+				public const string Twist = @"Content\nez\FNAEffects\Twist.fxb";
+				public const string Vignette = @"Content\nez\FNAEffects\Vignette.fxb";
+				public const string Wind = @"Content\nez\FNAEffects\Wind.fxb";
 			}
 
 			public static class Textures
@@ -1065,12 +1102,21 @@ namespace Nez
 
 					public static class Halls
 					{
+						public const string Forge_bottom_left_cornerCopyCopyCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_left_corner - Copy - Copy - Copy.tmx";
+						public const string Forge_bottom_left_cornerCopyCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_left_corner - Copy - Copy.tmx";
+						public const string Forge_bottom_left_cornerCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_left_corner - Copy.tmx";
 						public const string Forge_bottom_left_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_left_corner.tmx";
+						public const string Forge_bottom_right_cornerCopyCopyCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_right_corner - Copy - Copy - Copy.tmx";
+						public const string Forge_bottom_right_cornerCopyCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_right_corner - Copy - Copy.tmx";
+						public const string Forge_bottom_right_cornerCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_right_corner - Copy.tmx";
 						public const string Forge_bottom_right_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_bottom_right_corner.tmx";
 						public const string Forge_horizontal = @"Content\Tiled\Tilemaps\Forge\Halls\forge_horizontal.tmx";
+						public const string Forge_top_left_cornerCopyCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_top_left_corner - Copy - Copy.tmx";
+						public const string Forge_top_left_cornerCopy = @"Content\Tiled\Tilemaps\Forge\Halls\forge_top_left_corner - Copy.tmx";
 						public const string Forge_top_left_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_top_left_corner.tmx";
 						public const string Forge_top_right_corner = @"Content\Tiled\Tilemaps\Forge\Halls\forge_top_right_corner.tmx";
 						public const string Forge_vertical = @"Content\Tiled\Tilemaps\Forge\Halls\forge_vertical.tmx";
+						public const string Testinggak = @"Content\Tiled\Tilemaps\Forge\Halls\testing gak.tmx";
 					}
 
 					public const string Forge_pre_boss = @"Content\Tiled\Tilemaps\Forge\forge_pre_boss.tmx";

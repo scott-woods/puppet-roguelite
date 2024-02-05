@@ -473,7 +473,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\nez\effects\" />
     <Folder Include="Content\Textures\Characters\HeartHoarder\" />
     <Folder Include="Content\Textures\Characters\OrbMage\" />
     <Folder Include="Content\Textures\UI\Icons\Style3\Atlas\" />
