@@ -15,6 +15,7 @@ namespace PuppetRoguelite.Models
         public Map Map;
         public Vector2 Position;
         public List<DungeonDoorway> Doorways = new List<DungeonDoorway>();
+        public List<EnemySpawnTrigger> EnemySpawnTriggers = new List<EnemySpawnTrigger>();
         public DungeonLeaf DungeonLeaf;
 
         public DungeonRoom(Map map, Vector2 position, DungeonLeaf dungeonLeaf)

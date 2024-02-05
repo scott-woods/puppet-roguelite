@@ -1,9 +1,11 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.Tiled;
 using PuppetRoguelite.Components.Characters.Enemies.ChainBot;
 using PuppetRoguelite.Components.Characters.Enemies.Ghoul;
 using PuppetRoguelite.Components.Characters.Enemies.OrbMage;
 using PuppetRoguelite.Components.Characters.Enemies.Spitter;
+using PuppetRoguelite.Models;
 using PuppetRoguelite.SceneComponents.CombatManager;
 using System;
 using System.Collections;
@@ -14,12 +16,25 @@ using System.Threading.Tasks;
 
 namespace PuppetRoguelite.Components.TiledComponents
 {
-    public class EnemySpawnTrigger : Trigger
+    public class EnemySpawnTrigger : AreaTrigger
     {
         List<Type> _enemyTypes = new List<Type>() { typeof(ChainBot), typeof(Spitter), typeof(Ghoul), typeof(OrbMage) };
 
+        DungeonRoom _parentRoom;
+
         public EnemySpawnTrigger(TmxObject tmxTriggerObject, Entity mapEntity) : base(tmxTriggerObject, mapEntity)
         {
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            if (Entity.TryGetComponent<DungeonRoom>(out var parentRoom))
+            {
+                _parentRoom = parentRoom;
+                _parentRoom.EnemySpawnTriggers.Add(this);
+            }
         }
 
         public override void HandleTriggered()
@@ -30,12 +45,14 @@ namespace PuppetRoguelite.Components.TiledComponents
                 SetEnabled(false);
 
                 //destroy other enemy spawn triggers
-                var triggers = Entity.Scene.FindComponentsOfType<EnemySpawnTrigger>().Where(t => t.MapEntity == MapEntity).ToList();
-                foreach (var trigger in triggers)
+                if (_parentRoom != null)
                 {
-                    if (trigger != this)
+                    foreach (var trigger in _parentRoom.EnemySpawnTriggers)
                     {
-                        trigger.Entity.Destroy();
+                        if (trigger != this)
+                        {
+                            trigger.Entity.Destroy();
+                        }
                     }
                 }
 
@@ -49,11 +66,16 @@ namespace PuppetRoguelite.Components.TiledComponents
             var combatManager = Entity.Scene.GetOrCreateSceneComponent<CombatManager>();
 
             //lock gates
-            Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
-            var gates = Entity.Scene.FindComponentsOfType<Gate>().Where(g => g.MapEntity == MapEntity).ToList();
-            foreach (var gate in gates)
+            if (_parentRoom != null)
             {
-                gate.Lock();
+                if (_parentRoom.Doorways.Any(d => d.HasConnection))
+                {
+                    Game1.AudioManager.PlaySound(Nez.Content.Audio.Sounds.Gate_close);
+                    foreach (var doorway in _parentRoom.Doorways)
+                    {
+                        doorway.SetGateOpen(false);
+                    }
+                }
             }
 
             //wait 1 second before spawning enemies

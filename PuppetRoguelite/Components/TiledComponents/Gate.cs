@@ -20,6 +20,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         SpriteRenderer _renderer;
         OriginComponent _origin;
         YSorter _ySorter;
+        DungeonDoorway _parentDoorway;
 
         public Gate(TmxObject gateObj, Entity mapEntity) : base(gateObj, mapEntity)
         {
@@ -72,6 +73,17 @@ namespace PuppetRoguelite.Components.TiledComponents
             _collider.SetEnabled(false);
 
             //TmxObject.Visible = false;
+        }
+
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+
+            if (Entity.TryGetComponent<DungeonDoorway>(out var doorway))
+            {
+                _parentDoorway = doorway;
+                _parentDoorway.Gate = this;
+            }
         }
 
         public void Lock()

@@ -20,6 +20,7 @@ namespace PuppetRoguelite.Components.TiledComponents
         public Vector2 PathfindingOffset;
         public string Direction;
         public DungeonRoom DungeonRoom;
+        public Gate Gate;
 
         List<TiledMapRenderer> _mapRenderers = new List<TiledMapRenderer>();
         TmxMap _map;
@@ -69,6 +70,14 @@ namespace PuppetRoguelite.Components.TiledComponents
             _mapRenderers.Clear();
 
             CreateMap();
+        }
+
+        public void SetGateOpen(bool gateOpen)
+        {
+            if (gateOpen)
+                Gate?.Unlock();
+            else
+                Gate?.Lock();
         }
 
         /// <summary>

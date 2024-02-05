@@ -1,4 +1,5 @@
-﻿using Nez;
+﻿using Microsoft.Xna.Framework;
+using Nez;
 using Nez.Systems;
 using Nez.Tiled;
 using PuppetRoguelite.Enums;
@@ -29,8 +30,24 @@ namespace PuppetRoguelite.Components.TiledComponents
         {
             base.Initialize();
 
+            switch (TmxObject.ObjectType)
+            {
+                case TmxObjectType.Basic:
+                case TmxObjectType.Ellipse:
+                case TmxObjectType.Tile:
+                    _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
+                    break;
+                case TmxObjectType.Polygon:
+                    var points = new List<Vector2>(TmxObject.Points);
+                    _collider = Entity.AddComponent(new PolygonCollider(points.ToArray()));
+                    if (_collider.LocalOffset == Vector2.Zero)
+                    {
+                        _collider.SetLocalOffset(new Vector2(TmxObject.Width / 2, TmxObject.Height / 2));
+                    }
+                    break;
+            }
+
             //collider
-            _collider = new BoxCollider(TmxObject.Width, TmxObject.Height);
             _collider.IsTrigger = true;
             Flags.SetFlagExclusive(ref _collider.PhysicsLayer, (int)PhysicsLayers.Trigger);
             Flags.SetFlagExclusive(ref _collider.CollidesWithLayers, (int)PhysicsLayers.PlayerCollider);
